@@ -1,6 +1,6 @@
 import { ActionIcon, Anchor, AppShell, Button, Code, Container, Flex, Group, Loader, Space, Text, Title, type ActionIconProps, type ButtonProps } from "@mantine/core";
 import { createFileRoute, Link, Outlet, useMatches, useNavigate, type ErrorComponentProps, createLink } from "@tanstack/react-router"
-import { IconCalendar, IconHome, IconList, IconSearch, IconSettings } from "@tabler/icons-react";
+import { IconCalendar, IconCalendarPlus, IconHome, IconList, IconSearch, IconSettings } from "@tabler/icons-react";
 import z from "zod";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { SettingsDrawer } from "../../components/app/overlay/settings/SettingsDrawer";
@@ -40,12 +40,6 @@ function LayoutPage() {
 		select: (matches) => matches.some((match) => match.staticData?.hasEventForm),
 	});
 
-	const navProps: ActionIconProps = {
-		variant: "subtle",
-		color: "gray",
-		size: "input-md",
-	} as const;
-
 	useProvideAction({
 		label: "Go to Home",
 		category: "Navigation",
@@ -65,6 +59,13 @@ function LayoutPage() {
 		category: "Navigation",
 		icon: <IconCalendar />,
 		execute: () => navigate({ to: "/calendar" }),
+	});
+
+	useProvideAction({
+		label: "Create new event",
+		category: "Navigation",
+		icon: <IconCalendarPlus />,
+		execute: () => navigate({ to: "/new" }),
 	});
 
 	useProvideAction({
