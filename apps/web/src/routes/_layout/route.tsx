@@ -1,5 +1,5 @@
-import { ActionIcon, Anchor, AppShell, Button, Code, Container, Flex, Group, Loader, Space, Text, Title, type ButtonProps } from "@mantine/core";
-import { createFileRoute, Link, Outlet, useMatches, useNavigate, type ErrorComponentProps } from "@tanstack/react-router"
+import { ActionIcon, Anchor, AppShell, Button, Code, Container, Flex, Group, Loader, Space, Text, Title, type ActionIconProps, type ButtonProps } from "@mantine/core";
+import { createFileRoute, Link, Outlet, useMatches, useNavigate, type ErrorComponentProps, createLink } from "@tanstack/react-router"
 import { IconCalendar, IconHome, IconList, IconSearch, IconSettings } from "@tabler/icons-react";
 import z from "zod";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -40,10 +40,10 @@ function LayoutPage() {
 		select: (matches) => matches.some((match) => match.staticData?.hasEventForm),
 	});
 
-	const navbtnprops: ButtonProps = {
+	const navProps: ActionIconProps = {
 		variant: "subtle",
 		color: "gray",
-		size: "compact-md",
+		size: "input-md",
 	} as const;
 
 	useProvideAction({
@@ -92,27 +92,24 @@ function LayoutPage() {
 				<Group gap={0} p="xs" align="center" h="100%" w="100%" justify="space-between">
 					<Group gap={4}>
 						<Logo />
-						<Button
-							component={Link}
-							to="/"
-							{...navbtnprops}
-						>
-							Home
-						</Button>
-						<Button
-							component={Link}
-							to="/list"
-							{...navbtnprops}
-						>
-							List
-						</Button>
-						<Button
-							component={Link}
-							to="/calendar"
-							{...navbtnprops}
-						>
-							Cal
-						</Button>
+						<Group gap={4}>
+							<Link to="/list">
+								{({ isActive }) => (
+									<NavButton
+										icon={<IconList />}
+										isActive={isActive}
+									/>
+								)}
+							</Link>
+							<Link to="/calendar">
+								{({ isActive }) => (
+									<NavButton
+										icon={<IconCalendar />}
+										isActive={isActive}
+									/>
+								)}
+							</Link>
+						</Group>
 					</Group>
 					<Group gap={4}>
 						<ActionIcon
@@ -155,6 +152,24 @@ function LayoutPage() {
 	)
 }
 
+const NavButton = ({
+	icon,
+	isActive,
+}: {
+	icon: React.ReactNode;
+	isActive?: boolean;
+}) => {
+	return (
+		<ActionIcon
+			color="gray"
+			size="input-md"
+			variant={isActive ? "light" : "subtle"}
+		>
+			{icon}
+		</ActionIcon>
+	);
+};
+
 const Overlays = () => {
 	const { toggle: toggleSettings, useValue } = useSettingsOverlay();
 	const settingsIsOpen = useValue();
@@ -190,21 +205,30 @@ const Logo = () => {
 	const loading = !!fetchingAmount || !!tasks.length;
 
 	return (
-		<Flex align="center" justify="center">
-			<img src="/icon.svg" alt="@evnt Viewer Logo" width={32} height={32} style={{
-				scale: loading ? "0.7" : "1",
-				transition: "0.2s",
-			}} />
-			<Loader
-				pos="absolute"
-				width="100%"
-				height="100%"
-				style={{
-					opacity: loading ? 1 : 0,
-					transition: "0.2s",
-				}}
-			/>
-		</Flex>
+		<Link to="/">
+			<ActionIcon
+				size="input-md"
+				variant="subtle"
+				color="gray"
+				p={0}
+			>
+				<Flex align="center" justify="center">
+					<img src="/icon.svg" alt="@evnt Viewer Logo" width={32} height={32} style={{
+						scale: loading ? "0.7" : "1",
+						transition: "0.2s",
+					}} />
+					<Loader
+						pos="absolute"
+						width="100%"
+						height="100%"
+						style={{
+							opacity: loading ? 1 : 0,
+							transition: "0.2s",
+						}}
+					/>
+				</Flex>
+			</ActionIcon>
+		</Link>
 	);
 };
 

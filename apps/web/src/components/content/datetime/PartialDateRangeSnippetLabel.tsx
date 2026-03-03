@@ -35,14 +35,18 @@ export const PartialDateRangeSnippetLabel = ({ value }: { value: Range<PartialDa
 		const endDate = UtilPartialDate.toLowDate(value.end);
 		if (!UtilPartialDate.hasTime(value.end)) endDate.setHours(0, 0, 0, 0);
 		const parts = fmt.formatRangeToParts(startDate, endDate);
-		console.log(parts);
+		// console.log(parts);
 		return parts;
 	}, [language, timeZone, value]);
 
 	return (
 		<Tooltip label={`meow`}>
 			<Text span inline inherit>
-				{parts.map(p => p.value).join("")}
+				{parts.map((p, i) => (
+					<Text key={i} span inline inherit c={(p.type === "literal" && p.value.trim() !== ":") ? "dimmed" : undefined}>
+						{p.value}
+					</Text>
+				))}
 			</Text>
 		</Tooltip>
 	)

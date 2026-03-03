@@ -113,21 +113,22 @@ export const snippetInstances = (instances: EventInstance[]): TSnippet[] => {
 	const hashTimes = (instances: EventInstance[]) => instances.map(i => [
 		i.start,
 		i.end,
-	].filter((s): s is PartialDate.Full => !!s && UtilPartialDate.hasTime(s)).map(s => UtilPartialDate.getTimePart(s)).join("-")).sort().join("|");
+	].filter((s): s is PartialDate.Full => !!s && UtilPartialDate.hasTime(s)).map(s => UtilPartialDate.getTimePart(s)).join("-"))
+		.sort()
+		.reduce((acc, time) => acc.includes(time) ? acc : [...acc, time], [] as string[])
+		.join("|");
 
 	for (const [day, instances] of Object.entries(groupedByDate) as [PartialDate.Day, EventInstance[]][]) {
 		// Try to find an existing group that this day can be added to
 		let addedToGroup = false;
 		for (const group of groupedByConsecutiveDays) {
-			console.log("Checking consecutive day grouping:", { day, group, instances, hashTimes: hashTimes(instances) });
 			if (
 				UtilPartialDateRange.isNextDay({ start: group.range.end, end: day })
-				&& hashTimes(instances) === hashTimes(group.instances)
+				&& (hashTimes(instances) === hashTimes(group.instances))
 			) {
 				group.range.end = day;
 				group.instances.push(...instances);
 				addedToGroup = true;
-				break;
 			}
 		}
 
@@ -139,6 +140,7 @@ export const snippetInstances = (instances: EventInstance[]): TSnippet[] => {
 			});
 		}
 	}
+
 
 	// Create snippets for grouped consecutive days
 	for (const group of groupedByConsecutiveDays) {
@@ -196,8 +198,6 @@ export const snippetInstances = (instances: EventInstance[]): TSnippet[] => {
 		snippets.push(...snippetInstance(instance));
 	}
 
-	console.log("Generated snippets for event:", { snippets, groupedByDate, groupedByConsecutiveDays });
-
 	return snippets;
 };
 
@@ -227,8 +227,8 @@ export const snippetInstance = (instance: EventInstance): TSnippet[] => {
 				icon: "clock",
 				label: {
 					type: "time-range", value: {
-						start: { value: UtilPartialDate.getTimePart(instance.start)!, date: UtilPartialDate.asDay(instance.start! as PartialDate.Full) },
-						end: { value: UtilPartialDate.getTimePart(instance.end)!, date: UtilPartialDate.asDay(instance.end! as PartialDate.Full) },
+						start: { value: UtilPartialDate.getTimePart(instance.start)!, day: UtilPartialDate.asDay(instance.start! as PartialDate.Full) },
+						end: { value: UtilPartialDate.getTimePart(instance.end)!, day: UtilPartialDate.asDay(instance.end! as PartialDate.Full) },
 					}
 				},
 			});
@@ -242,7 +242,7 @@ export const snippetInstance = (instance: EventInstance): TSnippet[] => {
 				label: {
 					type: "time",
 					value: UtilPartialDate.getTimePart(instance.start)!,
-					date: UtilPartialDate.asDay(instance.start! as PartialDate.Full),
+					day: UtilPartialDate.asDay(instance.start! as PartialDate.Full),
 				},
 			});
 		} else {

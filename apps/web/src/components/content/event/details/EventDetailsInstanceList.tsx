@@ -45,7 +45,7 @@ export const EventDetailsInstanceList = () => {
 														label: {
 															type: "time",
 															value: UtilPartialDate.getTimePart(instance.start)!,
-															date: UtilPartialDate.asDay(instance.start! as PartialDate.Full),
+															day: UtilPartialDate.asDay(instance.start! as PartialDate.Full),
 														},
 													}}
 												/>
@@ -62,11 +62,11 @@ export const EventDetailsInstanceList = () => {
 															value: {
 																start: {
 																	value: UtilPartialDate.getTimePart(instance.start)!,
-																	date: UtilPartialDate.asDay(instance.start! as PartialDate.Full),
+																	day: UtilPartialDate.asDay(instance.start! as PartialDate.Full),
 																},
 																end: {
 																	value: UtilPartialDate.getTimePart(instance.end)!,
-																	date: UtilPartialDate.asDay(instance.end! as PartialDate.Full),
+																	day: UtilPartialDate.asDay(instance.end! as PartialDate.Full),
 																},
 															},
 														},

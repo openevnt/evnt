@@ -8,13 +8,13 @@ import type { PartialDate } from "@evnt/schema";
 
 export const TimeSnippetLabel = ({
 	value,
-	date,
+	day,
 }: SnippetLabelProps<"time">) => {
 	const timezone = useLocaleStore(store => store.timezone);
 
 	const str = useMemo(() => {
 		return trynull(() => {
-			const dateObj = UtilPartialDate.toLowDate(((date ?? UtilPartialDate.today()) + "T" + value) as PartialDate.Full);
+			const dateObj = UtilPartialDate.toLowDate(((day ?? UtilPartialDate.today()) + "T" + value) as PartialDate.Full);
 
 			return new Intl.DateTimeFormat(undefined, {
 				hour: "numeric",
@@ -23,7 +23,7 @@ export const TimeSnippetLabel = ({
 				timeZone: timezone,
 			}).format(dateObj);
 		});
-	}, [value, date]);
+	}, [value, day]);
 
 	return (
 		<Tooltip label={`${value} - UTC`}>

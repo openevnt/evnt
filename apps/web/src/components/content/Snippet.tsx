@@ -45,7 +45,7 @@ export const Snippet = ({
 			</Text>
 		);
 		if (label.type === "address") return <AddressSnippetLabel value={label.value} />;
-		if (label.type === "time") return <TimeSnippetLabel value={label.value} date={label.date} />;
+		if (label.type === "time") return <TimeSnippetLabel value={label.value} day={label.day} />;
 		if (label.type === "time-range") return <TimeRangeSnippetLabel value={label.value} />;
 		if (label.type === "date-time-range") return <PartialDateRangeSnippetLabel value={label.value} />;
 		if (label.type === "partial-date" || label.type == "date-time") return <PartialDateSnippetLabel value={label.value} />;
