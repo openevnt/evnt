@@ -1,146 +1,233 @@
-import { useEffect, useState } from "react";
-import { BroadcastChannelKey, getInstanceUrl, IsDeveloperMode } from "../main";
+import React, { useEffect, useRef, useState } from "react";
+import { BroadcastChannelKey, getInstanceUrl, IsDeveloperMode } from "../api";
+import { Anchor, Center, Collapse, Container, Group, Image, Loader, Paper, Spoiler, Stack, Text } from "@mantine/core";
 
 export interface PageProps {
 	message?: string;
-	params?: URLSearchParams;
 };
 
-export const Page = ({
-	message,
-	params,
-}: PageProps) => {
-	const [instanceUrl, setInstance] = useState<string | null>(getInstanceUrl());
-
-	useEffect(() => {
-		new BroadcastChannel(BroadcastChannelKey).onmessage = () => {
-			setInstance(getInstanceUrl());
-		};
-	}, []);
-
-	return (
-		<main>
-			<span style={{ fontSize: "1.2em", fontFamily: "monospace" }}>
-				<span>
-					{"⟶ "}
-				</span>
-				<span style={{ color: "gray" }}>
-					event.nya.pub
-				</span>
-			</span>
-
-			{message && (
-				<p>
-					{message}
-				</p>
-			)}
-
-			{instanceUrl && (
-				<p>
-					<span style={{ fontWeight: "bold" }}>Your Default:</span> <a href={instanceUrl}>
-						{instanceUrl.startsWith("web+evnt://") ? "web+evnt" : new URL(instanceUrl).host}
-					</a>
-					<a style={{ marginLeft: "1em", fontSize: "0.8em" }} href={`/?clearInstanceUrl`}>
-						[unset]
-					</a>
-				</p>
-			)}
-
-			<InstanceList params={params} />
-
-			<p style={{ marginTop: "2em", fontSize: "0.9em", color: "gray" }}>
-				<a style={{ fontSize: "0.8em" }} href="https://github.com/deniz-blue/evnt#readme" target="_blank" rel="noopener noreferrer">
-					what is this?
-				</a>
-			</p>
-
-			{/* <StorageAccessGranter /> */}
-		</main>
-	)
-}
-
-export const StorageAccessGranter = () => {
-	const [state, setState] = useState<PermissionState | null>(null);
-
-	useEffect(() => {
-		(async () => {
-			const perm = await navigator.permissions.query({ name: "storage-access" });
-			setState(perm.state);
-			perm.onchange = () => {
-				setState(perm.state);
-			};
-		})();
-	}, []);
-
-	const requestStorageAccess = async () => {
-		try {
-			await document.requestStorageAccess();
-		} catch (e) {
-			console.error("Storage access request failed:", e);
-			alert("Storage access request failed. See console for details.");
-		}
-	};
-
-	if (state !== "prompt") return null;
-
-	return (
-		<p style={{ color: "gray" }}>
-			<button onClick={requestStorageAccess}>Grant Storage Access</button> to enable changing default instance on other sites.
-		</p>
-	);
-};
-
-export const InstanceList = ({ params }: { params?: URLSearchParams }) => {
+export const usePublicInstances = () => {
 	const INSTANCES_URL = "https://raw.githubusercontent.com/deniz-blue/events-format/refs/heads/main/data/instances.json";
-	const PROTOCOL = "web+evnt";
 	const [data, setData] = useState<{
-		instances: { url: string }[];
+		instances: InstanceInfo[];
 	} | null>(null);
 
 	useEffect(() => {
 		fetch(INSTANCES_URL)
 			.then(res => res.json())
-			.then(data => {
-				if (IsDeveloperMode) {
-					data.instances.push({ url: "http://localhost:5173" });
-					data.instances.push({ url: PROTOCOL + "://" });
-				};
+			.then(setData);
+	}, []);
 
-				setData(data);
-			});
+	return [
+		...(data?.instances || []),
+		...(IsDeveloperMode ? [
+			{ url: "http://localhost:5173" },
+			{ url: "web+evnt://" },
+		] : []),
+	];
+}
+
+// This is not that great lmao
+export const useCountdown = ({
+	callback,
+	target,
+	deps,
+}: {
+	deps: React.DependencyList;
+	target: Date;
+	callback: () => void;
+}) => {
+	const [enabled, setEnabled] = useState(true);
+	const timeoutRef = useRef<number | null>(null);
+	const [count, setCount] = useState<number | null>(null);
+
+	useEffect(() => {
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+		if (enabled) timeoutRef.current = setTimeout(() => {
+			callback();
+			setCount(0);
+		}, target.getTime() - Date.now());
+
+		const get = () => Math.round(Math.max(0, target.getTime() - Date.now()) / 1000);
+
+		setCount(enabled ? get() : null);
+
+		const interval = setInterval(() => {
+			if (enabled) setCount(get());
+		}, 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	}, [enabled, target.getTime(), ...deps]);
+
+	const cancel = () => {
+		setEnabled(false);
+	};
+
+	return {
+		count,
+		cancel,
+	};
+};
+
+export const Page = ({
+	message,
+}: PageProps) => {
+	const [preferredInstanceUrl, setPreferredInstanceUrl] = useState<string | null>(getInstanceUrl());
+	const publicInstances = usePublicInstances();
+
+	const dateRef = useRef(new Date(Date.now() + 1000 * 5));
+	const { cancel, count } = useCountdown({
+		callback: () => {
+			window.location.href = (preferredInstanceUrl || publicInstances[0]?.url || "#") + window.location.search;
+		},
+		target: dateRef.current,
+		deps: [publicInstances],
+	});
+
+	useEffect(() => {
+		new BroadcastChannel(BroadcastChannelKey).onmessage = () => {
+			setPreferredInstanceUrl(getInstanceUrl());
+		};
 	}, []);
 
 	return (
-		<ul>
-			<span style={{ fontSize: "0.8em", color: "gray" }}>Applications:</span>
-			{!data && (
-				<li>Loading...</li>
-			)}
-			{data?.instances.map(instance => {
-				const url = new URL(instance.url);
-				const isProtocol = url.protocol.replace(":", "") == PROTOCOL;
+		<Container size="xs" my="md">
+			<Stack align="center" w="100%">
+				<Text ta="center">
+					{message}
+				</Text>
 
-				return (
-					<li key={url.href}>
-						<a href={isProtocol ? `${url.protocol}//${window.location.search}` : `${url.origin}/${window.location.search}`}>
-							{isProtocol ? PROTOCOL : url.host}
-						</a>
-						{(url.hostname === "localhost") ? (
-							<span
-								style={{ marginLeft: "1em", fontSize: "0.8em", color: "gray" }}
-							>
-								(developers only)
-							</span>
-						) : (
-							<a style={{ marginLeft: "1em", fontSize: "0.8em" }} href={`/?${new URLSearchParams({
-								setInstanceUrl: instance.url,
-							}).toString() + (params ? `&${params.toString()}` : "")}`}>
-								[set default]
-							</a>
+				{preferredInstanceUrl && (
+					<Text ta="center" size="sm" color="gray">
+						Your default application is set to <a href={preferredInstanceUrl}>
+							{preferredInstanceUrl.startsWith("web+evnt://") ? "web+evnt" : new URL(preferredInstanceUrl).host}
+						</a>.
+					</Text>
+				)}
+
+				<Collapse expanded={count !== null}>
+					{(count === 0) ? (
+						<Text ta="start" size="xs" c="yellow">
+							Redirecting...
+						</Text>
+					) : (
+						<Text ta="start" size="xs" c="dimmed">
+							Redirecting to first application in {count}... <Anchor style={{ cursor: "pointer" }} onClick={cancel}>Cancel</Anchor>
+						</Text>
+					)}
+				</Collapse>
+
+				<Stack gap={0} w="100%">
+					<Stack w="100%">
+						{publicInstances.map(instance => (
+							<InstanceCard key={instance.url} instance={instance} />
+						))}
+						{publicInstances.length === 0 && (
+							<Center w="100%">
+								<Loader />
+							</Center>
 						)}
-					</li>
-				);
-			})}
-		</ul>
-	);
+					</Stack>
+				</Stack>
+
+				<Stack
+					align="start"
+					w="100%"
+				>
+					<Spoiler
+						showLabel="What's this?"
+						hideLabel="Show less"
+						styles={{ control: { fontSize: "var(--mantine-font-size-sm)" } }}
+						onExpandedChange={expanded => expanded && cancel()}
+						maxHeight={0}
+						w="100%"
+					>
+						<Stack gap="xs" fz="sm" mb="md">
+							<Text inherit>
+								Evnt is a new open format for describing events, and this page is a redirector that sends you to the appropriate application to view the event, based on your preferences.
+							</Text>
+
+							<Anchor
+								href="https://github.com/deniz-blue/evnt"
+								target="_blank"
+								rel="noopener noreferrer"
+								inherit
+							>
+								Learn more about Evnt ↗
+							</Anchor>
+						</Stack>
+					</Spoiler>
+				</Stack>
+			</Stack>
+		</Container>
+	)
+}
+
+export interface InstanceInfo {
+	url: string;
+	name?: string;
+	description?: string;
+};
+
+export const InstanceCard = ({
+	instance,
+	params,
+}: {
+	instance: InstanceInfo;
+	params?: URLSearchParams;
+}) => {
+	const [iconLoaded, setIconLoaded] = useState(false);
+
+	const isProtocol = instance.url.startsWith("web+evnt://");
+
+	const name = isProtocol
+		? "web+evnt"
+		: (instance.name || new URL(instance.url).host);
+
+	const label = isProtocol
+		? `Protocol Handler`
+		: new URL(instance.url).origin;
+
+	return (
+		<Anchor
+			href={instance.url + (params ? `?${params.toString()}` : "")}
+			unstyled
+			w="100%"
+			c="unset"
+			td="unset"
+			style={{
+				cursor: "pointer",
+			}}
+		>
+			<Paper
+				withBorder
+				className="instance-card"
+				shadow="sm"
+				p="xs"
+			>
+				<Group wrap="nowrap" gap="xs">
+					<Collapse expanded={!!iconLoaded} orientation="vertical">
+						<Image
+							src={`${instance.url.replace(/\/$/, "")}/favicon.ico`}
+							alt={`${new URL(instance.url).host} favicon`}
+							w={32}
+							h={32}
+							onLoad={() => setIconLoaded(true)}
+						/>
+					</Collapse>
+					<Stack gap={0} flex="1">
+						<Text>
+							{name}
+						</Text>
+						<Text fz="xs" c="dimmed">
+							{label}
+						</Text>
+					</Stack>
+				</Group>
+			</Paper>
+		</Anchor>
+	)
 };

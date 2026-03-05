@@ -1,7 +1,7 @@
 {
     "instances": [
         {
-            "name": "vantage.deniz.blue",
+            "name": "Vantage Events Viewer",
             "description": "'official' web app",
             "url": "https://vantage.deniz.blue"
         }
