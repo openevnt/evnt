@@ -1,4 +1,5 @@
 import z from "zod";
+import { env } from "cloudflare:workers";
 
 export const config = z.object({
 	// OAuth settings
@@ -8,4 +9,4 @@ export const config = z.object({
 	DISCORD_CLIENT_SECRET: z.string(),
 	// JWT settings
 	JWT_SECRET: z.string(),
-}).parse(import.meta.env);
+}).parse(env);
