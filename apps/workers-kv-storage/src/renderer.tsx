@@ -1,8 +1,7 @@
 import { Context } from "hono";
-import { SignCallbackPageProps } from "./pages/sign-callback";
 import { Script } from "vite-ssr-components/hono";
 
-export const renderSignCallbackPage = (c: Context, props: SignCallbackPageProps) => {
+export const renderSsrPage = (c: Context, props: any) => {
 	return c.html(
 		<html>
 			<head>

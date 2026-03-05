@@ -1,7 +1,7 @@
 import { render } from "hono/jsx/dom";
-import { SignCallbackPage } from "./pages/sign-callback";
+import { Homepage } from "./pages/homepage";
 
 const root = document.getElementById("root")!;
 const props = JSON.parse(root.dataset.props!);
 
-render(<SignCallbackPage {...props} />, root);
+render(<Homepage {...props} />, root);
