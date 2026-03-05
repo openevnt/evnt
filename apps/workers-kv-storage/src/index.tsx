@@ -31,4 +31,9 @@ const app = new Hono<{ Bindings: CloudflareBindings }>()
 	.route("/api/v1/events", events)
 	.route("/api/v1/events", eventHooks)
 
+app.onError((err, c) => {
+	console.error(err);
+	return c.json({ error: "Internal Server Error", details: err.message, stack: err.stack }, 500);
+});
+
 export default app;
