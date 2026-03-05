@@ -76,9 +76,9 @@ export class EventResolver {
 				...newEnvelope,
 				data: data ?? envelope.data,
 			};
+		} else {
+			return await this.#fetchHttp(source);
 		}
-
-		return envelope;
 	}
 
 	static async #updateAtProto(source: EventSource.At, envelope: EventEnvelope): Promise<EventEnvelope> {

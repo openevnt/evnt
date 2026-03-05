@@ -288,9 +288,15 @@ importers:
 
   apps/workers-kv-storage:
     dependencies:
+      '@evnt/json-patch-schema':
+        specifier: workspace:*
+        version: link:../../packages/json-patch-schema
       '@evnt/schema':
         specifier: workspace:*
         version: link:../../packages/schema
+      '@hono/oauth-providers':
+        specifier: ^0.8.5
+        version: 0.8.5(hono@4.11.9)
       '@hono/vite-build':
         specifier: ^1.9.3
         version: 1.9.3(hono@4.11.9)
@@ -309,6 +315,9 @@ importers:
       hono:
         specifier: ^4.11.9
         version: 4.11.9
+      json-patch-rfc:
+        specifier: ^1.0.2
+        version: 1.0.2
       zod:
         specifier: ^4.3.5
         version: 4.3.5

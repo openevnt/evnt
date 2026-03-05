@@ -45,6 +45,7 @@ function FormPage() {
 		const data = get(dataAtom);
 		if (!data) return;
 		setLoading(true);
+
 		let url = new URL(redirectToParam);
 		url.searchParams.set("data", JSON.stringify(data));
 		window.location.href = url.toString();

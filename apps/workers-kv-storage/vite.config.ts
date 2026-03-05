@@ -6,5 +6,6 @@ export default defineConfig(({ isSsrBuild }) => ({
 	server: {
 		port: 8787,
 	},
+	envPrefix: ["D", "G", "J"],
 	plugins: [cloudflare(), ssrPlugin() as any],
 }))
