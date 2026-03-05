@@ -1,12 +1,12 @@
 import { githubAuth } from "@hono/oauth-providers/github";
 import { discordAuth } from "@hono/oauth-providers/discord";
 import { Context, Hono } from "hono";
-import { config } from "../config/env";
 import { createMiddleware } from "hono/factory";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
 import { SignatureAlgorithm } from "hono/utils/jwt/jwa";
 import { APP_ORIGIN } from "../config/constants";
+import { ENV } from "../config/env";
 
 export type Email = `${string}@${string}.${string}`;
 
@@ -29,7 +29,7 @@ const createAuthPayload = (email: Email) => {
 
 const writeAuthCookie = async (c: Context, email: Email) => {
 	const payload = createAuthPayload(email);
-	const token = await sign(payload, config.JWT_SECRET, AuthCookieMethod);
+	const token = await sign(payload, ENV.JWT_SECRET, AuthCookieMethod);
 	setCookie(c, AuthCookieName, token, {
 		httpOnly: true,
 		secure: true,
@@ -43,7 +43,7 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 
 	if (token) {
 		try {
-			const decodedPayload = await verify(token, config.JWT_SECRET, AuthCookieMethod);
+			const decodedPayload = await verify(token, ENV.JWT_SECRET, AuthCookieMethod);
 			if (typeof decodedPayload === "object" && "email" in decodedPayload) {
 				c.set("email", decodedPayload.email as Email);
 			}
@@ -59,9 +59,15 @@ export const auth = new Hono()
 	.get(
 		"/github",
 		githubAuth({
-			client_id: config.GITHUB_CLIENT_ID,
-			client_secret: config.GITHUB_CLIENT_SECRET,
-			redirect_uri: `${APP_ORIGIN}/auth/github`,
+			get client_id() {
+				return ENV.GITHUB_CLIENT_ID;
+			},
+			get client_secret() {
+				return ENV.GITHUB_CLIENT_SECRET;
+			},
+			get redirect_uri() {
+				return `${APP_ORIGIN}/auth/github`;
+			},
 			oauthApp: true,
 			scope: [
 				"user:email"
@@ -79,9 +85,15 @@ export const auth = new Hono()
 	.get(
 		"/discord",
 		discordAuth({
-			client_id: config.DISCORD_CLIENT_ID,
-			client_secret: config.DISCORD_CLIENT_SECRET,
-			redirect_uri: `${APP_ORIGIN}/auth/discord`,
+			get client_id() {
+				return ENV.DISCORD_CLIENT_ID;
+			},
+			get client_secret() {
+				return ENV.DISCORD_CLIENT_SECRET;
+			},
+			get redirect_uri() {
+				return `${APP_ORIGIN}/auth/discord`;
+			},
 			scope: [
 				"identify",
 				"email",
