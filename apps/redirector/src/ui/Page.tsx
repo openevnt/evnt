@@ -174,10 +174,8 @@ export interface InstanceInfo {
 
 export const InstanceCard = ({
 	instance,
-	params,
 }: {
 	instance: InstanceInfo;
-	params?: URLSearchParams;
 }) => {
 	const [iconLoaded, setIconLoaded] = useState(false);
 
@@ -193,7 +191,7 @@ export const InstanceCard = ({
 
 	return (
 		<Anchor
-			href={instance.url + (params ? `?${params.toString()}` : "")}
+			href={instance.url + window.location.search}
 			unstyled
 			w="100%"
 			c="unset"
