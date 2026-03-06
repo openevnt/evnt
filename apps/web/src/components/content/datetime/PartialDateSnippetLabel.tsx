@@ -3,16 +3,24 @@ import { UtilPartialDate } from "@evnt/schema/utils";
 import { Text } from "@mantine/core";
 import { useLocaleStore } from "../../../stores/useLocaleStore";
 
-export const PartialDateSnippetLabel = ({ value }: { value: PartialDate }) => {
-	const language = useLocaleStore(store => store.language);
-	const timezone = useLocaleStore(store => store.timezone);
+export const PartialDateSnippetLabel = ({
+	value,
+	timezone,
+	language,
+}: {
+	value: PartialDate;
+	timezone?: string;
+	language?: string;
+}) => {
+	const userLanguage = useLocaleStore(store => store.language);
+	const userTimezone = useLocaleStore(store => store.timezone);
 
-    return (
-        <Text span inline inherit>
-            {UtilPartialDate.toIntlString(value, {
-				locale: language,
-				timezone,
+	return (
+		<Text span inline inherit>
+			{UtilPartialDate.toIntlString(value, {
+				locale: language || userLanguage,
+				timezone: timezone || userTimezone,
 			})}
-        </Text>
-    )
+		</Text>
+	)
 };

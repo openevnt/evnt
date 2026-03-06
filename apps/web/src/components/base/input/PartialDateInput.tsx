@@ -1,10 +1,11 @@
 import type { PartialDate } from "@evnt/schema";
 import { UtilPartialDate } from "@evnt/schema/utils";
-import { ActionIcon, Box, Button, CloseButton, Collapse, Group, Input, Popover, Stack, Text, TextInput, Tooltip } from "@mantine/core";
+import { ActionIcon, Box, Button, CloseButton, Collapse, Group, Input, Popover, SegmentedControl, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { DatePicker, MonthPicker, TimePicker, YearPicker, type CalendarLevel } from "@mantine/dates";
 import { useEffect, useImperativeHandle, useRef, useState, type ReactNode } from "react";
 import { PartialDateSnippetLabel } from "../../content/datetime/PartialDateSnippetLabel";
 import { IconCalendar } from "@tabler/icons-react";
+import { useLocaleStore } from "../../../stores/useLocaleStore";
 
 export const PartialDateInput = ({
 	value,
@@ -27,6 +28,8 @@ export const PartialDateInput = ({
 	const [opened, setOpened] = useState(false);
 	const [calendarCollapsed, setCalendarCollapsed] = useState(UtilPartialDate.hasDay(value));
 	const timePickerHoursRef = useRef<HTMLInputElement | null>(null);
+	const [timePickerMode, setTimePickerMode] = useState<"utc" | "local">("utc");
+	const userTimezone = useLocaleStore(store => store.timezone);
 
 	const [inputValue, setInputValue] = useState<string>(value);
 	useEffect(() => {
@@ -115,7 +118,7 @@ export const PartialDateInput = ({
 			shadow="xl"
 		>
 			<Popover.Target>
-				<Stack gap={0}>
+				<Stack gap={4}>
 					<TextInput
 						value={inputValue}
 						onChange={(e) => onInputChange(e.currentTarget.value)}
@@ -148,8 +151,17 @@ export const PartialDateInput = ({
 						<PartialDateSnippetLabel
 							value={value}
 						/>
-						{" (localized)"}
+						{` (${userTimezone ?? "UTC"})`}
 					</Input.Description>
+					{!!userTimezone && userTimezone !== "UTC" && (
+						<Input.Description>
+							<PartialDateSnippetLabel
+								timezone="UTC"
+								value={value}
+							/>
+							{` (UTC)`}
+						</Input.Description>
+					)}
 				</Stack>
 			</Popover.Target>
 			<Popover.Dropdown>
@@ -223,7 +235,21 @@ export const PartialDateInput = ({
 					</Collapse>
 
 					{UtilPartialDate.hasDay(value) && (
-						<Group>
+						<Stack gap={4} mt="md">
+							<Group justify="space-between">
+								<Input.Label>
+									Time
+								</Input.Label>
+								<SegmentedControl<"utc" | "local">
+									data={[
+										{ label: "UTC", value: "utc" },
+										{ label: "Local", value: "local", disabled: true },
+									]}
+									value={timePickerMode}
+									onChange={setTimePickerMode}
+									size="xs"
+								/>
+							</Group>
 							<TimePicker
 								format="24h"
 								value={UtilPartialDate.getTimePart(value) || ""}
@@ -231,11 +257,10 @@ export const PartialDateInput = ({
 								onChange={(time) => {
 									onChange(UtilPartialDate.getDatePart(value) + (time ? `T${time}` : "") as PartialDate.Full | PartialDate.Day);
 								}}
-								label="Time (UTC)"
 								style={{ flex: 1 }}
 								hoursRef={timePickerHoursRef}
 							/>
-						</Group>
+						</Stack>
 					)}
 
 					{UtilPartialDate.hasDay(value) && !UtilPartialDate.isComplete(value) && (
