@@ -97,6 +97,7 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
 			element(element) {
 				if (data) {
 					element.append(`<meta property="twitter:card" content="summary"/>`, { html: true });
+					element.append(`<meta property="twitter:site" content="Evnt Event"/>`, { html: true });
 					element.append(`<meta property="og:title" content="${title!}" />`, { html: true });
 					if (markdown) element.append(`<meta property="og:description" content="${markdown.slice(0, 200)}" />`, { html: true });
 					if (image) {
