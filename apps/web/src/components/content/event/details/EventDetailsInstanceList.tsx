@@ -92,7 +92,7 @@ export const EventDetailsInstanceList = () => {
 								)}
 
 								{instance.venueIds
-									.map(venueId => data.venues?.find(v => v.venueId === venueId))
+									.map(venueId => data.venues?.find(v => v.id === venueId))
 									.filter(venue => venue !== undefined)
 									.map((venue, index) => (
 										<Stack key={index} gap={0}>
