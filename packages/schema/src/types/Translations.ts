@@ -7,7 +7,6 @@ export const LanguageKeySchema = z.string().meta({
 
 export type Translations = z.infer<typeof TranslationsSchema>;
 export const TranslationsSchema = z.record(LanguageKeySchema, z.string().optional())
-    // .brand<"Translations">()
     .meta({
         id: "Translations",
         description: "A multilingual string",

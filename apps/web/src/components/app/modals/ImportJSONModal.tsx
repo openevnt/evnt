@@ -46,7 +46,7 @@ export const ImportJSONModal = ({
 			error = prettifyError(result.error);
 		}
 	} catch (e) {
-		error = "Invalid JSON";
+		error = ""+e;
 	}
 
 	return (
