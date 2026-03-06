@@ -4,13 +4,8 @@ import { events } from "./routes/events";
 import { auth, authMiddleware } from "./routes/auth";
 import { eventHooks } from "./routes/hook";
 import { APP_ORIGIN, VANTAGE_ORIGIN } from "./config/constants";
-import { loadConfig } from "./config/env";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
-	.use("*", (c, next) => {
-		loadConfig(c.env);
-		return next();
-	})
 	.use(prettyJSON())
 	.use(authMiddleware)
 	.get(
