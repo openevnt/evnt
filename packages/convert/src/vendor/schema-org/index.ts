@@ -50,17 +50,17 @@ export const convertFromSchemaOrg = (
 
 		if (typeof location == "string") {
 			venues.push({
-				venueId: "0",
-				venueName: parseText(location) || { [language]: "Unknown" },
-				venueType: "physical", // Assumption...
+				id: "0",
+				name: parseText(location) || { [language]: "Unknown" },
+				type: "physical", // Assumption...
 				address: {},
 			});
 		}
 
 		venues.push({
-			venueId: "0",
-			venueName: parseText("name" in location ? location.name : null) || { [language]: "Unknown" },
-			venueType: "physical",
+			id: "0",
+			name: parseText("name" in location ? location.name : null) || { [language]: "Unknown" },
+			type: "physical",
 			address: {
 				// addr: location.address?.streetAddress,
 				// countryCode: location.address?.addressCountry,
@@ -89,7 +89,7 @@ export const convertFromSchemaOrg = (
 		venues,
 		instances: [
 			{
-				venueIds: venues.map(({ venueId }) => venueId),
+				venueIds: venues.map(({ id }) => id),
 				start: typeof data.startDate == "string" ? convertPartialDate(data.startDate) : undefined,
 				end: typeof data.endDate == "string" ? convertPartialDate(data.endDate) : undefined,
 			},

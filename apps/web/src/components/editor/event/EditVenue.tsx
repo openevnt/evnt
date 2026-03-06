@@ -19,20 +19,20 @@ export const EditVenue = ({
 	data: EditAtom<EventData>;
 	venue: EditAtom<Venue>;
 }) => {
-	const venueId = useAtomValue(useMemo(() => atom((get) => get(venue).venueId), [venue]));
-	const venueType = useAtomValue(useMemo(() => atom((get) => get(venue).venueType), [venue]));
+	const venueId = useAtomValue(useMemo(() => atom((get) => get(venue).id), [venue]));
+	const venueType = useAtomValue(useMemo(() => atom((get) => get(venue).type), [venue]));
 
 	// atomically change a venue id across all instances and itself
 	// return false if the newVenueId already exists
 	const changeVenueId = useSetAtom(useMemo(() => atom(null, (get, set, { fromVenueId, toVenueId }: { fromVenueId: string; toVenueId: string }): boolean => {
-		if (get(data).venues?.some((v, i) => v.venueId === toVenueId)) {
+		if (get(data).venues?.some((v, i) => v.id === toVenueId)) {
 			return false;
 		}
 
 		set(data, prev => {
 			return {
 				...prev,
-				venues: prev.venues?.map((v) => v.venueId === fromVenueId ? { ...v, venueId: toVenueId } : v),
+				venues: prev.venues?.map((v) => v.id === fromVenueId ? { ...v, id: toVenueId } : v),
 				instances: prev.instances?.map(instance => ({
 					...instance,
 					venueIds: instance.venueIds?.map(venueId => venueId === fromVenueId ? toVenueId : venueId),
@@ -48,14 +48,14 @@ export const EditVenue = ({
 	const setVenueType = useSetAtom(useMemo(() => atom(null, (get, set, newType: VenueType) => {
 		set(venue, prev => ({
 			...prev,
-			venueType: newType,
+			type: newType,
 		}));
 	}), [venue]));
 
 	const onDelete = useSetAtom(useMemo(() => atom(null, (get, set) => {
 		set(data, prev => ({
 			...prev,
-			venues: prev.venues?.filter((venue) => venue.venueId !== venueId),
+			venues: prev.venues?.filter((venue) => venue.id !== venueId),
 			instances: prev.instances?.map(instance => ({
 				...instance,
 				venueIds: instance.venueIds?.filter((venueId) => venueId !== venueId),
@@ -72,7 +72,7 @@ export const EditVenue = ({
 		>
 			<Deatom
 				component={TranslationsInput}
-				atom={focusAtom(venue, o => o.prop("venueName"))}
+				atom={focusAtom(venue, o => o.prop("name"))}
 				label="Venue Name"
 				description="Place name, URL description, etc."
 			/>
@@ -108,11 +108,11 @@ export const EditVenue = ({
 			</Group>
 
 			{venueType === "physical" && (
-				<EditVenuePhysical data={venue as EditAtom<Venue & { venueType: "physical" }>} />
+				<EditVenuePhysical data={venue as EditAtom<Venue & { type: "physical" }>} />
 			)}
 
 			{venueType === "online" && (
-				<EditVenueOnline data={venue as EditAtom<Venue & { venueType: "online" }>} />
+				<EditVenueOnline data={venue as EditAtom<Venue & { type: "online" }>} />
 			)}
 		</CollapsiblePaper>
 	);

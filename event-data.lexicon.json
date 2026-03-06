@@ -12,8 +12,12 @@
         "name": {
           "type": "unknown"
         },
-        "description": {
+        "label": {
           "type": "unknown"
+        },
+        "status": {
+          "type": "ref",
+          "ref": "#eventStatus"
         },
         "venues": {
           "type": "array",
@@ -21,7 +25,8 @@
             "type": "union",
             "refs": [
               "#physicalVenue",
-              "#onlineVenue"
+              "#onlineVenue",
+              "#unknownVenue"
             ]
           }
         },
@@ -32,9 +37,12 @@
             "ref": "#eventInstance"
           }
         },
-        "status": {
-          "type": "ref",
-          "ref": "#eventStatus"
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#eventComponent"
+          }
         }
       },
       "required": [
@@ -45,14 +53,14 @@
     "physicalVenue": {
       "type": "object",
       "properties": {
-        "venueId": {
+        "id": {
           "type": "string"
         },
-        "venueType": {
+        "type": {
           "type": "string",
           "const": "physical"
         },
-        "venueName": {
+        "name": {
           "type": "unknown"
         },
         "address": {
@@ -65,9 +73,9 @@
         }
       },
       "required": [
-        "venueId",
-        "venueType",
-        "venueName"
+        "id",
+        "type",
+        "name"
       ]
     },
     "address": {
@@ -102,14 +110,14 @@
     "onlineVenue": {
       "type": "object",
       "properties": {
-        "venueId": {
+        "id": {
           "type": "string"
         },
-        "venueType": {
+        "type": {
           "type": "string",
           "const": "online"
         },
-        "venueName": {
+        "name": {
           "type": "unknown"
         },
         "url": {
@@ -117,9 +125,29 @@
         }
       },
       "required": [
-        "venueId",
-        "venueType",
-        "venueName"
+        "id",
+        "type",
+        "name"
+      ]
+    },
+    "unknownVenue": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "const": "unknown"
+        },
+        "name": {
+          "type": "unknown"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name"
       ]
     },
     "eventInstance": {
@@ -142,6 +170,21 @@
           "ref": "#eventStatus"
         }
       }
+    },
+    "eventComponent": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "data": {
+          "type": "unknown"
+        }
+      },
+      "required": [
+        "type",
+        "data"
+      ]
     },
     "eventStatus": {
       "type": "string",

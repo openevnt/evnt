@@ -125,6 +125,7 @@
       "id": "EventStatus"
     },
     "Venue": {
+      "id": "Venue",
       "oneOf": [
         {
           "$ref": "#/$defs/PhysicalVenue"
@@ -135,21 +136,20 @@
         {
           "$ref": "#/$defs/UnknownVenue"
         }
-      ],
-      "id": "Venue"
+      ]
     },
     "PhysicalVenue": {
       "type": "object",
       "properties": {
-        "venueType": {
+        "type": {
           "type": "string",
           "const": "physical"
         },
-        "venueId": {
+        "id": {
           "type": "string",
           "description": "ID of the venue to be used in Event Instances"
         },
-        "venueName": {
+        "name": {
           "description": "The name of the venue",
           "$ref": "#/$defs/Translations"
         },
@@ -165,9 +165,9 @@
         }
       },
       "required": [
-        "venueType",
-        "venueId",
-        "venueName"
+        "type",
+        "id",
+        "name"
       ],
       "additionalProperties": false,
       "id": "PhysicalVenue",
@@ -215,15 +215,15 @@
     "OnlineVenue": {
       "type": "object",
       "properties": {
-        "venueType": {
+        "type": {
           "type": "string",
           "const": "online"
         },
-        "venueId": {
+        "id": {
           "type": "string",
           "description": "ID of the venue to be used in Event Instances"
         },
-        "venueName": {
+        "name": {
           "description": "The name of the venue",
           "$ref": "#/$defs/Translations"
         },
@@ -232,9 +232,9 @@
         }
       },
       "required": [
-        "venueType",
-        "venueId",
-        "venueName"
+        "type",
+        "id",
+        "name"
       ],
       "additionalProperties": false,
       "id": "OnlineVenue"
@@ -242,23 +242,23 @@
     "UnknownVenue": {
       "type": "object",
       "properties": {
-        "venueType": {
+        "type": {
           "type": "string",
           "const": "unknown"
         },
-        "venueId": {
+        "id": {
           "type": "string",
           "description": "ID of the venue to be used in Event Instances"
         },
-        "venueName": {
+        "name": {
           "description": "The name of the venue",
           "$ref": "#/$defs/Translations"
         }
       },
       "required": [
-        "venueType",
-        "venueId",
-        "venueName"
+        "type",
+        "id",
+        "name"
       ],
       "additionalProperties": false,
       "id": "UnknownVenue"
@@ -316,221 +316,25 @@
       ]
     },
     "EventComponent": {
-      "oneOf": [
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "const": "link"
-            },
-            "data": {
-              "$ref": "#/$defs/LinkComponent"
-            }
-          },
-          "required": [
-            "type",
-            "data"
-          ],
-          "additionalProperties": false
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
         },
-        {
+        "data": {
           "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "const": "source"
-            },
-            "data": {
-              "$ref": "#/$defs/SourceComponent"
-            }
+          "propertyNames": {
+            "type": "string"
           },
-          "required": [
-            "type",
-            "data"
-          ],
-          "additionalProperties": false,
-          "description": "!unstable(#5)"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "const": "splashMedia"
-            },
-            "data": {
-              "type": "object",
-              "properties": {
-                "roles": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "media": {
-                  "$ref": "#/$defs/Media"
-                }
-              },
-              "required": [
-                "roles",
-                "media"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "type",
-            "data"
-          ],
-          "additionalProperties": false
+          "additionalProperties": {}
         }
+      },
+      "required": [
+        "type",
+        "data"
       ],
+      "additionalProperties": false,
       "id": "EventComponent"
-    },
-    "LinkComponent": {
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string",
-          "description": "The URL of the link"
-        },
-        "name": {
-          "description": "The name of the link",
-          "$ref": "#/$defs/Translations"
-        },
-        "description": {
-          "description": "A description of the link",
-          "$ref": "#/$defs/Translations"
-        },
-        "disabled": {
-          "description": "Whether the link is disabled",
-          "type": "boolean"
-        },
-        "opensAt": {
-          "description": "The date and/or time when the link becomes active",
-          "$ref": "#/$defs/PartialDate"
-        },
-        "closesAt": {
-          "description": "The date and/or time when the link becomes inactive",
-          "$ref": "#/$defs/PartialDate"
-        }
-      },
-      "required": [
-        "url"
-      ],
-      "additionalProperties": false,
-      "id": "LinkComponent"
-    },
-    "SourceComponent": {
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string",
-          "description": "The URL of the source"
-        }
-      },
-      "required": [
-        "url"
-      ],
-      "additionalProperties": false,
-      "id": "SourceComponent",
-      "description": "A source of information about the event, such as a news article, a social media post, an official announcement etc."
-    },
-    "Media": {
-      "type": "object",
-      "properties": {
-        "sources": {
-          "minItems": 1,
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/MediaSource"
-          },
-          "description": "The sources for the media item"
-        },
-        "alt": {
-          "description": "Alternative text for the media item",
-          "$ref": "#/$defs/Translations"
-        },
-        "presentation": {
-          "description": "The presentation details of the media item",
-          "$ref": "#/$defs/MediaPresentation"
-        }
-      },
-      "required": [
-        "sources"
-      ],
-      "additionalProperties": false,
-      "id": "Media",
-      "title": "Media",
-      "description": "A media item, such as an image or video"
-    },
-    "MediaSource": {
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string",
-          "format": "uri",
-          "description": "The URL of the media source"
-        },
-        "dimensions": {
-          "description": "The dimensions of the media in pixels",
-          "$ref": "#/$defs/MediaDimensions"
-        },
-        "mimeType": {
-          "description": "The MIME type of the media",
-          "type": "string"
-        }
-      },
-      "required": [
-        "url"
-      ],
-      "additionalProperties": false,
-      "id": "MediaSource",
-      "title": "Media Source",
-      "description": "A source for a media item."
-    },
-    "MediaDimensions": {
-      "type": "object",
-      "properties": {
-        "width": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 9007199254740991,
-          "description": "The width of the media in pixels"
-        },
-        "height": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 9007199254740991,
-          "description": "The height of the media in pixels"
-        }
-      },
-      "required": [
-        "width",
-        "height"
-      ],
-      "additionalProperties": false,
-      "id": "MediaDimensions",
-      "title": "Media Dimensions",
-      "description": "The dimensions of a media item"
-    },
-    "MediaPresentation": {
-      "type": "object",
-      "properties": {
-        "blurhash": {
-          "description": " A BlurHash representation of the media item",
-          "type": "string"
-        },
-        "dominantColor": {
-          "description": "The dominant color of the media item in hex rgb format (must start with a hashtag)",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "id": "MediaPresentation",
-      "title": "Media Presentation",
-      "description": "The presentation details of a media item"
     }
   }
 }

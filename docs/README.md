@@ -4,6 +4,8 @@
 
 This document defines the data structures and types used for the @evnt Event format.
 
+See [Changelog](./CHANGELOG.md) for recent changes to the data format.
+
 - [Types](#types)
 	- [`Translations`](#translations)
 	- [`PartialDate`](#partialdate)
@@ -157,13 +159,13 @@ The main data structure representing an event is `EventData`.
 ```
 
 Important fields:
-- `v`: The version of the data format. Currently `0`.
-- `name`: Required [`Translations`](#translations)
+- `v`: The version of the data format. Currently `0`. Required.
+- `name`: [`Translations`](#translations); Required. The name of the event.
 - `venues`: Array of [`Venue`](#venue)s.
 - `instances`: Array of [`EventInstance`](#eventinstance)s.
 - `components`: Array of [`EventComponent`](#eventcomponent)s.
 
-Consumers should not use `venues` to display a list of venues for an event, but rather use the `venueIds` field in `EventInstance` objects to link them together (`Venue` has a `venueId` field). This allows us to:
+Consumers should not use `venues` to display a list of venues for an event, but rather use the `venueIds` field in `EventInstance` objects to link them together (`Venue` has a `id` field). This allows us to:
 - Represent instances where we dont know the venue of an event instance (empty `venueIds` array).
 - Represent instances where an event takes place in multiple venues simultaneously or is a hybrid event (multiple `venueIds`).
 - Avoid displaying venues that are not relevant to a specific event instance.
@@ -181,9 +183,9 @@ See the [schema documentation](./SCHEMA.md#event-data-schema) for the full defin
 A `Venue` represents a location where an event takes place.
 
 All venues have the following properties:
-- `venueId`: A **unique** identifier for the venue. This is used to link the venue to `EventInstance` objects.
-- `venueType`: The type of the venue, either `physical`, `online` or `unknown`.
-- `venueName`: The name of the venue as a [`Translations`](#translations) object.
+- `id`: A **unique** identifier for the venue. This is used to link the venue to `EventInstance` objects.
+- `type`: The type of the venue, either `physical`, `online` or `unknown`.
+- `name`: The name of the venue as a [`Translations`](#translations) object.
 
 Types of venues:
 - [`PhysicalVenue`](#physicalvenue): A real-world location where an event takes place.
@@ -202,9 +204,9 @@ _Examples_:
 
 ```ts
 {
-	venueId: "venue-1",
-	venueType: "physical",
-	venueName: { en: "Central Park", es: "Parque Central" },
+	id: "venue-1",
+	type: "physical",
+	name: { en: "Central Park", es: "Parque Central" },
 	address: {
 		addr: "Central Park West & 5th Ave, New York, NY 10024, USA",
 		countryCode: "US",
@@ -224,9 +226,9 @@ _Examples_:
 
 ```ts
 {
-	venueId: "venue-2",
-	venueType: "online",
-	venueName: { en: "YouTube Live" },
+	id: "venue-2",
+	type: "online",
+	name: { en: "YouTube Live" },
 	url: "https://www.youtube.com/live/example",
 }
 ```
@@ -235,7 +237,7 @@ _Examples_:
 
 An `UnknownVenue` represents a venue that is not known if it is online or physical.
 
-This is primarily intended to be used for data scrapers when they know that an event has a venue but they cannot determine any information about it. This allows them to still link the event instance to a venue (using `venueId`) without having to provide any additional information.
+This is primarily intended to be used for data scrapers when they know that an event has a venue but they cannot determine any information about it. This allows them to still link the event instance to a venue without having to provide any additional information.
 
 ## Instances
 
@@ -248,7 +250,7 @@ If an event has multiple occurrences (e.g., a conference with multiple days), ea
 If an event spans multiple days (such as a Game Jam or a Festival longer than 24 hours), it should be represented as a single `EventInstance` with a start and end date.
 
 Required fields:
-- `venueIds`: An array of `venueId`s linking this instance to one or more `Venue` objects. This field can be an empty array if the venue is not known.
+- `venueIds`: An array of strings linking this instance to one or more `Venue` objects. This field can be an empty array if the venue is not known.
 
 Optional fields:
 - `start`: A [`PartialDate`](#partialdate) representing the start date and/or time of the event instance
@@ -258,10 +260,26 @@ Optional fields:
 _Examples_:
 
 ```ts
-{
+let instance: EventInstance = {
 	venueIds: ["venue-1"],
 	start: "2025-11-12T10:00",
 	end: "2025-11-12T18:00",
+}
+
+let event: EventData = {
+	v: 0,
+	name: { en: "Example Event" },
+	venues: [
+		{
+			// Note! This ID is used to link the venue to the event instance
+			id: "venue-1",
+			type: "unknown",
+			name: { en: "Example Venue" },
+		},
+	],
+	instances: [
+		instance,
+	],
 }
 ```
 
@@ -275,9 +293,22 @@ Each component has a `type` field that defines the type of the component and a `
 
 Table of component types:
 
-| `type` | `data` type                     |
-|--------|---------------------------------|
-| `link` | [LinkComponent](#linkcomponent) |
+| `type`        | `data` type                                   |
+|---------------|-----------------------------------------------|
+| `link`        | [LinkComponent](#linkcomponent)               |
+| `source`      | [SourceComponent](#sourcecomponent)           |
+| `splashMedia` | [SplashMediaComponent](#splashmediacomponent) |
+
+```ts
+let component: EventComponent = {
+	type: "link",
+	data: {
+		url: "https://www.example.com",
+		name: { en: "Example Website" },
+		description: { en: "The official website of the event" },
+	},
+}
+```
 
 ### `LinkComponent`
 

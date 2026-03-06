@@ -23,6 +23,8 @@ export const UnknownEventComponentSchema = z.object({
 });
 
 export type EventComponent = z.infer<typeof EventComponentSchema>;
+export type EventComponentType = keyof typeof KnownEventComponentsMap | (string & {});
+
 export const EventComponentSchema = UnknownEventComponentSchema.superRefine((obj, ctx) => {
 	if (obj.type in KnownEventComponentsMap) {
 		const schema = KnownEventComponentsMap[obj.type as keyof typeof KnownEventComponentsMap];

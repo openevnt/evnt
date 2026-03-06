@@ -1,4 +1,4 @@
-import type { EventComponent, Translations } from "@evnt/schema";
+import type { KnownEventComponent, Translations } from "@evnt/schema";
 import { IconExternalLink, IconLink, IconPhoto } from "@tabler/icons-react";
 import type { FC } from "react";
 import type { EditAtom } from "../edit-atom";
@@ -7,12 +7,12 @@ import { EditComponentSource } from "./components/EditComponentSource";
 import { EditComponentSplashMedia } from "./components/EditComponentSplashMedia";
 
 export const EventComponentRegistry: {
-	[Type in EventComponent["type"]]?: {
+	[Type in KnownEventComponent["type"]]?: {
 		label: Translations;
 		desc?: Translations;
 		icon: FC<{ size?: number }> | any; // Stupid typescript
-		createData?: EventComponent;
-		editComponent?: FC<{ data: EditAtom<(EventComponent & { type: Type })["data"]> }>;
+		createData?: KnownEventComponent;
+		editComponent?: FC<{ data: EditAtom<(KnownEventComponent & { type: Type })["data"]> }>;
 	};
 } = {
 	link: {

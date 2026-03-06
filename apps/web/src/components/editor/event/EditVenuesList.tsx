@@ -29,13 +29,13 @@ export const EditVenuesList = ({
 
 	const addVenue = useSetAtom(useMemo(() => atom(null, (get, set) => {
 		let id = get(data).venues?.length ?? 0;
-		const existingVenueIds = new Set(get(data).venues?.map(v => v.venueId));
+		const existingVenueIds = new Set(get(data).venues?.map(v => v.id));
 		while (existingVenueIds.has(id.toString())) id++;
 
 		const newVenue: Venue = {
-			venueId: id.toString(),
-			venueType: "unknown",
-			venueName: {},
+			id: id.toString(),
+			type: "unknown",
+			name: {},
 		};
 
 		set(data, (prev) => {

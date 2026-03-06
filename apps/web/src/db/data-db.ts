@@ -3,6 +3,7 @@ import { DATABASE_NAME } from "../constants";
 import { Logger } from "../lib/util/logger";
 import { UtilEventSource, type EventSource } from "./models/event-source";
 import type { EventEnvelope } from "./models/event-envelope";
+import type { Venue } from "@evnt/schema";
 
 const logger = Logger.main.styledChild("DataDB", "#a6d189");
 const loggerBroadcast = Logger.main.styledChild("DataDB > Broadcast", "#81a1c1");
@@ -30,17 +31,36 @@ export class DataDB {
 
 	static async db(): Promise<IDBPDatabase<DataDB.StoreNames>> {
 		if (this.#db) return this.#db;
-		this.#db = await openDB<DataDB.StoreNames>(DATABASE_NAME, 8, {
-			upgrade: (db, prevVer, newVer, transaction, event) => {
-				if (prevVer == 7) {
+		this.#db = await openDB<DataDB.StoreNames>(DATABASE_NAME, 9, {
+			upgrade: async (db, prevVer, newVer, transaction, event) => {
+				if (prevVer == 8) {
+					// Update all values to ensure they have the correct venue format
+					const store = transaction.objectStore(this.STORE_NAME_DATA);
+					const cursor = await store.openCursor();
+					if (cursor) for await (const c of cursor) {
+						const entry = c.value;
+						if (entry.data?.venues) {
+							entry.data.venues = entry.data.venues.map((obj: any): Venue => ({
+								...obj,
+								id: obj.id ?? obj.venueId,
+								name: obj.name ?? obj.venueName,
+								type: obj.type ?? obj.venueType,
+							}));
+							await c.update(entry);
+							console.log(`Upgraded venue format for key ${c.key}`);
+						} else {
+							console.log(`No venues to upgrade for key ${c.key}`);
+						}
+					}
+				} else if (prevVer == 7) {
 					if (db.objectStoreNames.contains(this.STORE_NAME_DATA)) {
 						const store = transaction.objectStore(this.STORE_NAME_DATA);
-						store.openCursor().then(function upgradeCursor(cursor) {
+						await store.openCursor().then(async function upgradeCursor(cursor) {
 							if (!cursor) return;
 							const oldKey = cursor.key as any;
-							cursor.delete().then(() => {
+							await cursor.delete().then(() => {
 								let newKey: DataDB.Key = UtilEventSource.fromOld(oldKey);
-								store.delete(oldKey)
+								return store.delete(oldKey)
 									.then(() => store.put(cursor.value, newKey))
 									.then(() => cursor.continue().then(upgradeCursor));
 							});

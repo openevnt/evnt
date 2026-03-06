@@ -1,5 +1,5 @@
 import type { EditAtom } from "../edit-atom";
-import type { EventComponent, EventData } from "@evnt/schema";
+import type { EventComponent, EventComponentType, EventData } from "@evnt/schema";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useMemo } from "react";
 import { focusAtom } from "jotai-optics";
@@ -12,7 +12,7 @@ export const EditComponent = ({ component, data }: {
 	data: EditAtom<EventData>;
 	component: EditAtom<EventComponent>;
 }) => {
-	const type = useAtomValue(useMemo(() => atom((get) => get(component).type), [component]));
+	const type: EventComponentType = useAtomValue(useMemo(() => atom((get) => get(component).type), [component]));
 
 	const onDelete = useSetAtom(useMemo(() => atom(null, (get, set) => {
 		const index = get(data).components?.findIndex((c) => c === get(component));
@@ -28,13 +28,13 @@ export const EditComponent = ({ component, data }: {
 		icon: Icon,
 		editComponent: EditComponent,
 	} = useMemo(() => {
-		const registryEntry = EventComponentRegistry[type];
+		const registryEntry = type in EventComponentRegistry ? EventComponentRegistry[type as keyof typeof EventComponentRegistry] : null;
 		return {
 			label: registryEntry?.label ?? { en: `Unknown: ${type}` },
 			icon: registryEntry?.icon ?? IconQuestionMark,
 			editComponent: registryEntry?.editComponent ?? (
 				(() => null)
-			) as any, // Stupid typescript
+			) as any, // Type Acrobatics
 		};
 	}, [type]);
 

@@ -19,9 +19,9 @@ export const convertFromGoogle = (data: calendar_v3.Schema$Event, {
 	if (data.location) {
 		// string ??? what tf do we do here
 		venues.push({
-			venueId: "google-calendar-location",
-			venueType: "physical", // hm
-			venueName: {
+			id: "google-calendar-location",
+			type: "physical", // hm
+			name: {
 				en: data.location,
 			},
 		});
@@ -48,7 +48,7 @@ export const convertFromGoogle = (data: calendar_v3.Schema$Event, {
 		description: inverseT(data.description),
 		instances: [
 			{
-				venueIds: venues.map(v => v.venueId),
+				venueIds: venues.map(v => v.id),
 				start: asPartialDate(data.start || {}),
 				end: asPartialDate(data.end || {}),
 			},

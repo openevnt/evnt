@@ -1,4 +1,4 @@
-import { EventDataSchema, type EventData } from "@evnt/schema";
+import { EventDataSchema, type EventData, type Venue } from "@evnt/schema";
 import { UtilEventSource, type EventSource } from "./models/event-source";
 import { DataDB } from "./data-db";
 import { Client, simpleFetchHandler, type FailedClientResponse } from "@atcute/client";
@@ -12,16 +12,16 @@ import { getPdsEndpoint } from "@atcute/identity";
 export class EventResolver {
 	static async resolve(source: EventSource): Promise<EventEnvelope> {
 		const cached = await DataDB.get(source);
-		if (UtilEventSource.isLocal(source) && cached != null) return cached;
-		if (cached != null) return cached;
-		// the code below causes an infinite loop!
+		if (cached != null) {
+			if (cached.data?.venues) cached.data.venues = cached.data.venues.map((obj: any): Venue => ({
+				...obj,
+				id: obj.id ?? obj.venueId,
+				name: obj.name ?? obj.venueName,
+				type: obj.type ?? obj.venueType,
+			}));
+			return cached;
+		}
 
-		// if (cached != null && !!cached.data && !cached.err) {
-		// 	const updated = await this.#update(source, cached);
-		// 	console.log(`EventResolver: resolved event source ${source} from cache, updated: ${updated != null}`);
-		// 	if (updated != null) await DataDB.put(source, updated);
-		// 	if (updated != null) return updated;
-		// };
 		const envelope = await this.#fetch(source);
 		await DataDB.put(source, envelope);
 		console.log(`EventResolver: resolved event source ${source} from network, success: ${!!envelope.data}, err: ${!!envelope.err}`);

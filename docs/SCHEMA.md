@@ -34,11 +34,14 @@ _All properties are optional._
 
 ## EventComponent
 
-_Union of the following possible types:_
+_Object containing the following properties:_
 
-- _Object with properties:_<ul><li>**`type`** (\*): `'link'`</li><li>**`data`** (\*): [LinkComponent](#linkcomponent)</li></ul>
-- _Object with properties:_<ul><li>**`type`** (\*): `'source'`</li><li>**`data`** (\*): [SourceComponent](#sourcecomponent) - A source of information about the event, such as a news article, a social media post, an official announcement etc.</li></ul>
-- _Object with properties:_<ul><li>**`type`** (\*): `'splashMedia'`</li><li>**`data`** (\*): _Object with properties:_<ul><li>**`roles`** (\*): `Array<string>`</li><li>**`media`** (\*): [Media](#media) - A media item, such as an image or video</li></ul></li></ul>
+| Property        | Type                      |
+| :-------------- | :------------------------ |
+| **`type`** (\*) | `string`                  |
+| **`data`** (\*) | `Record<string, unknown>` |
+
+_(\*) Required._
 
 ## EventInstance
 
@@ -156,12 +159,12 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-| Property             | Description                                   | Type                          |
-| :------------------- | :-------------------------------------------- | :---------------------------- |
-| **`venueType`** (\*) |                                               | `'online'`                    |
-| **`venueId`** (\*)   | ID of the venue to be used in Event Instances | `string`                      |
-| **`venueName`** (\*) | The name of the venue                         | [Translations](#translations) |
-| `url`                |                                               | `string`                      |
+| Property        | Description                                   | Type                          |
+| :-------------- | :-------------------------------------------- | :---------------------------- |
+| **`type`** (\*) |                                               | `'online'`                    |
+| **`id`** (\*)   | ID of the venue to be used in Event Instances | `string`                      |
+| **`name`** (\*) | The name of the venue                         | [Translations](#translations) |
+| `url`           |                                               | `string`                      |
 
 _(\*) Required._
 
@@ -177,14 +180,14 @@ A venue with a known or unknown physical location
 
 _Object containing the following properties:_
 
-| Property             | Description                                   | Type                          |
-| :------------------- | :-------------------------------------------- | :---------------------------- |
-| **`venueType`** (\*) |                                               | `'physical'`                  |
-| **`venueId`** (\*)   | ID of the venue to be used in Event Instances | `string`                      |
-| **`venueName`** (\*) | The name of the venue                         | [Translations](#translations) |
-| `address`            |                                               | [Address](#address)           |
-| `coordinates`        | Approximate coordinates                       | [LatLng](#latlng)             |
-| `googleMapsPlaceId`  |                                               | `string`                      |
+| Property            | Description                                   | Type                          |
+| :------------------ | :-------------------------------------------- | :---------------------------- |
+| **`type`** (\*)     |                                               | `'physical'`                  |
+| **`id`** (\*)       | ID of the venue to be used in Event Instances | `string`                      |
+| **`name`** (\*)     | The name of the venue                         | [Translations](#translations) |
+| `address`           |                                               | [Address](#address)           |
+| `coordinates`       | Approximate coordinates                       | [LatLng](#latlng)             |
+| `googleMapsPlaceId` |                                               | `string`                      |
 
 _(\*) Required._
 
@@ -200,6 +203,21 @@ _Object containing the following properties:_
 
 _(\*) Required._
 
+## SplashMediaComponent
+
+_Object containing the following properties:_
+
+| Property         | Description                             | Type                                                 |
+| :--------------- | :-------------------------------------- | :--------------------------------------------------- |
+| **`roles`** (\*) |                                         | _Array of [SplashMediaRole](#splashmediarole) items_ |
+| **`media`** (\*) | A media item, such as an image or video | [Media](#media)                                      |
+
+_(\*) Required._
+
+## SplashMediaRole
+
+_String._
+
 ## Translations
 
 A multilingual string
@@ -209,13 +227,24 @@ _Object record with dynamic keys:_
 - _keys of type_ [LanguageKey](#languagekey)
 - _values of type_ `string` (_optional_)
 
+## UnknownEventComponent
+
+_Object containing the following properties:_
+
+| Property        | Type                      |
+| :-------------- | :------------------------ |
+| **`type`** (\*) | `string`                  |
+| **`data`** (\*) | `Record<string, unknown>` |
+
+_(\*) Required._
+
 ## Venue
 
 _Union of the following possible types:_
 
 - [PhysicalVenue](#physicalvenue)
 - [OnlineVenue](#onlinevenue)
-- _Object with properties:_<ul><li>**`venueType`** (\*): `'unknown'`</li><li>**`venueId`** (\*): `string` - ID of the venue to be used in Event Instances</li><li>**`venueName`** (\*): [Translations](#translations) - The name of the venue</li></ul>
+- _Object with properties:_<ul><li>**`type`** (\*): `'unknown'`</li><li>**`id`** (\*): `string` - ID of the venue to be used in Event Instances</li><li>**`name`** (\*): [Translations](#translations) - The name of the venue</li></ul>
 
 ## VenueType
 

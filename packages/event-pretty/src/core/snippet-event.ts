@@ -22,10 +22,10 @@ export const snippetEvent = (data: EventData, opts?: {
 			let hasPhysical = false;
 			let hasOnline = false;
 			for (let venueId of venueIds) {
-				const venue = data.venues?.find(v => v.venueId === venueId);
+				const venue = data.venues?.find(v => v.id === venueId);
 				if (!venue) continue;
-				if (venue.venueType === "physical") hasPhysical = true;
-				if (venue.venueType === "online") hasOnline = true;
+				if (venue.type === "physical") hasPhysical = true;
+				if (venue.type === "online") hasOnline = true;
 			};
 
 			snippets.push({
@@ -39,7 +39,7 @@ export const snippetEvent = (data: EventData, opts?: {
 			});
 		} else {
 			for (const venueId of venueIds) {
-				const venue = data.venues?.find(v => v.venueId === venueId);
+				const venue = data.venues?.find(v => v.id === venueId);
 				if (!venue) continue;
 				snippets.push(snippetVenue(venue, opts?.venueDetails));
 			}
@@ -56,24 +56,24 @@ export const snippetVenue = (venue: Venue, detailed?: boolean): TSnippet => {
 	let sublabel: SnippetLabel | undefined = undefined;
 
 	if (detailed) {
-		if (venue.venueType === "physical" && venue.address) {
+		if (venue.type === "physical" && venue.address) {
 			sublabel = { type: "address", value: venue.address };
-		} else if (venue.venueType === "online" && venue.url) {
+		} else if (venue.type === "online" && venue.url) {
 			sublabel = { type: "external-link", url: venue.url };
-		} else if (venue.venueType === "unknown") {
+		} else if (venue.type === "unknown") {
 			sublabel = undefined;
 		}
 	}
 
 	return {
-		icon: venue.venueType === "physical" ? "venue-physical" : venue.venueType === "online" ? "venue-online" : "venue-unknown",
-		label: UtilTranslations.isEmpty(venue.venueName) ? { type: "placeholder", hint: "unnamed" } : { type: "translations", value: venue.venueName },
+		icon: venue.type === "physical" ? "venue-physical" : venue.type === "online" ? "venue-online" : "venue-unknown",
+		label: UtilTranslations.isEmpty(venue.name) ? { type: "placeholder", hint: "unnamed" } : { type: "translations", value: venue.name },
 		sublabel,
 	};
 };
 
 export const venueGoogleMapsLink = (venue: Venue): string | null => {
-	if (venue.venueType !== "physical") return null;
+	if (venue.type !== "physical") return null;
 	if (venue.googleMapsPlaceId) return `https://www.google.com/maps/place/?${new URLSearchParams({ q: `place_id:${venue.googleMapsPlaceId}` }).toString()}`;
 	if (venue.coordinates) return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: `${venue.coordinates.lat},${venue.coordinates.lng}` }).toString()}`;
 	if (venue.address?.addr) return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: venue.address.addr }).toString()}`;
@@ -81,7 +81,7 @@ export const venueGoogleMapsLink = (venue: Venue): string | null => {
 }
 
 export const venueOpenStreetMapsLink = (venue: Venue): string | null => {
-	if (venue.venueType !== "physical") return null;
+	if (venue.type !== "physical") return null;
 	if (venue.coordinates) return `https://www.openstreetmap.org/?mlat=${venue.coordinates.lat}&mlon=${venue.coordinates.lng}#map=18/${venue.coordinates.lat}/${venue.coordinates.lng}`;
 	if (venue.address?.addr) return `https://www.openstreetmap.org/search?${new URLSearchParams({ query: venue.address.addr }).toString()}`;
 	return null;

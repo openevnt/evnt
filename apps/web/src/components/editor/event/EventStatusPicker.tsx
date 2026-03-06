@@ -27,7 +27,7 @@ export const EventStatusPicker = ({
 		uncertain: "var(--mantine-color-gray-6)",
 	};
 
-	const renderOption: SelectProps["renderOption"] = useCallback(({ option, checked }) => {
+	const renderOption: SelectProps["renderOption"] = (({ option, checked }) => {
 		const Icon = icons[option.value as EventStatus];
 
 		return (
@@ -44,7 +44,7 @@ export const EventStatusPicker = ({
 				{checked && <IconCheck style={{ marginInlineStart: 'auto' }} />}
 			</Group>
 		);
-	}, []);
+	});
 
 	const Icon = icons[value];
 

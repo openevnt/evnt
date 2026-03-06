@@ -22,7 +22,7 @@ export const EventDataSchema = z.object({
 	instances: EventInstanceSchema.array().optional().meta({ description: "The instances of the event" }),
 	components: EventComponentSchema.array().optional().meta({ description: "Additional components of the event" }),
 }).refine((data) => {
-	const venueIds = new Set(data.venues?.map(v => v.venueId));
+	const venueIds = new Set(data.venues?.map(v => v.id));
 	return data.instances?.every(instance => instance.venueIds?.every(venueId => venueIds.has(venueId))) ?? true;
 }, {
 	message: "Incorrect venueIds reference(s)",

@@ -24,15 +24,15 @@ export const convertFromVEvent = (
 	for (let loc of event.component.getAllProperties("location")) {
 		const location = loc.getFirstValue();
 		if (typeof location == "string") eventData.venues!.push({
-			venueId: `icalendar:${eventData.venues!.length}`,
-			venueName: { [language]: location },
-			venueType: "unknown",
+			id: `icalendar:${eventData.venues!.length}`,
+			name: { [language]: location },
+			type: "unknown",
 		});
 	}
 
 	if (event.startDate) {
 		eventData.instances!.push({
-			venueIds: eventData.venues?.map(({ venueId }) => venueId) || [],
+			venueIds: eventData.venues?.map(({ id }) => id) || [],
 			start: UtilPartialDate.fromDate(event.startDate.toJSDate()),
 			end: event.endDate ? UtilPartialDate.fromDate(event.endDate.toJSDate()) : undefined,
 		});
