@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "blue.deniz.event",
+  "id": "directory.evnt.event",
   "defs": {
     "main": {
       "type": "object",

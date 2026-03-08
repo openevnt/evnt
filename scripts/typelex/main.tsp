@@ -1,6 +1,6 @@
 import "@typelex/emitter";
 
-namespace blue.deniz.event {
+namespace directory.evnt.event {
 	model Main {
 		@required @readOnly v: numeric = 0;
 		@required name: Translations;

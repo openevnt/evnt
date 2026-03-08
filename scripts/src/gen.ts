@@ -8,7 +8,7 @@ const LEXICON_PATH = new URL("../../event-data.lexicon-beta.json", import.meta.u
 const MD_PATH = new URL("../../docs/SCHEMA.md", import.meta.url);
 
 const INSTANCES_JSON_PATH = new URL("../../data/instances.json", import.meta.url);
-const WELL_KNOWN_ORIGIN_ASSOC_PATH = new URL("../../apps/redirector/public/.well-known/web-app-origin-association", import.meta.url);
+const WELL_KNOWN_ORIGIN_ASSOC_PATH = new URL("../../apps/opener/public/.well-known/web-app-origin-association", import.meta.url);
 
 async function main() {
 	const jsonSchema = await genJsonSchema(JSON_SCHEMA_PATH);

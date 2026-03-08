@@ -50,7 +50,7 @@ export const SpecificationSection = () => {
 							ATProto Lexicon
 						</Anchor> available at <Anchor href="https://github.com/deniz-blue/evnt/blob/main/event-data.lexicon.json" target="_blank" rel="noopener noreferrer">
 							event-data.lexicon.json
-						</Anchor>. Lexicons do not support the neccesary features to fully represent the evnt schema.
+						</Anchor>. Lexicons do not support the neccesary features to fully represent the evnt schema. ATProto records for Evnt data should be under the <Code>directory.evnt.event</Code> collection.
 					</Text>
 				</List.Item>
 			</List>

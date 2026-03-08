@@ -22,7 +22,7 @@ _Links:_
 
 | Name                                      | Description     | Plat.                                                                                                                 | Lang.    | Source Code                                                 |
 |-------------------------------------------|-----------------|-----------------------------------------------------------------------------------------------------------------------|----------|-------------------------------------------------------------|
-| **[Vantage](https://vantage.deniz.blue)** | Example Web App | 🌐                                                                                                                    | TS+React | [./apps/web](./apps/vantage)                                    |
+| **[Vantage](https://vantage.deniz.blue)** | Example Web App | 🌐                                                                                                                    | TS+React | [./apps/web](./apps/vantage)                                |
 | **Event Viewer**                          | Kuylar's WIP    | <img src="https://github.com/deniz-blue/md-emojis/raw/main/emojis/platform/android.svg" align="center" height="24" /> | Kotlin   | [kuylar/EventViewer](https://github.com/kuylar/EventViewer) |
 
 Applications are the different clients that can be used to view and interact with events.
@@ -33,9 +33,7 @@ Events can be served over **HTTP** or [ATProto](https://atproto.com).
 
 ## ATProto
 
-Event data can be served over [ATProto](https://atproto.com).
-
-We are currently using the `blue.deniz.event` collection for storing event data but it is subject to change.
+Event data can be served over [ATProto](https://atproto.com) using the `at://` URI scheme. This allows events to be stored as ATProto records, which can be easily shared and discovered within the ATProto ecosystem. We use the `directory.evnt.event` collection for event records, but this is not strictly required. The content of the record should be the `EventData` schema.
 
 ## Event Repositories
 

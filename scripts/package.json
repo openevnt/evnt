@@ -6,7 +6,7 @@
   "scripts": {
     "gen": "pnpm run gen:scriptables && pnpm run gen:typelex",
 	"gen:scriptables": "tsx ./src/gen.ts",
-    "gen:typelex": "tsp compile ./typelex/main.tsp --emit @typelex/emitter && mv ./tsp-output/@typelex/emitter/blue/deniz/event.json ../event-data.lexicon.json && rm -rf ./tsp-output",
+    "gen:typelex": "tsp compile ./typelex/main.tsp --emit @typelex/emitter && mv ./tsp-output/@typelex/emitter/directory/evnt/event.json ../event-data.lexicon.json && rm -rf ./tsp-output",
     "dev": "tsx watch ./src/gen.ts"
   },
   "keywords": [],
