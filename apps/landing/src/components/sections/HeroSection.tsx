@@ -55,7 +55,7 @@ instances: [
 					src={`https://vantage.deniz.blue/embed?${new URLSearchParams({
 						data: JSON.stringify(exampleData),
 					})}`}
-					style={{ border: "none", flex: "1" }}
+					style={{ border: "none", width: "100%", height: "100%" }}
 				/>
 			</Paper>
 			<Text c="dimmed" fz="xs">

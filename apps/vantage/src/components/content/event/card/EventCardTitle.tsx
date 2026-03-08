@@ -56,6 +56,7 @@ export const EventCardTitle = () => {
 									to="."
 									search={(old) => ({ ...old, [key]: source })}
 									target={embed ? "_blank" : undefined}
+									disabled={!source}
 									{...props}
 								/>
 							)}
@@ -74,7 +75,7 @@ export const EventCardTitle = () => {
 							</Text>
 						</Anchor>
 					</Group>
-					<EnvelopeErrorBadge err={err} />
+					<EnvelopeErrorBadge />
 				</Group>
 				{variant !== "inline" && (
 					<>
