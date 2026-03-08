@@ -1,4 +1,4 @@
-import { JsonInput, Text } from "@mantine/core";
+import { JsonInput, Paper, Stack, Text, Title } from "@mantine/core";
 import { Section } from "../Section";
 import { useState } from "react";
 import { EventDataSchema, type EventData } from "@evnt/schema";
@@ -45,6 +45,25 @@ export const ValidatorSection = () => {
 					}
 				}}
 			/>
+
+			<Title order={3}>
+				Preview
+			</Title>
+
+			<Stack gap={0}>
+				<Paper withBorder h={300} style={{ resize: "both", overflow: "hidden" }}>
+					<iframe
+						title="Event Data Preview"
+						src={`https://vantage.deniz.blue/embed?${new URLSearchParams({
+							data: value,
+						})}`}
+						style={{ border: "none", margin: 0, padding: 0, width: "100%", height: "100%" }}
+					/>
+				</Paper>
+				<Text c="dimmed" fz="xs">
+					Rendered using Vantage
+				</Text>
+			</Stack>
 		</Section>
 	)
 };

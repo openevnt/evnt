@@ -9,8 +9,6 @@ export const FeaturesSection = () => {
 
 			<List spacing="md" styles={{ itemIcon: { display: "inline", verticalAlign: "start" } }}>
 				<List.Item>
-					<IconLanguage />
-
 					<Text span fw="bold">Multilingual</Text> - Every text field in Evnt supports multiple languages (by using language-keyed objects). This means that internationalization is built into the core of the format.
 
 					<Code
@@ -30,6 +28,9 @@ export const FeaturesSection = () => {
 				</List.Item>
 				<List.Item>
 					<Text span fw="bold">Multiple Locations</Text> - Evnt has first class support for events that have multiple locations, both physical and online, maybe even multiple physical locations.
+				</List.Item>
+				<List.Item>
+					<Text span fw="bold">Metadata</Text> - Add as many links, splash media, etc. as you want.
 				</List.Item>
 				<List.Item>
 					<Text span fw="bold">Extensible</Text> - Designed to be flexible and extensible

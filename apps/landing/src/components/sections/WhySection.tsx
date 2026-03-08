@@ -1,4 +1,4 @@
-import { Anchor, Text } from "@mantine/core";
+import { Anchor, Image, Text } from "@mantine/core";
 import { Section } from "../Section";
 
 export const WhySection = () => {

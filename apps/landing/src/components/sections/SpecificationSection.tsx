@@ -6,8 +6,8 @@ export const SpecificationSection = () => {
 	return (
 		<Section title="Specification">
 			<Text>
-				You can find the specification for evnt in <Anchor href="https://github.com/deniz-blue/evnt/blob/main/docs/readme.md" target="_blank" rel="noopener noreferrer">
-					docs/readme.md
+				You can find the specification for evnt in <Anchor href="https://github.com/deniz-blue/evnt/blob/main/docs/README.md" target="_blank" rel="noopener noreferrer">
+					docs/README.md
 				</Anchor> file in the GitHub repository.
 			</Text>
 
@@ -30,11 +30,14 @@ export const SpecificationSection = () => {
 							event-data.schema.json
 						</Anchor>. Here's a raw link you can use as <Code>$schema</Code>:
 					</Text>
-
-					<CodeHighlight
-						code="https://raw.githubusercontent.com/deniz-blue/events-format/refs/heads/main/event-data.schema.json"
-					/>
 				</List.Item>
+
+				<CodeHighlight
+					styles={{
+						code: { paddingRight: 60 },
+					}}
+					code="https://raw.githubusercontent.com/deniz-blue/events-format/refs/heads/main/event-data.schema.json"
+				/>
 
 				<List.Item>
 					<Text>

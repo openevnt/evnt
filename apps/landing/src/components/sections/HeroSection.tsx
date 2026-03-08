@@ -1,5 +1,5 @@
-import { Center, Flex, Paper, Stack, Text, Title } from "@mantine/core";
-import { IconArrowDown } from "@tabler/icons-react";
+import { Button, Center, Flex, Group, Paper, Stack, Text, Title } from "@mantine/core";
+import { IconArrowDown, IconExternalLink } from "@tabler/icons-react";
 import type { EventData } from "@evnt/schema";
 
 export const HeroSection = () => {
@@ -35,7 +35,7 @@ export const HeroSection = () => {
 
 	const cardPart = (
 		<Stack gap={0}>
-			<Paper withBorder w={400} h={200}>
+			<Paper withBorder w="calc(min(100%, 400px))" h={200}>
 				<iframe
 					title="Example Event"
 					src={`https://vantage.deniz.blue/embed?${new URLSearchParams({
@@ -51,7 +51,7 @@ export const HeroSection = () => {
 	);
 
 	return (
-		<Flex mih="calc(100dvh - 60px)" display="flex">
+		<Flex mih="calc(100svh - 60px)" display="flex">
 			<Stack justify="space-between" align="start" w="100%">
 				<Center flex="1" w="100%">
 					<Stack w="100%">
@@ -66,6 +66,27 @@ export const HeroSection = () => {
 								A standardized, open-source data format for representing events
 							</Text>
 						</Stack>
+
+						<Group gap={4}>
+							<Button
+								component="a"
+								href="https://github.com/deniz-blue/evnt"
+								target="_blank"
+								rightSection={<IconExternalLink />}
+								variant="light"
+							>
+								GitHub
+							</Button>
+							<Button
+								component="a"
+								href="#applications"
+								rightSection={<IconArrowDown />}
+								variant="light"
+								color="green"
+							>
+								Apps
+							</Button>
+						</Group>
 
 						{cardPart}
 
