@@ -1,0 +1,13 @@
+{
+	"include": [
+		"**/*",
+	],
+	"extends": "@repo/typescript-config/vite.json",
+	"compilerOptions": {
+		"paths": {
+			"~/*": [
+				"./src/*"
+			]
+		}
+	}
+}

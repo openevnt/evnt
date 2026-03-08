@@ -1,0 +1,33 @@
+{
+	"name": "landing",
+	"private": true,
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.28.0",
+	"dependencies": {
+		"@evnt/schema": "workspace:*",
+		"@mantine/code-highlight": "9.0.0-alpha.4",
+		"@mantine/core": "9.0.0-alpha.4",
+		"@mantine/hooks": "9.0.0-alpha.4",
+		"@tabler/icons-react": "^3.36.1",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"@types/node": "^25.3.5",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^5.1.4",
+		"typescript": "^5.9.3",
+		"vite": "8.0.0-beta.16",
+		"vite-tsconfig-paths": "^6.1.1"
+	}
+}
