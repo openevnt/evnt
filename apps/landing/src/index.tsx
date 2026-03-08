@@ -1,10 +1,13 @@
 import { Container } from "@mantine/core";
 import { LandingPage } from "./components/LandingPage";
+import { Layout } from "./components/Layout";
 
 export const IndexPage = () => {
 	return (
-		<Container>
-			<LandingPage />
-		</Container>
+		<Layout>
+			<Container>
+				<LandingPage />
+			</Container>
+		</Layout>
 	);
 }

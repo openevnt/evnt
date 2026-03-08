@@ -1,5 +1,5 @@
 import { Code, List, Text } from "@mantine/core";
-import { IconCalendarQuestion, IconCalendarRepeat, IconClockQuestion, IconLanguage } from "@tabler/icons-react";
+import { IconLanguage } from "@tabler/icons-react";
 import { Section } from "../Section"
 
 export const FeaturesSection = () => {
@@ -30,6 +30,9 @@ export const FeaturesSection = () => {
 				</List.Item>
 				<List.Item>
 					<Text span fw="bold">Multiple Locations</Text> - Evnt has first class support for events that have multiple locations, both physical and online, maybe even multiple physical locations.
+				</List.Item>
+				<List.Item>
+					<Text span fw="bold">Extensible</Text> - Designed to be flexible and extensible
 				</List.Item>
 			</List>
 		</Section>

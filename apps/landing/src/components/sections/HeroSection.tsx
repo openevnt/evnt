@@ -1,61 +1,47 @@
-import { Box, Center, Flex, Group, Paper, Stack, Text, Title } from "@mantine/core";
-import { CodeHighlight } from "@mantine/code-highlight";
-import { IconArrowDown, IconArrowRight } from "@tabler/icons-react";
+import { Center, Flex, Paper, Stack, Text, Title } from "@mantine/core";
+import { IconArrowDown } from "@tabler/icons-react";
 import type { EventData } from "@evnt/schema";
-import { UtilPartialDate } from "@evnt/schema/utils";
 
 export const HeroSection = () => {
-	const today = UtilPartialDate.today();
-
 	const exampleData: EventData = {
 		v: 0,
-		name: { en: "Example Event" },
+		name: { en: "Some Hackathon" },
 		venues: [
 			{
 				id: "0",
 				name: { en: "Somewhere" },
-				type: "unknown",
+				type: "physical",
+			},
+			{
+				id: "1",
+				name: { en: "And Online" },
+				type: "online",
+				url: "https://example.com",
 			},
 		],
 		instances: [
 			{
-				venueIds: ["0"],
-				start: today,
+				venueIds: ["0", "1"],
+				start: "2027-03-08T09:00",
+				end: "2027-03-08T18:00",
+			},
+			{
+				venueIds: ["0", "1"],
+				start: "2027-03-09T09:00",
+				end: "2027-03-09T18:00",
 			},
 		],
 	};
 
-	const exampleDataString = `
-v: 0,
-name: { en: "Example Event" },
-venues: [
-	{
-		id: "0",
-		name: { en: "Somewhere" },
-		type: "unknown",
-	},
-],
-instances: [
-	{
-		venueIds: ["0"],
-		start: "${today}",
-	},
-],
-`.trim().replaceAll(/\t/gm, "  ");
-
-	const codePart = (
-		<CodeHighlight flex="1" language="js" code={exampleDataString} />
-	);
-
 	const cardPart = (
-		<Stack gap={0} flex="1">
-			<Paper withBorder>
+		<Stack gap={0}>
+			<Paper withBorder w={400} h={200}>
 				<iframe
 					title="Example Event"
 					src={`https://vantage.deniz.blue/embed?${new URLSearchParams({
 						data: JSON.stringify(exampleData),
 					})}`}
-					style={{ border: "none", width: "100%", height: "100%" }}
+					style={{ border: "none", margin: 0, padding: 0, width: "100%", height: "100%" }}
 				/>
 			</Paper>
 			<Text c="dimmed" fz="xs">
@@ -65,7 +51,7 @@ instances: [
 	);
 
 	return (
-		<Flex h="100dvh" display="flex">
+		<Flex mih="calc(100dvh - 60px)" display="flex">
 			<Stack justify="space-between" align="start" w="100%">
 				<Center flex="1" w="100%">
 					<Stack w="100%">
@@ -81,7 +67,9 @@ instances: [
 							</Text>
 						</Stack>
 
-						<Box visibleFrom="sm">
+						{cardPart}
+
+						{/* <Box visibleFrom="sm">
 							<Group w="100%" wrap="nowrap">
 								{codePart}
 								<Box flex="0">
@@ -96,7 +84,7 @@ instances: [
 								<IconArrowDown />
 								{cardPart}
 							</Stack>
-						</Box>
+						</Box> */}
 					</Stack>
 				</Center>
 				<Center p="md" w="100%">
