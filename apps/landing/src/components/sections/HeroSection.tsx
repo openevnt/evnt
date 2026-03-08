@@ -43,6 +43,27 @@ instances: [
 ],
 `.trim().replaceAll(/\t/gm, "  ");
 
+	const codePart = (
+		<CodeHighlight flex="1" language="js" code={exampleDataString} />
+	);
+
+	const cardPart = (
+		<Stack gap={0} flex="1">
+			<Paper withBorder>
+				<iframe
+					title="Example Event"
+					src={`https://vantage.deniz.blue/embed?${new URLSearchParams({
+						data: JSON.stringify(exampleData),
+					})}`}
+					style={{ border: "none", flex: "1" }}
+				/>
+			</Paper>
+			<Text c="dimmed" fz="xs">
+				Rendered using Vantage
+			</Text>
+		</Stack>
+	);
+
 	return (
 		<Flex h="100dvh" display="flex">
 			<Stack justify="space-between" align="start" w="100%">
@@ -60,28 +81,22 @@ instances: [
 							</Text>
 						</Stack>
 
-						<Group w="100%">
-							<CodeHighlight flex="1" language="js" code={exampleDataString} />
-							<Box flex="0">
-								<IconArrowRight />
-							</Box>
-							<Stack gap={0} flex="1">
-								<Paper withBorder>
-									<iframe
-										title="Example Event"
-										src={`https://vantage.deniz.blue/embed?${new URLSearchParams({
-											"event-data": JSON.stringify(exampleData),
-										})}`}
-										width="400"
-										height="300"
-										style={{ border: "none" }}
-									/>
-								</Paper>
-								<Text c="dimmed" fz="xs">
-									Rendered using Vantage
-								</Text>
+						<Box visibleFrom="sm">
+							<Group w="100%" wrap="nowrap">
+								{codePart}
+								<Box flex="0">
+									<IconArrowRight />
+								</Box>
+								{cardPart}
+							</Group>
+						</Box>
+						<Box hiddenFrom="sm">
+							<Stack w="100%" align="center">
+								{codePart}
+								<IconArrowDown />
+								{cardPart}
 							</Stack>
-						</Group>
+						</Box>
 					</Stack>
 				</Center>
 				<Center p="md" w="100%">
