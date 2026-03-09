@@ -50,7 +50,7 @@
         "name"
       ]
     },
-    "physicalVenue": {
+    "PhysicalVenue": {
       "type": "object",
       "properties": {
         "id": {
@@ -78,7 +78,7 @@
         "name"
       ]
     },
-    "address": {
+    "Address": {
       "type": "object",
       "properties": {
         "addr": {
@@ -92,7 +92,7 @@
         }
       }
     },
-    "coordinates": {
+    "Coordinates": {
       "type": "object",
       "properties": {
         "lat": {
@@ -107,7 +107,7 @@
         "lng"
       ]
     },
-    "onlineVenue": {
+    "OnlineVenue": {
       "type": "object",
       "properties": {
         "id": {
@@ -130,7 +130,7 @@
         "name"
       ]
     },
-    "unknownVenue": {
+    "UnknownVenue": {
       "type": "object",
       "properties": {
         "id": {
@@ -150,7 +150,7 @@
         "name"
       ]
     },
-    "eventInstance": {
+    "EventInstance": {
       "type": "object",
       "properties": {
         "venueIds": {
@@ -171,7 +171,7 @@
         }
       }
     },
-    "eventComponent": {
+    "EventComponent": {
       "type": "object",
       "properties": {
         "type": {
@@ -186,7 +186,7 @@
         "data"
       ]
     },
-    "eventStatus": {
+    "EventStatus": {
       "type": "string",
       "knownValues": [
         "planned",

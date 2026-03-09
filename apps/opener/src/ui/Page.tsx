@@ -96,7 +96,7 @@ export const Page = ({
 	return (
 		<Container size="xs" my="md">
 			<Stack align="center" w="100%">
-				<Text ta="center">
+				<Text ta="center" fw="bold">
 					{message}
 				</Text>
 
@@ -110,12 +110,14 @@ export const Page = ({
 
 				<Collapse expanded={count !== null}>
 					{(count === 0) ? (
-						<Text ta="start" size="xs" c="yellow">
+						<Text ta="start" c="yellow">
 							Redirecting...
 						</Text>
 					) : (
-						<Text ta="start" size="xs" c="dimmed">
-							Redirecting to first application in {count}... <Anchor style={{ cursor: "pointer" }} onClick={cancel}>Cancel</Anchor>
+						<Text ta="start" c="dimmed">
+							Redirecting to first application in <Text c="yellow" fw="bold" inherit span>
+								{count}
+							</Text>... <Anchor style={{ cursor: "pointer" }} onClick={cancel}>Cancel</Anchor>
 						</Text>
 					)}
 				</Collapse>
@@ -147,11 +149,11 @@ export const Page = ({
 					>
 						<Stack gap="xs" fz="sm" mb="md">
 							<Text inherit>
-								Evnt is a new open format for describing events, and this page is a redirector that sends you to the appropriate application to view the event, based on your preferences.
+								<Text span inherit fw="bold">Evnt</Text> is a new open format for describing events, and this page is a redirector that sends you to the appropriate application to view the event, based on your preferences.
 							</Text>
 
 							<Anchor
-								href="https://github.com/deniz-blue/evnt"
+								href="https://evnt.directory"
 								target="_blank"
 								rel="noopener noreferrer"
 								inherit

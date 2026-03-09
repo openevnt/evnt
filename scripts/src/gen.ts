@@ -2,9 +2,10 @@ import { readFileSync } from "node:fs";
 import { genMarkdownDocs } from "./gen-md";
 import { genJsonSchema } from "./gen-schema";
 import { genWellKnownOriginAssoc } from "./gen-wellknown-originassoc";
+import { postprocessLexicon } from "./postprocess-lexicon";
 
 const JSON_SCHEMA_PATH = new URL("../../event-data.schema.json", import.meta.url);
-const LEXICON_PATH = new URL("../../event-data.lexicon-beta.json", import.meta.url);
+const LEXICON_PATH = new URL("../../event-data.lexicon.json", import.meta.url);
 const MD_PATH = new URL("../../docs/SCHEMA.md", import.meta.url);
 
 const INSTANCES_JSON_PATH = new URL("../../data/instances.json", import.meta.url);
@@ -20,6 +21,9 @@ async function main() {
 
 	await genWellKnownOriginAssoc(instancesJson, WELL_KNOWN_ORIGIN_ASSOC_PATH);
 	console.log("Generated", WELL_KNOWN_ORIGIN_ASSOC_PATH.href);
+
+	await postprocessLexicon(LEXICON_PATH);
+	console.log("Post-processed Lexicon at", LEXICON_PATH.href);
 }
 
 main().catch((err) => {
