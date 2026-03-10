@@ -19,7 +19,6 @@
     "@typelex/cli": "^0.4.0",
     "@typelex/emitter": "^0.4.0",
     "@types/node": "^25.0.10",
-    "json-schema-to-lexicon": "workspace:*",
     "tsx": "^4.21.0",
     "zod": "^4.3.5",
     "zod2md": "^0.2.4"

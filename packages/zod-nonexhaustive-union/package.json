@@ -1,5 +1,5 @@
 {
-	"name": "json-schema-to-lexicon",
+	"name": "zod-nonexhaustive-union",
 	"version": "0.0.1",
 	"type": "module",
 	"author": "deniz.blue",
@@ -18,11 +18,10 @@
 		"build": "tsc"
 	},
 	"devDependencies": {
-		"@atproto/lexicon": "^0.6.1",
-		"@evnt/schema": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
-		"@types/node": "^25.0.10",
-		"json-schema-typed": "^8.0.2",
 		"typescript": "^5.6.3"
+	},
+	"dependencies": {
+		"zod": "^4.3.6"
 	}
 }
