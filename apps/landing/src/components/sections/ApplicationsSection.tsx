@@ -41,7 +41,7 @@ export const ApplicationsSection = () => {
 										<IconBrandReact />
 									</Tooltip>
 								</Group>,
-								<Anchor href="https://github.com/deniz-blue/evnt/blob/main/apps/vantage" target="_blank" rel="noopener noreferrer">
+								<Anchor href="https://github.com/openevnt/evnt/blob/main/apps/vantage" target="_blank" rel="noopener noreferrer">
 									Link
 								</Anchor>
 							]

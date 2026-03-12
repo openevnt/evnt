@@ -7,7 +7,7 @@ export const SpecificationSection = () => {
 	return (
 		<Section title="Specification">
 			<Text>
-				You can find the specification for Evnt in <Anchor href="https://github.com/deniz-blue/evnt/blob/main/docs/README.md" target="_blank" rel="noopener noreferrer">
+				You can find the specification for Evnt in <Anchor href="https://github.com/openevnt/evnt/blob/main/docs/README.md" target="_blank" rel="noopener noreferrer">
 					docs/README.md
 				</Anchor> file in the GitHub repository.
 			</Text>
@@ -15,13 +15,13 @@ export const SpecificationSection = () => {
 			<Stack align="center">
 				<Button
 					component="a"
-					href="https://github.com/deniz-blue/evnt/blob/main/docs/README.md"
+					href="https://github.com/openevnt/evnt/blob/main/docs/README.md"
 					target="_blank"
 					rel="noopener noreferrer"
 					rightSection={<IconExternalLink />}
 					variant="light"
 				>
-					View on GitHub
+					Read the Specification
 				</Button>
 			</Stack>
 
@@ -48,7 +48,7 @@ export const SpecificationSection = () => {
 			<List spacing="xl">
 				<List.Item>
 					<Text>
-						A <Text span fw="bold">JSON Schema</Text> for the event data, which can be used for validation and type generation. You can find it in <Anchor href="https://github.com/deniz-blue/evnt/blob/main/event-data.schema.json" target="_blank" rel="noopener noreferrer">
+						A <Text span fw="bold">JSON Schema</Text> for the event data, which can be used for validation and type generation. You can find it in <Anchor href="https://github.com/openevnt/evnt/blob/main/event-data.schema.json" target="_blank" rel="noopener noreferrer">
 							event-data.schema.json
 						</Anchor>. Here's a raw link you can use as <Code>$schema</Code>:
 					</Text>
@@ -63,7 +63,7 @@ export const SpecificationSection = () => {
 
 				<List.Item>
 					<Text>
-						A <Anchor href="https://github.com/deniz-blue/evnt/blob/main/docs/SCHEMA.md" target="_blank" rel="noopener noreferrer">
+						A <Anchor href="https://github.com/openevnt/evnt/blob/main/docs/SCHEMA.md" target="_blank" rel="noopener noreferrer">
 							markdown document
 						</Anchor> that documents all the type information.
 					</Text>

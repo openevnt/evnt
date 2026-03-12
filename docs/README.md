@@ -1,10 +1,10 @@
 🔙 [@evnt Project](../README.md)
 
-**Data Format Specification**
+**Evnt Specification**
 
-This document defines the data structures and types used for the @evnt Event format.
+This document defines the data structures and types used for [Evnt](https://evnt.directory).
 
-*Skip to [main type][#eventdata]*
+The main data structure is [`EventData`](#eventdata), which represents a single event. Event data should be represented as a JSON object.
 
 See [Changelog](./CHANGELOG.md) for recent changes to the data format.
 
@@ -134,6 +134,25 @@ Optional fields:
 - `presentation`: Optional object for presentation information;
   - `blurhash`: [BlurHash](https://blurha.sh/)
   - `dominantColor`: Hex color code with hashtag representing the dominant color; example: `#ff0000` for red.
+
+```ts
+let media: Media = {
+	sources: [
+		{
+			url: "https://www.example.com/image.jpg",
+			mimeType: "image/jpeg",
+			dimensions: { width: 800, height: 600 },
+		},
+	],
+	alt: {
+		en: "An example image",
+	},
+	presentation: {
+		blurhash: "LEHV6nWB2yk8pyo0adR*.7kCMdnj",
+		dominantColor: "#ff0000",
+	},
+};
+```
 
 ### `MediaSource`
 

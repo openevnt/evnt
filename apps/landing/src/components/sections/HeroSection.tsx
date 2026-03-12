@@ -69,26 +69,41 @@ export const HeroSection = () => {
 									</Text>
 								</Stack>
 
-								<Group gap={4}>
-									<Button
-										component="a"
-										href="https://github.com/deniz-blue/evnt"
-										target="_blank"
-										rightSection={<IconExternalLink />}
-										variant="light"
-									>
-										GitHub
-									</Button>
-									<Button
-										component="a"
-										href="#applications"
-										rightSection={<IconArrowDown />}
-										variant="light"
-										color="green"
-									>
-										Apps
-									</Button>
-								</Group>
+								<Stack gap={4}>
+									<Group gap={4}>
+										<Button
+											component="a"
+											href="https://github.com/openevnt/evnt"
+											target="_blank"
+											rightSection={<IconExternalLink />}
+											variant="light"
+										>
+											GitHub
+										</Button>
+										<Button
+											component="a"
+											href="#applications"
+											rightSection={<IconArrowDown />}
+											variant="light"
+											color="green"
+										>
+											Apps
+										</Button>
+									</Group>
+
+									<Group>
+										<Button
+											component="a"
+											href="https://github.com/openevnt/evnt/blob/main/docs/README.md"
+											target="_blank"
+											rightSection={<IconExternalLink />}
+											variant="light"
+											color="gray.8"
+										>
+											Specification
+										</Button>
+									</Group>
+								</Stack>
 
 								<Box hiddenFrom="sm">
 									{cardPart}

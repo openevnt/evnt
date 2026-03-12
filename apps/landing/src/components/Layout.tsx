@@ -33,7 +33,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
 						<Tooltip label="View on GitHub" withArrow>
 							<ActionIcon
 								component="a"
-								href="https://github.com/deniz-blue/evnt"
+								href="https://github.com/openevnt/evnt"
 								variant="transparent"
 								size="lg"
 							>

@@ -81,7 +81,7 @@ export const FeaturesSection = () => {
 				<Text>
 					If you are interested in any of these features and would like to help out, or if you have any other ideas or suggestions,
 					please feel free to <Anchor
-						href="https://github.com/deniz-blue/evnt/issues"
+						href="https://github.com/openevnt/evnt/issues"
 						target="_blank"
 						rel="noopener noreferrer"
 						ml={4}
