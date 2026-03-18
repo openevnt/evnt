@@ -25,7 +25,6 @@ function EventPage() {
 
 	useProvideEventActions({
 		source,
-		data: query.data?.data ?? null,
 	});
 
 	return (

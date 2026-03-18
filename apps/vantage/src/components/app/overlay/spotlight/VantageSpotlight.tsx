@@ -78,7 +78,6 @@ export const VantageSpotlight = () => {
 			tagsToIgnore={[]}
 			shortcut={[
 				"mod + K",
-				"/",
 				"F1",
 				"mod + shift + P",
 			]}

@@ -12,3 +12,4 @@ dist
 *.apk
 *.idsig
 manifest-checksum.txt
+.npmrc

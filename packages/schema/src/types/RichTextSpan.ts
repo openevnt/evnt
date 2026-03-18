@@ -4,6 +4,12 @@ export type TextSpan = z.infer<typeof TextSpanSchema>;
 export const TextSpanSchema = z.object({
 	type: z.literal("text").optional(),
 	text: z.string(),
+	bold: z.boolean().optional(),
+	italic: z.boolean().optional(),
+	underline: z.boolean().optional(),
+	strikethrough: z.boolean().optional(),
+	code: z.boolean().optional(),
+	highlight: z.boolean().optional(),
 });
 
 export type LinkSpan = z.infer<typeof LinkSpanSchema>;

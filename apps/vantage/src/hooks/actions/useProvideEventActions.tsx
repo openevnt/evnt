@@ -1,24 +1,41 @@
-import { useProvideAction } from "../../components/app/overlay/spotlight/useAction";
+import { useProvideActionList } from "../../components/app/overlay/spotlight/useAction";
 import { UtilEventSource, type EventSource } from "../../db/models/event-source";
-import type { EventEnvelope } from "../../db/models/event-envelope";
 import { handleAsyncCopy, handleCopy } from "../../lib/util/copy";
 import { EventResolver } from "../../db/event-resolver";
-import { IconBraces, IconClipboard, IconCode, IconEdit, IconReload, IconShare } from "@tabler/icons-react";
+import { IconBraces, IconClipboard, IconCode, IconEdit, IconJson, IconMarkdown, IconQrcode, IconReload, IconShare, IconTrash } from "@tabler/icons-react";
 import { EventActions } from "../../lib/actions/event-actions";
 import { useNavigate } from "@tanstack/react-router";
-import { Text } from "@mantine/core";
+import { Code } from "@mantine/core";
+import { QRCode } from "../../lib/util/qrcode";
+import { modals } from "@mantine/modals";
+import { DataDB } from "../../db/data-db";
+import { PDSlsIcon } from "../../lib/resources/PDSlsIcon";
+import { AsyncLoader } from "../../components/data/AsyncLoader";
+import { openConfirmModal, withConfirmation } from "../../lib/util/confirm";
 
-export const useProvideEventActions = ({
-	source,
-	data,
-}: {
-	source: EventSource;
-	data: EventEnvelope["data"] | null;
-}) => {
-	const navigate = useNavigate();
+export const EventActionFactory = {
+	All: ({
+		source,
+		navigate,
+	}: {
+		source: EventSource;
+		navigate: ReturnType<typeof useNavigate>;
+	}) => [
+			EventActionFactory.Edit(navigate, source),
+			EventActionFactory.CopyShareLink(source),
+			EventActionFactory.CopyMarkdownLink(source),
+			EventActionFactory.ShareLinkQRCode(source),
+			EventActionFactory.CopySource(source),
+			EventActionFactory.CopyJSON(source),
+			EventActionFactory.ViewJSON(source),
+			EventActionFactory.RefetchData(source),
+			EventActionFactory.CopyEmbedLink(source),
+			EventActionFactory.ViewOnPDS(source),
+			EventActionFactory.Delete(source),
+		],
 
-	useProvideAction({
-		label: "Edit event",
+	Edit: (navigate: ReturnType<typeof useNavigate>, source: EventSource) => ({
+		label: "Edit",
 		icon: <IconEdit />,
 		disabled: !UtilEventSource.isEditable(source),
 		category: "Event",
@@ -28,10 +45,9 @@ export const useProvideEventActions = ({
 				source,
 			},
 		}),
-	});
-
-	useProvideAction({
-		label: "Copy event share link",
+	}),
+	CopyShareLink: (source: EventSource) => ({
+		label: "Copy Share Link",
 		icon: <IconShare />,
 		disabled: !UtilEventSource.isFromNetwork(source),
 		category: "Event",
@@ -41,10 +57,39 @@ export const useProvideEventActions = ({
 		),
 		id: "copy-event-share-link",
 		deps: [source],
-	});
-
-	useProvideAction({
-		label: "Copy event source",
+	}),
+	CopyMarkdownLink: (source: EventSource) => ({
+		label: "Copy Markdown Link",
+		icon: <IconMarkdown />,
+		disabled: !UtilEventSource.isFromNetwork(source),
+		category: "Event",
+		execute: handleAsyncCopy(
+			async () => {
+				const data = (await DataDB.get(source))?.data;
+				const name = data?.name["en"] ?? data?.name[Object.keys(data.name)[0]!] ?? "Event";
+				return `[${name}](${EventActions.getShareLink(source)!})`;
+			},
+			"Event share link copied to clipboard",
+		),
+		id: "copy-event-markdown-link",
+		deps: [source],
+	}),
+	ShareLinkQRCode: (source: EventSource) => ({
+		label: "Share (QR)",
+		icon: <IconQrcode />,
+		disabled: !UtilEventSource.isFromNetwork(source),
+		category: "Event",
+		execute: () => modals.open({
+			size: "md",
+			children: (
+				<QRCode value={EventActions.getShareLink(source)} />
+			),
+		}),
+		id: "share-link-qrcode",
+		deps: [source],
+	}),
+	CopySource: (source: EventSource) => ({
+		label: UtilEventSource.isAt(source) ? "Copy at-URI" : "Copy Source",
 		icon: <IconClipboard />,
 		disabled: !UtilEventSource.isFromNetwork(source),
 		category: "Event",
@@ -54,32 +99,49 @@ export const useProvideEventActions = ({
 		),
 		id: "copy-event-source",
 		deps: [source],
-	});
-
-	useProvideAction({
-		label: "Copy event JSON",
+	}),
+	CopyJSON: (source: EventSource) => ({
+		label: "Copy JSON",
 		category: "Event",
 		icon: <IconBraces />,
 		execute: handleAsyncCopy(
-			async (): Promise<string> => JSON.stringify(data, null, 2) ?? "",
+			async (): Promise<string> => JSON.stringify((await DataDB.get(source))?.data, null, 2) ?? "",
 			"Event JSON copied to clipboard",
 		),
 		id: "copy-event-json",
-		deps: [source, data],
-	});
-
-	useProvideAction({
-		label: "Refetch event data",
+		deps: [source],
+	}),
+	ViewJSON: (source: EventSource) => ({
+		label: "View JSON",
+		category: "Event",
+		icon: <IconJson />,
+		execute: () => modals.open({
+			size: "xl",
+			title: "Event JSON Data",
+			children: (
+				<AsyncLoader fetcher={() => DataDB.get(source)}>
+					{(data) => (
+						<Code block>
+							{JSON.stringify(data?.data, null, 2) ?? "No data"}
+						</Code>
+					)}
+				</AsyncLoader>
+			),
+		}),
+		id: "view-event-json",
+		deps: [source],
+	}),
+	RefetchData: (source: EventSource) => ({
+		label: "Refetch",
 		category: "Event",
 		icon: <IconReload />,
 		disabled: !UtilEventSource.isFromNetwork(source),
 		execute: () => EventResolver.update(source),
 		id: "refetch-event",
 		deps: [source],
-	});
-
-	useProvideAction({
-		label: "Copy event embed link",
+	}),
+	CopyEmbedLink: (source: EventSource) => ({
+		label: "Copy Embed Link",
 		category: "Event",
 		icon: <IconCode />,
 		disabled: !UtilEventSource.isFromNetwork(source),
@@ -89,13 +151,42 @@ export const useProvideEventActions = ({
 		),
 		id: "copy-event-embed-link",
 		deps: [source],
-	});
-
-	useProvideAction({
+	}),
+	ViewOnPDS: (source: EventSource) => ({
 		label: "View on pds.ls",
 		category: "Event",
-		icon: <Text span inline inherit fz="xs">PDS</Text>,
+		icon: <PDSlsIcon />,
 		disabled: UtilEventSource.getType(source) !== "at",
 		execute: () => window.open(`https://pds.ls/${source}`, "_blank"),
-	});
+		special: {
+			href: `https://pds.ls/${source}`,
+		},
+	}),
+	Delete: (source: EventSource) => ({
+		label: UtilEventSource.isLocal(source) ? "Delete" : "Remove",
+		category: "Event",
+		icon: <IconTrash />,
+		disabled: UtilEventSource.isAt(source),
+		execute: () => openConfirmModal(
+			UtilEventSource.isLocal(source) ? "Are you sure you want to delete this event?" : "Are you sure you want to stop following this event?",
+			() => EventActions.deleteEvent(source),
+		),
+		id: "delete-event",
+		special: {
+			color: "red",
+		},
+		deps: [source],
+	}),
+};
+
+export const useProvideEventActions = ({
+	source,
+}: {
+	source: EventSource;
+}) => {
+	const navigate = useNavigate();
+	useProvideActionList(EventActionFactory.All({
+		source,
+		navigate,
+	}));
 };

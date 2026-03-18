@@ -21,11 +21,11 @@ export const withConfirmation = (
 ) => {
     return (e: React.MouseEvent) => {
         if (e.shiftKey) return onConfirm?.();
-        confirm(message, onConfirm);
+        openConfirmModal(message, onConfirm);
     };
 };
 
-export const confirm = (
+export const openConfirmModal = (
     message: ReactNode,
     onConfirm?: () => void,
 ) => {
