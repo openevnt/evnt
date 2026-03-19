@@ -315,9 +315,6 @@ importers:
       vite:
         specifier: ^8.0.1
         version: 8.0.1(@types/node@25.5.0)(esbuild@0.27.3)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.2)
-      vite-tsconfig-paths:
-        specifier: ^6.1.1
-        version: 6.1.1(typescript@5.9.3)(vite@8.0.1(@types/node@25.5.0)(esbuild@0.27.3)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.2))
 
   apps/wiki-events-api:
     dependencies:
@@ -10974,16 +10971,6 @@ snapshots:
       globrex: 0.1.2
       tsconfck: 3.1.6(typescript@5.9.3)
       vite: 8.0.0-beta.16(@types/node@25.3.5)(esbuild@0.27.3)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.2)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
-  vite-tsconfig-paths@6.1.1(typescript@5.9.3)(vite@8.0.1(@types/node@25.5.0)(esbuild@0.27.3)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.2)):
-    dependencies:
-      debug: 4.4.3
-      globrex: 0.1.2
-      tsconfck: 3.1.6(typescript@5.9.3)
-      vite: 8.0.1(@types/node@25.5.0)(esbuild@0.27.3)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - supports-color
       - typescript
