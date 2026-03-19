@@ -76,10 +76,10 @@ export class EventActions {
 	}
 
 	static getShareLink(source: EventSource) {
-		return `${EVENT_REDIRECTOR_URL}/?${new URLSearchParams({
-			action: "view-event",
-			url: source,
-		}).toString()}`;
+		const p = new URLSearchParams();
+		if (UtilEventSource.isAt(source)) p.set("at", source);
+		else p.set("url", source);
+		return `${EVENT_REDIRECTOR_URL}/e?${p.toString()}`;
 	}
 
 	static getEmbedLink(source: EventSource) {
