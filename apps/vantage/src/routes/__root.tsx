@@ -13,10 +13,15 @@ import { theme } from "../styles/theme";
 export const Route = createRootRoute({
 	component: RootPage,
 	beforeLoad: async ({ search }) => {
-		const action = (search as any)?.action;
+		const intent = (search as {
+			type?: "event",
+			url?: string;
+			at?: string;
+			data?: any;
+		});
 
-		if (action === "view-event") {
-			const source = (search as any)?.source || (search as any)?.url;
+		if (intent.type === "event") {
+			const source = intent.at || intent.url;
 			console.log("Opening event details for url", source);
 			throw redirect({
 				to: "/event",
@@ -24,16 +29,7 @@ export const Route = createRootRoute({
 					source,
 				},
 			});
-		} else if (action === "view-index") {
-			const indexUrl = (search as any)?.index;
-			const fullIndexUrl = indexUrl.startsWith("http") ? indexUrl : ("https://" + indexUrl);
-			throw redirect({
-				to: "/",
-				search: {
-					"view-index": fullIndexUrl,
-				},
-			});
-		}
+		};
 	},
 });
 
