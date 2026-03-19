@@ -92,7 +92,7 @@ export const Page = ({
 	const dateRef = useRef(new Date(Date.now() + 1000 * 5));
 	const { cancel, count } = useCountdown({
 		callback: () => {
-			window.location.href = (preferredInstanceUrl || publicInstances[0]?.url || "#") + window.location.search;
+			window.location.href = (preferredInstanceUrl || publicInstances[0]?.url || "#") + "?" + new URLSearchParams(intent);
 		},
 		target: dateRef.current,
 		deps: [publicInstances],
@@ -136,7 +136,7 @@ export const Page = ({
 				<Stack gap={0} w="100%">
 					<Stack w="100%">
 						{publicInstances.map(instance => (
-							<InstanceCard key={instance.url} instance={instance} />
+							<InstanceCard key={instance.url} instance={instance} intent={intent} />
 						))}
 						{publicInstances.length === 0 && (
 							<Center w="100%">
@@ -187,8 +187,10 @@ export interface InstanceInfo {
 
 export const InstanceCard = ({
 	instance,
+	intent,
 }: {
 	instance: InstanceInfo;
+	intent?: Intent;
 }) => {
 	const [iconLoaded, setIconLoaded] = useState(false);
 
@@ -204,7 +206,7 @@ export const InstanceCard = ({
 
 	return (
 		<Anchor
-			href={instance.url + window.location.search}
+			href={instance.url + "?" + new URLSearchParams(intent)}
 			unstyled
 			w="100%"
 			c="unset"
