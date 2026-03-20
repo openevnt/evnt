@@ -8,6 +8,9 @@ export const EventTimeframeBadge = () => {
 	const { data } = useEventEnvelope();
 	const now = UtilPartialDate.now();
 
+	const status = data?.status ?? "planned";
+	if (status == "planned" || status == "uncertain") return null;
+
 	if (!data) return null;
 
 	const allDays: PartialDate.Day[] = data

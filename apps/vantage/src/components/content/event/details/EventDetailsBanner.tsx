@@ -2,14 +2,16 @@ import { ActionIcon, Box, Collapse, Group, Loader, Menu, Modal, Stack, Title } f
 import { useEventDetailsContext } from "./event-details-context";
 import { Trans } from "../Trans";
 import { EnvelopeErrorBadge } from "../envelope/EnvelopeErrorBadge";
-import type { EventComponent } from "@evnt/schema";
+import type { KnownEventComponent } from "@evnt/schema";
 import { OverLayer } from "../../../base/layout/OverLayer";
 import classes from "../card/event-card.module.css";
 import { EvntMedia } from "../../../base/media/EvntMedia";
 import { useEventEnvelope } from "../event-envelope-context";
-import { IconDots, IconDotsVertical } from "@tabler/icons-react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import { useActionsStore } from "../../../app/overlay/spotlight/useActionsStore";
 import { useShallow } from "zustand/shallow";
+import { EventTimeframeBadge } from "../badges/EventTimeframeBadge";
+import { EventStatusBadge } from "../badges/EventStatusBadge";
 
 export const EventDetailsBanner = () => {
 	const { data, err } = useEventEnvelope();
@@ -19,7 +21,7 @@ export const EventDetailsBanner = () => {
 	);
 
 	const splashMediaComponents = data?.components
-		?.filter((c): c is EventComponent & { type: "splashMedia" } =>
+		?.filter((c): c is KnownEventComponent & { type: "splashMedia" } =>
 			c.type === "splashMedia") ?? [];
 
 	const bannerMedia = splashMediaComponents.find(x => x.data.roles.includes("banner"))?.data?.media
@@ -62,7 +64,9 @@ export const EventDetailsBanner = () => {
 								<Title order={3}>
 									<Trans t={data?.name} />
 								</Title>
-								<EnvelopeErrorBadge err={err} />
+								<EventTimeframeBadge />
+								<EventStatusBadge />
+								<EnvelopeErrorBadge />
 							</Group>
 						</Stack>
 						<Stack h="100%" justify="start" align="start">

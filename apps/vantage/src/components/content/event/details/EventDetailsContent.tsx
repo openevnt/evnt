@@ -1,10 +1,9 @@
-import { ActionIcon, Box, Code, Container, Group, Stack, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Code, Container, Stack, Text, Tooltip } from "@mantine/core";
 import { SmallTitle } from "../../base/SmallTitle";
-import { MarkdownTranslations } from "../../base/MarkdownTranslations";
 import { UtilEventSource, type EventSource } from "../../../../db/models/event-source";
 import { LayerImportSection } from "./LayerImportSection";
 import { ExternalLink } from "../../base/ExternalLink";
-import { IconQuote, IconReload } from "@tabler/icons-react";
+import { IconReload } from "@tabler/icons-react";
 import { useEventQuery } from "../../../../db/useEventQuery";
 import { AsyncAction } from "../../../data/AsyncAction";
 import { EventResolver } from "../../../../db/event-resolver";
@@ -12,7 +11,6 @@ import { EventDetailsContext } from "./event-details-context";
 import { EventDetailsBanner } from "./EventDetailsBanner";
 import { EventDetailsInstanceList } from "./EventDetailsInstanceList";
 import { EventDetailsLinks } from "./EventDetailsLinks";
-import { useEventEnvelope } from "../event-envelope-context";
 import { EnvelopeErrorAlert } from "../envelope/EnvelopeErrorAlert";
 
 export interface EventDetailsContentProps {
@@ -22,7 +20,6 @@ export interface EventDetailsContentProps {
 }
 
 export const EventDetailsContent = (props: EventDetailsContentProps) => {
-	const { data } = useEventEnvelope();
 	const { source } = props;
 
 	return (

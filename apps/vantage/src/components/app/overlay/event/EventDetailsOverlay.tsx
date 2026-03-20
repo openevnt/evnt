@@ -3,10 +3,12 @@ import { BaseOverlay } from "../base/BaseOverlay";
 import { EventDetailsContent } from "../../../content/event/details/EventDetailsContent";
 import { useEventQuery } from "../../../../db/useEventQuery";
 import { UtilEventSource, type EventSource } from "../../../../db/models/event-source";
-import { Code, Stack, Text } from "@mantine/core";
+import { Affix, Button, Code, Space, Stack, Text } from "@mantine/core";
 import { RQResult } from "../../../data/RQResult";
 import { EventEnvelopeProvider } from "../../../content/event/event-envelope-context";
 import { useProvideEventActions } from "../../../../hooks/actions/useProvideEventActions";
+import { Link } from "@tanstack/react-router";
+import { IconArrowNarrowRight } from "@tabler/icons-react";
 
 export const EventDetailsOverlay = () => {
 	const { close, useValue } = useEventDetailsModal();
@@ -27,6 +29,32 @@ export const EventDetailsOverlay = () => {
 					</Text>
 				</Stack>
 			)}
+
+			<Space h="10rem" />
+
+			{!!source && (
+				<Affix
+					position={{ bottom: "sm", right: "50%" }}
+					pos="fixed"
+				>
+					<Button
+						variant="filled"
+						color="gray"
+						miw="10rem"
+						rightSection={<IconArrowNarrowRight />}
+						style={{ transform: "translateX(50%)" }}
+						renderRoot={(props) => (
+							<Link
+								to="/event"
+								search={{ source }}
+								{...props}
+							/>
+						)}
+					>
+						View
+					</Button>
+				</Affix>
+			)}
 		</BaseOverlay>
 	);
 };
@@ -36,7 +64,6 @@ export const EventDetailsOverlayHandler = ({ source }: { source: EventSource }) 
 
 	useProvideEventActions({
 		source,
-		data: query.data?.data ?? null,
 	});
 
 	return (
