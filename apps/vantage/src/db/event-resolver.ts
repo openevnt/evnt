@@ -8,6 +8,7 @@ import { tryCatch, tryCatchAsync } from "../lib/util/trynull";
 import { ZodError } from "zod";
 import { didDocumentResolver } from "../lib/atproto/atproto-services";
 import { getPdsEndpoint } from "@atcute/identity";
+import { convertFromLexicon as convertFromCommunityLexicon } from "@evnt/convert/community-lexicon";
 
 export class EventResolver {
 	static async resolve(source: EventSource): Promise<EventEnvelope> {
@@ -194,22 +195,24 @@ export class EventResolver {
 			};
 		}
 
-		const result = EventDataSchema.safeParse(res.data.value);
-
-		if (!result.success) {
-			return {
-				data: null,
-				err: this.#EnvelopeError(result.error),
-			};
-		}
-
 		return {
-			data: result.data,
-			err: undefined,
+			...this.fromAtProtoRecord(res.data.value),
 			rev: {
 				cid: res.data.cid,
 			},
 		};
+	}
+
+	static fromAtProtoRecord(record: Record<string, unknown>): EventEnvelope {
+		if (record.$type === "community.lexicon.calendar.event") {
+			const data = convertFromCommunityLexicon(record as any);
+			return {
+				data,
+				err: undefined,
+			};
+		};
+
+		return this.fromJsonObject(record);
 	}
 
 	static #EnvelopeError(err: TypeError | SyntaxError | Response | ZodError | FailedClientResponse): EventEnvelope.Error {

@@ -95,7 +95,7 @@ export class UtilEventSource {
 	}
 
 	static isEditable(source: EventSource): source is EventSource.Local | EventSource.At {
-		return this.isLocal(source) || this.isAt(source);
+		return this.isLocal(source) || (this.isAt(source) && !source.includes("community.lexicon.calendar.event"));
 	}
 };
 

@@ -1,19 +1,6 @@
 {
 	"instances": [
 		{
-			"name": "Vantage Events Viewer",
-			"description": "Reference implementation",
-			"url": "https://vantage.deniz.blue",
-			"redirectTo": "https://vantage.deniz.blue/?{intent}",
-			"capabilities": [
-				"home",
-				"event:at?collection=directory.evnt.event",
-				"event:at?collection=blue.deniz.event",
-				"event:http",
-				"event:https"
-			]
-		},
-		{
 			"name": "Smoke Signal",
 			"description": "Event and RSVP management system",
 			"url": "https://smokesignal.events",
@@ -43,6 +30,20 @@
 			"capabilities": [
 				"home",
 				"event:at?collection=community.lexicon.calendar.event"
+			]
+		},
+		{
+			"name": "Vantage Events Viewer",
+			"description": "Reference implementation",
+			"url": "https://vantage.deniz.blue",
+			"redirectTo": "https://vantage.deniz.blue/?{intent}",
+			"capabilities": [
+				"home",
+				"event:at?collection=directory.evnt.event",
+				"event:at?collection=blue.deniz.event",
+				"event:at?collection=community.lexicon.calendar.event",
+				"event:http",
+				"event:https"
 			]
 		},
 		{

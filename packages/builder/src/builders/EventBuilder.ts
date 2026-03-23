@@ -53,11 +53,12 @@ export class EventBuilder {
 	addLink(arg: string | LinkComponent | ((b: LinkBuilder) => LinkBuilder)) {
 		this.data.components ??= [];
 		const component =
-			typeof arg === "string"
-				? { type: "link", data: { url: arg } }
-				: arg instanceof LinkBuilder
-					? arg.build()
+			typeof arg === "function"
+				? arg(new LinkBuilder()).build()
+				: typeof arg === "string"
+					? { type: "link", data: { url: arg } }
 					: arg;
+		this.data.components ??= [];
 		this.data.components.push(component as KnownEventComponent);
 		return this;
 	}
