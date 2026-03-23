@@ -29,11 +29,11 @@ export const snippetLabelToMarkdown = (label: SnippetLabel): string => {
 		timezone: "UTC",
 		locale: "en",
 		noCurrentYear: false,
-	}) + " (UTC)";
+	}) + (UtilPartialDate.hasTime(label.value) ? " (UTC)" : "");
 
-	if (label.type === "time") return label.value;
+	if (label.type === "time") return label.value + " (UTC)";
 
-	if (label.type === "time-range") return `${label.value.start.value} - ${label.value.end.value}`;
+	if (label.type === "time-range") return `${label.value.start.value} - ${label.value.end.value} (UTC)`;
 
 	if (label.type === "date-time-range") return `${UtilPartialDate.toIntlString(label.value.start, {
 		timezone: "UTC",
