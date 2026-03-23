@@ -8,6 +8,7 @@ export interface Redirectable {
 	title?: string;
 	label?: string;
 	faviconUrl?: string;
+	faviconRadius?: number;
 }
 
 const tryParseResourceUri = (uri: string) => {
@@ -29,9 +30,6 @@ export const getRedirectablesForIntent = (intent: Intent | null): Redirectable[]
 		"aturi-collection": collection || "",
 		"aturi-rkey": rkey || "",
 	};
-
-	console.log("Filtering instances for intent", intent);
-	console.log("vars", replaceMap, { intentType, hasUrl, hasAt });
 
 	return instances.instances.filter(instance => {
 		if (!intent && instance.capabilities.includes("home")) return true;
@@ -57,8 +55,9 @@ export const getRedirectablesForIntent = (intent: Intent | null): Redirectable[]
 	}).map(instance => ({
 		title: instance.name || new URL(instance.url).host,
 		label: new URL(instance.url).host,
-		url: (instance.redirectTo ?? instance.url).replace(/{([^}]+)}/g, (_, key: string) => replaceMap[key] || ""),
-		faviconUrl: `${instance.url.replace(/\/$/, "")}/favicon.ico`,
+		url: ((intent ? instance.redirectTo : false) || instance.url).replace(/{([^}]+)}/g, (_, key: string) => replaceMap[key] || ""),
+		faviconUrl: instance.faviconUrl ?? `${instance.url.replace(/\/$/, "")}/favicon.ico`,
+		faviconRadius: instance.faviconRadius,
 	}));
 };
 

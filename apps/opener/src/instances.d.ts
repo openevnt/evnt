@@ -10,6 +10,8 @@ declare module "virtual:instances" {
 		name?: string;
 		description?: string;
 		redirectTo?: string;
+		faviconUrl?: string;
+		faviconRadius?: number;
 		capabilities: string[];
 	}
 }

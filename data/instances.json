@@ -27,6 +27,8 @@
 			"name": "atmo.rsvp",
 			"url": "https://atmo.rsvp",
 			"redirectTo": "https://atmo.rsvp/p/{aturi-repo}/e/{aturi-rkey}",
+			"faviconUrl": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%97%93%EF%B8%8F</text></svg>",
+			"faviconRadius": 0,
 			"capabilities": [
 				"home",
 				"event:at?collection=community.lexicon.calendar.event"
@@ -36,6 +38,8 @@
 			"name": "OpenMeet",
 			"url": "https://platform.openmeet.net",
 			"redirectTo": "https://platform.openmeet.net/at/{aturi-repo}/{aturi-collection}/{aturi-rkey}",
+			"faviconUrl": "https://platform.openmeet.net/openmeet/icons/favicon.ico",
+			"faviconRadius": 0,
 			"capabilities": [
 				"home",
 				"event:at?collection=community.lexicon.calendar.event"

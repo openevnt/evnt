@@ -51,20 +51,13 @@ export const Page = () => {
 					>
 						<Stack gap="xs" fz="sm" mb="md">
 							<Text inherit>
-								<Text span inherit fw="bold">eventsl.ink</Text> is a redirector for viewing and sharing events.
+								<Text span inherit fw="bold">eventsl.ink</Text> is a redirector for events.
 
-								This site allows you to pick your preferred event viewer application.
+								This site allows you to pick your preferred way to view events.
 							</Text>
 
 							<Text inherit>
-								This site supports opening <Anchor
-									href="https://evnt.directory"
-									target="_blank"
-									rel="noopener noreferrer"
-									inherit
-								>
-									Evnt ↗
-								</Anchor> and <Code>
+								You can view events that use the <Code>
 									<Anchor
 										href="https://lexicon.community"
 										unstyled
@@ -73,7 +66,14 @@ export const Page = () => {
 									>
 										community.lexicon
 									</Anchor>.calendar.event
-								</Code> based events.
+								</Code> lexicon and <Anchor
+									href="https://evnt.directory"
+									target="_blank"
+									rel="noopener noreferrer"
+									inherit
+								>
+									Evnt
+								</Anchor> formats, based on AT Protocol or HTTP sources.
 							</Text>
 						</Stack>
 					</Spoiler>
@@ -150,7 +150,7 @@ export const InstanceCard = ({
 							w={32}
 							h={32}
 							onLoad={() => setIconLoaded(true)}
-							bdrs="50%"
+							bdrs={info.faviconRadius ?? "50%"}
 						/>
 					</Collapse>
 					<Stack gap={0} flex="1">
