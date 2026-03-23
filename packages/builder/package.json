@@ -1,0 +1,29 @@
+{
+	"name": "@evnt/builder",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"author": "deniz.blue",
+	"keywords": [],
+	"files": [
+		"/dist"
+	],
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"publishConfig": {
+		"main": "./dist/index.js",
+		"types": "./dist/index.d.ts",
+		"exports": {
+			".": "./dist/index.js"
+		}
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"tsx": "^4.21.0",
+		"typescript": "^5.6.3"
+	},
+	"dependencies": {
+		"@evnt/schema": "workspace:*"
+	}
+}
