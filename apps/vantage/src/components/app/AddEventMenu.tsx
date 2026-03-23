@@ -4,7 +4,7 @@ import { IconBraces, IconEdit, IconFileImport, IconLink, IconPlus } from "@table
 import { Link } from "@tanstack/react-router";
 import { useRef } from "react";
 import { useTasksStore } from "../../stores/useTasksStore";
-import * as icalendar from "@evnt/convert/vendor/icalendar";
+import * as icalendar from "@evnt/convert/icalendar";
 import ICAL from "ical.js";
 import { EventActions } from "../../lib/actions/event-actions";
 
