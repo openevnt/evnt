@@ -90,6 +90,7 @@ export const CalendarMonth = ({
 					row.map(day => (
 						<Paper
 							withBorder
+							key={day}
 							radius={0}
 							w="100%"
 							style={{

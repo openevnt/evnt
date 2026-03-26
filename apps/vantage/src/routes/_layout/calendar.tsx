@@ -76,6 +76,7 @@ export const DayButton = ({
 			disabled={sources.length === 0}
 		>
 			<Day
+				component="div"
 				date={day}
 			/>
 		</Indicator>

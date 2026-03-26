@@ -3,7 +3,7 @@ import { BaseOverlay } from "../base/BaseOverlay";
 import { EventDetailsContent } from "../../../content/event/details/EventDetailsContent";
 import { useEventQuery } from "../../../../db/useEventQuery";
 import { UtilEventSource, type EventSource } from "../../../../db/models/event-source";
-import { Affix, Button, Code, Space, Stack, Text } from "@mantine/core";
+import { Affix, Button, Code, Space, Stack, Text, Transition } from "@mantine/core";
 import { RQResult } from "../../../data/RQResult";
 import { EventEnvelopeProvider } from "../../../content/event/event-envelope-context";
 import { useProvideEventActions } from "../../../../hooks/actions/useProvideEventActions";
@@ -32,29 +32,34 @@ export const EventDetailsOverlay = () => {
 
 			<Space h="10rem" />
 
-			{!!source && (
-				<Affix
-					position={{ bottom: "sm", right: "50%" }}
-					pos="fixed"
-				>
-					<Button
-						variant="filled"
-						color="gray"
-						miw="10rem"
-						rightSection={<IconArrowNarrowRight />}
-						style={{ transform: "translateX(50%)" }}
-						renderRoot={(props) => (
-							<Link
-								to="/event"
-								search={{ source }}
-								{...props}
-							/>
-						)}
+			<Transition mounted={!!source}>
+				{(styles) => (
+					<Affix
+						position={{ bottom: "sm", right: "50%" }}
+						pos="fixed"
+						style={styles}
 					>
-						View
-					</Button>
-				</Affix>
-			)}
+						{!!source && (
+							<Button
+								variant="filled"
+								color="gray"
+								miw="10rem"
+								rightSection={<IconArrowNarrowRight />}
+								style={{ transform: "translateX(50%)" }}
+								renderRoot={(props) => (
+									<Link
+										to="/event"
+										search={{ source }}
+										{...props}
+									/>
+								)}
+							>
+								View
+							</Button>
+						)}
+					</Affix>
+				)}
+			</Transition>
 		</BaseOverlay>
 	);
 };
