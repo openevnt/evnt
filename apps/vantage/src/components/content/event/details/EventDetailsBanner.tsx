@@ -57,16 +57,16 @@ export const EventDetailsBanner = () => {
 							flex="1"
 							mt={bannerMedia ? "4rem" : undefined}
 						>
-							<Group flex="1" gap={4} align="end">
+							<Group flex="1" gap={4} align="center">
 								<Collapse expanded={!!loading} orientation="horizontal">
 									<Loader size="sm" />
 								</Collapse>
 								<Title order={3}>
 									<Trans t={data?.name} />
+									<EventTimeframeBadge mx={4} />
+									<EventStatusBadge mx={4} />
+									<EnvelopeErrorBadge mx={4} />
 								</Title>
-								<EventTimeframeBadge />
-								<EventStatusBadge />
-								<EnvelopeErrorBadge />
 							</Group>
 						</Stack>
 						<Stack h="100%" justify="start" align="start">

@@ -1,4 +1,4 @@
-import { Button, Stack } from "@mantine/core";
+import { Button, Stack, Text } from "@mantine/core";
 import { useLayersStore } from "../../../../db/useLayersStore";
 import { type EventSource } from "../../../../db/models/event-source";
 import { EventActions } from "../../../../lib/actions/event-actions";
@@ -22,8 +22,16 @@ export const LayerImportSection = ({ source }: { source: EventSource }) => {
 						onClick={onClick}
 						loading={loading}
 						color="green"
+						h="auto"
 					>
-						Add to saved events
+						<Stack gap={4} py={4}>
+							<Text span inherit>
+								Add to My Events
+							</Text>
+							<Text size="xs" fw="normal" span inherit>
+								offline accessible and shown in your list
+							</Text>
+						</Stack>
 					</Button>
 				)}
 			</AsyncAction>

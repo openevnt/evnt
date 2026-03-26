@@ -34,22 +34,23 @@ export const EventLinkButton = ({
 				section: { marginInlineEnd: 4 },
 			}}
 		>
-			<Stack gap={0} py={subtitle ? 4 : "xs"}>
+			<Stack gap={0} py={subtitle ? 4 : "xs"} align="start">
 				<Text inline c={disabled ? "gray.4" : undefined}>
-					<Trans t={UtilTranslations.isEmpty(value.name) ? { en: "Link" } : value.name} />
+					<Trans t={UtilTranslations.isEmpty(value.name) ? { en: "Link" } : value.name} /> <IconExternalLink size={14} />
 				</Text>
 				<Stack
 					gap={0}
 					fz="xs"
 					c={disabled ? "gray.6" : "blue.4"}
 					style={{ textWrap: "wrap" }}
+					align="start"
 				>
-					<Text inline inherit fw="normal" pt={UtilTranslations.isEmpty(value.description) ? 0 : 4}>
+					<Text inline span ta="start" inherit fw="normal" pt={UtilTranslations.isEmpty(value.description) ? 0 : 4}>
 						<Trans t={value.description} />
 					</Text>
 
 					<Stack gap={0} pt={subtitle ? 4 : 0}>
-						<Group gap={4} justify="center">
+						<Group gap={4} justify="start">
 							<Text inherit inline span>
 								{subtitle}
 							</Text>

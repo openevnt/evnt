@@ -1,13 +1,14 @@
-import { Badge } from "@mantine/core";
+import { Badge, type BoxProps } from "@mantine/core";
 import { useEventEnvelope } from "../event-envelope-context";
 import { IconCalendarOff, IconCalendarPause, IconCalendarQuestion, IconCalendarTime } from "@tabler/icons-react";
 
-export const EventStatusBadge = () => {
+export const EventStatusBadge = (props: BoxProps) => {
 	const { data } = useEventEnvelope();
 	const status = data?.status ?? "planned";
 	
 	if (status === "cancelled") return (
 		<Badge
+			{...props}
 			variant="light"
 			color="red"
 			leftSection={<IconCalendarOff size={18} />}
@@ -18,6 +19,7 @@ export const EventStatusBadge = () => {
 
 	if (status === "postponed") return (
 		<Badge
+			{...props}
 			variant="light"
 			color="yellow"
 			leftSection={<IconCalendarTime size={18} />}
@@ -28,6 +30,7 @@ export const EventStatusBadge = () => {
 
 	if (status === "suspended") return (
 		<Badge
+			{...props}
 			variant="light"
 			color="blue"
 			leftSection={<IconCalendarPause size={18} />}
@@ -38,6 +41,7 @@ export const EventStatusBadge = () => {
 
 	if (status === "uncertain") return (
 		<Badge
+			{...props}
 			variant="light"
 			color="gray"
 			leftSection={<IconCalendarQuestion size={18} />}

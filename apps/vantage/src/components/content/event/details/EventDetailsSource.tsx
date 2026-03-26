@@ -1,14 +1,11 @@
 import { Stack, Text } from "@mantine/core";
 import { SmallTitle } from "../../base/SmallTitle";
-import { useEventEnvelope } from "../event-envelope-context";
 import { UtilEventSource, type EventSource } from "../../../../db/models/event-source";
-import { IconAt, IconDatabase, IconWorld } from "@tabler/icons-react";
+import { IconAt, IconDatabase, IconExternalLink, IconWorld } from "@tabler/icons-react";
 import { BaseSnippet } from "../../Snippet";
 import { EventLinkButtonBase } from "../link/EventLinkButtonBase";
 
 export const EventDetailsSource = ({ source }: { source?: EventSource }) => {
-	const { data } = useEventEnvelope();
-
 	return (
 		<Stack gap={0} component="section">
 			<SmallTitle>
@@ -30,11 +27,14 @@ export const EventDetailsSource = ({ source }: { source?: EventSource }) => {
 							ATProto
 						</Text>
 					</BaseSnippet>
+
 					<EventLinkButtonBase
 						url={`https://pds.ls/${source}`}
 						leftSection={<img src="https://pds.ls/favicon.ico" alt="PDSls" width={24} height={24} />}
 					>
-						View on PDSls
+						<Text inherit span mr={4}>
+							View on PDSls
+						</Text> <IconExternalLink size={14} />
 					</EventLinkButtonBase>
 				</Stack>
 			)}

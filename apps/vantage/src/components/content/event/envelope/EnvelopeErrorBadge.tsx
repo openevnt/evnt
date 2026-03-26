@@ -1,8 +1,8 @@
-import { Badge, Stack, Text, Tooltip } from "@mantine/core";
+import { Badge, Stack, Text, Tooltip, type BoxProps } from "@mantine/core";
 import { getEnvelopeErrorMeta } from "./envelope-error-meta";
 import { useEventEnvelope } from "../event-envelope-context";
 
-export const EnvelopeErrorBadge = () => {
+export const EnvelopeErrorBadge = (props: BoxProps) => {
 	const { err } = useEventEnvelope();
 	if (!err) return null;
 
@@ -17,7 +17,7 @@ export const EnvelopeErrorBadge = () => {
 				</Text>
 			</Stack>
 		)} multiline>
-			<Badge color={color} variant="outline">
+			<Badge color={color} variant="outline" {...props}>
 				{status ?? "ERR"}
 			</Badge>
 		</Tooltip>

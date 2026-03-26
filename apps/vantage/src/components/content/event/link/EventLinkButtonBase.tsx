@@ -29,6 +29,7 @@ export const EventLinkButtonBase = ({
 			p={0}
 			styles={{
 				section: { marginInlineEnd: 4 },
+				label: { overflow: "visible" },
 			}}
 			fz="unset"
 			fw="unset"

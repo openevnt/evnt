@@ -1,15 +1,15 @@
 import { UtilPartialDate, UtilPartialDateRange } from "@evnt/schema/utils";
 import { useEventEnvelope } from "../event-envelope-context";
 import type { PartialDate } from "@evnt/schema";
-import { Badge } from "@mantine/core";
+import { Badge, type BoxProps } from "@mantine/core";
 import { IconCalendarDown, IconHistory, IconHourglass } from "@tabler/icons-react";
 
-export const EventTimeframeBadge = () => {
+export const EventTimeframeBadge = (props: BoxProps) => {
 	const { data } = useEventEnvelope();
 	const now = UtilPartialDate.now();
 
 	const status = data?.status ?? "planned";
-	if (status == "planned" || status == "uncertain") return null;
+	if (status !== "planned" && status !== "uncertain") return null;
 
 	if (!data) return null;
 
@@ -45,6 +45,7 @@ export const EventTimeframeBadge = () => {
 
 	if (someOngoing) return (
 		<Badge
+			{...props}
 			variant="light"
 			color="green"
 			leftSection={<IconHourglass size={18} />}
@@ -55,6 +56,7 @@ export const EventTimeframeBadge = () => {
 
 	if (hasToday) return (
 		<Badge
+			{...props}
 			variant="light"
 			color="green"
 			leftSection={<IconCalendarDown size={18} />}
@@ -65,6 +67,7 @@ export const EventTimeframeBadge = () => {
 
 	if (allPast) return (
 		<Badge
+			{...props}
 			variant="light"
 			color="gray"
 			leftSection={<IconHistory size={18} />}
