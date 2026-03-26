@@ -1,6 +1,6 @@
 {
     "name": "@evnt/schema",
-    "version": "0.0.3",
+    "version": "0.0.5",
     "type": "module",
     "author": "deniz.blue",
     "keywords": [],
@@ -19,10 +19,10 @@
             "./utils": "./dist/utils.js"
         }
     },
-    "homepage": "https://github.com/deniz-blue/events-format/tree/main/packages/schema#readme",
+    "homepage": "https://evnt.directory",
     "repository": {
         "type": "git",
-        "url": "https://github.com/deniz-blue/events-format.git",
+        "url": "https://github.com/openevnt/evnt.git",
         "directory": "packages/schema"
     },
     "scripts": {

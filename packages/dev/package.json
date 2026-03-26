@@ -1,7 +1,7 @@
 {
   "name": "@evnt/dev",
   "description": "Build static files of events",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "type": "module",
   "author": "deniz.blue",
   "keywords": [],
@@ -9,16 +9,8 @@
     "/dist"
   ],
   "bin": "./dist/cli.js",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "publishConfig": {
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-      ".": "./dist/index.js"
-    }
-  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "homepage": "https://github.com/openevnt/evnt#readme",
   "repository": {
     "type": "git",
