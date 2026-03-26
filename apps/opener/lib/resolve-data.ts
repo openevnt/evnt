@@ -1,11 +1,11 @@
 import { CompositeDidDocumentResolver, CompositeHandleResolver, DohJsonHandleResolver, LocalActorResolver, PlcDidDocumentResolver, WebDidDocumentResolver, WellKnownHandleResolver } from "@atcute/identity-resolver";
 import type { EventIntent } from "./intent";
 import { Client, simpleFetchHandler } from "@atcute/client";
-import { ParsedResourceUri, parseResourceUri } from "@atcute/lexicons";
+import { type ParsedResourceUri, parseResourceUri } from "@atcute/lexicons";
 import { type EventData, EventDataSchema } from "@evnt/schema";
 import { convertFromLexicon } from "@evnt/convert/community-lexicon";
 import type { } from "@atcute/atproto";
-import { AtprotoDid } from "@atcute/lexicons/syntax";
+import type { AtprotoDid } from "@atcute/lexicons/syntax";
 
 const actorResolver = new LocalActorResolver({
 	handleResolver: new CompositeHandleResolver({
