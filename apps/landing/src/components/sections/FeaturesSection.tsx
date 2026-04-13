@@ -1,95 +1,112 @@
-import { Anchor, Code, List, Stack, Text, Title } from "@mantine/core";
-import { IconLanguage } from "@tabler/icons-react";
+import { Anchor, Code, List, Stack, Table, Text, Title } from "@mantine/core";
+import { IconApps, IconClockQuestion, IconLanguage, IconListNumbers, IconUsers } from "@tabler/icons-react";
 import { Section } from "../Section"
+import { CodeHighlight } from "@mantine/code-highlight";
 
 export const FeaturesSection = () => {
 	return (
 		<Section title="Features">
-			When designing Evnt, we had a few key features in mind that we wanted to support:
+			<Title order={3}>
+				<IconLanguage size={28} style={{ verticalAlign: "middle" }} /> Internationalization
+			</Title>
 
-			<List spacing="md" styles={{ itemIcon: { display: "inline", verticalAlign: "start" } }}>
-				<List.Item>
-					<Text span fw="bold">Multilingual</Text> - Every text field in Evnt supports multiple languages (by using language-keyed objects). This means that internationalization is built into the core of the format.
+			<Text>
+				Every piece of text that is meant to be shown to end users in Open Evnt is <Text inline span inherit td="underline">multilingual</Text>.
+				This means that instead of just having a "name" field, we have a "name" object that can contain multiple translations of the title.
+				This allows applications to easily support multiple languages and also allows for better accessibility.
+			</Text>
 
-					<Code
-						block
-						mt="xs"
-						children={JSON.stringify({ en: "Example message", lt: "Pavyzdžio pranešimas" }, null, 2)}
-					/>
-				</List.Item>
-				<List.Item>
-					<Text span fw="bold">Instances</Text> - Events can have multiple time spans. Many events (e.g. conferences) have multiple instances, and it is important to be able to represent that in a consistent way.
-				</List.Item>
-				<List.Item>
-					<Text span fw="bold">Venues</Text> - Events can have multiple venues, both physical and online. This is important for events that have multiple physical locations (e.g. a conference with multiple stages) or that are hybrid (e.g. a conference with both physical and online attendees).
-				</List.Item>
-				<List.Item>
-					<Text span fw="bold">Partial Dates</Text> - Some events only have partial date information. For example, you might only know the month and year of an event, but not the exact day. Evnt allows you to represent this in a consistent way by allowing partial date strings (e.g. "2024-05" for May 2024).
-				</List.Item>
-				<List.Item>
-					<Text span fw="bold">Timezone-aware Partial Dates</Text> - Dates include an explicit timezone identifier (e.g. "2027-03-08T09:00[UTC]") so data remains portable across systems.
-				</List.Item>
-				<List.Item>
-					<Text span fw="bold">Metadata</Text> - Information that don't belong to a specific instance or venue can be stored as Components, which are extensible.
-					<Text my="xs">
-						We currently have:
-					</Text>
-					<List withPadding>
-						<List.Item>
-							<Text span fw="bold">Links</Text> - Links related to the event (e.g. website, social media, registration form etc.); they can have titles, descriptions and even defined times for when they are valid.
-						</List.Item>
-						<List.Item>
-							<Text span fw="bold">Splash Media</Text> - Images or videos that represent the event. Applications can use this to display a banner for the event, for example.
-						</List.Item>
-					</List>
-					<Text my="xs">
-						Components can also be defined by applications, and they can be used to store any kind of metadata that doesn't fit into the predefined fields.
-					</Text>
-				</List.Item>
-			</List>
+			<CodeHighlight language="json" code={JSON.stringify({
+				name: {
+					en: "My Event",
+					lt: "Mano Renginys",
+					fr: "Mon Événement",
+				},
+			}, null, 2)} />
 
-			<Stack>
-				<Title order={3}>
-					Roadmap
-				</Title>
+			<Text>
+				Most of the time, when applications don't support internationalization for something like a description, users tend to put all of them one after another in the same description field.
+			</Text>
 
-				<Text>
-					We also have other things we are planning to add:
-				</Text>
+			<Title order={3} mt="3rem">
+				<IconClockQuestion size={28} style={{ verticalAlign: "middle" }} /> Partially Defined Dates
+			</Title>
 
-				<List spacing="xs">
-					<List.Item>
-						<Text span fw="bold">Ticketing</Text> - Weather an event is free or paid, ticket tiers, ticket prices, seller links etc.
-					</List.Item>
-					<List.Item>
-						<Text span fw="bold">Rich Text</Text> - Support for rich text formatting in description fields. We were going to use Markdown, but we will probably use something similar to BlueSky richtext facets instead.
-					</List.Item>
-					<List.Item>
-						<Text span fw="bold">Organizers</Text> - Information about the organizers of the event, such as their name, contact information, social media links etc.
-					</List.Item>
-					<List.Item>
-						<Text span fw="bold">Attending Language</Text> - Metadata about the language(s) used in the event. This would be very useful for multilingual regions for example.
-					</List.Item>
-					<List.Item>
-						<Text span fw="bold">Activities</Text> - Things that go on inside the event. For example, a conference might have talks, workshops, panels etc; a cosplay convention might have a show, a photoshoot, a meetup etc.
-					</List.Item>
-					<List.Item>
-						<Text span fw="bold">Categories/Tags</Text> - The ability to categorize or tag events.
-					</List.Item>
-				</List>
+			<Text>
+				A lot of events only have partial date information.
+				For example, you might only know the month and year of an event, but not the exact day and time.
+			</Text>
 
-				<Text>
-					If you are interested in any of these features and would like to help out, or if you have any other ideas or suggestions,
-					please feel free to <Anchor
-						href="https://github.com/openevnt/evnt/issues"
-						target="_blank"
-						rel="noopener noreferrer"
-						ml={4}
-					>
-						check out the GitHub issue tracker
-					</Anchor>
-				</Text>
-			</Stack>
+			<Text>
+				Open Evnt uses a consistent way to represent this by allowing partial date strings.
+			</Text>
+
+			<Table
+				styles={{
+					tr: { textAlign: "center" },
+				}}
+				data={{
+					body: [
+						["Partial Date", "Description"],
+						[<Code>2024-05[Europe/Vilnius]</Code>, "May 2024 (in Vilnius)"],
+						[<Code>2024-05-15[Europe/Vilnius]</Code>, "May 15, 2024 (in Vilnius)"],
+						[<Code>2024-05-15T12:00[Europe/Vilnius]</Code>, "May 15, 2024 at 12:00 (in Vilnius)"],
+					],
+				}}
+			/>
+
+			<Text>
+				Open Evnt uses timezone-aware partial dates, which means that every date includes an explicit timezone identifier.
+				Trust me, this is very important.
+			</Text>
+
+			<Title order={3} mt="3rem">
+				<IconListNumbers size={28} style={{ verticalAlign: "middle" }} /> Multiple Instances and Venues
+			</Title>
+
+			<Text>
+				Many events can span multiple days, or even have multiple occurrences in different locations.
+			</Text>
+
+			<Text>
+				Open Evnt natively supports representing this information by allowing events to have multiple date <Text inline span inherit td="underline">instances</Text> and multiple <Text inline span inherit td="underline">venues</Text>.
+			</Text>
+
+			<Title order={3} mt="3rem">
+				<IconApps size={28} style={{ verticalAlign: "middle" }} /> Extensibility
+			</Title>
+
+			<Text>
+				Events can have an arbitrary number of <Text inline span inherit td="underline">components</Text>, which are just objects with a <Code>$type</Code> defining what they are.
+			</Text>
+
+			<Text>
+				Any application can define its own components and use them to store any kind of metadata that doesn't fit into the predefined fields.
+			</Text>
+
+			<Text>
+				The core specification defines a couple components such as a link component and a splash media component. We are also planning to add more in the future such as ticketing, organizers, categories/tags etc.
+			</Text>
+
+			<Title order={3} mt="3rem">
+				<IconUsers size={28} style={{ verticalAlign: "middle" }} /> Open Source
+			</Title>
+
+			<Text>
+				Open Evnt is completely open source, and we welcome contributions from anyone.
+			</Text>
+
+			<Text>
+				If you are interested in any of these features and would like to help out, or if you have any other ideas or suggestions,
+				please feel free to <Anchor
+					href="https://github.com/openevnt/evnt/issues"
+					target="_blank"
+					rel="noopener noreferrer"
+					ml={4}
+				>
+					check out the GitHub issue tracker
+				</Anchor>.
+			</Text>
 		</Section>
 	)
 };
