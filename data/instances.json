@@ -1,16 +1,6 @@
 {
 	"instances": [
 		{
-			"name": "Smoke Signal",
-			"description": "Event and RSVP management system",
-			"url": "https://smokesignal.events",
-			"redirectTo": "https://smokesignal.events/{aturi-repo}/{aturi-rkey}",
-			"capabilities": [
-				"home",
-				"event:at?collection=community.lexicon.calendar.event"
-			]
-		},
-		{
 			"name": "atmo.rsvp",
 			"url": "https://atmo.rsvp",
 			"redirectTo": "https://atmo.rsvp/p/{aturi-repo}/e/{aturi-rkey}",
@@ -33,7 +23,7 @@
 			]
 		},
 		{
-			"name": "Vantage Events Viewer",
+			"name": "Vantage",
 			"description": "Reference implementation",
 			"url": "https://vantage.deniz.blue",
 			"redirectTo": "https://vantage.deniz.blue/?{intent}",
@@ -42,15 +32,16 @@
 				"event:at?collection=directory.evnt.event",
 				"event:at?collection=blue.deniz.event",
 				"event:at?collection=community.lexicon.calendar.event",
-				"event:http",
 				"event:https"
 			]
 		},
 		{
-			"name": "Blento",
-			"url": "https://blento.app",
-			"redirectTo": "https://blento.app/{aturi-repo}/events/{aturi-rkey}",
+			"name": "Smoke Signal",
+			"description": "Event and RSVP management system",
+			"url": "https://smokesignal.events",
+			"redirectTo": "https://smokesignal.events/{aturi-repo}/{aturi-rkey}",
 			"capabilities": [
+				"home",
 				"event:at?collection=community.lexicon.calendar.event"
 			]
 		},
