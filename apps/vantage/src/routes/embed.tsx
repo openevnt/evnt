@@ -7,7 +7,7 @@ import { Center, Stack, Text } from "@mantine/core";
 import { EventCard } from "../components/content/event/card/EventCard";
 import { useQuery } from "@tanstack/react-query";
 import { ResolvedEventProvider } from "../components/content/event/event-envelope-context";
-import { EventResolver } from "../db/event-resolver";
+import { ResolvedEventEnvelopeUtil } from "../db/models/resolved-event-envelope";
 
 const SearchParamsSchema = z.object({
 	source: RemoteEventSourceSchema.optional(),
@@ -29,7 +29,7 @@ function EmbedPage() {
 		queryKey: ["embed-event-data", JSON.stringify(search.data)],
 		enabled: !!search.data,
 		queryFn: async () => {
-			return EventResolver.fromJsonObject(search.data);
+			return ResolvedEventEnvelopeUtil.fromJsonObject(search.data);
 		},
 	});
 

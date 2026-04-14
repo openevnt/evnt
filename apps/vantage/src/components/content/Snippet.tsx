@@ -1,7 +1,7 @@
 import type { PlaceholderHint, SnippetIcon, SnippetLabel, TSnippet } from "@evnt/pretty";
 import { Anchor, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useCallback, useMemo, type PropsWithChildren, type ReactNode } from "react";
-import { Trans } from "./event/Trans";
+import { Trans } from "./Trans";
 import { AddressSnippetLabel } from "./address/AddressSnippetLabel";
 import { IconCalendar, IconClock, IconExternalLink, IconLocationQuestion, IconMapPin, IconWorld, IconWorldPin } from "@tabler/icons-react";
 import { TimeSnippetLabel } from "./datetime/TimeSnippetLabel";
@@ -28,6 +28,8 @@ export const Snippet = ({
 	} as Partial<Record<SnippetIcon | "_", ReactNode>>)[snippet.icon ?? "_"] ?? null;
 
 	const getLabelNode = useCallback((label?: SnippetLabel) => {
+		console.log("Getting label node for", label);
+
 		if (!label) return null;
 
 		if (label.type === "text") return <Text inline span inherit>{label.value}</Text>;
@@ -45,7 +47,7 @@ export const Snippet = ({
 			</Text>
 		);
 		if (label.type === "address") return <AddressSnippetLabel value={label.value} />;
-		if (label.type === "time") return <TimeSnippetLabel value={label.value} day={label.day} />;
+		if (label.type === "time") return <TimeSnippetLabel value={label.value} />;
 		if (label.type === "time-range") return <TimeRangeSnippetLabel value={label.value} />;
 		if (label.type === "date-time-range") return <PartialDateRangeSnippetLabel value={label.value} />;
 		if (label.type === "partial-date" || label.type == "date-time") return <PartialDateSnippetLabel value={label.value} />;

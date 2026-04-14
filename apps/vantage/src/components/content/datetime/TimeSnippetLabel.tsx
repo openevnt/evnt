@@ -4,26 +4,31 @@ import type { SnippetLabel, SnippetLabelProps } from "@evnt/pretty";
 import { useMemo } from "react";
 import { trynull } from "../../../lib/util/trynull";
 import { UtilPartialDate } from "~/lib/util/schema-utils";
-import type { PartialDate as PartialDateParts } from "@evnt/partial-date";
+import { PartialDateUtil, type PartialDate as PartialDateParts } from "@evnt/partial-date";
 
 export const TimeSnippetLabel = ({
 	value,
-	day,
 }: SnippetLabelProps<"time">) => {
-	const timezone = useLocaleStore(store => store.timezone);
+	const userTimezone = useLocaleStore(store => store.timezone);
 
-	const str = useMemo(() => {
-		return trynull(() => {
-			const dateObj = UtilPartialDate.toLowDate(((day ?? UtilPartialDate.today()) + "T" + value + "[UTC]") as PartialDateParts.YearMonthDayTime);
+	const parsed = PartialDateUtil.parse(value);
 
-			return new Intl.DateTimeFormat(undefined, {
-				hour: "numeric",
-				minute: "numeric",
-				hour12: false,
-				timeZone: timezone,
-			}).format(dateObj);
-		});
-	}, [value, day]);
+	const sameTimezone = parsed.timezone === userTimezone;
+	const pdt = PartialDateUtil.parsedAsPlainDateTime(parsed);
+	const zdt = PartialDateUtil.parsedAsZonedDateTime(parsed);
+
+	const str = pdt.toLocaleString(undefined, {
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+	});
+
+	const str2 = zdt.toInstant().toLocaleString(undefined, {
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+		timeZone: userTimezone,
+	});
 
 	return (
 		<Tooltip label={`${value} - UTC`}>
@@ -34,7 +39,7 @@ export const TimeSnippetLabel = ({
 				inline
 				inherit
 			>
-				{str ?? "Invalid"}
+				{str ?? "!"}{!sameTimezone && (str !== str2) && <Text span inline inherit c="dimmed" children={` (${str2})`} />}
 			</Text>
 		</Tooltip>
 	);

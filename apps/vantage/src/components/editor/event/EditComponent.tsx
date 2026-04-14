@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { focusAtom } from "jotai-optics";
 import { CollapsiblePaper } from "../CollapsiblePaper";
 import { EventComponentRegistry, toLegacyComponentKey } from "./event-components";
-import { Trans } from "../../content/event/Trans";
+import { Trans } from "../../content/Trans";
 import { IconQuestionMark } from "@tabler/icons-react";
 
 export const EditComponent = ({ component, data, index }: {

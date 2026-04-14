@@ -1,6 +1,6 @@
 import type { Translations } from "@evnt/schema";
 import { notifications } from "@mantine/notifications";
-import { Trans } from "../../components/content/event/Trans";
+import { Trans } from "../../components/content/Trans";
 
 export const copyWithFeedback = async (
     text: string,

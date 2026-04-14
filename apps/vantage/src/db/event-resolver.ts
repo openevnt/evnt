@@ -1,47 +1,21 @@
-import { $NSID, EventDataSchema } from "@evnt/schema";
 import { UtilEventSource, type EventSource } from "./models/event-source";
 import { DataDB } from "./data-db";
 import { Client, simpleFetchHandler } from "@atcute/client";
 import { parseCanonicalResourceUri, type Did } from "@atcute/lexicons/syntax";
-import { type ResolvedEventEnvelope, type EventEnvelope, EventEnvelopeUtil } from "./models/event-envelope";
+import { type EventEnvelope, EventEnvelopeUtil } from "./models/event-envelope";
+import { ResolvedEventEnvelopeUtil, type ResolvedEventEnvelope } from "./models/resolved-event-envelope";
 import { tryCatch, tryCatchAsync } from "../lib/util/trynull";
 import { didDocumentResolver } from "../lib/atproto/atproto-services";
 import { getPdsEndpoint } from "@atcute/identity";
-import { convertFromLexicon as convertFromCommunityLexicon } from "@evnt/convert/community-lexicon";
 
 export class EventResolver {
-	static #fromStored(stored: EventEnvelope): ResolvedEventEnvelope {
-		const { data, dataType = EventEnvelopeUtil.inferDataType(data), err, rev } = stored;
-		if (!data) return { data: null, err, rev };
-
-		switch (dataType) {
-			case "blue.deniz.event": { if (stored.data) (stored.data as any).$type = $NSID }
-			case $NSID: return this.#parseOpenEvnt(stored);
-			case "community.lexicon.calendar.event": return this.#parseCommunityLexicon(stored);
-			default: return { data: null, err: { kind: "unknown-data-type", dataType } };
-		}
-	}
-
-	static #parseOpenEvnt(stored: EventEnvelope): ResolvedEventEnvelope {
-		const { data, err, rev } = stored;
-		const parseResult = EventDataSchema.safeParse(data);
-		if (!parseResult.success) return { data: null, err: EventEnvelopeUtil.createError(parseResult.error), rev };
-		return { data: parseResult.data, err, rev };
-	}
-
-	static #parseCommunityLexicon(stored: EventEnvelope): ResolvedEventEnvelope {
-		const { data, err, rev } = stored;
-		const converted = convertFromCommunityLexicon(data as any);
-		return { data: converted, err, rev };
-	}
-
 	static async resolve(source: EventSource): Promise<ResolvedEventEnvelope> {
 		const cached = await DataDB.get(source);
-		if (cached != null) return this.#fromStored(cached);
+		if (cached != null) return ResolvedEventEnvelopeUtil.fromEnvelope(cached);
 
 		const stored = await this.#fetch(source);
 		await DataDB.put(source, stored);
-		const envelope = this.#fromStored(stored);
+		const envelope = ResolvedEventEnvelopeUtil.fromEnvelope(stored);
 		console.log(`EventResolver: resolved event source ${source} from network, success: ${!!envelope.data}, err: ${!!envelope.err}`);
 		return envelope;
 	}

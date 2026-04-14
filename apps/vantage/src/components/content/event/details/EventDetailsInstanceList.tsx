@@ -5,7 +5,7 @@ import { UtilPartialDate, UtilPartialDateRange, UtilTranslations } from "~/lib/u
 import type { EventInstance, PartialDate, Venue } from "@evnt/schema";
 import type { ReactNode } from "react";
 import { IconCalendar, IconCalendarQuestion, IconCheck, IconCopy, IconExternalLink, IconMapPin, IconWorld, IconWorldPin } from "@tabler/icons-react";
-import { Trans } from "../Trans";
+import { Trans } from "../../Trans";
 import { AddressSnippetLabel } from "../../address/AddressSnippetLabel";
 import { useLocaleStore } from "../../../../stores/useLocaleStore";
 import { TimeSnippetLabel } from "../../datetime/TimeSnippetLabel";

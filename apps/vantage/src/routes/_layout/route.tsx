@@ -253,8 +253,8 @@ export function ErrorBoundary({ error, reset, info }: ErrorComponentProps) {
 				Fuck
 			</Title>
 
-			<Text>
-				The Application crashed! Please report the following error to the developers:
+			<Text my="md">
+				The Application crashed! This means that Deniz fucked up. Here's what we know about the crash, please send her a screenshot of this and the steps to reproduce if possible so she can fix it:
 			</Text>
 
 			<Text>

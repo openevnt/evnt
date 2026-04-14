@@ -1,5 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
 
+export type PlainDateString = `${number}-${number}-${number}`;
+export type PlainTimeString = `${number}:${number}`;
+
 export namespace PartialDate {
 	type TimezoneIdentifier = string;
 	export type YearOnly = `${number}[${TimezoneIdentifier}]`;
@@ -41,6 +44,11 @@ export class PartialDateUtil {
 	 * @param pd A PartialDate string to parse into a structured object
 	 * @returns Parsed representation of the PartialDate
 	 */
+	static parse(pd: PartialDate.YearOnly): PartialDate.Parsed.YearOnly;
+	static parse(pd: PartialDate.YearMonth): PartialDate.Parsed.YearMonth;
+	static parse(pd: PartialDate.YearMonthDay): PartialDate.Parsed.YearMonthDay;
+	static parse(pd: PartialDate.YearMonthDayTime): PartialDate.Parsed.YearMonthDayTime;
+	static parse(pd: PartialDate): PartialDate.Parsed;
 	static parse(pd: PartialDate): PartialDate.Parsed {
 		const match = PartialDateRegex.exec(pd);
 		if (!match || !match.groups) {
@@ -77,6 +85,8 @@ export class PartialDateUtil {
 		return str as PartialDate;
 	}
 
+	// == Introspection methods ==
+
 	static getPrecision(pd: PartialDate): PartialDate.Precision {
 		const parsed = this.parse(pd);
 		return parsed.precision;
@@ -97,6 +107,8 @@ export class PartialDateUtil {
 			default: return false;
 		}
 	}
+
+	// == Modification methods ==
 
 	static lowerPrecision(pd: PartialDate.YearMonthDayTime, to: "day"): PartialDate.YearMonthDay;
 	static lowerPrecision(pd: PartialDate.YearMonthDayTime, to: "month"): PartialDate.YearMonth;
@@ -136,6 +148,8 @@ export class PartialDateUtil {
 		return this.format({ ...parsed, timezone });
 	}
 
+	// == Conversions from Temporal types ==
+
 	static parsedFromTemporal(obj: Temporal.ZonedDateTime | Temporal.PlainDateTime | Temporal.PlainDate | Temporal.PlainYearMonth): PartialDate.Parsed {
 		return {
 			precision: ("hour" in obj && "minute" in obj) ? "time" : ("day" in obj ? "day" : "month"),
@@ -148,10 +162,14 @@ export class PartialDateUtil {
 		} as PartialDate.Parsed;
 	}
 
+	// == Factory methods ==
+
 	static now(timeZone?: Temporal.TimeZoneLike): PartialDate {
 		const now = Temporal.Now.zonedDateTimeISO(timeZone);
 		return this.format(this.parsedFromTemporal(now));
 	}
+
+	// == Conversions to Temporal types ==
 
 	static parsedAsPlainYearMonth(parsed: Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly>): Temporal.PlainYearMonth {
 		return new Temporal.PlainYearMonth(parsed.year, parsed.month);
@@ -167,6 +185,18 @@ export class PartialDateUtil {
 
 	static parsedAsZonedDateTime(parsed: PartialDate.Parsed.YearMonthDayTime): Temporal.ZonedDateTime {
 		return this.parsedAsPlainDateTime(parsed).toZonedDateTime(parsed.timezone);
+	}
+
+	// == Humanization methods ==
+
+	static toLocaleString(pd: PartialDate | PartialDate.Parsed, locales: string[] = ["en"]): string {
+		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
+		switch (parsed.precision) {
+			case "year": return parsed.year.toString();
+			case "month": return this.parsedAsPlainYearMonth(parsed).toLocaleString(locales, { year: "numeric", month: "long" });
+			case "day": return this.parsedAsPlainDate(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric" });
+			case "time": return this.parsedAsZonedDateTime(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
+		}
 	}
 }
 

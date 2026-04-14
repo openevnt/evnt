@@ -9,12 +9,11 @@ export const TimeRangeSnippetLabel = ({ value }: SnippetLabelProps<"time-range">
 			inline
 			inherit
 			role="group"
-			aria-label={`${value.start.value} to ${value.end.value}`}
+			aria-label={`${value.start} to ${value.end}`}
 			aria-roledescription="Time range"
 		>
 			<TimeSnippetLabel
-				value={value.start.value}
-				day={value.start.day}
+				value={value.start}
 			/>
 			<Text
 				span
@@ -25,8 +24,7 @@ export const TimeRangeSnippetLabel = ({ value }: SnippetLabelProps<"time-range">
 				aria-hidden
 			/>
 			<TimeSnippetLabel
-				value={value.end.value}
-				day={value.end.day}
+				value={value.end}
 			/>
 		</Text>
 	)

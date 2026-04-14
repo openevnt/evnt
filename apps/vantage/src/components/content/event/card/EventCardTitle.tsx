@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useEventDetailsModal } from "../../../../hooks/app/useEventDetailsModal";
 import { Anchor, Group, Loader, Skeleton, Stack, Text, Transition, type MantineTransition } from "@mantine/core";
 import { useEventCardContext } from "./event-card-context";
-import { Trans } from "../Trans";
+import { Trans } from "../../Trans";
 import { Link } from "@tanstack/react-router";
 import { EnvelopeErrorBadge } from "../envelope/EnvelopeErrorBadge";
 import { useResolvedEvent } from "../event-envelope-context";

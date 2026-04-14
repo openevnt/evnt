@@ -172,7 +172,7 @@ export const snippetInstances = (instances: EventInstance[], maxInstances?: numb
 	for (const instance of instances) {
 		if (instance.start && PartialDateUtil.has(instance.start, "day") && (!instance.end || isSameDay(instance))) {
 			const { year, month, day } = PartialDateUtil.parse(instance.start) as PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime;
-			const dayValue = PartialDateUtil.format({ year, month, day, timezone: "UTC", precision: "day" }) as PartialDate.YearMonthDay;
+			const dayValue = PartialDateUtil.format({ year, month, day, timezone: "UTC", precision: "day" }) as PartialDate.YearMonthDay; // !
 			groupedByDate[dayValue] ||= [];
 			groupedByDate[dayValue].push(instance);
 		} else {
@@ -225,19 +225,19 @@ export const snippetInstances = (instances: EventInstance[], maxInstances?: numb
 			const hasStartTime = i.start && hasTime(i.start);
 			const hasEndTime = i.end && hasTime(i.end);
 			if (hasStartTime && hasEndTime) {
-				return `range:${getTimePart(i.start as PartialDate.YearMonthDayTime)}-${getTimePart(i.end as PartialDate.YearMonthDayTime)}`;
+				return `range:${(i.start as PartialDate.YearMonthDayTime)}|${(i.end as PartialDate.YearMonthDayTime)}`;
 			} else if (hasStartTime) {
-				return `time:${getTimePart(i.start as PartialDate.YearMonthDayTime)}`;
+				return `time:${(i.start as PartialDate.YearMonthDayTime)}`;
 			}
 			return "none";
 		}))).map(tr => {
 			if (tr.startsWith("range:")) {
-				const [startTime, endTime] = tr.replace("range:", "").split("-");
+				const [startTime, endTime] = tr.replace("range:", "").split("|") as [PartialDate.YearMonthDayTime, PartialDate.YearMonthDayTime];
 				return {
 					type: "time-range",
 					value: {
-						start: { value: startTime },
-						end: { value: endTime },
+						start: startTime,
+						end: endTime,
 					},
 				} as SnippetLabel;
 			} else if (tr.startsWith("time:")) {
@@ -322,8 +322,8 @@ export const snippetInstance = (instance: EventInstance): TSnippet[] => {
 				icon: "clock",
 				label: {
 					type: "time-range", value: {
-						start: { value: getTimePart(instance.start)!, day: asDay(instance.start as PartialDate.YearMonthDayTime) },
-						end: { value: getTimePart(instance.end)!, day: asDay(instance.end as PartialDate.YearMonthDayTime) },
+						start: instance.start as PartialDate.YearMonthDayTime,
+						end: instance.end as PartialDate.YearMonthDayTime,
 					}
 				},
 			});
@@ -336,8 +336,7 @@ export const snippetInstance = (instance: EventInstance): TSnippet[] => {
 				icon: "clock",
 				label: {
 					type: "time",
-					value: getTimePart(instance.start)!,
-					day: asDay(instance.start as PartialDate.YearMonthDayTime),
+					value: instance.start as PartialDate.YearMonthDayTime,
 				},
 			});
 		} else {

@@ -1,5 +1,5 @@
 import { createContext, useContext, type PropsWithChildren } from "react";
-import type { ResolvedEventEnvelope } from "../../../db/models/event-envelope";
+import type { ResolvedEventEnvelope } from "~/db/models/resolved-event-envelope";
 
 export interface ResolvedEventContext extends Omit<ResolvedEventEnvelope, "draft"> {
 	isDraft?: boolean;

@@ -7,7 +7,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { EditComponent } from "./EditComponent";
 import { focusAtom } from "jotai-optics";
 import { EventComponentRegistry } from "./event-components";
-import { Trans } from "../../content/event/Trans";
+import { Trans } from "../../content/Trans";
 
 export const EditComponentsList = ({ data }: { data: EditAtom<EventData> }) => {
 	const indexes = useAtomValue(useMemo(() => atom((get) => {

@@ -1,5 +1,5 @@
 import type { FailedClientResponse } from "@atcute/client";
-import { $NSID, type EventData } from "@evnt/schema";
+import { $NSID } from "@evnt/schema";
 import { ZodError } from "zod";
 import type { $ZodIssue } from "zod/v4/core";
 
@@ -63,10 +63,6 @@ export namespace EventEnvelope {
 export interface EventEnvelope extends EventEnvelope.Metadata {
 	data: unknown | null;
 	dataType?: EventEnvelope.DataType;
-};
-
-export interface ResolvedEventEnvelope extends EventEnvelope.Metadata {
-	data: EventData | null;
 };
 
 export class EventEnvelopeUtil {

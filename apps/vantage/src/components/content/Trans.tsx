@@ -1,5 +1,5 @@
 import type { Translations } from "@evnt/schema";
-import { useTranslations } from "../../../stores/useLocaleStore";
+import { useTranslations } from "../../stores/useLocaleStore";
 
 export const Trans = ({
     t,

@@ -1,6 +1,6 @@
 import { ActionIcon, Box, Collapse, Group, Loader, Menu, Modal, Stack, Title } from "@mantine/core";
 import { useEventDetailsContext } from "./event-details-context";
-import { Trans } from "../Trans";
+import { Trans } from "../../Trans";
 import { EnvelopeErrorBadge } from "../envelope/EnvelopeErrorBadge";
 import type { SplashMediaComponent } from "@evnt/schema";
 import { OverLayer } from "../../../base/layout/OverLayer";
