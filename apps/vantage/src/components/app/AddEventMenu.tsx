@@ -4,9 +4,11 @@ import { IconBraces, IconCalendarPlus, IconEdit, IconFileImport, IconLink, IconP
 import { Link } from "@tanstack/react-router";
 import { useRef } from "react";
 import { useTasksStore } from "../../stores/useTasksStore";
-import * as icalendar from "@evnt/convert/icalendar";
 import ICAL from "ical.js";
 import { EventActions } from "../../lib/actions/event-actions";
+import { UtilEventSource } from "../../db/models/event-source";
+import { DataDB } from "../../db/data-db";
+import { useLayersStore } from "../../db/useLayersStore";
 
 export const AddEventMenu = () => {
 	const icsFileInputRef = useRef<HTMLInputElement>(null);
@@ -17,12 +19,21 @@ export const AddEventMenu = () => {
 		}, async () => {
 			for (const file of files) {
 				const text = await file.text();
+				console.log("Read .ics file:", file.name, text);
 				let jcalData = ICAL.parse(text)
 				let comp = new ICAL.Component(jcalData);
 				const vevents = comp.getAllSubcomponents("vevent");
 				for (const vevent of vevents) {
-					const eventData = icalendar.convertFromVEvent(vevent);
-					EventActions.createLocalEvent(eventData);
+					const veventString = vevent.toString();
+					console.log("Parsed VEVENT:", veventString);
+					const source = UtilEventSource.localRandom();
+					await DataDB.put(source, {
+						data: {
+							$type: "com.apple.icalendar",
+							value: veventString,
+						}
+					});
+					useLayersStore.getState().addEventSource(source);
 				};
 			}
 		});

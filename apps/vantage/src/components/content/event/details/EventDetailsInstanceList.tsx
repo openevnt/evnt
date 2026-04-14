@@ -135,7 +135,7 @@ export const MiniBoxInstance = ({ instance }: { instance: EventInstance }) => {
 			icon={icon}
 			title={title}
 			subtitle={fmtSubtitle ? (
-				<Text span inherit inline c="dimmed" fz="sm">
+				<Text span inherit inline fz="sm">
 					{subtitle}
 				</Text>
 			) : subtitle}

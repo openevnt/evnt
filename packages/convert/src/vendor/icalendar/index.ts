@@ -30,28 +30,41 @@ export const convertFromVEvent = (
 		});
 	}
 
+	const icalTimeToPartialDate = (icalTime: ICAL.Time): PartialDate => {
+		if (icalTime.isDate) {
+			return PartialDateUtil.format({
+				precision: "day",
+				year: icalTime.year,
+				month: icalTime.month,
+				day: icalTime.day,
+				timezone: icalTime.zone.tzid,
+			});
+		} else {
+			return PartialDateUtil.format({
+				precision: "time",
+				year: icalTime.year,
+				month: icalTime.month,
+				day: icalTime.day,
+				hour: icalTime.hour,
+				minute: icalTime.minute,
+				timezone: icalTime.zone.tzid,
+			});
+		}
+	};
+
 	if (event.startDate) {
-		const startDate = event.startDate.toJSDate();
+		const startDate = event.startDate
 		eventData.instances!.push({
 			venueIds: eventData.venues?.map(({ id }) => id) || [],
-			start: PartialDateUtil.format({
-				year: startDate.getUTCFullYear(),
-				month: startDate.getUTCMonth() + 1,
-				day: startDate.getUTCDate(),
-				hour: startDate.getUTCHours(),
-				minute: startDate.getUTCMinutes(),
-				timezone: "UTC",
-				precision: (startDate.getUTCHours() === 0 && startDate.getUTCMinutes() === 0) ? "day" : "time",
-			} as PartialDate.Parsed),
-			end: event.endDate ? PartialDateUtil.format({
-				year: event.endDate.toJSDate().getUTCFullYear(),
-				month: event.endDate.toJSDate().getUTCMonth() + 1,
-				day: event.endDate.toJSDate().getUTCDate(),
-				hour: event.endDate.toJSDate().getUTCHours(),
-				minute: event.endDate.toJSDate().getUTCMinutes(),
-				timezone: "UTC",
-				precision: (event.endDate.toJSDate().getUTCHours() === 0 && event.endDate.toJSDate().getUTCMinutes() === 0) ? "day" : "time",
-			} as PartialDate.Parsed) : undefined,
+			start: icalTimeToPartialDate(startDate),
+			end: event.endDate ? icalTimeToPartialDate(event.endDate) : undefined,
+		});
+	}
+
+	if (event.description) {
+		eventData.components!.push({
+			$type: "app.bsky.richtext",
+			description: { text: event.description, facets: [] },
 		});
 	}
 
