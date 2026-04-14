@@ -1,10 +1,10 @@
 import { PartialDateUtil, type PartialDate } from "@evnt/partial-date";
 import { UtilPartialDate } from "~/lib/util/schema-utils";
-import { ActionIcon, Box, Button, CloseButton, Collapse, Group, Input, Popover, SegmentedControl, Stack, Text, TextInput, Tooltip } from "@mantine/core";
+import { ActionIcon, Badge, Box, Button, CloseButton, Collapse, Group, Input, InputBase, Popover, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { DatePicker, MonthPicker, TimePicker, YearPicker, type CalendarLevel } from "@mantine/dates";
 import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from "react";
 import { PartialDateSnippetLabel } from "../../content/datetime/PartialDateSnippetLabel";
-import { IconCalendar } from "@tabler/icons-react";
+import { IconCalendar, IconCalendarQuestion, IconCheck, IconClock, IconClockQuestion, IconX } from "@tabler/icons-react";
 import { useLocaleStore } from "../../../stores/useLocaleStore";
 import { TimezoneSelect } from "../../app/overlay/settings/TimezoneSelect";
 
@@ -28,8 +28,13 @@ export const usePartialDateInputStates = ({
 		}
 	};
 
-	const asPartialDateDay = (v: PartialDate) =>
-		PartialDateUtil.setPrecision(v, "day", "low");
+	const pad = (n: number) => String(n).padStart(2, "0");
+
+	const asPartialDateDay = (v: PartialDate) => {
+		const p = PartialDateUtil.setPrecision(v, "day", "low");
+		const parsed = PartialDateUtil.parse(p);
+		return `${parsed.year}-${pad(parsed.month)}-${pad(parsed.day)}`;
+	};
 
 	const [calendarLevel, setCalendarLevel] = useState<CalendarLevel>(calendarLevelOf(value));
 	const [calendarDate, setCalendarDate] = useState<string>(asPartialDateDay(value));
@@ -65,7 +70,6 @@ export const usePartialDateInputStates = ({
 
 	const calendarValueFor = (level: CalendarLevel): string | undefined => {
 		const parsed = PartialDateUtil.parse(value);
-		const pad = (n: number) => String(n).padStart(2, "0");
 		switch (true) {
 			case level === "decade": return `${parsed.year}`;
 			case level === "year" && PartialDateUtil.has(parsed, "month"): return `${parsed.year}-${pad(parsed.month)}`;
@@ -89,7 +93,8 @@ export const usePartialDateInputStates = ({
 				onChange(v.slice(0, 7) + "[UTC]" as PartialDate.YearMonth);
 				return "month";
 			} else if (level === "month") {
-				onChange(v + "[UTC]" as PartialDate.YearMonthDay);
+				const parsed = PartialDateUtil.parse(value);
+				onChange(v + (parsed.precision == "time" ? `T${pad(parsed.hour)}:${pad(parsed.minute)}` : "") + "[UTC]" as PartialDate.YearMonthDay | PartialDate.YearMonthDayTime);
 				setCalendarCollapsed(true);
 				setTimeout(() => focusOnTimePicker?.(), 0);
 			}
@@ -103,23 +108,24 @@ export const usePartialDateInputStates = ({
 	const timePickerValue = useMemo(() => {
 		const parsed = PartialDateUtil.parse(value);
 		if (parsed.precision !== "time") return "";
-		return [parsed.hour, parsed.minute].map((n) => String(n).padStart(2, "0")).join(":");
+		return [parsed.hour, parsed.minute].map(pad).join(":");
 	}, [value]);
 
 	const onTimePickerChange = (time: string | null) => {
-		if (!time) return;
-		const [hourStr, minuteStr] = time.split(":") as string[];
-		const hour = parseInt(hourStr ?? "", 10);
-		const minute = parseInt(minuteStr ?? "", 10);
-		if (isNaN(hour) || isNaN(minute)) return;
-		const step = PartialDateUtil.setPrecision(value, "time", "low");
-		const parsed = PartialDateUtil.parse(step) as PartialDate.Parsed.YearMonthDayTime;
-		onChange(PartialDateUtil.format({
-			...parsed,
-			hour,
-			minute,
-			precision: "time",
-		}));
+		if (time) {
+			const [h, m] = time.split(":").map(Number) as [number, number];
+			const step = PartialDateUtil.setPrecision(value, "time", "low");
+			const parsed = PartialDateUtil.parse(step) as PartialDate.Parsed.YearMonthDayTime;
+			onChange(PartialDateUtil.format({
+				...parsed,
+				hour: h,
+				minute: m,
+				precision: "time",
+			}));
+		} else {
+			const step = PartialDateUtil.setPrecision(value, "day", "low");
+			onChange(step);
+		};
 	}
 
 	// == Text Input ==
@@ -200,6 +206,7 @@ export const PartialDateInput = ({
 	const [popupOpened, setPopupOpened] = useState(false);
 
 	const userTimezone = useLocaleStore(store => store.timezone);
+	const userLanguage = useLocaleStore(store => store.language);
 
 	// ref forwarding for DeatomOptional
 	// open dropdown when value added
@@ -266,88 +273,89 @@ export const PartialDateInput = ({
 			</Popover.Target>
 			<Popover.Dropdown>
 				<Stack gap={4}>
-					<Text c="dimmed" ta="center" size="xs">
-						{(
-							!UtilPartialDate.hasMonth(value) ? "Enter Partial Date" :
-								!UtilPartialDate.hasDay(value) ? "Known month, Unknown day" :
-									!UtilPartialDate.hasTime(value) ? "Known day, Unknown time" :
-										"Complete date and time"
-						)}
-					</Text>
+					<Group grow gap={4}>
+						{(["year", "month", "day", "time"] as PartialDate.Precision[]).map((precision) => (
+							<Badge
+								key={precision}
+								variant="light"
+								color={PartialDateUtil.has(value, /* Stupid TS */ precision as any) ? "blue" : "gray"}
+								size="xs"
+							>
+								{precision.charAt(0).toUpperCase() + precision.slice(1)}
+							</Badge>
+						))}
+					</Group>
 
-					<Collapse expanded={calendarCollapsed}>
-						<Button
-							onClick={() => setCalendarCollapsed(false)}
-							miw="260px"
-							color="gray"
-							variant="light"
-							h="auto"
-							py={4}
-							style={{ overflow: "visible" }}
-						>
-							<Stack gap={0}>
-								<Text inline inherit fz="xs">Change Date</Text>
-								<Text size="sm">
-									{UtilPartialDate.toIntlDateString(value)}
+					<Stack gap={0}>
+						<Collapse expanded={calendarCollapsed}>
+							<InputBase
+								miw="260px"
+								label="Date"
+								component="button"
+								onClick={() => setCalendarCollapsed(false)}
+								leftSection={PartialDateUtil.has(value, "day") ? <IconCalendar /> : <IconCalendarQuestion />}
+								children={PartialDateUtil.has(value, "day") ? PartialDateUtil.asPlainDate(value).toLocaleString(userLanguage, {
+									dateStyle: "full",
+								}) : "!"}
+							/>
+						</Collapse>
+
+						<Collapse expanded={!calendarCollapsed}>
+							<Box>
+								{calendarLevel === "decade" && (
+									<YearPicker
+										date={calendarDate}
+										value={calendarValueFor("decade")}
+										onDateChange={onCalendarDateChange}
+										onChange={onCalendarValueChange}
+									/>
+								)}
+								{calendarLevel === "year" && (
+									<MonthPicker
+										date={calendarDate}
+										value={calendarValueFor("year")}
+										onDateChange={onCalendarDateChange}
+										onChange={onCalendarValueChange}
+										level="year"
+										onLevelChange={onCalendarLevelChange}
+									/>
+								)}
+								{calendarLevel === "month" && (
+									<DatePicker
+										level="month"
+										date={calendarDate}
+										value={calendarValueFor("month")}
+										highlightToday
+										onDateChange={onCalendarDateChange}
+										onChange={onCalendarValueChange}
+										onLevelChange={onCalendarLevelChange}
+									/>
+								)}
+
+								<Text c="dimmed" ta="center" size="xs" mt={4}>
+									{(UtilPartialDate.hasDay(value) ? null :
+										UtilPartialDate.hasMonth(value) ? "Close popup if unknown day" :
+											"Close popup if unknown month")}
 								</Text>
-							</Stack>
-						</Button>
-					</Collapse>
-
-					<Collapse expanded={!calendarCollapsed}>
-						<Box>
-							{calendarLevel === "decade" && (
-								<YearPicker
-									date={calendarDate}
-									value={calendarValueFor("decade")}
-									onDateChange={onCalendarDateChange}
-									onChange={onCalendarValueChange}
-								/>
-							)}
-							{calendarLevel === "year" && (
-								<MonthPicker
-									date={calendarDate}
-									value={calendarValueFor("year")}
-									onDateChange={onCalendarDateChange}
-									onChange={onCalendarValueChange}
-									level="year"
-									onLevelChange={onCalendarLevelChange}
-								/>
-							)}
-							{calendarLevel === "month" && (
-								<DatePicker
-									level="month"
-									date={calendarDate}
-									value={calendarValueFor("month")}
-									highlightToday
-									onDateChange={onCalendarDateChange}
-									onChange={onCalendarValueChange}
-									onLevelChange={onCalendarLevelChange}
-								/>
-							)}
-
-							<Text c="dimmed" ta="center" size="xs" mt={4}>
-								{(UtilPartialDate.hasDay(value) ? null :
-									UtilPartialDate.hasMonth(value) ? "Close popup if unknown day" :
-										"Close popup if unknown month")}
-							</Text>
-						</Box>
-					</Collapse>
+							</Box>
+						</Collapse>
+					</Stack>
 
 					{PartialDateUtil.has(value, "day") && (
-						<Stack gap={4} mt="md">
+						<Stack gap={4}>
 							<Group justify="space-between">
 								<Input.Label>
-									Time
+									Time <Text c="dimmed" inline span inherit>(Local)</Text>
 								</Input.Label>
 							</Group>
 							<TimePicker
 								format="24h"
 								value={timePickerValue}
 								onChange={onTimePickerChange}
+								hoursRef={timePickerHoursRef}
 								clearable
 								style={{ flex: 1 }}
-								hoursRef={timePickerHoursRef}
+								leftSection={PartialDateUtil.has(value, "time") ? <IconClock /> : <IconClockQuestion />}
 							/>
 						</Stack>
 					)}
@@ -372,7 +380,7 @@ export const PartialDateInput = ({
 						size="xs"
 						mt="md"
 					>
-						Close
+						Confirm
 					</Button>
 				</Stack>
 			</Popover.Dropdown>

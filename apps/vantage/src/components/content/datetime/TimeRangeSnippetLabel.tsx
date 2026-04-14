@@ -1,5 +1,5 @@
 import type { SnippetLabelProps } from "@evnt/pretty";
-import { Text, VisuallyHidden } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { TimeSnippetLabel } from "./TimeSnippetLabel";
 
 export const TimeRangeSnippetLabel = ({ value }: SnippetLabelProps<"time-range">) => {
@@ -9,7 +9,6 @@ export const TimeRangeSnippetLabel = ({ value }: SnippetLabelProps<"time-range">
 			inline
 			inherit
 			role="group"
-			aria-label={`${value.start} to ${value.end}`}
 			aria-roledescription="Time range"
 		>
 			<TimeSnippetLabel
@@ -21,7 +20,7 @@ export const TimeRangeSnippetLabel = ({ value }: SnippetLabelProps<"time-range">
 				inherit
 				c="dimmed"
 				children=" – "
-				aria-hidden
+				aria-label="to"
 			/>
 			<TimeSnippetLabel
 				value={value.end}

@@ -92,13 +92,15 @@ export class PartialDateUtil {
 		return parsed.precision;
 	}
 
+	static has(pd: PartialDate | PartialDate.Parsed, field: "year"): true;
 	static has(pd: PartialDate.Parsed, field: "time"): pd is PartialDate.Parsed.YearMonthDayTime;
 	static has(pd: PartialDate.Parsed, field: "day"): pd is PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime;
 	static has(pd: PartialDate.Parsed, field: "month"): pd is PartialDate.Parsed.YearMonth | PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime;
 	static has(pd: PartialDate, field: "time"): pd is PartialDate.YearMonthDayTime;
 	static has(pd: PartialDate, field: "day"): pd is PartialDate.YearMonthDay | PartialDate.YearMonthDayTime;
 	static has(pd: PartialDate, field: "month"): pd is PartialDate.YearMonth | PartialDate.YearMonthDay | PartialDate.YearMonthDayTime;
-	static has(pd: PartialDate | PartialDate.Parsed, field: "month" | "day" | "time"): boolean {
+	static has(pd: PartialDate | PartialDate.Parsed, field: PartialDate.Precision): boolean {
+		if (field === "year") return true;
 		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
 		switch (field) {
 			case "time": return parsed.precision === "time";
@@ -171,20 +173,24 @@ export class PartialDateUtil {
 
 	// == Conversions to Temporal types ==
 
-	static parsedAsPlainYearMonth(parsed: Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly>): Temporal.PlainYearMonth {
-		return new Temporal.PlainYearMonth(parsed.year, parsed.month);
+	static asPlainYearMonth(pd: PartialDate.YearMonth | PartialDate.YearMonthDay | PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonth | PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime): Temporal.PlainYearMonth {
+		const parsed = typeof pd === "string" ? this.parse(pd) as Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly> : pd;
+		return new Temporal.PlainYearMonth(parsed.year, parsed.month, "iso8601");
 	}
 
-	static parsedAsPlainDate(parsed: Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly | PartialDate.Parsed.YearMonth>): Temporal.PlainDate {
-		return new Temporal.PlainDate(parsed.year, parsed.month, parsed.day);
+	static asPlainDate(pd: PartialDate.YearMonthDay | PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime): Temporal.PlainDate {
+		const parsed = typeof pd === "string" ? this.parse(pd) as Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly | PartialDate.Parsed.YearMonth> : pd;
+		return new Temporal.PlainDate(parsed.year, parsed.month, parsed.day, "iso8601");
 	}
 
-	static parsedAsPlainDateTime(parsed: PartialDate.Parsed.YearMonthDayTime): Temporal.PlainDateTime {
+	static asPlainDateTime(pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime): Temporal.PlainDateTime {
+		const parsed = typeof pd === "string" ? this.parse(pd) as PartialDate.Parsed.YearMonthDayTime : pd;
 		return new Temporal.PlainDateTime(parsed.year, parsed.month, parsed.day, parsed.hour, parsed.minute);
 	}
 
-	static parsedAsZonedDateTime(parsed: PartialDate.Parsed.YearMonthDayTime): Temporal.ZonedDateTime {
-		return this.parsedAsPlainDateTime(parsed).toZonedDateTime(parsed.timezone);
+	static asZonedDateTime(pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime): Temporal.ZonedDateTime {
+		const parsed = typeof pd === "string" ? this.parse(pd) as PartialDate.Parsed.YearMonthDayTime : pd;
+		return this.asPlainDateTime(parsed).toZonedDateTime(parsed.timezone);
 	}
 
 	// == Humanization methods ==
@@ -193,9 +199,9 @@ export class PartialDateUtil {
 		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
 		switch (parsed.precision) {
 			case "year": return parsed.year.toString();
-			case "month": return this.parsedAsPlainYearMonth(parsed).toLocaleString(locales, { year: "numeric", month: "long" });
-			case "day": return this.parsedAsPlainDate(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric" });
-			case "time": return this.parsedAsZonedDateTime(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
+			case "month": return this.asPlainYearMonth(parsed).toLocaleString(locales, { year: "numeric", month: "long" });
+			case "day": return this.asPlainDate(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric" });
+			case "time": return this.asZonedDateTime(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
 		}
 	}
 }

@@ -73,39 +73,40 @@ export const MiniBoxInstance = ({ instance }: { instance: EventInstance }) => {
 		/>
 	);
 
-	const monthShort = new Intl.DateTimeFormat(language, { month: "short" }).format(UtilPartialDate.toLowDate(instance.start));
+	const monthName = () => {
+		const parsed = PartialDateUtil.parse(instance.start!) as Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly>;
+		const pym = PartialDateUtil.asPlainYearMonth(parsed);
+		return pym.toLocaleString(language, { month: "short", calendar: pym.calendarId });
+	};
 
 	let icon: ReactNode = <IconCalendar />;
 	if (PartialDateUtil.has(instance.start, "day")) {
-		const parsed = UtilPartialDate.toComponents(instance.start);
-		const day = "day" in parsed ? parsed.day : 1;
+		const parsed = PartialDateUtil.parse(instance.start) as PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime;
 		icon = (
 			<Stack gap={0} align="center">
 				<Text span inherit>
-					{day}
+					{parsed.day}
 				</Text>
 				<Text fz="xs" c="dimmed" span inline inherit>
-					{monthShort}
+					{monthName()}
 				</Text>
 			</Stack>
 		);
-	}
-	else if (PartialDateUtil.has(instance.start, "month"))
+	} else if (PartialDateUtil.has(instance.start, "month"))
 		icon = (
 			<Stack gap={0} align="center">
 				<Text span inherit>
-					{monthShort}
+					{monthName()}
 				</Text>
 			</Stack>
 		);
-
 
 	let title: ReactNode = null;
 	let subtitle: ReactNode = null;
 	let fmtSubtitle = true;
 
 	if (instance.end) {
-		const bothHasTime = UtilPartialDateRange.bothHasTime(instance);
+		const bothHasTime = PartialDateUtil.has(instance.start, "time") && PartialDateUtil.has(instance.end, "time");
 		const isSameDay = UtilPartialDateRange.isSameDay(instance);
 		const isSameTime = UtilPartialDate.getTimePart(instance.start) === UtilPartialDate.getTimePart(instance.end);
 
@@ -113,17 +114,11 @@ export const MiniBoxInstance = ({ instance }: { instance: EventInstance }) => {
 			title = <PartialDateSnippetLabel value={UtilPartialDate.getDatePart(instance.start)} />;
 			if (bothHasTime && !isSameTime)
 				subtitle = <TimeRangeSnippetLabel value={{
-					start: {
-						value: UtilPartialDate.getTimePart(instance.start)!,
-						day: UtilPartialDate.asDay(instance.start),
-					},
-					end: {
-						value: UtilPartialDate.getTimePart(instance.end)!,
-						day: UtilPartialDate.asDay(instance.end),
-					},
+					start: instance.start as PartialDate.YearMonthDayTime,
+					end: instance.end as PartialDate.YearMonthDayTime,
 				}} />;
 			else if (UtilPartialDate.hasTime(instance.start))
-				subtitle = <TimeSnippetLabel value={UtilPartialDate.getTimePart(instance.start)!} day={UtilPartialDate.asDay(instance.start)} />;
+				subtitle = <TimeSnippetLabel value={instance.start as PartialDate.YearMonthDayTime} />;
 		} else {
 			title = <PartialDateSnippetLabel value={instance.start} />;
 			subtitle = <PartialDateSnippetLabel value={instance.end} />;
@@ -132,7 +127,7 @@ export const MiniBoxInstance = ({ instance }: { instance: EventInstance }) => {
 	} else {
 		title = <PartialDateSnippetLabel value={UtilPartialDate.getDatePart(instance.start)} />;
 		if (UtilPartialDate.hasTime(instance.start))
-			subtitle = <TimeSnippetLabel value={UtilPartialDate.getTimePart(instance.start)!} day={UtilPartialDate.asDay(instance.start)} />;
+			subtitle = <TimeSnippetLabel value={instance.start as PartialDate.YearMonthDayTime} />;
 	}
 
 	return (

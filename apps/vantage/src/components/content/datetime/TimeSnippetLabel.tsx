@@ -1,10 +1,9 @@
 import { Text, Tooltip } from "@mantine/core";
 import { useLocaleStore } from "../../../stores/useLocaleStore";
-import type { SnippetLabel, SnippetLabelProps } from "@evnt/pretty";
+import type { SnippetLabelProps } from "@evnt/pretty";
+import { PartialDateUtil } from "@evnt/partial-date";
 import { useMemo } from "react";
 import { trynull } from "../../../lib/util/trynull";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
-import { PartialDateUtil, type PartialDate as PartialDateParts } from "@evnt/partial-date";
 
 export const TimeSnippetLabel = ({
 	value,
@@ -14,32 +13,30 @@ export const TimeSnippetLabel = ({
 	const parsed = PartialDateUtil.parse(value);
 
 	const sameTimezone = parsed.timezone === userTimezone;
-	const pdt = PartialDateUtil.parsedAsPlainDateTime(parsed);
-	const zdt = PartialDateUtil.parsedAsZonedDateTime(parsed);
 
-	const str = pdt.toLocaleString(undefined, {
+	const time = useMemo(() => trynull(() => PartialDateUtil.asPlainDateTime(parsed).toLocaleString(undefined, {
 		hour: "2-digit",
 		minute: "2-digit",
 		hour12: false,
-	});
+	})), [value]) ?? "!";
 
-	const str2 = zdt.toInstant().toLocaleString(undefined, {
+	const localizedTime = useMemo(() => trynull(() => PartialDateUtil.asZonedDateTime(parsed).toInstant().toLocaleString(undefined, {
 		hour: "2-digit",
 		minute: "2-digit",
 		hour12: false,
 		timeZone: userTimezone,
-	});
+	})), [value, userTimezone]) ?? "!";
 
 	return (
 		<Tooltip label={`${value} - UTC`}>
 			<Text
 				component="time"
-				dateTime={str ?? undefined}
-				aria-label={`${str ?? "Invalid time"}`}
+				dateTime={time ?? undefined}
+				aria-label={`${time ?? "Invalid time"}`}
 				inline
 				inherit
 			>
-				{str ?? "!"}{!sameTimezone && (str !== str2) && <Text span inline inherit c="dimmed" children={` (${str2})`} />}
+				{time ?? "!"}{!sameTimezone && (time !== localizedTime) && <Text span inline inherit c="dimmed" children={` (${localizedTime})`} />}
 			</Text>
 		</Tooltip>
 	);

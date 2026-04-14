@@ -8,12 +8,14 @@ export const TimezoneSelect = ({
 	showDetected = true,
 	label,
 	description,
+	leftSection,
 }: {
 	value: string | undefined;
 	onChange: (value: string) => void;
 	showDetected?: boolean;
 	label?: React.ReactNode;
 	description?: React.ReactNode;
+	leftSection?: React.ReactNode;
 }) => {
 	const [searchValue, setSearchValue] = useState("");
 
@@ -35,6 +37,7 @@ export const TimezoneSelect = ({
 					onChange(value ?? "UTC");
 					setSearchValue("");
 				}}
+				leftSection={leftSection}
 			/>
 			{(showDetected && intlResolvedTz && value !== intlResolvedTz) && (
 				<Input.Description>
