@@ -2,6 +2,10 @@
 
 ## `"0.1"`
 
+__**2026-04-15**__
+
+- `PhysicalVenue.coordinates` was removed.
+
 __**2026-04-10**__
 
 - `EventComponent` is no longer in the shape of `{ type, data }`; it is now a flat object with a `$type` field to indicate the component type and the rest of the fields are specific to that component type.

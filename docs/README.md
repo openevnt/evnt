@@ -294,7 +294,8 @@ __Required fields:__
 __Optional fields:__
 
 - `address`: Optional physical address information.
-- `coordinates`: Optional latitude and longitude coordinates.
+  - `addr`: The full address as a single string.
+  - `countryCode`: The ISO 3166-1 alpha-2 country code of the venue (e.g. `US` for United States, `LT` for Lithuania etc.). This can be used for filtering and display purposes.
 
 _Examples_:
 
@@ -307,7 +308,6 @@ let venue: PhysicalVenue = {
 		addr: "Central Park West & 5th Ave, New York, NY 10024, USA",
 		countryCode: "US",
 	},
-	coordinates: { lat: 40.785091, lng: -73.968285 },
 }
 ```
 
