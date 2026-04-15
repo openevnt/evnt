@@ -520,6 +520,9 @@ importers:
       vite:
         specifier: ^8.0.2
         version: 8.0.2(@types/node@25.5.0)(esbuild@0.27.3)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.2)
+      workbox-window:
+        specifier: ^7.4.0
+        version: 7.4.0
 
   apps/wiki-events-api:
     dependencies:
