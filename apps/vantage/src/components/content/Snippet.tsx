@@ -28,8 +28,6 @@ export const Snippet = ({
 	} as Partial<Record<SnippetIcon | "_", ReactNode>>)[snippet.icon ?? "_"] ?? null;
 
 	const getLabelNode = useCallback((label?: SnippetLabel) => {
-		console.log("Getting label node for", label);
-
 		if (!label) return null;
 
 		if (label.type === "text") return <Text inline span inherit>{label.value}</Text>;

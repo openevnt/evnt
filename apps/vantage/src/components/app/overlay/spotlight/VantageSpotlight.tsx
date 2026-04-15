@@ -11,6 +11,8 @@ import { EventCardBackground } from "../../../content/event/card/EventCardBackgr
 import { Box, Loader, Paper } from "@mantine/core";
 import { useActionsStore, type Action } from "./useActionsStore";
 import { useTranslations } from "../../../../stores/useLocaleStore";
+import { EVENT_REDIRECTOR_URL } from "../../../../constants";
+import { trynull } from "../../../../lib/util/trynull";
 
 export const VantageSpotlight = () => {
 	const [query, setQuery] = useState("");
@@ -29,7 +31,20 @@ export const VantageSpotlight = () => {
 	const filteredActions = actions
 		.filter(props => props.label?.toLowerCase().includes(query.toLowerCase()));
 
-	if (UtilEventSource.is(query, false))
+	const asUrl = trynull(() => new URL(query));
+
+	const maybeFromRedirector = asUrl && query.startsWith(EVENT_REDIRECTOR_URL) ? asUrl.searchParams.get("url") || asUrl.searchParams.get("at") : null;
+
+	if (!!maybeFromRedirector)
+		filteredActions.push({
+			label: "View Event",
+			icon: <IconCalendar />,
+			execute: () => navigate({
+				to: "/event",
+				search: { source: maybeFromRedirector },
+			}),
+		});
+	else if (UtilEventSource.is(query, false))
 		filteredActions.push({
 			label: "View Event",
 			icon: <IconCalendar />,
