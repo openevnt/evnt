@@ -10,14 +10,14 @@ Read the [specification](https://github.com/openevnt/evnt/blob/main/docs/README.
 import { EventDataSchema, type EventData } from "@evnt/schema";
 
 const event: EventData = {
-	v: 0,
+	v: "0.1",
 	name: {
 		en: "My Event",
 	},
 	instances: [
 		{
 			venueIds: [],
-			start: "2026-01-01",
+			start: "2026-01-01[Europe/Berlin]"
 		}
 	],
 	components: [
