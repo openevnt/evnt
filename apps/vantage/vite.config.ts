@@ -34,6 +34,10 @@ export default defineConfig({
 		tsconfigPaths: true,
 	},
 
+	build: {
+		sourcemap: true,
+	},
+
 	plugins: [
 		tanstackRouter({
 			target: "react",
@@ -44,11 +48,11 @@ export default defineConfig({
 		react(),
 		AtprotoOAuth(),
 		VitePWA({
-			registerType: "autoUpdate",
+			registerType: "prompt",
 			injectRegister: "auto",
 			manifest: {
 				id: "/",
-				name: "Vantage Events Viewer",
+				name: "Vantage",
 				short_name: "Vantage",
 				description: "View and manage events",
 				categories: ["utilities", "calendar", "productivity"],

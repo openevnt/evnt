@@ -4,6 +4,7 @@
 	],
 	"extends": "@repo/typescript-config/vite.json",
 	"compilerOptions": {
+		"types": ["vite-plugin-pwa/client"],
 		"paths": {
 			"@evnt/schema/utils": [
 				"./src/lib/util/schema-utils.ts"

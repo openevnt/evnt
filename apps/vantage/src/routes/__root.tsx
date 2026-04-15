@@ -9,6 +9,7 @@ import { useLocaleStore } from "../stores/useLocaleStore";
 import { useMemo, type ComponentType, type PropsWithChildren } from "react";
 import { queryClient } from "../query-client";
 import { theme } from "../styles/theme";
+import { ServiceWorkerPrompt } from "../components/app/ServiceWorkerPrompt";
 
 export const Route = createRootRoute({
 	component: RootPage,
@@ -52,6 +53,7 @@ export function RootPage() {
 			]}
 		>
 			<Notifications />
+			<ServiceWorkerPrompt />
 			<Outlet />
 		</ProviderStack>
 	);
