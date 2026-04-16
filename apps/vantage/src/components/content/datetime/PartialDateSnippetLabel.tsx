@@ -1,7 +1,9 @@
 import type { PartialDate } from "@evnt/schema";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { Text } from "@mantine/core";
 import { useLocaleStore } from "../../../stores/useLocaleStore";
+import { PartialDateUtil } from "@evnt/partial-date";
+import { useMemo } from "react";
+import { trynull } from "../../../lib/util/trynull";
 
 export const PartialDateSnippetLabel = ({
 	value,
@@ -15,31 +17,53 @@ export const PartialDateSnippetLabel = ({
 	const userLanguage = useLocaleStore(store => store.language);
 	const userTimezone = useLocaleStore(store => store.timezone);
 
-	const fmt = new Intl.DateTimeFormat(language || userLanguage, {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-		hour: UtilPartialDate.hasTime(value) ? "numeric" : undefined,
-		minute: UtilPartialDate.hasTime(value) ? "numeric" : undefined,
-		hour12: false,
-		timeZone: timezone || userTimezone,
-	});
+	const str = useMemo(() => trynull(() => {
+		const parsed = PartialDateUtil.parse(value);
 
-	const parts = fmt.formatToParts(UtilPartialDate.toLowDate(value));
+		const fmt = new Intl.DateTimeFormat(language || userLanguage, {
+			year: "numeric",
+			month: PartialDateUtil.has(parsed, "month") ? "long" : undefined,
+			day: PartialDateUtil.has(parsed, "day") ? "numeric" : undefined,
+			hour: PartialDateUtil.has(parsed, "time") ? "numeric" : undefined,
+			minute: PartialDateUtil.has(parsed, "time") ? "numeric" : undefined,
+			calendar: "iso8601",
+			hour12: false,
+			timeZone: parsed.timezone,
+		});
+
+		let temporal: Intl.FormattableTemporalObject;
+		switch (parsed.precision) {
+			case "year": temporal = new Temporal.PlainYearMonth(parsed.year, 1); break;
+			case "month": temporal = PartialDateUtil.asPlainYearMonth(parsed); break;
+			case "day": temporal = PartialDateUtil.asPlainDate(parsed); break;
+			case "time": temporal = PartialDateUtil.asZonedDateTime(parsed).toInstant(); break;
+		}
+
+		let str = fmt.format(temporal);
+
+		if (parsed.precision === "time" && parsed.timezone !== userTimezone) {
+			const localizedFmt = new Intl.DateTimeFormat(language || userLanguage, {
+				hour: "numeric",
+				minute: "numeric",
+				hour12: false,
+				timeZone: userTimezone,
+			});
+			const localizedParts = localizedFmt.format(PartialDateUtil.asZonedDateTime(parsed).toInstant());
+			str += ` (${localizedParts})`;
+		}
+
+		return str;
+	}), [value, userLanguage, userTimezone]) ?? "Error";
 
 	return (
 		<Text
 			component="time"
 			dateTime={value}
-			aria-label={parts.map(p => p.value).join("")}
+			aria-label={str}
 			inline
 			inherit
 		>
-			{parts.map((p, i) => (
-				<Text key={i} span inline inherit c={(p.type === "literal" && p.value.trim() !== ":") ? "dimmed" : undefined}>
-					{p.value}
-				</Text>
-			))}
+			{str}
 		</Text>
 	)
 };

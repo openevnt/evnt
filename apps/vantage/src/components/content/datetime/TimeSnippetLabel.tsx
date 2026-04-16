@@ -36,7 +36,7 @@ export const TimeSnippetLabel = ({
 				inline
 				inherit
 			>
-				{time ?? "!"}{!sameTimezone && (time !== localizedTime) && <Text span inline inherit c="dimmed" children={` (${localizedTime})`} />}
+				{time ?? "!"}{!sameTimezone && (time !== localizedTime) && <Text span inline inherit c="dimmed" fw="unset" children={` (${localizedTime})`} />}
 			</Text>
 		</Tooltip>
 	);

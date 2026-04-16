@@ -1,5 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
-
 export type PlainDateString = `${number}-${number}-${number}`;
 export type PlainTimeString = `${number}:${number}`;
 
@@ -76,6 +74,11 @@ export class PartialDateUtil {
 		}
 	}
 
+	static format(parsed: PartialDate.Parsed.YearOnly): PartialDate.YearOnly;
+	static format(parsed: PartialDate.Parsed.YearMonth): PartialDate.YearMonth;
+	static format(parsed: PartialDate.Parsed.YearMonthDay): PartialDate.YearMonthDay;
+	static format(parsed: PartialDate.Parsed.YearMonthDayTime): PartialDate.YearMonthDayTime;
+	static format(parsed: PartialDate.Parsed): PartialDate;
 	static format(parsed: PartialDate.Parsed): PartialDate {
 		let str = parsed.year.toString();
 		if (this.has(parsed, "month")) str += `-${String(parsed.month).padStart(2, "0")}`;
@@ -112,12 +115,9 @@ export class PartialDateUtil {
 
 	// == Modification methods ==
 
-	static lowerPrecision(pd: PartialDate.YearMonthDayTime, to: "day"): PartialDate.YearMonthDay;
-	static lowerPrecision(pd: PartialDate.YearMonthDayTime, to: "month"): PartialDate.YearMonth;
-	static lowerPrecision(pd: PartialDate.YearMonthDayTime, to: "year"): PartialDate.YearOnly;
-	static lowerPrecision(pd: PartialDate.YearMonthDay, to: "month"): PartialDate.YearMonth;
-	static lowerPrecision(pd: PartialDate.YearMonthDay, to: "year"): PartialDate.YearOnly;
-	static lowerPrecision(pd: PartialDate.YearMonth, to: "year"): PartialDate.YearOnly;
+	static lowerPrecision(pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay, to: "day"): PartialDate.YearMonthDay;
+	static lowerPrecision(pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay | PartialDate.YearMonth, to: "month"): PartialDate.YearMonth;
+	static lowerPrecision(pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay | PartialDate.YearMonth | PartialDate.YearOnly, to: "year"): PartialDate.YearOnly;
 	static lowerPrecision(pd: PartialDate, to: Exclude<PartialDate.Precision, "time">): PartialDate {
 		const { year, month, day, timezone } = this.parse(pd) as PartialDate.Parsed.Fields;
 		switch (to) {
@@ -146,12 +146,17 @@ export class PartialDateUtil {
 	}
 
 	static withTimezone(pd: PartialDate | PartialDate.Parsed, timezone: string): PartialDate {
-		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
-		return this.format({ ...parsed, timezone });
+		const parsed = typeof pd === "string" ? this.parse(pd) : { ...pd };
+		parsed.timezone = timezone;
+		return this.format(parsed);
 	}
 
 	// == Conversions from Temporal types ==
 
+	static parsedFromTemporal(obj: Temporal.PlainYearMonth): PartialDate.Parsed.YearMonth;
+	static parsedFromTemporal(obj: Temporal.PlainDate): PartialDate.Parsed.YearMonthDay;
+	static parsedFromTemporal(obj: Temporal.PlainDateTime): PartialDate.Parsed.YearMonthDayTime;
+	static parsedFromTemporal(obj: Temporal.ZonedDateTime): PartialDate.Parsed.YearMonthDayTime;
 	static parsedFromTemporal(obj: Temporal.ZonedDateTime | Temporal.PlainDateTime | Temporal.PlainDate | Temporal.PlainYearMonth): PartialDate.Parsed {
 		return {
 			precision: ("hour" in obj && "minute" in obj) ? "time" : ("day" in obj ? "day" : "month"),
@@ -166,7 +171,7 @@ export class PartialDateUtil {
 
 	// == Factory methods ==
 
-	static now(timeZone?: Temporal.TimeZoneLike): PartialDate {
+	static now(timeZone?: Temporal.TimeZoneLike): PartialDate.YearMonthDayTime {
 		const now = Temporal.Now.zonedDateTimeISO(timeZone);
 		return this.format(this.parsedFromTemporal(now));
 	}
@@ -185,7 +190,7 @@ export class PartialDateUtil {
 
 	static asPlainDateTime(pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime): Temporal.PlainDateTime {
 		const parsed = typeof pd === "string" ? this.parse(pd) as PartialDate.Parsed.YearMonthDayTime : pd;
-		return new Temporal.PlainDateTime(parsed.year, parsed.month, parsed.day, parsed.hour, parsed.minute);
+		return new Temporal.PlainDateTime(parsed.year, parsed.month, parsed.day, parsed.hour, parsed.minute).withCalendar("iso8601");
 	}
 
 	static asZonedDateTime(pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime): Temporal.ZonedDateTime {

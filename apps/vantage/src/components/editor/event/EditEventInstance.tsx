@@ -11,21 +11,33 @@ import { snippetInstance, snippetVenue } from "@evnt/pretty";
 import { VenueAtomDisplay } from "./EditVenue";
 import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { CollapsiblePaper } from "../CollapsiblePaper";
+import { useLocaleStore } from "../../../stores/useLocaleStore";
+import { PartialDateUtil } from "@evnt/partial-date";
 
 export const EditEventInstance = ({
 	data,
 	instance,
-	onDelete,
 	index,
+	withVenuesControl = true,
 }: {
 	data: EditAtom<EventData>;
 	instance: EditAtom<EventInstance>;
 	index: number;
-	onDelete: () => void;
+	withVenuesControl?: boolean;
 }) => {
+	const userTimezone = useLocaleStore(store => store.timezone);
+
 	const getInstanceData = useSetAtom(useMemo(() => atom(null, (get) => {
 		return get(instance);
 	}), []));
+
+	const onDelete = useSetAtom(useMemo(() => atom(null, (get, set) => {
+		console.log("Deleting instance with index", index);
+		set(data, prev => ({
+			...prev,
+			instances: prev.instances?.map((instance, i) => i === index ? null : instance).filter((x): x is EventInstance => !!x) ?? [],
+		}));
+	}), [data, index]));
 
 	const startAtom = useMemo(() => focusAtom(instance, o => o.prop("start")), [instance]);
 	const endAtom = useMemo(() => focusAtom(instance, o => o.prop("end")), [instance]);
@@ -36,29 +48,29 @@ export const EditEventInstance = ({
 			id={`instance::${index}`}
 			title={<InstanceAtomDisplay instance={instance} />}
 		>
-			<EditEventInstanceVenues
-				data={data}
-				instance={instance}
-			/>
+			{withVenuesControl && (
+				<EditEventInstanceVenues
+					data={data}
+					instance={instance}
+				/>
+			)}
 
 			<SimpleGrid type="container" cols={{ base: 1, "450px": 2 }}>
 				{(["start", "end"] as const).map((field) => (
 					<Stack gap={4} key={field}>
 						<Stack gap={0}>
 							<Input.Label>{field == "start" ? "Start Date & Time" : "End Date & Time"}</Input.Label>
-							<Input.Description>
-								{field == "start" ? "When the event instance starts" : "When the event instance ends"}
-							</Input.Description>
 						</Stack>
 						<DeatomOptional
+							title={field == "start" ? "Start Date & Time" : "End Date & Time"}
 							component={PartialDateInput}
 							atom={field === "start" ? startAtom : endAtom}
 							set={() => {
-								if (field == "start") return UtilPartialDate.thisMonth();
+								if (field == "start") return PartialDateUtil.lowerPrecision(PartialDateUtil.now(userTimezone), "month");
 								const instance = getInstanceData();
-								if (!instance.start) return UtilPartialDate.thisMonth();
-								if (UtilPartialDate.hasDay(instance.start))
-									return UtilPartialDate.asDay(instance.start);
+								if (!instance.start) return PartialDateUtil.lowerPrecision(PartialDateUtil.now(userTimezone), "month");
+								if (PartialDateUtil.has(instance.start, "day"))
+									return PartialDateUtil.lowerPrecision(/* Stupid TS */ instance.start as any, "day");
 								return instance.start;
 							}}
 						/>

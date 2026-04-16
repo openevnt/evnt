@@ -1,6 +1,6 @@
 import type { OnlineVenue } from "@evnt/schema";
 import { DeatomOptional, type EditAtom } from "../edit-atom";
-import { Stack, Text } from "@mantine/core";
+import { Input, Stack, Text } from "@mantine/core";
 import { ClearableTextInput } from "../../base/input/ClearableTextInput";
 import { focusAtom } from "jotai-optics";
 import { useMemo } from "react";
@@ -10,15 +10,16 @@ export const EditVenueOnline = ({ data }: { data: EditAtom<OnlineVenue> }) => {
 
 	return (
 		<Stack>
-			<Text fw="bold">Online Venue Details</Text>
-
-			<DeatomOptional
-				component={ClearableTextInput}
-				atom={urlAtom}
-				set={() => ""}
-				setLabel="Add URL"
-				label="URL"
-			/>
+			<Stack gap={0}>
+				<Input.Label>URL</Input.Label>
+				<DeatomOptional
+					component={ClearableTextInput}
+					atom={urlAtom}
+					set={() => ""}
+					setLabel="Click to set URL"
+					placeholder="https://..."
+				/>
+			</Stack>
 		</Stack>
 	)
 };

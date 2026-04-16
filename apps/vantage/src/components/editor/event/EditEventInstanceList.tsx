@@ -17,10 +17,6 @@ export const EditEventInstanceList = ({ data }: { data: EditAtom<EventData> }) =
 			index={i}
 			data={data}
 			instance={focusAtom(data, o => o.prop("instances").valueOr([]).at(i)) as EditAtom<EventInstance>}
-			onDelete={() => setData(prev => ({
-				...prev,
-				instances: (prev.instances ?? []).filter((_, index) => index !== i),
-			}))}
 		/>
 	));
 

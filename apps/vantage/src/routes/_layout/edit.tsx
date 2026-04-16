@@ -11,7 +11,7 @@ import { useEventQuery } from "../../db/useEventQuery";
 import { useMutation } from "@tanstack/react-query";
 import { EventMutator } from "../../db/event-mutator";
 import z from "zod";
-import { useEditorCollapseState } from "../../components/editor/collapse-state";
+import { useEditorCollapseState } from "../../components/editor/editor-states";
 
 const RouteSearchSchema = z.object({
 	source: EventSourceSchema,

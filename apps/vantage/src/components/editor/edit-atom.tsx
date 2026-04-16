@@ -1,4 +1,4 @@
-import { Box, Button, CloseButton, Group, type ButtonProps } from "@mantine/core";
+import { Box, Button, CloseButton, Group, InputBase, type ButtonProps } from "@mantine/core";
 import { useAtom, type WritableAtom } from "jotai";
 import type React from "react";
 import { useCallback, useEffect, useRef, type ReactNode } from "react";
@@ -32,8 +32,7 @@ export const DeatomOptional = <Data, Props>({
 	atom,
 	component: Component,
 	set,
-	setLabel = "Set",
-	setButtonProps,
+	setLabel = "Click to Set",
 	withDeleteButton = false,
 	...props
 }: Omit<Props, keyof DeatomableComponentProps<Data> | "set"> & {
@@ -41,7 +40,6 @@ export const DeatomOptional = <Data, Props>({
 	atom: EditAtom<Data | undefined>;
 	set: Data | (() => Data);
 	setLabel?: ReactNode;
-	setButtonProps?: Omit<ButtonProps, "onClick">;
 	withDeleteButton?: boolean;
 }) => {
 	const [value, onChange] = useAtom(atom);
@@ -55,16 +53,18 @@ export const DeatomOptional = <Data, Props>({
 		prevValue.current = value;
 	}, [value]);
 
+	const handleSet = () => onChange(typeof set === "function" ? (set as () => Data)() : set);
+
 	if (value === undefined) {
 		return (
-			<Button
-				onClick={() => onChange(typeof set === "function" ? (set as () => Data)() : set)}
+			<InputBase
+				component="button"
+				onClick={handleSet}
+				onMouseDown={handleSet}
 				color="gray"
-				justify="start"
-				{...setButtonProps}
 			>
-				{setLabel}
-			</Button>
+				<Box c="dimmed">{setLabel}</Box>
+			</InputBase>
 		);
 	}
 

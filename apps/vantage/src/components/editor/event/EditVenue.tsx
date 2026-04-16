@@ -86,7 +86,7 @@ export const EditVenue = ({
 
 			<Group gap={4} justify="space-between">
 				<Stack gap={0}>
-					<Input.Label>Venue Type</Input.Label>
+					<Input.Label>Type</Input.Label>
 					<Input.Description>
 						For hybrid events, create multiple venues
 					</Input.Description>
@@ -97,7 +97,7 @@ export const EditVenue = ({
 				/>
 			</Group>
 
-			<Group gap={4} justify="space-between">
+			{/* <Group gap={4} justify="space-between">
 				<Text fw="bold">Venue ID: {venueId}</Text>
 				<Button size="xs"
 					onClick={() => {
@@ -112,7 +112,7 @@ export const EditVenue = ({
 				>
 					Change Venue ID
 				</Button>
-			</Group>
+			</Group> */}
 
 			{venueType === "directory.evnt.venue.physical" && (
 				<EditVenuePhysical data={venue as unknown as EditAtom<Venue & { $type: "directory.evnt.venue.physical" }> as any} />

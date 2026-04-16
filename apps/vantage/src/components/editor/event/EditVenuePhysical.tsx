@@ -28,8 +28,6 @@ export const EditVenuePhysical = ({ data }: { data: EditAtom<PhysicalVenue> }) =
 
 	return (
 		<Stack>
-			<Text fw="bold">Physical Venue Details</Text>
-
 			<EditAddress
 				data={addressAtom}
 				onDelete={deleteAddress}
@@ -68,6 +66,21 @@ export const EditAddress = ({
 				)}
 			</Group>
 
+			<Stack gap={4}>
+				<Stack gap={0}>
+					<Input.Label>Full Address</Input.Label>
+					<Input.Description>
+						Street address, city, state/province, etc.
+					</Input.Description>
+				</Stack>
+				<DeatomOptional
+					component={ClearableTextInput}
+					atom={addrAtom}
+					set={() => ""}
+					placeholder="123 Main St, Anytown, NY 12345"
+				/>
+			</Stack>
+
 			<Grid>
 				<Grid.Col span={6}>
 					<Deatom
@@ -79,37 +92,16 @@ export const EditAddress = ({
 					<Stack gap={4}>
 						<Stack gap={0}>
 							<Input.Label>Postal Code</Input.Label>
-							<Input.Description>
-								Postal code or ZIP code
-							</Input.Description>
 						</Stack>
 						<DeatomOptional
 							component={ClearableTextInput}
 							atom={postalCodeAtom}
 							set={() => ""}
-							setLabel="Set Postal Code"
 							placeholder="12345"
 						/>
 					</Stack>
 				</Grid.Col>
 			</Grid>
-
-
-			<Stack gap={4}>
-				<Stack gap={0}>
-					<Input.Label>Address Line</Input.Label>
-					<Input.Description>
-						Street address, city, state/province, etc.
-					</Input.Description>
-				</Stack>
-				<DeatomOptional
-					component={ClearableTextInput}
-					atom={addrAtom}
-					set={() => ""}
-					setLabel="Set Address Line"
-					placeholder="123 Main St, Anytown, NY 12345"
-				/>
-			</Stack>
 		</Stack>
 	)
 };
@@ -126,10 +118,7 @@ export const CountryCodePicker = ({
 	return (
 		<Stack gap={4}>
 			<Stack gap={0}>
-				<Input.Label>Country Code</Input.Label>
-				<Input.Description>
-					Country of the venue
-				</Input.Description>
+				<Input.Label>Country</Input.Label>
 			</Stack>
 			<Select
 				data={COUNTRY_CODES.map(code => ({

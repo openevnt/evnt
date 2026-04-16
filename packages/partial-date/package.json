@@ -26,9 +26,7 @@
 	"author": "deniz.blue <deniz@deniz.blue>",
 	"license": "MIT",
 	"packageManager": "pnpm@11.0.0-beta.6",
-	"dependencies": {
-		"@js-temporal/polyfill": "^0.5.1"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"typescript": "^6.0.2"
 	}

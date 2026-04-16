@@ -1,18 +1,20 @@
 import { Accordion, ActionIcon, Box, CloseButton, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
 import { useDisclosure, useId } from "@mantine/hooks";
 import type { PropsWithChildren } from "react";
-import { useEditorCollapseState } from "./collapse-state";
+import { useEditorCollapseState } from "./editor-states";
 
 export const CollapsiblePaper = ({
 	children,
 	onDelete,
 	icon,
 	title,
+	disabled = false,
 	id,
 }: PropsWithChildren<{
 	onDelete?: () => void;
 	icon?: React.ReactNode;
 	title?: React.ReactNode;
+	disabled?: boolean;
 	id?: string;
 }>) => {
 	const hookId = useId();
@@ -31,12 +33,14 @@ export const CollapsiblePaper = ({
 			<Stack gap={0}>
 				<Group justify="space-between" gap={4} align="start" wrap="nowrap">
 					<Group gap={4} align="start" c="dimmed" wrap="nowrap">
-						<ActionIcon onClick={toggleCollapse} size="md" variant="subtle" color="gray">
-							<Accordion.Chevron style={{
-								transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)",
-								transition: "transform 150ms ease",
-							}} />
-						</ActionIcon>
+						{!disabled && (
+							<ActionIcon onClick={toggleCollapse} size="md" variant="subtle" color="gray">
+								<Accordion.Chevron style={{
+									transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)",
+									transition: "transform 150ms ease",
+								}} />
+							</ActionIcon>
+						)}
 						{icon}
 						<Text inherit span fw="bold">
 							{title}
