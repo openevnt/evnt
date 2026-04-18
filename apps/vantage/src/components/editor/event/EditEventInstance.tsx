@@ -9,7 +9,6 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import { Snippet } from "../../content/Snippet";
 import { snippetInstance, snippetVenue } from "@evnt/pretty";
 import { VenueAtomDisplay } from "./EditVenue";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { CollapsiblePaper } from "../CollapsiblePaper";
 import { useLocaleStore } from "../../../stores/useLocaleStore";
 import { PartialDateUtil } from "@evnt/partial-date";

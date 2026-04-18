@@ -1,10 +1,9 @@
 import { Button, Center, CopyButton, Group, Paper, Stack, Text } from "@mantine/core";
 import { ExternalLink } from "../../base/ExternalLink";
 import { useResolvedEvent } from "../event-envelope-context";
-import { UtilPartialDate, UtilPartialDateRange, UtilTranslations } from "~/lib/util/schema-utils";
 import type { EventInstance, PartialDate, Venue } from "@evnt/schema";
 import type { ReactNode } from "react";
-import { IconCalendar, IconCalendarQuestion, IconCheck, IconCopy, IconExternalLink, IconMapPin, IconWorld, IconWorldPin } from "@tabler/icons-react";
+import { IconCalendar, IconCalendarQuestion, IconExternalLink, IconMapPin, IconWorld, IconWorldPin } from "@tabler/icons-react";
 import { Trans } from "../../Trans";
 import { AddressSnippetLabel } from "../../address/AddressSnippetLabel";
 import { useLocaleStore } from "../../../../stores/useLocaleStore";
@@ -13,6 +12,7 @@ import { TimeRangeSnippetLabel } from "../../datetime/TimeRangeSnippetLabel";
 import { PartialDateSnippetLabel } from "../../datetime/PartialDateSnippetLabel";
 import { venueGoogleMapsLink, venueOpenStreetMapsLink } from "@evnt/pretty";
 import { PartialDateUtil } from "@evnt/partial-date";
+import { TranslationsUtil } from "@evnt/translations";
 
 export const EventDetailsInstanceList = () => {
 	const { data } = useResolvedEvent();
@@ -106,18 +106,20 @@ export const MiniBoxInstance = ({ instance }: { instance: EventInstance }) => {
 	let fmtSubtitle = true;
 
 	if (instance.end) {
+		const eqPrecision = PartialDateUtil.getPrecisionEquality(instance.start, instance.end);
+
 		const bothHasTime = PartialDateUtil.has(instance.start, "time") && PartialDateUtil.has(instance.end, "time");
-		const isSameDay = UtilPartialDateRange.isSameDay(instance);
-		const isSameTime = UtilPartialDate.getTimePart(instance.start) === UtilPartialDate.getTimePart(instance.end);
+		const isSameDay = eqPrecision === "day" || eqPrecision === "time";
+		const isSameTime = eqPrecision === "time";
 
 		if (isSameDay) {
-			title = <PartialDateSnippetLabel value={UtilPartialDate.getDatePart(instance.start)} />;
+			title = <PartialDateSnippetLabel value={PartialDateUtil.lowerPrecision(instance.start as PartialDate.YearMonthDayTime | PartialDate.YearMonthDay, "day")} />;
 			if (bothHasTime && !isSameTime)
 				subtitle = <TimeRangeSnippetLabel value={{
 					start: instance.start as PartialDate.YearMonthDayTime,
 					end: instance.end as PartialDate.YearMonthDayTime,
 				}} />;
-			else if (UtilPartialDate.hasTime(instance.start))
+			else if (PartialDateUtil.has(instance.start, "time"))
 				subtitle = <TimeSnippetLabel value={instance.start as PartialDate.YearMonthDayTime} />;
 		} else {
 			title = <PartialDateSnippetLabel value={instance.start} />;
@@ -125,9 +127,12 @@ export const MiniBoxInstance = ({ instance }: { instance: EventInstance }) => {
 			fmtSubtitle = false;
 		}
 	} else {
-		title = <PartialDateSnippetLabel value={UtilPartialDate.getDatePart(instance.start)} />;
-		if (UtilPartialDate.hasTime(instance.start))
-			subtitle = <TimeSnippetLabel value={instance.start as PartialDate.YearMonthDayTime} />;
+		let datePart = instance.start;
+		if (PartialDateUtil.has(instance.start, "time")) datePart = PartialDateUtil.lowerPrecision(instance.start, "day");
+
+		title = <PartialDateSnippetLabel value={datePart} />;
+		if (PartialDateUtil.has(instance.start, "time"))
+			subtitle = <TimeSnippetLabel value={instance.start} />;
 	}
 
 	return (
@@ -149,7 +154,7 @@ export const MiniBoxVenue = ({ venue }: { venue: Venue }) => {
 	else if (venue.$type === "directory.evnt.venue.physical") icon = <IconMapPin />;
 
 	let title = undefined;
-	if (UtilTranslations.isEmpty(venue.name)) title = (
+	if (TranslationsUtil.isEmpty(venue.name)) title = (
 		<Text inline span inherit c="dimmed" fs="italic">
 			{"<unnamed>"}
 		</Text>

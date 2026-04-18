@@ -117,6 +117,23 @@ export class PartialDateUtil {
 		}
 	}
 
+	/**
+	 * Determines the highest level of precision that two PartialDates have in common.
+	 * For example, if both PartialDates have the same year and month, but different days, this method would return "month".
+	 * If they have different years, it would return "none".
+	 */
+	static getPrecisionEquality(a: PartialDate, b: PartialDate): PartialDate.Precision | "none" {
+		const start = this.parse(a) as PartialDate.Parsed.Fields;
+		const end = this.parse(b) as PartialDate.Parsed.Fields;
+
+		let equalPrecision: PartialDate.Precision | "none" = "none";
+		if (start.year === end.year) equalPrecision = "year";
+		if (equalPrecision === "year" && start.month === end.month) equalPrecision = "month";
+		if (equalPrecision === "month" && start.day === end.day) equalPrecision = "day";
+		if (equalPrecision === "day" && start.hour === end.hour && start.minute === end.minute) equalPrecision = "time";
+		return equalPrecision;
+	}
+
 	// == Modification methods ==
 
 	static lowerPrecision(pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay, to: "day"): PartialDate.YearMonthDay;

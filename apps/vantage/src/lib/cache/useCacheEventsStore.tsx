@@ -1,18 +1,22 @@
 import { create } from "zustand";
 import type { EventSource } from "../../db/models/event-source";
-import type { EventData, PartialDate } from "@evnt/schema";
-import type { PartialDate as PartialDateParts } from "@evnt/partial-date";
+import type { EventData } from "@evnt/schema";
+import { PartialDateUtil, type PartialDate, type PlainDateString } from "@evnt/partial-date";
 import { immer } from "zustand/middleware/immer";
 import { useLayersStore } from "../../db/useLayersStore";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { EventResolver } from "../../db/event-resolver";
+import { enableMapSet } from "immer";
+
+enableMapSet();
 
 export interface CacheEventsStore {
 	cache: {
-		byPartialDate: Record<PartialDate, EventSource[]>;
-		byMonth: Record<PartialDateParts.YearMonth, EventSource[]>;
-		byDay: Record<PartialDateParts.YearMonthDay, EventSource[]>;
-		byText: Record<string, EventSource[]>;
+		byText: Record<string, Set<EventSource>>;
+
+		byPartialDate: Record<PartialDate, Set<EventSource>>;
+
+		byWallDay: Record<PlainDateString, Set<EventSource>>;
+		byWallMonth: Record<`${number}-${number}`, Set<EventSource>>; // "YYYY-MM"
 	};
 
 	hydrateSource: (source: EventSource) => Promise<void>;
@@ -25,19 +29,16 @@ export const useCacheEventsStore = create<CacheEventsStore>()(
 	immer((set, get) => ({
 		cache: {
 			byPartialDate: {},
-			byMonth: {},
-			byDay: {},
+			byWallDay: {},
+			byWallMonth: {},
 			byText: {},
 		},
 
 		uncache: (source: EventSource) => set((state) => {
 			for (const key in state.cache) {
-				state.cache[key as keyof CacheEventsStore["cache"]] = Object.fromEntries(
-					Object.entries(state.cache[key as keyof CacheEventsStore["cache"]]).map(([k, sources]) => [
-						k,
-						sources.filter(s => s !== source),
-					])
-				);
+				for (const entry in state.cache[key as keyof CacheEventsStore["cache"]]) {
+					(state.cache as any)[key][entry].delete(source);
+				}
 			}
 		}),
 
@@ -50,39 +51,45 @@ export const useCacheEventsStore = create<CacheEventsStore>()(
 		},
 
 		hydrate: (source: EventSource, data: EventData) => set((state) => {
-			return; // disable cache for now
+			// == text ==
 
-			// const text = [
-			// 	...Object.values(data.name),
-			// 	...Object.values(data.label ?? {}),
-			// ].join(" ");
-			// state.cache.byText[text] ||= []
-			// state.cache.byText[text].push(source);
+			const text = [
+				...Object.values(data.name),
+				...Object.values(data.label ?? {}),
+			].join(" ");
+			state.cache.byText[text] ||= new Set();
+			state.cache.byText[text].add(source);
 
-			// for (const instance of data.instances || []) {
-			// 	for (const key of ["start", "end"] as const) {
-			// 		const partialDate = instance[key];
-			// 		if (!partialDate) continue;
+			// == dates ==
 
-			// 		state.cache.byPartialDate[partialDate] ||= [];
-			// 		if (!state.cache.byPartialDate[partialDate].includes(source))
-			// 			state.cache.byPartialDate[partialDate].push(source);
+			for (const instance of data.instances || []) {
+				for (const key of ["start", "end"] as const) {
+					const partialDate = instance[key];
+					if (!partialDate) continue;
 
-			// 		if (UtilPartialDate.hasMonth(partialDate)) {
-			// 			const month = UtilPartialDate.asMonth(partialDate);
-			// 			state.cache.byMonth[month] ||= [];
-			// 			if (!state.cache.byMonth[month].includes(source))
-			// 				state.cache.byMonth[month].push(source);
-			// 		}
+					state.cache.byPartialDate[partialDate] ||= new Set();
+					state.cache.byPartialDate[partialDate].add(source);
 
-			// 		if (UtilPartialDate.hasDay(partialDate)) {
-			// 			const day = UtilPartialDate.asDay(partialDate);
-			// 			state.cache.byDay[day] ||= [];
-			// 			if (!state.cache.byDay[day].includes(source))
-			// 				state.cache.byDay[day].push(source);
-			// 		}
-			// 	}
-			// }
+					const parsed = PartialDateUtil.parse(partialDate);
+
+					const pad = (num: number) => num.toString().padStart(2, "0");
+
+					switch (parsed.precision) {
+						case "time":
+						case "day": {
+							const dayKey = [parsed.year, parsed.month, parsed.day].map(pad).join("-") as PlainDateString;
+							state.cache.byWallDay[dayKey] ||= new Set();
+							state.cache.byWallDay[dayKey].add(source);
+						} // Fallthrough intended
+						case "month": {
+							const monthKey = `${parsed.year}-${pad(parsed.month)}` as `${number}-${number}`;
+							state.cache.byWallMonth[monthKey] ||= new Set();
+							state.cache.byWallMonth[monthKey].add(source);
+						} // Fallthrough intended
+						default: break;
+					}
+				}
+			}
 		}),
 
 		init: async () => {

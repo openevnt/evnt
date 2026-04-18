@@ -1,47 +1,45 @@
-import { UtilPartialDate, UtilPartialDateRange } from "~/lib/util/schema-utils";
+import type { PartialDate } from "@evnt/schema";
 import { useResolvedEvent } from "../event-envelope-context";
-import { PartialDateUtil, type PartialDate as PartialDateParts } from "@evnt/partial-date";
+import { PartialDateUtil } from "@evnt/partial-date";
 import { Badge, type BoxProps } from "@mantine/core";
 import { IconCalendarDown, IconHistory, IconHourglass } from "@tabler/icons-react";
 
+const getDayBounds = (start: PartialDate, end?: PartialDate) => ({
+	low: PartialDateUtil.setPrecision(start, "day", "low"),
+	high: end ? PartialDateUtil.setPrecision(end, "day", "high") : PartialDateUtil.setPrecision(start, "day", "high"),
+});
+
+const getActiveBounds = (start: PartialDate, end?: PartialDate) => ({
+	low: PartialDateUtil.setPrecision(start, "time", "low"),
+	high: end ? PartialDateUtil.setPrecision(end, "time", "high") : PartialDateUtil.setPrecision(start, "day", "high"),
+});
+
 export const EventTimeframeBadge = (props: BoxProps) => {
 	const { data } = useResolvedEvent();
-	const now = UtilPartialDate.now();
+	const now = PartialDateUtil.now();
+	const today = PartialDateUtil.lowerPrecision(now, "day");
 
 	const status = data?.status ?? "planned";
 	if (status !== "planned" && status !== "uncertain") return null;
 
 	if (!data) return null;
 
-	const allDays: PartialDateParts.YearMonthDay[] = data
-		.instances
-		?.flatMap(instance => UtilPartialDateRange.getIncludedDates(instance))
-		?? [];
+	const ranges = data.instances?.filter(instance => !!instance.start && PartialDateUtil.has(instance.start as PartialDate, "day")) ?? [];
 
-	const today = PartialDateUtil.lowerPrecision(PartialDateUtil.now(), "day");
+	const someOngoing = ranges.some(instance => {
+		const bounds = getActiveBounds(instance.start as PartialDate, instance.end as PartialDate | undefined);
+		return !PartialDateUtil.isAfter(bounds.low, now) && !PartialDateUtil.isBefore(bounds.high, now);
+	});
 
-	const hasToday = allDays?.some(day => today === day);
+	const hasToday = ranges.some(instance => {
+		const bounds = getDayBounds(instance.start as PartialDate, instance.end as PartialDate | undefined);
+		return !PartialDateUtil.isAfter(bounds.low, today) && !PartialDateUtil.isBefore(bounds.high, today);
+	});
 
-	const dateObjRanges: {
-		low: Date;
-		high: Date;
-	}[] = data
-		.instances
-		?.filter(instance => !!instance.start && UtilPartialDate.hasDay(instance.start))
-		?.map(instance => ({
-			low: UtilPartialDate.toLowDate(instance.start!),
-			high: instance.end ? UtilPartialDate.toHighDate(instance.end) : (
-				UtilPartialDate.toHighDate(UtilPartialDate.asDay(instance.start as PartialDateParts.YearMonthDay | PartialDateParts.YearMonthDayTime))
-			),
-		}))
-		?? [];
-
-	const currentDateObj = UtilPartialDate.toLowDate(now);
-	const allPast = dateObjRanges.every(({ high }) => high < currentDateObj);
-	const allFuture = dateObjRanges.every(({ low }) => low > currentDateObj);
-	const somePast = dateObjRanges.some(({ high }) => high < currentDateObj);
-	const someFuture = dateObjRanges.some(({ low }) => low > currentDateObj);
-	const someOngoing = dateObjRanges.some(({ low, high }) => low <= currentDateObj && high >= currentDateObj);
+	const allPast = ranges.every(instance => {
+		const bounds = getActiveBounds(instance.start as PartialDate, instance.end as PartialDate | undefined);
+		return PartialDateUtil.isBefore(bounds.high, now);
+	});
 
 	if (someOngoing) return (
 		<Badge

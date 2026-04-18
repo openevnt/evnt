@@ -74,8 +74,8 @@ function ListPage() {
 	const allQueries = useEventQueries(sources);
 	const filtered = applyEventFilters(allQueries, [
 		(search && search.length > 0) ? EventFilters.Search(search) : EventFilters.None,
-		relativity === "future" ? EventFilters.AfterDate(new Date()) : EventFilters.None,
-		relativity === "past" ? EventFilters.BeforeDate(new Date()) : EventFilters.None,
+		relativity === "future" ? EventFilters.AfterDate(Temporal.Now.instant()) : EventFilters.None,
+		relativity === "past" ? EventFilters.BeforeDate(Temporal.Now.instant()) : EventFilters.None,
 	]);
 	const sorted = applyEventSorters(filtered, [
 		sortBy === "name" ? EventSorters.Name(userLanguage) : EventSorters.None,

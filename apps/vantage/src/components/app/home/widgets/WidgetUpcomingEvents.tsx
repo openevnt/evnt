@@ -1,24 +1,27 @@
 import { Box, Center, Divider, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
 import { useEventQueries } from "../../../../db/useEventQuery";
 import { useShallow } from "zustand/react/shallow";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { useCacheEventsStore } from "../../../../lib/cache/useCacheEventsStore";
 import { ResolvedEventProvider } from "../../../content/event/event-envelope-context";
 import { EventCard } from "../../../content/event/card/EventCard";
 import { EventContextMenu } from "../../../content/event/EventContextMenu";
+import type { PlainDateString } from "@evnt/partial-date";
 
 export const WidgetUpcomingEvents = () => {
-	const today = UtilPartialDate.today();
+	const today = Temporal.Now.plainDateISO().toString() as PlainDateString;
+
 	const firstFiveUpcomingEvents = useCacheEventsStore(
 		useShallow(state => {
-			return Array.from(new Set(
-				Object.entries(state.cache.byDay)
-					.filter(([day]) => day >= today)
-					.sort(([a], [b]) => a.localeCompare(b))
-					.flatMap(([_, sources]) => sources)
-			)).slice(0, 5);
+			const keys = Object.keys(state.cache.byWallDay) as PlainDateString[];
+			const upcomingKeys = keys.filter(key => key >= today).sort().slice(0, 5);
+			const events = upcomingKeys
+				.map((key) => state.cache.byWallDay[key]!)
+				.map(set => [...set])
+				.flat();
+			return events;
 		})
 	);
+
 	const queries = useEventQueries(firstFiveUpcomingEvents);
 
 	return (

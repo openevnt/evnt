@@ -1,15 +1,13 @@
 import { ActionIcon, Box, Group, Paper, ScrollArea, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
 import { useLocaleStore } from "../../stores/useLocaleStore";
 import { getMonthDays } from "@mantine/dates";
-import type { PartialDate as PartialDateParts } from "@evnt/partial-date";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import type { PropsWithChildren } from "react";
 
 export interface CalendarMonthProps {
-	month: PartialDateParts.YearMonth;
-	setMonth: (month: PartialDateParts.YearMonth) => void;
-	renderDay: (props: { day: PartialDateParts.YearMonthDay }) => React.ReactNode;
+	month: `${number}-${number}`;
+	setMonth: (month: `${number}-${number}`) => void;
+	renderDay: (props: { day: `${number}-${number}-${number}` }) => React.ReactNode;
 }
 
 export const CalendarMonth = ({
@@ -23,7 +21,7 @@ export const CalendarMonth = ({
 		month,
 		firstDayOfWeek: 1,
 		consistentWeeks: true,
-	}) as PartialDateParts.YearMonthDay[][];
+	}) as (`${number}-${number}-${number}`)[][];
 
 	return (
 		<Stack w="100%" h="100%" gap={0}>
@@ -53,7 +51,7 @@ export const CalendarMonth = ({
 											p2 = 1;
 											p1 += 1;
 										};
-										setMonth(`${p1.toString()}-${p2.toString().padStart(2, "0")}` + "[UTC]" as PartialDateParts.YearMonth);
+										setMonth(`${p1.toString()}-${p2.toString().padStart(2, "0")}` as `${number}-${number}`);
 									}}
 								>
 									{dir === -1 ? <IconArrowLeft /> : <IconArrowRight />}
@@ -102,7 +100,7 @@ export const CalendarMonth = ({
 						>
 							<CalendarMonthDay
 								day={day}
-								isCurrentMonth={UtilPartialDate.asMonth(day) === month}
+								isCurrentMonth={day.slice(0, 7) === month}
 							>
 								{renderDay({ day })}
 							</CalendarMonthDay>
@@ -119,10 +117,10 @@ export const CalendarMonthDay = ({
 	children,
 	isCurrentMonth,
 }: PropsWithChildren<{
-	day: PartialDateParts.YearMonthDay;
+	day: `${number}-${number}-${number}`;
 	isCurrentMonth: boolean;
 }>) => {
-	const isToday = UtilPartialDate.today() === day;
+	const isToday = Temporal.Now.plainDateISO().toString() === day;
 
 	return (
 		<Stack gap={0} w="100%" h="100%" align="center">

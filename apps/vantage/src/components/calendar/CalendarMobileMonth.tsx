@@ -1,15 +1,13 @@
-import type { PartialDate as PartialDateParts } from "@evnt/partial-date";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { ScrollArea, Stack } from "@mantine/core";
 import { DatePicker, MonthLevel, MonthPicker } from "@mantine/dates";
 
 export interface CalendarMobileMonthProps {
-	month: PartialDateParts.YearMonth;
-	setMonth: (month: PartialDateParts.YearMonth) => void;
-	day: PartialDateParts.YearMonthDay;
-	setDay: (day: PartialDateParts.YearMonthDay) => void;
-	renderDay: (props: { day: PartialDateParts.YearMonthDay }) => React.ReactNode;
-	renderDayButton?: (props: { day: PartialDateParts.YearMonthDay }) => React.ReactNode;
+	month: `${number}-${number}`;
+	setMonth: (month: `${number}-${number}`) => void;
+	day: `${number}-${number}-${number}`;
+	setDay: (day: `${number}-${number}-${number}`) => void;
+	renderDay: (props: { day: `${number}-${number}-${number}` }) => React.ReactNode;
+	renderDayButton?: (props: { day: `${number}-${number}-${number}` }) => React.ReactNode;
 }
 
 export const CalendarMobileMonth = ({
@@ -25,9 +23,9 @@ export const CalendarMobileMonth = ({
 			<DatePicker
 				date={month}
 				value={day}
-				onDateChange={(date) => setMonth(UtilPartialDate.asMonth(date as any))}
-				onChange={(date) => setDay(UtilPartialDate.asDay(date as any))}
-				renderDay={(day) => renderDayButton?.({ day: day as PartialDateParts.YearMonthDay }) ?? null}
+				onDateChange={(date) => setMonth(date.slice(0, 7) as `${number}-${number}`)}
+				onChange={(date) => setDay(date as `${number}-${number}-${number}`)}
+				renderDay={(day) => renderDayButton?.({ day: day as `${number}-${number}-${number}` }) ?? null}
 				level="month"
 			/>
 			<ScrollArea w="100%">

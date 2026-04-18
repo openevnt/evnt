@@ -1,8 +1,8 @@
 import type { LinkComponent } from "@evnt/schema";
-import { UtilTranslations } from "~/lib/util/schema-utils";
 import { Button, Group, Stack, Text } from "@mantine/core";
 import { IconExternalLink, IconLink, IconLinkOff } from "@tabler/icons-react";
 import { Trans } from "../../Trans";
+import { TranslationsUtil } from "@evnt/translations";
 
 export const EventLinkButton = ({
 	value,
@@ -36,7 +36,7 @@ export const EventLinkButton = ({
 		>
 			<Stack gap={0} py={subtitle ? 4 : "xs"} align="start">
 				<Text inline c={disabled ? "gray.4" : undefined}>
-					<Trans t={UtilTranslations.isEmpty(value.name) ? { en: "Link" } : value.name} /> <IconExternalLink size={14} />
+					<Trans t={TranslationsUtil.isEmpty(value.name) ? { en: "Link" } : value.name} /> <IconExternalLink size={14} />
 				</Text>
 				<Stack
 					gap={0}

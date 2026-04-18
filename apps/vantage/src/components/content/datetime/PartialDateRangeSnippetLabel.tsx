@@ -10,14 +10,7 @@ export const PartialDateRangeSnippetLabel = ({ value }: { value: Range<PartialDa
 	const timeZone = useLocaleStore(store => store.timezone);
 
 	const str = useMemo(() => {
-		const start = PartialDateUtil.parse(value.start) as PartialDate.Parsed.Fields;
-		const end = PartialDateUtil.parse(value.end) as PartialDate.Parsed.Fields;
-
-		let equalPrecision: PartialDate.Precision | "none" = "none";
-		if (start.year === end.year) equalPrecision = "year";
-		if (equalPrecision === "year" && start.month === end.month) equalPrecision = "month";
-		if (equalPrecision === "month" && start.day === end.day) equalPrecision = "day";
-		if (equalPrecision === "day" && start.hour === end.hour && start.minute === end.minute) equalPrecision = "time";
+		let equalPrecision = PartialDateUtil.getPrecisionEquality(value.start, value.end);
 
 		const fmt = new Intl.DateTimeFormat(language, {
 			year: "numeric",

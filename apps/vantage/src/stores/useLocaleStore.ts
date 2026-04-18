@@ -4,7 +4,7 @@ import { immer } from "zustand/middleware/immer";
 import { LOCALSTORAGE_KEYS } from "../constants";
 import { useCallback, useMemo } from "react";
 import type { Translations } from "@evnt/schema";
-import { UtilTranslations } from "~/lib/util/schema-utils";
+import { TranslationsUtil } from "@evnt/translations";
 
 export interface LocaleStore {
 	language: string;
@@ -30,7 +30,7 @@ export const useLocaleStore = create<LocaleStore>()(
 export const useTranslations = () => {
 	const language = useLocaleStore((state) => state.language);
 
-	const resolve = useMemo(() => UtilTranslations.createTranslator([language]), [language]);
+	const resolve = useMemo(() => TranslationsUtil.createTranslator([language]), [language]);
 
 	return resolve;
 };

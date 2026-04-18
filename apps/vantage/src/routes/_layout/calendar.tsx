@@ -1,8 +1,5 @@
-import type { PartialDate as PartialDateParts } from "@evnt/partial-date";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { Box, Indicator, Stack } from "@mantine/core";
 import { useState } from "react";
-import { useLocaleStore } from "../../stores/useLocaleStore";
 import { useCacheEventsStore } from "../../lib/cache/useCacheEventsStore";
 import { useShallow } from "zustand/shallow";
 import { useEventQueries } from "../../db/useEventQuery";
@@ -23,12 +20,10 @@ export const Route = createFileRoute("/_layout/calendar")({
 export default function CalendarPage() {
 	const h = "calc(100svh - var(--app-shell-header-height, 0px) - 2 * var(--app-shell-padding) - var(--safe-area-inset-top) - var(--safe-area-inset-bottom))";
 
-	const [month, setMonth] = useState<PartialDateParts.YearMonth>(UtilPartialDate.asMonth(UtilPartialDate.today()));
-	const [day, setDay] = useState<PartialDateParts.YearMonthDay>(UtilPartialDate.asDay(UtilPartialDate.today()));
+	const [month, setMonth] = useState<`${number}-${number}`>(Temporal.Now.plainDateISO().toString().slice(0, 7) as `${number}-${number}`);
+	const [day, setDay] = useState<`${number}-${number}-${number}`>(Temporal.Now.plainDateISO().toString() as `${number}-${number}-${number}`);
 
 	let breakpoint = "xs";
-
-	return null;
 
 	return (
 		<Stack
@@ -39,16 +34,16 @@ export default function CalendarPage() {
 		>
 			<Box visibleFrom={breakpoint} w="100%" h="100%">
 				<CalendarMonth
-					month={UtilPartialDate.asMonth(month)}
+					month={month}
 					setMonth={(m) => setMonth(m)}
 					renderDay={({ day }) => <DayCard day={day} variant="inline" />}
 				/>
 			</Box>
 			<Box hiddenFrom={breakpoint} w="100%" h="100%">
 				<CalendarMobileMonth
-					month={UtilPartialDate.asMonth(month)}
+					month={month}
 					setMonth={(m) => setMonth(m)}
-					day={UtilPartialDate.asDay(day)}
+					day={day}
 					setDay={(d) => setDay(d)}
 					renderDay={({ day }) => <DayCard
 						day={day}
@@ -64,10 +59,10 @@ export default function CalendarPage() {
 export const DayButton = ({
 	day,
 }: {
-	day: PartialDateParts.YearMonthDay;
+	day: `${number}-${number}-${number}`;
 }) => {
 	const sources = useCacheEventsStore(
-		useShallow(store => store.cache.byDay[day] ?? [])
+		useShallow(store => [...(store.cache.byWallDay[day] ?? [])])
 	);
 
 	return (
@@ -89,11 +84,11 @@ export const DayCard = ({
 	day,
 	variant,
 }: {
-	day: PartialDateParts.YearMonthDay;
+	day: `${number}-${number}-${number}`;
 	variant?: EventCardProps["variant"];
 }) => {
 	const sources = useCacheEventsStore(
-		useShallow(store => store.cache.byDay[day] ?? [])
+		useShallow(store => [...(store.cache.byWallDay[day] ?? [])])
 	);
 
 	const queries = useEventQueries(sources);
