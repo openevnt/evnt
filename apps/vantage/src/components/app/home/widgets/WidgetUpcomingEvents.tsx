@@ -18,7 +18,7 @@ export const WidgetUpcomingEvents = () => {
 				.map((key) => state.cache.byWallDay[key]!)
 				.map(set => [...set])
 				.flat();
-			return events;
+			return [...new Set(events)];
 		})
 	);
 

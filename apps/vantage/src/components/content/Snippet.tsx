@@ -13,49 +13,18 @@ import { ExternalLink } from "./base/ExternalLink";
 export const Snippet = ({
 	snippet,
 	noSublabel,
+	iconProps,
 }: {
 	snippet: TSnippet;
 	noSublabel?: boolean;
+	iconProps?: any;
 }) => {
-	const icon: ReactNode = ({
-		"venue-physical": <IconMapPin />,
-		"venue-online": <IconWorld />,
-		"venue-mixed": <IconWorldPin />,
-		"venue-unknown": <IconWorldPin />,
-		calendar: <IconCalendar />,
-		clock: <IconClock />,
-		_: null,
-	} as Partial<Record<SnippetIcon | "_", ReactNode>>)[snippet.icon ?? "_"] ?? null;
+	const icon = useMemo(() => {
+		return <Snippet.Icon icon={snippet.icon} props={iconProps} />;
+	}, [snippet.icon, iconProps]);
 
-	const getLabelNode = useCallback((label?: SnippetLabel) => {
-		if (!label) return null;
-
-		if (label.type === "text") return <Text inline span inherit>{label.value}</Text>;
-		if (label.type === "translations") return (
-			<Text inline span inherit>
-				<Trans t={label.value} />
-			</Text>
-		);
-		if (label.type === "placeholder") return (
-			<Text inline span inherit c="dimmed" fs="italic">
-				{({
-					"unknown": "<unknown>",
-					"unnamed": "<unnamed>",
-				} as Record<PlaceholderHint, string>)[label.hint] ?? "Placeholder"}
-			</Text>
-		);
-		if (label.type === "address") return <AddressSnippetLabel value={label.value} />;
-		if (label.type === "time") return <TimeSnippetLabel value={label.value} />;
-		if (label.type === "time-range") return <TimeRangeSnippetLabel value={label.value} />;
-		if (label.type === "date-time-range") return <PartialDateRangeSnippetLabel value={label.value} />;
-		if (label.type === "partial-date" || label.type == "date-time") return <PartialDateSnippetLabel value={label.value} />;
-		if (label.type === "external-link") return <ExternalLink href={label.url} children={label.name} />;
-
-		return null;
-	}, []);
-
-	let label: ReactNode = useMemo(() => getLabelNode(snippet.label), [snippet.label]);
-	let sublabel: ReactNode = useMemo(() => getLabelNode(snippet.sublabel), [snippet.sublabel]);
+	let label: ReactNode = useMemo(() => <Snippet.Label label={snippet.label} />, [snippet.label]);
+	let sublabel: ReactNode = useMemo(() => <Snippet.Label label={snippet.sublabel} />, [snippet.sublabel]);
 
 	return (
 		<BaseSnippet icon={icon}>
@@ -67,6 +36,57 @@ export const Snippet = ({
 			)}
 		</BaseSnippet>
 	);
+};
+
+Snippet.Label = ({
+	label,
+}: {
+	label?: SnippetLabel;
+}) => {
+	if (!label) return null;
+
+	if (label.type === "text") return <Text inline span inherit>{label.value}</Text>;
+	if (label.type === "translations") return (
+		<Text inline span inherit>
+			<Trans t={label.value} />
+		</Text>
+	);
+	if (label.type === "placeholder") return (
+		<Text inline span inherit c="dimmed" fs="italic">
+			{({
+				"unknown": "<unknown>",
+				"unnamed": "<unnamed>",
+			} as Record<PlaceholderHint, string>)[label.hint] ?? "Placeholder"}
+		</Text>
+	);
+	if (label.type === "address") return <AddressSnippetLabel value={label.value} />;
+	if (label.type === "time") return <TimeSnippetLabel value={label.value} />;
+	if (label.type === "time-range") return <TimeRangeSnippetLabel value={label.value} />;
+	if (label.type === "date-time-range") return <PartialDateRangeSnippetLabel value={label.value} />;
+	if (label.type === "partial-date" || label.type == "date-time") return <PartialDateSnippetLabel value={label.value} />;
+	if (label.type === "external-link") return <ExternalLink href={label.url} children={label.name} />;
+
+	return null;
+};
+
+Snippet.Icon = ({
+	icon,
+	props,
+}: {
+	icon?: SnippetIcon;
+	props?: any;
+}) => {
+	const node: ReactNode = ({
+		"venue-physical": <IconMapPin {...props} />,
+		"venue-online": <IconWorld {...props} />,
+		"venue-mixed": <IconWorldPin {...props} />,
+		"venue-unknown": <IconWorldPin {...props} />,
+		calendar: <IconCalendar {...props} />,
+		clock: <IconClock {...props} />,
+		_: null,
+	} as Partial<Record<SnippetIcon | "_", ReactNode>>)[icon ?? "_"] ?? null;
+
+	return <>{node}</>;
 };
 
 export const BaseSnippet = ({

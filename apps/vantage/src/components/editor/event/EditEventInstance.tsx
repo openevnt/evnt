@@ -1,17 +1,17 @@
-import type { EventData, EventInstance, PartialDate, Venue } from "@evnt/schema";
-import { Box, Button, CloseButton, Combobox, Group, Input, Paper, SimpleGrid, Stack, Text, useCombobox } from "@mantine/core";
-import { Deatom, DeatomOptional, type EditAtom } from "../edit-atom";
+import type { EventData, EventInstance } from "@evnt/schema";
+import { Box, Collapse, Combobox, Group, Input, Pill, PillsInput, SimpleGrid, Stack, useCombobox } from "@mantine/core";
+import { Deatom, type EditAtom } from "../edit-atom";
 import { PartialDateInput } from "../../base/input/PartialDateInput";
 import { focusAtom } from "jotai-optics";
-import { IconCalendar, type ReactNode } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { IconCheck } from "@tabler/icons-react";
+import { useMemo, useState } from "react";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { Snippet } from "../../content/Snippet";
 import { snippetInstance, snippetVenue } from "@evnt/pretty";
-import { VenueAtomDisplay } from "./EditVenue";
 import { CollapsiblePaper } from "../CollapsiblePaper";
 import { useLocaleStore } from "../../../stores/useLocaleStore";
 import { PartialDateUtil } from "@evnt/partial-date";
+import { TranslationsUtil } from "@evnt/translations";
 
 export const EditEventInstance = ({
 	data,
@@ -84,6 +84,11 @@ export const EditEventInstanceVenues = ({
 	data: EditAtom<EventData>;
 	instance: EditAtom<EventInstance>;
 }) => {
+	const allVenues = useAtomValue(useMemo(() => atom((get) => {
+		const snap = get(data);
+		return snap.venues ?? [];
+	}), [data]));
+
 	const venueIdsAtom = useMemo(() => focusAtom(instance, o => o.prop("venueIds")), [instance]);
 	const venueIds = useAtomValue(venueIdsAtom);
 
@@ -91,90 +96,103 @@ export const EditEventInstanceVenues = ({
 		set(venueIdsAtom, (prev) => prev?.filter((id) => id !== venueId) ?? []);
 	}), [venueIdsAtom]));
 
-	const addVenueId = useSetAtom(useMemo(() => atom(null, (get, set, venueId: string) => {
+	const toggleVenueId = useSetAtom(useMemo(() => atom(null, (get, set, venueId: string) => {
 		const venueIds = get(venueIdsAtom) ?? [];
-		if (venueIds.includes(venueId)) return;
-		set(venueIdsAtom, [...venueIds, venueId]);
+		if (venueIds.includes(venueId)) {
+			set(venueIdsAtom, venueIds.filter((id) => id !== venueId));
+		} else {
+			set(venueIdsAtom, [...venueIds, venueId]);
+		}
 	}), [venueIdsAtom]));
+
+	const [search, setSearch] = useState("");
+
+	const combobox = useCombobox({
+		onDropdownClose: () => combobox.resetSelectedOption(),
+		onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),
+	});
+
+	const pills = venueIds.map((venueId) => {
+		const venue = allVenues.find((v) => v.id === venueId);
+		if (!venue) return null;
+
+		const snippet = snippetVenue(venue);
+
+		return (
+			<Pill
+				key={venueId}
+				withRemoveButton
+				onRemove={() => removeVenueId(venueId)}
+			>
+				<Group gap={4} align="center" h="100%" wrap="nowrap">
+					<Snippet.Icon icon={snippet.icon} props={{ size: 16 }} />
+					<Snippet.Label label={snippet.label} />
+				</Group>
+			</Pill>
+		);
+	});
+
+	const options = allVenues
+		.filter((venue) => TranslationsUtil.search(venue.name, search))
+		.map((venue) => (
+			<Combobox.Option value={venue.id} key={venue.id} active={venueIds.includes(venue.id)}>
+				<Group gap={4}>
+					<Box w={24}>
+						{venueIds.includes(venue.id) ? <IconCheck style={{ verticalAlign: "middle" }} /> : null}
+					</Box>
+					<Snippet snippet={snippetVenue(venue)} />
+				</Group>
+			</Combobox.Option>
+		));
 
 	return (
 		<Stack gap={4}>
-			<Text fw="bold">Venues ({venueIds.length})</Text>
-			<Stack gap={4}>
-				{venueIds.map((venueId) => (
-					<Group
-						key={venueId}
-						gap={4}
-					>
-						<CloseButton
-							onClick={() => removeVenueId(venueId)}
-						/>
-						<Box flex="1">
-							<VenueAtomDisplay
-								venue={focusAtom(data, o => o.prop("venues").valueOr([]).find((v) => v.id === venueId)) as EditAtom<Venue>}
-								noSublabel
-							/>
-						</Box>
-					</Group>
-				))}
-			</Stack>
-			<Group>
-				<VenueIdPicker
-					data={data}
-					filter={(venue) => !venueIds.includes(venue.id)}
-					label="Add"
-					onSelect={(venueId) => addVenueId(venueId)}
-				/>
-			</Group>
+			<Combobox store={combobox} onOptionSubmit={toggleVenueId}>
+				<Combobox.DropdownTarget>
+					<Stack gap={4}>
+						<PillsInput
+							label="Venues"
+							onClick={() => combobox.openDropdown()}
+						>
+							<Pill.Group>
+								{pills}
+
+								<Combobox.EventsTarget>
+									<PillsInput.Field
+										onFocus={() => combobox.openDropdown()}
+										onBlur={() => combobox.closeDropdown()}
+										value={search}
+										placeholder="Search venues..."
+										onChange={(event) => {
+											combobox.updateSelectedOptionIndex();
+											setSearch(event.currentTarget.value);
+										}}
+										onKeyDown={(event) => {
+											if (event.key === 'Backspace' && search.length === 0 && venueIds.length > 0) {
+												event.preventDefault();
+												removeVenueId(venueIds[venueIds.length - 1]!);
+											}
+										}}
+									/>
+								</Combobox.EventsTarget>
+							</Pill.Group>
+						</PillsInput>
+
+						<Collapse expanded={!venueIds.length}>
+							<Input.Description>
+								Location marked as unknown
+							</Input.Description>
+						</Collapse>
+					</Stack>
+				</Combobox.DropdownTarget>
+
+				<Combobox.Dropdown>
+					<Combobox.Options>
+						{options.length > 0 ? options : <Combobox.Empty>Nothing found...</Combobox.Empty>}
+					</Combobox.Options>
+				</Combobox.Dropdown>
+			</Combobox>
 		</Stack>
-	);
-};
-
-export const VenueIdPicker = ({
-	data,
-	filter = () => true,
-	onSelect,
-	label,
-}: {
-	data: EditAtom<EventData>;
-	filter?: (venue: Venue, data: EventData) => boolean;
-	onSelect?: (venueId: string) => void;
-	label?: ReactNode;
-}) => {
-	const venues = useAtomValue(useMemo(() => atom((get) => {
-		const snap = get(data);
-		return (snap.venues ?? [])
-			.filter((venue) => filter(venue, snap));
-	}), [data, filter]));
-
-	const combobox = useCombobox();
-
-	const options = venues.map((venue) => (
-		<Combobox.Option
-			key={venue.id}
-			value={venue.id}
-		>
-			<Snippet snippet={snippetVenue(venue)} />
-		</Combobox.Option>
-	));
-
-	return (
-		<Combobox
-			store={combobox}
-			onOptionSubmit={onSelect}
-			width="max-content"
-		>
-			<Combobox.Target>
-				<Button
-					onClick={() => combobox.toggleDropdown()}
-				>
-					{label}
-				</Button>
-			</Combobox.Target>
-			<Combobox.Dropdown>
-				{options}
-			</Combobox.Dropdown>
-		</Combobox>
 	);
 };
 

@@ -1,7 +1,7 @@
 import { Stack, Text } from "@mantine/core";
 import { SmallTitle } from "../../base/SmallTitle";
 import { UtilEventSource, type EventSource } from "../../../../db/models/event-source";
-import { IconAt, IconDatabase, IconExternalLink, IconWorld } from "@tabler/icons-react";
+import { IconAt, IconBraces, IconDatabase, IconExternalLink, IconWorld } from "@tabler/icons-react";
 import { BaseSnippet } from "../../Snippet";
 import { EventLinkButtonBase } from "../link/EventLinkButtonBase";
 
@@ -24,7 +24,7 @@ export const EventDetailsSource = ({ source }: { source?: EventSource }) => {
 				<Stack gap={4}>
 					<BaseSnippet icon={<IconAt />}>
 						<Text inline>
-							ATProto
+							AT Protocol
 						</Text>
 					</BaseSnippet>
 
@@ -47,9 +47,12 @@ export const EventDetailsSource = ({ source }: { source?: EventSource }) => {
 						</Text>
 					</BaseSnippet>
 					<EventLinkButtonBase
+						leftSection={<IconBraces />}
 						url={source}
 					>
-						View Source
+						<Text inherit span mr={4}>
+							View raw data
+						</Text> <IconExternalLink size={14} />
 					</EventLinkButtonBase>
 				</Stack>
 			)}

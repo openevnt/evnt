@@ -221,12 +221,14 @@ export const PartialDateInput = ({
 				{value === undefined ? (
 					<InputBase
 						component="button"
+						pointer
 						onClick={handleSet}
 						onMouseDown={handleSet}
+						label={label}
 						color="gray"
 					>
-						<Text c="dimmed">
-
+						<Text c="dimmed" inherit inline span>
+							Click to Set
 						</Text>
 					</InputBase>
 				) : (
@@ -254,32 +256,34 @@ export const PartialDateInput = ({
 								if ((e.key === "Enter" && PartialDateUtil.isValid(textInputValue)) || e.key === "Escape")
 									setEditingRaw(false);
 							}}
+							label={label}
 							placeholder="Enter raw PartialDate string"
 						/>
 					) : (
 						<InputBase
 							component="button"
+							label={label}
 							onClick={() => setModalOpened(true)}
+							pointer
 							rightSectionWidth="auto"
-							rightSection={
-								(
-									<Group gap={4} wrap="nowrap" >
-										<Tooltip label="Edit raw PartialDate string">
-											<ActionIcon
-												onClick={() => setEditingRaw(true)}
-												variant="subtle"
-												color="gray"
-											>
-												<IconPencil stroke={1.2} />
-											</ActionIcon>
-										</Tooltip>
-										<Tooltip label="Remove date">
-											<CloseButton
-												onClick={() => onChange(undefined)}
-											/>
-										</Tooltip>
-									</Group>
-								)}
+							rightSection={(
+								<Group gap={4} wrap="nowrap" >
+									<Tooltip label="Edit raw PartialDate string">
+										<ActionIcon
+											onClick={() => setEditingRaw(true)}
+											variant="subtle"
+											color="gray"
+										>
+											<IconPencil stroke={1.2} />
+										</ActionIcon>
+									</Tooltip>
+									<Tooltip label="Remove date">
+										<CloseButton
+											onClick={() => onChange(undefined)}
+										/>
+									</Tooltip>
+								</Group>
+							)}
 						>
 							<PartialDateSnippetLabel value={value} />
 						</InputBase>

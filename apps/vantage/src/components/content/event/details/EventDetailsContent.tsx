@@ -61,8 +61,8 @@ export const EventDetailsContent = (props: EventDetailsContentProps) => {
 						>
 							<Stack>
 								<EventDetailsLinks />
-								<EventDetailsSource source={source} />
 								<EventDetailsAlternatives source={source} />
+								<EventDetailsSource source={source} />
 							</Stack>
 						</Grid.Col>
 					</Grid>
