@@ -1,55 +1,44 @@
 🔙 [@evnt Project](../README.md)
 
-# Application Links Format
+# `eventsl.ink` Intents
 
-A link format is defined to allow applications to link to the redirector with specific actions to be performed. 
+Applications can use the `eventsl.ink` service to create links that open in compatible applications. This allows users to share events across different platforms while maintaining a consistent experience.
 
-When sharing events with other users, applications should link to the redirector; the redirector will then forward the user to their preferred application to view the event.
+When an event link is opened, the following happens:
 
-If the user does not have a preferred application, a list of public applications ([data/instances.json](../data/instances.json)) are shown in the redirector.
+1. `eventsl.ink` parses the intent from the URL.
+2. If a preferred application is set, forwards the user to that application.
+3. If no preferred application is set, shows compatible public applications from [data/instances.json](../data/instances.json).
 
 ```mermaid
 graph LR
 	A([Application A])
 	B([Application B])
 	C([Application C])
+	Redirector(eventsl.ink)
 
 	Redirector -.-> A
 	Redirector -.-> B
-	Redirector -->|Preference| C
+	Redirector -->|Preferred App| C
 
-	A -->|Share Link| Redirector
+	A -->|Share link| Redirector
 ```
 
-Application Links use **URL search parameters** to define the action to be performed.
+## Link Format
 
-The operations are differentiated by the `action` parameter.
+The links are path-based with query parameters for intent parsing. The base URL is `https://eventsl.ink`.
 
-## `?action=view-event`
-  
-**Parameters:**
-- `source`: [EventSource](./SOURCE.md) *used to be 'url'*
+- Show an event: `/event` or `/e`
 
-**Examples:**
+Search parameters for event links:
 
-- [Link to FOSDEM 2026](<https://eventsl.ink/?action=view-event&source=https%3A%2F%2Fdeniz.blue%2Fevents-data%2Fevents%2F2026%2Ffoss%2Ffosdem26.json>)
+- One of the following:
+  - `at`: an AT Protocol event record URI
+  - `url`: an HTTP URL pointing to a JSON event payload
+  - `data`: inline JSON event data
 
-## `?action=view-index`
+Examples:
 
-Views an `.index.json`.
+- https://eventsl.ink/e?at=at://did:plc:example/community.lexicon.calendar.event/3kxyz
+- https://eventsl.ink/event?url=https%3A%2F%2Fdeniz.blue%2Fevents-data%2Fevents%2F2026%2Ffoss%2Ffosdem26.json
 
-**Parameters:**
-- `index`: URL of the `.index.json` file
-
-## Special Parameters
-
-**Parameters:**
-
-- `?setInstanceUrl=<url>` sets the instance url
-- `?clearInstanceUrl` clears the instance url
-- `?popup` to close the popup after operation
-
-**Examples:**
-
-- [Set Instance URL to 127.0.0.1:5173](https://eventsl.ink/?setInstanceUrl=http://127.0.0.1:5173/)
-- [Clear Instance URL](https://eventsl.ink/?clearInstanceUrl)

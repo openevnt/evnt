@@ -27,11 +27,11 @@ __Table of Contents__
 	- [Instances](#instances)
 		- [`EventInstance`](#eventinstance)
 	- [Components](#components)
-		- [Type `EventComponent`](#type-eventcomponent)
-		- [`LinkComponent`](#linkcomponent)
-		- [`SourceComponent`](#sourcecomponent)
-		- [`SplashMediaComponent`](#splashmediacomponent)
+		- [`directory.evnt.component.link`](#directoryevntcomponentlink)
+		- [`directory.evnt.component.source`](#directoryevntcomponentsource)
+		- [`directory.evnt.component.splashMedia`](#directoryevntcomponentsplashmedia)
 		- [`app.bsky.richtext`](#appbskyrichtext)
+		- [`directory.evnt.richtext.markdown`](#directoryevntrichtextmarkdown)
 
 # Types
 
@@ -411,12 +411,10 @@ Every component is an object which **must** have a `$type` field, which is a str
 
 __Defined Component Types:__
 
-| `$type`                                | type                                          |
-|----------------------------------------|-----------------------------------------------|
-| `directory.evnt.component.link`        | [LinkComponent](#linkcomponent)               |
-| `directory.evnt.component.source`      | [SourceComponent](#sourcecomponent)           |
-| `directory.evnt.component.splashMedia` | [SplashMediaComponent](#splashmediacomponent) |
-| `app.bsky.richtext`                    | [AppBskyRichtextComponent](#appbskyrichtext)  |
+- [`directory.evnt.component.link`](#linkcomponent)
+- [`directory.evnt.component.source`](#sourcecomponent)
+- [`directory.evnt.component.splashMedia`](#splashmediacomponent)
+- [`directory.evnt.richtext.markdown`](#appbskyrichtext)
 
 > [!IMPORTANT]
 > This list is **not exhaustive**; applications can define their own component types as needed.
@@ -436,9 +434,9 @@ let component: EventComponent = {
 }
 ```
 
-### `LinkComponent`
+### `directory.evnt.component.link`
 
-A `LinkComponent` represents a link related to the event, such as a website, social media page, ticketing page etc.
+Represents a link related to the event, such as a website, social media page, ticketing page etc.
 
 __Required fields:__
 
@@ -452,9 +450,9 @@ __Optional fields:__
 - `opensAt`: A [`PartialDate`](#partialdate) representing the date and/or time when the link becomes active or valid. This can be used for links that are not yet active but will become active in the future (e.g., a ticketing page that opens at a specific date and time).
 - `closesAt`: A [`PartialDate`](#partialdate) representing the date and/or time when the link becomes inactive or invalid. This can be used for links that are only valid for a certain period of time (e.g., a form for registering to a competition that closes at a specific date and time).
 
-### `SourceComponent`
+### `directory.evnt.component.source`
 
-A `SourceComponent` represents a source of information about the event, such as a news article, a social media post, an official announcement etc.
+Represents a source of information about the event, such as a news article, a social media post, an official announcement etc.
 
 __Required fields:__
 
@@ -468,9 +466,9 @@ let source: SourceComponent = {
 }
 ```
 
-### `SplashMediaComponent`
+### `directory.evnt.component.splashMedia`
 
-A `SplashMediaComponent` represents a media item (such as an image or video) that can be used as a splash media for the event.
+Represents a media item (such as an image or video) that can be used as a splash media for the event.
 
 Splash media is a media item that can be used to represent the event in a visual way, such as a cover image or a promotional video. This can be used by applications to display a visually appealing representation of the event.
 
@@ -499,3 +497,27 @@ let richtextComponent: AppBskyRichtextComponent = {
 	}],
 };
 ```
+
+### `directory.evnt.richtext.markdown`
+
+This component type can be used to represent markdown content related to the event.
+
+__Required fields:__
+
+- `$type`: Must be set to `directory.evnt.richtext.markdown`
+- `markdown`: A string containing the markdown content.
+
+__Optional fields:__
+
+- `language`: BCP47/IETF language tag representing the language of the markdown content.
+
+```ts
+let md: MarkdownComponent = {
+	$type: "directory.evnt.richtext.markdown",
+	markdown: "This is **markdown** content for the event.",
+	language: "en",
+};
+```
+
+
+
