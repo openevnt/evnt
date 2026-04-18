@@ -1,8 +1,7 @@
 import { PartialDateUtil, type PartialDate } from "@evnt/partial-date";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { ActionIcon, Badge, Box, Button, CloseButton, Collapse, Group, Input, InputBase, Modal, Paper, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { DatePicker, MonthPicker, TimePicker, YearPicker, type CalendarLevel } from "@mantine/dates";
-import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { PartialDateSnippetLabel } from "../../content/datetime/PartialDateSnippetLabel";
 import { IconCalendar, IconCalendarQuestion, IconCheck, IconClock, IconClockQuestion, IconPencil, IconWorld, IconX } from "@tabler/icons-react";
 import { useLocaleStore } from "../../../stores/useLocaleStore";
@@ -13,13 +12,14 @@ export const usePartialDateInputStates = ({
 	onChange,
 	focusOnTimePicker,
 }: {
-	value: PartialDate;
-	onChange: (value: PartialDate) => void;
+	value: PartialDate | undefined;
+	onChange: (value: PartialDate | undefined) => void;
 	focusOnTimePicker?: () => void;
 }) => {
-	const [calendarCollapsed, setCalendarCollapsed] = useState(PartialDateUtil.has(value, "day"));
+	const [calendarCollapsed, setCalendarCollapsed] = useState(!!value && PartialDateUtil.has(value, "day"));
 
-	const calendarLevelOf = (v: PartialDate): CalendarLevel => {
+	const calendarLevelOf = (v: PartialDate | undefined): CalendarLevel => {
+		if (!v) return "decade";
 		switch (PartialDateUtil.getPrecision(v)) {
 			case "time":
 			case "day": return "month";
@@ -30,7 +30,8 @@ export const usePartialDateInputStates = ({
 
 	const pad = (n: number) => String(n).padStart(2, "0");
 
-	const partialDateAsCalendarDate = (v: PartialDate) => {
+	const partialDateAsCalendarDate = (v: PartialDate | undefined) => {
+		if (!v) return new Date().toISOString().slice(0, 10);
 		const p = PartialDateUtil.setPrecision(v, "day", "low");
 		const parsed = PartialDateUtil.parse(p);
 		return `${parsed.year}-${pad(parsed.month)}-${pad(parsed.day)}`;
@@ -49,6 +50,8 @@ export const usePartialDateInputStates = ({
 	};
 
 	const onCalendarLevelChange = (newLevel: CalendarLevel) => {
+		if (!value) return;
+
 		setCalendarLevel((level) => {
 			console.log("Level change to", level, "->", newLevel);
 
@@ -69,6 +72,8 @@ export const usePartialDateInputStates = ({
 	};
 
 	const calendarValueFor = (level: CalendarLevel): string | undefined => {
+		if (!value) return undefined;
+
 		const parsed = PartialDateUtil.parse(value);
 		switch (true) {
 			case level === "decade": return `${parsed.year}`;
@@ -79,7 +84,7 @@ export const usePartialDateInputStates = ({
 	};
 
 	const onCalendarValueChange = (v: string | null) => {
-		if (!v) return;
+		if (!v || !value) return;
 
 		setCalendarLevel((level) => {
 			console.log("Value change", level, v);
@@ -106,12 +111,15 @@ export const usePartialDateInputStates = ({
 	// == Time Picker ==
 
 	const timePickerValue = useMemo(() => {
+		if (!value) return "";
 		const parsed = PartialDateUtil.parse(value);
 		if (parsed.precision !== "time") return "";
 		return [parsed.hour, parsed.minute].map(pad).join(":");
 	}, [value]);
 
 	const onTimePickerChange = (time: string | null) => {
+		if (!value) return;
+
 		if (time) {
 			const [h, m] = time.split(":").map(Number) as [number, number];
 			const step = PartialDateUtil.setPrecision(value, "time", "low");
@@ -130,8 +138,8 @@ export const usePartialDateInputStates = ({
 
 	// == Text Input ==
 
-	const [textInputValue, setTextInputValue] = useState<string>(value);
-	useEffect(() => setTextInputValue(value), [value]);
+	const [textInputValue, setTextInputValue] = useState<string>(value ?? "");
+	useEffect(() => setTextInputValue(value ?? ""), [value]);
 
 	const onTextInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const v = e.currentTarget.value;
@@ -165,19 +173,14 @@ export const usePartialDateInputStates = ({
 export const PartialDateInput = ({
 	value,
 	onChange,
-	onDelete,
-	title,
-	ref,
+	getInsertValue,
+	label,
 }: {
-	value: PartialDate;
-	onChange: (value: PartialDate) => void;
-	onDelete?: () => void;
-	title?: ReactNode;
-	// Specifically for DeatomOptional lol
-	ref?: React.Ref<{ focus: () => void }>;
+	value: PartialDate | undefined;
+	onChange: (value: PartialDate | undefined) => void;
+	getInsertValue?: () => PartialDate;
+	label?: ReactNode;
 }) => {
-	const parsedValue = PartialDateUtil.parse(value);
-
 	const timePickerHoursRef = useRef<HTMLInputElement | null>(null);
 
 	const {
@@ -207,82 +210,86 @@ export const PartialDateInput = ({
 
 	const userLanguage = useLocaleStore(store => store.language);
 
-	// ref forwarding for DeatomOptional
-	// open dropdown when value added
-	useImperativeHandle(ref, () => ({
-		focus: () => setModalOpened(true),
-	}), [setModalOpened]);
+	const handleSet = useCallback(() => {
+		const newValue: PartialDate = getInsertValue?.() ?? PartialDateUtil.format(PartialDateUtil.parsedFromTemporal(Temporal.Now.plainDateTimeISO()));
+		onChange(newValue);
+	}, [getInsertValue, onChange]);
 
 	return (
 		<Box>
 			<Stack gap={4}>
-				{editingRaw ? (
-					<TextInput
-						value={textInputValue}
-						onChange={onTextInputChange}
-						rightSection={(
-							<Group gap={4} wrap="nowrap" >
-								<Tooltip label="Done">
-									<ActionIcon
-										onClick={() => setEditingRaw(false)}
-										disabled={!PartialDateUtil.isValid(textInputValue)}
-										variant="subtle"
-										color="green"
-									>
-										<IconCheck stroke={1.2} />
-									</ActionIcon>
-								</Tooltip>
-							</Group>
-						)}
-						error={textInputValue && !PartialDateUtil.isValid(textInputValue) ? "Invalid PartialDate string" : undefined}
-						autoFocus
-						onKeyDown={(e) => {
-							if ((e.key === "Enter" && PartialDateUtil.isValid(textInputValue)) || e.key === "Escape")
-								setEditingRaw(false);
-						}}
-						placeholder="Enter raw PartialDate string"
-					/>
-				) : (
+				{value === undefined ? (
 					<InputBase
 						component="button"
-						onClick={() => setModalOpened(true)}
-						rightSectionWidth="auto"
-						rightSection={
-							(
+						onClick={handleSet}
+						onMouseDown={handleSet}
+						color="gray"
+					>
+						<Text c="dimmed">
+
+						</Text>
+					</InputBase>
+				) : (
+					editingRaw ? (
+						<TextInput
+							value={textInputValue}
+							onChange={onTextInputChange}
+							rightSection={(
 								<Group gap={4} wrap="nowrap" >
-									<Tooltip label="Edit raw PartialDate string">
+									<Tooltip label="Done">
 										<ActionIcon
-											onClick={() => setEditingRaw(true)}
+											onClick={() => setEditingRaw(false)}
+											disabled={!PartialDateUtil.isValid(textInputValue)}
 											variant="subtle"
-											color="gray"
+											color="green"
 										>
-											<IconPencil stroke={1.2} />
+											<IconCheck stroke={1.2} />
 										</ActionIcon>
 									</Tooltip>
-									{onDelete && (
-										<Tooltip label="Remove date">
-											<CloseButton
-												onClick={onDelete}
-											/>
-										</Tooltip>
-									)}
 								</Group>
 							)}
-					>
-						<PartialDateSnippetLabel
-							value={value}
+							error={textInputValue && !PartialDateUtil.isValid(textInputValue) ? "Invalid PartialDate string" : undefined}
+							autoFocus
+							onKeyDown={(e) => {
+								if ((e.key === "Enter" && PartialDateUtil.isValid(textInputValue)) || e.key === "Escape")
+									setEditingRaw(false);
+							}}
+							placeholder="Enter raw PartialDate string"
 						/>
-					</InputBase>
-				)
-				}
+					) : (
+						<InputBase
+							component="button"
+							onClick={() => setModalOpened(true)}
+							rightSectionWidth="auto"
+							rightSection={
+								(
+									<Group gap={4} wrap="nowrap" >
+										<Tooltip label="Edit raw PartialDate string">
+											<ActionIcon
+												onClick={() => setEditingRaw(true)}
+												variant="subtle"
+												color="gray"
+											>
+												<IconPencil stroke={1.2} />
+											</ActionIcon>
+										</Tooltip>
+										<Tooltip label="Remove date">
+											<CloseButton
+												onClick={() => onChange(undefined)}
+											/>
+										</Tooltip>
+									</Group>
+								)}
+						>
+							<PartialDateSnippetLabel value={value} />
+						</InputBase>
+					))}
 				<Input.Description>
 					{editingRaw ? (
-						<PartialDateSnippetLabel
-							value={value}
-						/>
+						<PartialDateSnippetLabel value={value} />
 					) : value}
 				</Input.Description>
-			</Stack >
+			</Stack>
 			<Modal
 				opened={modalOpened}
 				onClose={() => setModalOpened(false)}
@@ -293,21 +300,19 @@ export const PartialDateInput = ({
 					<Stack gap={4}>
 						<Group justify="center">
 							<Input.Label>
-								{title}
+								{label}
 							</Input.Label>
 						</Group>
 						<Group justify="center" gap={4}>
 							<IconCalendar />
-							<PartialDateSnippetLabel
-								value={value}
-							/>
+							<PartialDateSnippetLabel value={value} />
 						</Group>
 						<Group grow gap={4} my={4}>
 							{(["year", "month", "day", "time"] as PartialDate.Precision[]).map((precision) => (
 								<Badge
 									key={precision}
 									variant="light"
-									color={PartialDateUtil.has(value, /* Stupid TS */ precision as any) ? "blue" : "gray"}
+									color={(!!value && PartialDateUtil.has(value, /* Stupid TS */ precision as any)) ? "blue" : "gray"}
 									size="xs"
 								>
 									{precision.charAt(0).toUpperCase() + precision.slice(1)}
@@ -327,8 +332,8 @@ export const PartialDateInput = ({
 								w="100%"
 								component="button"
 								onClick={() => setCalendarCollapsed(false)}
-								leftSection={PartialDateUtil.has(value, "day") ? <IconCalendar /> : <IconCalendarQuestion />}
-								children={PartialDateUtil.has(value, "day") ? PartialDateUtil.asPlainDate(value).toLocaleString(userLanguage, {
+								leftSection={value && PartialDateUtil.has(value, "day") ? <IconCalendar /> : <IconCalendarQuestion />}
+								children={value && PartialDateUtil.has(value, "day") ? PartialDateUtil.asPlainDate(value).toLocaleString(userLanguage, {
 									dateStyle: "full",
 								}) : "!"}
 							/>
@@ -369,20 +374,20 @@ export const PartialDateInput = ({
 							</Paper>
 						</Collapse>
 
-						<Collapse expanded={PartialDateUtil.getPrecision(value) === "year"}>
+						<Collapse expanded={!!value && PartialDateUtil.getPrecision(value) === "year"}>
 							<Input.Description>
 								Month, day and time marked as unknown
 							</Input.Description>
 						</Collapse>
 
-						<Collapse expanded={PartialDateUtil.getPrecision(value) === "month"}>
+						<Collapse expanded={!!value && PartialDateUtil.getPrecision(value) === "month"}>
 							<Input.Description>
 								Day and time marked as unknown
 							</Input.Description>
 						</Collapse>
 					</Stack>
 
-					<Collapse expanded={PartialDateUtil.has(value, "day")}>
+					<Collapse expanded={!!value && PartialDateUtil.has(value, "day")}>
 						<Stack gap={4}>
 							<Input.Label>
 								Time <Text c="dimmed" inline span inherit>(Local)</Text>
@@ -394,9 +399,9 @@ export const PartialDateInput = ({
 								hoursRef={timePickerHoursRef}
 								clearable
 								style={{ flex: 1 }}
-								leftSection={PartialDateUtil.has(value, "time") ? <IconClock /> : <IconClockQuestion />}
+								leftSection={!!value && PartialDateUtil.has(value, "time") ? <IconClock /> : <IconClockQuestion />}
 							/>
-							<Collapse expanded={!PartialDateUtil.has(value, "time")}>
+							<Collapse expanded={!!value && !PartialDateUtil.has(value, "time")}>
 								<Input.Description>
 									Time marked as unknown
 								</Input.Description>
@@ -406,9 +411,10 @@ export const PartialDateInput = ({
 
 					<TimezoneSelect
 						label="Timezone"
-						value={parsedValue.timezone || "UTC"}
+						value={(value ? PartialDateUtil.parse(value).timezone : null) ?? "UTC"}
 						leftSection={<IconWorld />}
 						onChange={(tz) => {
+							if (!value) return;
 							onChange(PartialDateUtil.withTimezone(value, tz));
 						}}
 					/>

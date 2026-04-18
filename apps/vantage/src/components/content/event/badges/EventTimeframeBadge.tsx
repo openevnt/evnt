@@ -1,6 +1,6 @@
 import { UtilPartialDate, UtilPartialDateRange } from "~/lib/util/schema-utils";
 import { useResolvedEvent } from "../event-envelope-context";
-import type { PartialDate as PartialDateParts } from "@evnt/partial-date";
+import { PartialDateUtil, type PartialDate as PartialDateParts } from "@evnt/partial-date";
 import { Badge, type BoxProps } from "@mantine/core";
 import { IconCalendarDown, IconHistory, IconHourglass } from "@tabler/icons-react";
 
@@ -18,7 +18,7 @@ export const EventTimeframeBadge = (props: BoxProps) => {
 		?.flatMap(instance => UtilPartialDateRange.getIncludedDates(instance))
 		?? [];
 
-	const today: PartialDateParts.YearMonthDay = UtilPartialDate.asDay(now);
+	const today = PartialDateUtil.lowerPrecision(PartialDateUtil.now(), "day");
 
 	const hasToday = allDays?.some(day => today === day);
 

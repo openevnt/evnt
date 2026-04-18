@@ -96,28 +96,12 @@ const formatFrom = (
 };
 
 export class UtilPartialDate {
-	static validate(value: string): value is SchemaPartialDate {
-		return PartialDateUtil.isValid(value);
-	}
-
-	static hasMonth(value: SchemaPartialDate): boolean {
-		return PartialDateUtil.has(value, "month");
-	}
-
 	static hasDay(value: SchemaPartialDate): boolean {
 		return PartialDateUtil.has(value, "day");
 	}
 
 	static hasTime(value: SchemaPartialDate): boolean {
 		return PartialDateUtil.has(value, "time");
-	}
-
-	static isComplete(value: SchemaPartialDate): boolean {
-		return this.hasTime(value);
-	}
-
-	static asYear(value: SchemaPartialDate): PartialDateParts.YearOnly {
-		return formatFrom(value, "year") as PartialDateParts.YearOnly;
 	}
 
 	static asMonth(value: SchemaPartialDate): PartialDateParts.YearMonth {
@@ -138,10 +122,6 @@ export class UtilPartialDate {
 		return `${p.hour.toString().padStart(2, "0")}:${p.minute.toString().padStart(2, "0")}`;
 	}
 
-	static toComponents(value: SchemaPartialDate) {
-		return parse(value);
-	}
-
 	static toLowDate(value: SchemaPartialDate): Date {
 		return toDate(value, "low");
 	}
@@ -157,24 +137,6 @@ export class UtilPartialDate {
 	static today(timeZone?: string): PartialDateParts.YearMonthDay {
 		return this.asDay(this.now(timeZone));
 	}
-
-	static thisMonth(timeZone?: string): PartialDateParts.YearMonth {
-		return this.asMonth(this.now(timeZone));
-	}
-
-	static toIntlDateString(value: SchemaPartialDate, locale?: string): string {
-		const p = parse(value);
-		const fmt = new Intl.DateTimeFormat(locale, {
-			timeZone: p.timezone,
-			year: "numeric",
-			month: this.hasMonth(value) ? "short" : undefined,
-			day: this.hasDay(value) ? "numeric" : undefined,
-			hour: this.hasTime(value) ? "2-digit" : undefined,
-			minute: this.hasTime(value) ? "2-digit" : undefined,
-			hour12: false,
-		});
-		return fmt.format(this.toLowDate(value));
-	}
 }
 
 export type PartialDateRange = {
@@ -183,20 +145,8 @@ export type PartialDateRange = {
 };
 
 export class UtilPartialDateRange {
-	static isRange(range: PartialDateRange | EventInstance | null | undefined): range is PartialDateRange {
-		return !!range && typeof range === "object" && typeof range.start === "string" && typeof range.end === "string";
-	}
-
-	static bothHasTime(range: PartialDateRange | EventInstance): boolean {
-		return !!range.start && !!range.end && UtilPartialDate.hasTime(range.start) && UtilPartialDate.hasTime(range.end);
-	}
-
 	static isSameDay(range: PartialDateRange | EventInstance): boolean {
 		return !!range.start && !!range.end && UtilPartialDate.hasDay(range.start) && UtilPartialDate.hasDay(range.end) && UtilPartialDate.asDay(range.start) === UtilPartialDate.asDay(range.end);
-	}
-
-	static isSameTime(range: PartialDateRange | EventInstance): boolean {
-		return !!range.start && !!range.end && this.bothHasTime(range) && UtilPartialDate.getTimePart(range.start) === UtilPartialDate.getTimePart(range.end);
 	}
 
 	static getIncludedDates(range: PartialDateRange | EventInstance): PartialDateParts.YearMonthDay[] {

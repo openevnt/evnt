@@ -7,17 +7,17 @@ import { trynull } from "../../../lib/util/trynull";
 
 export const PartialDateSnippetLabel = ({
 	value,
-	timezone,
 	language,
 }: {
-	value: PartialDate;
-	timezone?: string;
+	value: PartialDate | undefined;
 	language?: string;
 }) => {
 	const userLanguage = useLocaleStore(store => store.language);
 	const userTimezone = useLocaleStore(store => store.timezone);
 
 	const str = useMemo(() => trynull(() => {
+		if (!value) return "";
+
 		const parsed = PartialDateUtil.parse(value);
 
 		const fmt = new Intl.DateTimeFormat(language || userLanguage, {
@@ -31,14 +31,7 @@ export const PartialDateSnippetLabel = ({
 			timeZone: parsed.timezone,
 		});
 
-		let temporal: Intl.FormattableTemporalObject;
-		switch (parsed.precision) {
-			case "year": temporal = new Temporal.PlainYearMonth(parsed.year, 1); break;
-			case "month": temporal = PartialDateUtil.asPlainYearMonth(parsed); break;
-			case "day": temporal = PartialDateUtil.asPlainDate(parsed); break;
-			case "time": temporal = PartialDateUtil.asZonedDateTime(parsed).toInstant(); break;
-		}
-
+		let temporal = PartialDateUtil.asFormattableTemporal(parsed);
 		let str = fmt.format(temporal);
 
 		if (parsed.precision === "time" && parsed.timezone !== userTimezone) {
@@ -62,8 +55,9 @@ export const PartialDateSnippetLabel = ({
 			aria-label={str}
 			inline
 			inherit
+			c={str ? undefined : "dimmed"}
 		>
-			{str}
+			{str || "<unknown>"}
 		</Text>
 	)
 };

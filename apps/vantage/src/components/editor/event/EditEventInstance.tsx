@@ -1,6 +1,6 @@
 import type { EventData, EventInstance, PartialDate, Venue } from "@evnt/schema";
 import { Box, Button, CloseButton, Combobox, Group, Input, Paper, SimpleGrid, Stack, Text, useCombobox } from "@mantine/core";
-import { DeatomOptional, type EditAtom } from "../edit-atom";
+import { Deatom, DeatomOptional, type EditAtom } from "../edit-atom";
 import { PartialDateInput } from "../../base/input/PartialDateInput";
 import { focusAtom } from "jotai-optics";
 import { IconCalendar, type ReactNode } from "@tabler/icons-react";
@@ -58,14 +58,11 @@ export const EditEventInstance = ({
 			<SimpleGrid type="container" cols={{ base: 1, "450px": 2 }}>
 				{(["start", "end"] as const).map((field) => (
 					<Stack gap={4} key={field}>
-						<Stack gap={0}>
-							<Input.Label>{field == "start" ? "Start Date & Time" : "End Date & Time"}</Input.Label>
-						</Stack>
-						<DeatomOptional
-							title={field == "start" ? "Start Date & Time" : "End Date & Time"}
-							component={PartialDateInput}
+						<Deatom
 							atom={field === "start" ? startAtom : endAtom}
-							set={() => {
+							component={PartialDateInput}
+							label={field == "start" ? "Start Date & Time" : "End Date & Time"}
+							getInsertValue={() => {
 								if (field == "start") return PartialDateUtil.lowerPrecision(PartialDateUtil.now(userTimezone), "month");
 								const instance = getInstanceData();
 								if (!instance.start) return PartialDateUtil.lowerPrecision(PartialDateUtil.now(userTimezone), "month");

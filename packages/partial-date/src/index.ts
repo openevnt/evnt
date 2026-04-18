@@ -32,10 +32,14 @@ export type PartialDate = PartialDate.YearOnly | PartialDate.YearMonth | Partial
 export const PartialDateRegex = /^(?<year>\d{4})(?:-(?<month>\d{2})(?:-(?<day>\d{2})(?:T(?<time>(?<hour>\d{2}):(?<minute>\d{2}))?)?)?)?(?:\[(?<timezone>[\w\/]+)\])?$/;
 
 export class PartialDateUtil {
+	// == Validation methods ==
+
 	/** Checks if a string is a valid PartialDate */
 	static isValid(pd: string): pd is PartialDate {
 		return PartialDateRegex.test(pd);
 	}
+
+	// == Parsing and formatting methods ==
 
 	/**
 	 * Parses a PartialDate string into a structured object
@@ -127,16 +131,26 @@ export class PartialDateUtil {
 		}
 	}
 
-	static setPrecision(pd: PartialDate, precision: "year"): PartialDate.YearOnly;
-	static setPrecision(pd: PartialDate, precision: "month", mode: "low" | "high"): PartialDate.YearMonth;
-	static setPrecision(pd: PartialDate, precision: "day", mode: "low" | "high"): PartialDate.YearMonthDay;
-	static setPrecision(pd: PartialDate, precision: "time", mode: "low" | "high"): PartialDate.YearMonthDayTime;
-	static setPrecision(pd: PartialDate, precision: PartialDate.Precision, mode?: "low" | "high"): PartialDate {
-		let { year, month, day, hour, minute, timezone } = this.parse(pd) as PartialDate.Parsed.Fields;
-		month ??= mode === "low" ? 1 : 12;
-		day ??= mode === "low" ? 1 : new Temporal.PlainYearMonth(year, month).daysInMonth;
-		hour ??= mode === "low" ? 0 : 23;
-		minute ??= mode === "low" ? 0 : 59;
+	static setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "year"): PartialDate.YearOnly;
+	static setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "month", mode: "low" | "high"): PartialDate.YearMonth;
+	static setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "day", mode: "low" | "high"): PartialDate.YearMonthDay;
+	static setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "time", mode: "low" | "high"): PartialDate.YearMonthDayTime;
+	static setPrecision(pd: PartialDate | PartialDate.Parsed, precision: PartialDate.Precision, mode?: "low" | "high"): PartialDate {
+		const parsed = (typeof pd === "string" ? this.parse(pd) : pd) as PartialDate.Parsed;
+		let { year, month, day, hour, minute, timezone } = parsed as PartialDate.Parsed.Fields;
+
+		if (mode) {
+			if (parsed.precision === "year")
+				month = mode === "low" ? 1 : 12;
+			if (parsed.precision === "year" || parsed.precision === "month")
+				day = mode === "low" ? 1 : new Temporal.PlainYearMonth(year, month).daysInMonth;
+
+			if (parsed.precision !== "time") {
+				hour = mode === "low" ? 0 : 23;
+				minute = mode === "low" ? 0 : 59;
+			}
+		}
+
 		switch (precision) {
 			case "year": return this.format({ year, timezone, precision: "year" });
 			case "month": return this.format({ year, month, timezone, precision: "month" });
@@ -198,6 +212,67 @@ export class PartialDateUtil {
 		return this.asPlainDateTime(parsed).toZonedDateTime(parsed.timezone);
 	}
 
+	static asFormattableTemporal(pd: PartialDate | PartialDate.Parsed): Intl.FormattableTemporalObject {
+		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
+		let temporal: Intl.FormattableTemporalObject;
+		switch (parsed.precision) {
+			case "year": temporal = new Temporal.PlainYearMonth(parsed.year, 1); break;
+			case "month": temporal = PartialDateUtil.asPlainYearMonth(parsed); break;
+			case "day": temporal = PartialDateUtil.asPlainDate(parsed); break;
+			case "time": temporal = PartialDateUtil.asZonedDateTime(parsed).toInstant(); break;
+		}
+		return temporal;
+	}
+
+	// == Temporal.Instant conversions ==
+
+	static toInstant(pd: PartialDate | PartialDate.Parsed, mode: "low" | "high"): Temporal.Instant {
+		const full = this.setPrecision(pd, "time", mode);
+		return this.asZonedDateTime(full).toInstant();
+	}
+
+	// == Comparision methods ==
+
+	/**
+	 * Checks if PartialDate {@link a} is strictly before PartialDate {@link b}.
+	 * This is true if the latest possible time represented by {@link a} is before the earliest possible time represented by {@link b}.
+	 */
+	static isBefore(a: PartialDate | PartialDate.Parsed, b: PartialDate | PartialDate.Parsed): boolean {
+		return Temporal.Instant.compare(this.toInstant(a, "high"), this.toInstant(b, "low")) < 0;
+	}
+
+	/**
+	 * Checks if PartialDate {@link a} is strictly after PartialDate {@link b}
+	 * This is true if the earliest possible time represented by {@link a} is after the latest possible time represented by {@link b}
+	 */
+	static isAfter(a: PartialDate | PartialDate.Parsed, b: PartialDate | PartialDate.Parsed): boolean {
+		return Temporal.Instant.compare(this.toInstant(a, "low"), this.toInstant(b, "high")) > 0;
+	}
+
+	/**
+	 * Checks if PartialDate {@link inner} is contained within PartialDate {@link outer}
+	 * This is true if both:
+	 * - The earliest possible time represented by {@link inner} is after the earliest possible time represented by {@link outer}
+	 * - And the latest possible time represented by {@link inner} is before the latest possible time represented by {@link outer}
+	 * inner ----==----
+	 * outer --======--
+	 */
+	static isContainedIn(inner: PartialDate | PartialDate.Parsed, outer: PartialDate | PartialDate.Parsed): boolean {
+		return Temporal.Instant.compare(this.toInstant(inner, "low"), this.toInstant(outer, "low")) >= 0 && Temporal.Instant.compare(this.toInstant(inner, "high"), this.toInstant(outer, "high")) <= 0;
+	}
+
+	/**
+	 * Checks if PartialDate {@link a} intersects with PartialDate {@link b}
+	 * This is true if either:
+	 * - The earliest possible time represented by {@link a} is before the latest possible time represented by {@link b}
+	 * - And the latest possible time represented by {@link a} is after the earliest possible time represented by {@link b}
+	 * a --==---
+	 * b ---==--
+	 */
+	static intersects(a: PartialDate | PartialDate.Parsed, b: PartialDate | PartialDate.Parsed): boolean {
+		return Temporal.Instant.compare(this.toInstant(a, "low"), this.toInstant(b, "high")) < 0 && Temporal.Instant.compare(this.toInstant(a, "high"), this.toInstant(b, "low")) > 0;
+	}
+
 	// == Humanization methods ==
 
 	static toLocaleString(pd: PartialDate | PartialDate.Parsed, locales: string[] = ["en"]): string {
@@ -206,7 +281,7 @@ export class PartialDateUtil {
 			case "year": return parsed.year.toString();
 			case "month": return this.asPlainYearMonth(parsed).toLocaleString(locales, { year: "numeric", month: "long" });
 			case "day": return this.asPlainDate(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric" });
-			case "time": return this.asZonedDateTime(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
+			case "time": return this.asZonedDateTime(parsed).toInstant().toLocaleString(locales, { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
 		}
 	}
 }

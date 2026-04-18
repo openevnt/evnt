@@ -5,7 +5,6 @@ import { focusAtom } from "jotai-optics";
 import { TranslationsInput } from "../../../base/input/TranslationsInput";
 import { ClearableSwitch } from "../../../base/input/ClearableSwitch";
 import { PartialDateInput } from "../../../base/input/PartialDateInput";
-import { UtilPartialDate } from "~/lib/util/schema-utils";
 import { useMemo } from "react";
 
 export const EditComponentLink = ({ data }: { data: EditAtom<LinkComponent> }) => {
@@ -60,10 +59,9 @@ export const EditComponentLink = ({ data }: { data: EditAtom<LinkComponent> }) =
 								{field == "opensAt" ? "When the link starts being available" : "When the link stops being available; such as the end of registrations"}
 							</Input.Description>
 						</Stack>
-						<DeatomOptional
+						<Deatom
 							component={PartialDateInput}
 							atom={field === "opensAt" ? opensAtAtom : closesAtAtom}
-							set={() => UtilPartialDate.thisMonth()}
 						/>
 					</Stack>
 				))}
