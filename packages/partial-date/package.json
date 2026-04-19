@@ -1,14 +1,12 @@
 {
 	"name": "@evnt/partial-date",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Utility for handling OpenEvnt PartialDate values",
 	"type": "module",
 	"scripts": {
 		"build": "tsc"
 	},
-	"exports": {
-		".": "./src/index.ts"
-	},
+	"main": "./src/index.ts",
 	"publishConfig": {
 		"main": "./dist/index.js",
 		"types": "./dist/index.d.ts"

@@ -1,14 +1,12 @@
 {
 	"name": "@evnt/translations",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Utility for handling OpenEvnt Translations type",
 	"type": "module",
 	"scripts": {
 		"build": "tsc"
 	},
-	"exports": {
-		".": "./src/index.ts"
-	},
+	"main": "./src/index.ts",
 	"publishConfig": {
 		"main": "./dist/index.js",
 		"types": "./dist/index.d.ts"

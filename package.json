@@ -1,6 +1,6 @@
 {
 	"private": true,
-	"packageManager": "pnpm@11.0.0-rc.0",
+	"packageManager": "pnpm@11.0.0-rc.2",
 	"scripts": {
 		"test": "vitest"
 	},

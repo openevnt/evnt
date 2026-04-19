@@ -1,6 +1,6 @@
 {
 	"name": "@evnt/convert",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"author": "deniz.blue <deniz@deniz.blue>",
 	"keywords": [],
@@ -18,11 +18,13 @@
 		"./schema-org": "./src/vendor/schema-org/index.ts"
 	},
 	"publishConfig": {
-		".": "./dist/index.js",
-		"./google": "./dist/vendor/google/index.js",
-		"./community-lexicon": "./dist/vendor/community-lexicon/index.js",
-		"./icalendar": "./dist/vendor/icalendar/index.js",
-		"./schema-org": "./dist/vendor/schema-org/index.js",
+		"exports": {
+			".": "./dist/index.js",
+			"./google": "./dist/vendor/google/index.js",
+			"./community-lexicon": "./dist/vendor/community-lexicon/index.js",
+			"./icalendar": "./dist/vendor/icalendar/index.js",
+			"./schema-org": "./dist/vendor/schema-org/index.js"
+		},
 		"types": "./dist/index.d.ts"
 	},
 	"devDependencies": {
