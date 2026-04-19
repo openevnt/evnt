@@ -138,21 +138,6 @@ export const snippetVenue = (venue: Venue, detailed?: boolean): TSnippet => {
 	};
 };
 
-export const venueGoogleMapsLink = (venue: Venue): string | null => {
-	if (venue.$type !== "directory.evnt.venue.physical") return null;
-	// if (venue.googleMapsPlaceId) return `https://www.google.com/maps/place/?${new URLSearchParams({ q: `place_id:${venue.googleMapsPlaceId}` }).toString()}`;
-	if (venue.coordinates) return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: `${venue.coordinates.lat},${venue.coordinates.lng}` }).toString()}`;
-	if (venue.address?.addr) return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: venue.address.addr }).toString()}`;
-	return null;
-}
-
-export const venueOpenStreetMapsLink = (venue: Venue): string | null => {
-	if (venue.$type !== "directory.evnt.venue.physical") return null;
-	if (venue.coordinates) return `https://www.openstreetmap.org/?mlat=${venue.coordinates.lat}&mlon=${venue.coordinates.lng}#map=18/${venue.coordinates.lat}/${venue.coordinates.lng}`;
-	if (venue.address?.addr) return `https://www.openstreetmap.org/search?${new URLSearchParams({ query: venue.address.addr }).toString()}`;
-	return null;
-}
-
 export const snippetInstances = (instances: EventInstance[], maxInstances?: number): TSnippet[] => {
 	let snippets: TSnippet[] = [];
 

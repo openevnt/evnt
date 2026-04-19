@@ -1,14 +1,13 @@
-export const indexhtml = () => {
-    const redirector = "https://eventsl.ink";
+import * as github from "@actions/github";
 
-    return (
-        `<!DOCTYPE html>
+export const indexhtml = () => {
+	const redirector = "https://eventsl.ink";
+
+	return (
+		`<!DOCTYPE html>
             <script>
-                window.location = ${JSON.stringify(redirector)} + "/?" + new URLSearchParams({
-                    action: "view-index",
-                    index: window.location.hostname + window.location.pathname + (window.location.pathname.endsWith("/") ? ".index.json" : "/.index.json"),
-                }).toString();
+                window.location = "https://github.com/${github.context.repo.owner}/${github.context.repo.repo}";
             </script>
         </html>`
-    );
+	);
 };

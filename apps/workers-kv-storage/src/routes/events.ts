@@ -1,8 +1,8 @@
 import { EventData, EventDataSchema } from "@evnt/schema";
 import { Context, Hono } from "hono";
-import { JsonPatchSchema } from "@evnt/json-patch-schema";
 import { zValidator } from "@hono/zod-validator";
 import { cors } from "hono/cors";
+import z from "zod";
 
 type Email = `${string}@${string}.${string}`;
 type Everyone = "*";
@@ -112,7 +112,7 @@ export const events = new Hono<{ Bindings: CloudflareBindings }>()
 	)
 	.patch(
 		"/:id",
-		zValidator("json", JsonPatchSchema),
+		zValidator("json", z.any()), // TODO: Define a JSON Patch schema
 		async (c) => {
 			const id = c.req.param("id");
 			const patches = c.req.valid("json");

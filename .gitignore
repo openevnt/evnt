@@ -13,3 +13,4 @@ dist
 *.idsig
 manifest-checksum.txt
 .npmrc
+*.tgz

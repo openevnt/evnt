@@ -20,7 +20,7 @@ export class VenueBuilder<Type extends VenueType = VenueType> {
 	}
 
 	setRandomId() {
-		this.venue.id = crypto.randomUUID();
+		this.venue.id = Math.random().toString(36).slice(2);
 		return this;
 	}
 }

@@ -10,7 +10,6 @@ import { useLocaleStore } from "../../../../stores/useLocaleStore";
 import { TimeSnippetLabel } from "../../datetime/TimeSnippetLabel";
 import { TimeRangeSnippetLabel } from "../../datetime/TimeRangeSnippetLabel";
 import { PartialDateSnippetLabel } from "../../datetime/PartialDateSnippetLabel";
-import { venueGoogleMapsLink, venueOpenStreetMapsLink } from "@evnt/pretty";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { TranslationsUtil } from "@evnt/translations";
 
@@ -147,6 +146,21 @@ export const MiniBoxInstance = ({ instance }: { instance: EventInstance }) => {
 		/>
 	);
 };
+
+export const venueGoogleMapsLink = (venue: Venue): string | null => {
+	if (venue.$type !== "directory.evnt.venue.physical") return null;
+	// if (venue.googleMapsPlaceId) return `https://www.google.com/maps/place/?${new URLSearchParams({ q: `place_id:${venue.googleMapsPlaceId}` }).toString()}`;
+	if (venue.coordinates) return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: `${venue.coordinates.lat},${venue.coordinates.lng}` }).toString()}`;
+	if (venue.address?.addr) return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: venue.address.addr }).toString()}`;
+	return null;
+}
+
+export const venueOpenStreetMapsLink = (venue: Venue): string | null => {
+	if (venue.$type !== "directory.evnt.venue.physical") return null;
+	if (venue.coordinates) return `https://www.openstreetmap.org/?mlat=${venue.coordinates.lat}&mlon=${venue.coordinates.lng}#map=18/${venue.coordinates.lat}/${venue.coordinates.lng}`;
+	if (venue.address?.addr) return `https://www.openstreetmap.org/search?${new URLSearchParams({ query: venue.address.addr }).toString()}`;
+	return null;
+}
 
 export const MiniBoxVenue = ({ venue }: { venue: Venue }) => {
 	let icon = <IconWorldPin />;

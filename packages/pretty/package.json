@@ -1,13 +1,15 @@
 {
 	"name": "@evnt/pretty",
 	"version": "0.0.1",
-	"private": true,
 	"type": "module",
-	"author": "deniz.blue",
+	"author": "deniz.blue <deniz@deniz.blue>",
 	"keywords": [],
 	"files": [
 		"/dist"
 	],
+	"scripts": {
+		"build": "tsc"
+	},
 	"exports": {
 		".": "./src/index.ts",
 		"./markdown": "./src/markdown/index.ts"
@@ -22,8 +24,7 @@
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
-		"tsx": "^4.21.0",
-		"typescript": "^5.6.3"
+		"typescript": "^6.0.3"
 	},
 	"dependencies": {
 		"@evnt/partial-date": "workspace:*",

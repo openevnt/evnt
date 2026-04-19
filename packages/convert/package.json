@@ -2,12 +2,14 @@
 	"name": "@evnt/convert",
 	"version": "0.0.1",
 	"type": "module",
-	"author": "deniz.blue",
-	"private": true,
+	"author": "deniz.blue <deniz@deniz.blue>",
 	"keywords": [],
 	"files": [
 		"/dist"
 	],
+	"scripts": {
+		"build": "tsc"
+	},
 	"exports": {
 		".": "./src/index.ts",
 		"./google": "./src/vendor/google/index.ts",
@@ -15,25 +17,30 @@
 		"./icalendar": "./src/vendor/icalendar/index.ts",
 		"./schema-org": "./src/vendor/schema-org/index.ts"
 	},
-	"scripts": {
-		"gen": "tsx ./scripts/gen.ts"
+	"publishConfig": {
+		".": "./dist/index.js",
+		"./google": "./dist/vendor/google/index.js",
+		"./community-lexicon": "./dist/vendor/community-lexicon/index.js",
+		"./icalendar": "./dist/vendor/icalendar/index.js",
+		"./schema-org": "./dist/vendor/schema-org/index.js",
+		"types": "./dist/index.d.ts"
 	},
 	"devDependencies": {
-		"@atcute/lex-cli": "^2.5.3",
-		"@atcute/lexicons": "^1.2.9",
+		"@atcute/lex-cli": "^2.8.1",
+		"@atcute/lexicons": "^1.3.0",
 		"@evnt/builder": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
-		"@types/node": "^25.0.6",
+		"@types/node": "^25.6.0",
 		"tsx": "^4.21.0",
-		"typescript": "^5.6.3"
+		"typescript": "^6.0.3"
 	},
 	"dependencies": {
 		"@evnt/partial-date": "workspace:*",
 		"@evnt/schema": "workspace:*",
 		"@evnt/translations": "workspace:*",
-		"googleapis": "^170.0.0",
+		"googleapis": "^171.4.0",
 		"ical.js": "^2.2.1",
 		"schema-dts": "^1.1.5",
-		"zod": "^4.3.5"
+		"zod": "^4.3.6"
 	}
 }

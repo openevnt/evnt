@@ -1,108 +1,145 @@
-import type { PartialDate } from "@evnt/schema";
+import type { PartialDate, Translations } from "@evnt/schema";
 import { PartialDateUtil } from "@evnt/partial-date";
-import type { SnippetIcon, SnippetLabel, TSnippet } from "../core/snippet";
+import type { Range, SnippetIcon, SnippetLabel, TSnippet } from "../core/snippet";
+import { TranslationsUtil } from "@evnt/translations";
 
-export interface Locale {
-	language?: string;
-	timezone?: string;
-};
-
-export const DefaultLocale: Required<Locale> = {
-	language: "en",
-	timezone: "UTC",
-};
-
-export const getClockEmoji = (time: string) => {
-	const [hours, minutes] = time.split(":").map(Number);
-	let hour12 = (hours ?? 0) % 12 || 12;
-	const base = ((minutes ?? 0) >= 30) ? 0x1F55C : 0x1F550;
-	return String.fromCodePoint(base + hour12 - 1);
-};
-
-const partialDateToIntlString = (value: PartialDate, locale: string, timezone: string): string => {
-	const parsed = PartialDateUtil.parse(value);
-	const date = new Date(Date.UTC(
-		parsed.year,
-		"month" in parsed ? parsed.month - 1 : 0,
-		"day" in parsed ? parsed.day : 1,
-		"hour" in parsed ? parsed.hour : 0,
-		"minute" in parsed ? parsed.minute : 0,
-	));
-
-	if (parsed.precision === "year") {
-		return new Intl.DateTimeFormat(locale, { year: "numeric", timeZone: timezone }).format(date);
+export class Emojis {
+	static clock(time: string) {
+		const [hours, minutes] = time.split(":").map(Number);
+		let hour12 = (hours ?? 0) % 12 || 12;
+		const base = ((minutes ?? 0) >= 30) ? 0x1F55C : 0x1F550;
+		return String.fromCodePoint(base + hour12 - 1);
 	}
 
-	if (parsed.precision === "month") {
-		return new Intl.DateTimeFormat(locale, { year: "numeric", month: "long", timeZone: timezone }).format(date);
+	static country(countryCode: string) {
+		return String.fromCodePoint(...countryCode.toUpperCase()
+			.split("")
+			.map(char => 127397 + char.charCodeAt(0)));
+	}
+}
+
+export class MarkdownSnippets {
+	language: string = "en";
+	timezone: string = "UTC";
+	flavor: null | "github" | "discord" = null;
+
+	translate(text: Translations) {
+		return TranslationsUtil.translate(text, [this.language]);
 	}
 
-	if (parsed.precision === "day") {
-		return new Intl.DateTimeFormat(locale, { year: "numeric", month: "short", day: "numeric", timeZone: timezone }).format(date);
+	link(url: string, name?: string) {
+		return name ? `[${name}](${url})` : url;
 	}
 
-	return new Intl.DateTimeFormat(locale, {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-		hour12: false,
-		timeZone: timezone,
-	}).format(date);
-};
-
-export const snippetLabelToMarkdown = (label: SnippetLabel, locale: Locale = DefaultLocale): string => {
-	if (label.type === "text") return label.value;
-	if (label.type === "placeholder") switch (label.hint) {
-		case "unknown": return "Unknown";
-		case "unnamed": return "Unnamed";
+	subtext(str: string) {
+		if (this.flavor === "discord")
+			return str.split("\n").map(line => `-# ${line}`).join("\n");
+		return str;
 	}
-	if (label.type === "translations")
-		return label.value[locale.language || DefaultLocale.language] || label.value[Object.keys(label.value)[0]!] || "";
-	if (label.type === "external-link")
-		return label.name ? `[${label.name}](${label.url})` : label.url;
-	if (label.type === "address")
-		return (label.value.addr ?? "") + (label.value.countryCode ? (" " + (
-			String.fromCodePoint(...label.value.countryCode.toUpperCase()
-				.split("")
-				.map(char => 127397 + char.charCodeAt(0)))
-		)) : "");
 
-	if (label.type === "partial-date" || label.type === "date-time") return partialDateToIntlString(
-		label.value,
-		locale.language || DefaultLocale.language,
-		locale.timezone || DefaultLocale.timezone,
-	) + (PartialDateUtil.has(label.value, "time") ? ` (${locale.timezone || DefaultLocale.timezone})` : "");
+	icon(icon: SnippetIcon, label?: SnippetLabel) {
+		if (icon === "clock" && label?.type === "time")
+			return Emojis.clock(label.value); // TODO: timezones...
+		if (icon === "calendar") return "📅";
+		if (icon === "venue-online") return "🌐";
+		if (icon === "venue-physical" || icon === "venue-mixed" || icon === "venue-unknown")
+			return "📍";
+		return "";
+	}
 
-	if (label.type === "time") return `${label.value} (${locale.timezone || DefaultLocale.timezone})`;
+	snippet(snippet: TSnippet) {
+		const emoji = snippet.icon ? this.icon(snippet.icon, snippet.label) : "";
+		const label = snippet.label ? this.label(snippet.label) : "";
+		return [emoji, label].filter(Boolean).join(" ");
+	}
 
-	if (label.type === "time-range") return `${label.value.start.value} - ${label.value.end.value} (${locale.timezone || DefaultLocale.timezone})`;
+	label(label: SnippetLabel): string {
+		if (label.type === "text") return label.value;
 
-	if (label.type === "date-time-range") return `${partialDateToIntlString(
-		label.value.start,
-		locale.language || DefaultLocale.language,
-		locale.timezone || DefaultLocale.timezone,
-	)} - ${partialDateToIntlString(
-		label.value.end,
-		locale.language || DefaultLocale.language,
-		locale.timezone || DefaultLocale.timezone,
-	)} (${locale.timezone || DefaultLocale.timezone})`;
+		if (label.type === "placeholder") switch (label.hint) {
+			case "unknown": return "Unknown";
+			case "unnamed": return "Unnamed";
+			default: return "";
+		}
 
-	return "";
-};
+		if (label.type === "translations")
+			return this.translate(label.value);
 
-export const snippetToMarkdown = (snippet: TSnippet, locale: Locale = DefaultLocale): string => {
-	let emoji = snippet.icon ? ({
-		clock: getClockEmoji(snippet.label?.type === "time" ? snippet.label.value : "00:00"),
-		calendar: "📅",
-		"venue-online": "🌐",
-		"venue-physical": "📍",
-		"venue-mixed": "📍",
-		"venue-unknown": "📍",
-	} as Record<SnippetIcon, string>)[snippet.icon] : "";
+		if (label.type === "external-link")
+			return this.link(label.url, label.name);
 
-	let label = snippet.label ? snippetLabelToMarkdown(snippet.label, locale) : "";
+		if (label.type === "address")
+			return (label.value.addr ?? "") + (label.value.countryCode ? (" " + Emojis.country(label.value.countryCode)) : "");
 
-	return [emoji, label].filter(Boolean).join(" ");
-};
+		if (label.type === "partial-date" || label.type === "date-time")
+			return this.partialDate(label.value);
+
+		if (label.type === "time")
+			return this.time(label.value);
+
+		if (label.type === "time-range")
+			return this.timeRange(label.value);
+
+		if (label.type === "date-time-range")
+			return this.partialDateRange(label.value);
+
+		const _exhaustiveCheck: never = label;
+		return "";
+	}
+
+	partialDate(value: PartialDate) {
+		const parsed = PartialDateUtil.parse(value);
+		const temporal = PartialDateUtil.asFormattableTemporal(parsed);
+
+		const fmt = new Intl.DateTimeFormat(this.language, {
+			year: "numeric",
+			month: PartialDateUtil.has(value, "month") ? "long" : undefined,
+			day: PartialDateUtil.has(value, "day") ? "numeric" : undefined,
+			hour: PartialDateUtil.has(value, "time") ? "numeric" : undefined,
+			minute: PartialDateUtil.has(value, "time") ? "numeric" : undefined,
+			calendar: "iso8601",
+			hour12: false,
+			timeZone: parsed.timezone,
+		});
+
+		const str = fmt.format(temporal);
+
+		if (parsed.precision === "time" && parsed.timezone !== this.timezone) {
+			const localizedFmt = new Intl.DateTimeFormat(this.language, {
+				hour: "numeric",
+				minute: "numeric",
+				hour12: false,
+				timeZone: this.timezone,
+			});
+			const localizedTime = localizedFmt.format(PartialDateUtil.asZonedDateTime(parsed).toInstant());
+			return `${str} (${localizedTime})`;
+		}
+
+		return str;
+	}
+
+	partialDateRange(value: Range<PartialDate>) {
+		return this.partialDate(value.start) + " - " + this.partialDate(value.end);
+	}
+
+	time(value: PartialDate.YearMonthDayTime) {
+		const parsed = PartialDateUtil.parse(value);
+		const sameTimezone = parsed.timezone === this.timezone;
+		const time = PartialDateUtil.asPlainDateTime(parsed).toLocaleString(this.language, {
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: false,
+		});
+		const localizedTime = PartialDateUtil.asZonedDateTime(parsed).toInstant().toLocaleString(this.language, {
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: false,
+			timeZone: this.timezone,
+		});
+		return `${time}${!sameTimezone && (time !== localizedTime) ? ` (${localizedTime})` : ""}`;
+	}
+
+	timeRange(value: Range<PartialDate.YearMonthDayTime>) {
+		return this.time(value.start) + " - " + this.time(value.end);
+	}
+}
