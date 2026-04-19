@@ -134,6 +134,5 @@ export const convertToSchemaOrg = (
 		"@context": "https://schema.org",
 		"@type": "Event",
 		name: t(data.name),
-
 	};
 };
