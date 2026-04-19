@@ -1,9 +1,0 @@
-.instance-card {
-	background: var(--mantine-color-dark-7);
-	transition: all 150ms ease;
-}
-
-.instance-card:hover {
-	background: var(--mantine-color-dark-6);
-	scale: 1.02;
-}

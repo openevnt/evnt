@@ -1,3 +1,0 @@
-# opener
-
-opens links
