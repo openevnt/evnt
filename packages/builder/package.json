@@ -1,6 +1,6 @@
 {
 	"name": "@evnt/builder",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"author": "deniz.blue <deniz@deniz.blue>",
 	"keywords": [],
@@ -21,11 +21,11 @@
 		}
 	},
 	"devDependencies": {
-		"@repo/typescript-config": "workspace:*",
+		"@repo/typescript-config": "workspace:^",
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.3"
 	},
 	"dependencies": {
-		"@evnt/schema": "workspace:*"
+		"@evnt/schema": "workspace:^"
 	}
 }

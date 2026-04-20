@@ -1,51 +1,44 @@
-# <img src="https://github.com/deniz-blue/md-emojis/raw/main/emojis/denizblue/evnt.svg" width="32px" /> @evnt
+# <img src="https://github.com/deniz-blue/md-emojis/raw/main/emojis/denizblue/evnt.svg" width="32px" /> Open Evnt
 
-A **standardized**, **open-source** data **format** for representing and sharing event data across different applications.
+[![](https://shields.io/badge/join_the-discord-blue)](https://deniz.blue/discord-invite?id=1493641727980994710)
 
-_Links:_
+A modern data format for events.
 
-- [About & Differences from other formats](./docs/ABOUT.md)
-- 📱 [Applications](#applications)
-- 📅 [ATProto](#atproto)
-- 📅 [Event Repositories](#event-repositories)
-- 📜 [Data Format Specification](./docs/README.md)
-  - [@evnt/schema](./packages/schema/) package
-  - [JSON Schema](./event-data.schema.json) _(generated)_
-  - [Markdown Documentation](./docs/SCHEMA.md) _(generated)_
-  - [ATProto Lexicon](./event-data.lexicon.json) _(generated, also bad)_
-- 🔗 [Event Source](./docs/SOURCE.md)
-- 🔗 [Application Links Format](./docs/LINKS.md) _eventsl.ink_
+This monorepo contains a lot of things:
 
-## Applications
+__Specification__: The data format specification document, [**can be found here**](./docs/README.md). There's also:
 
-- [Application Selector](https://eventsl.ink) (eventsl.ink)
+- [JSON Schema](./event-data.schema.json) of the data format
+- [Markdown documentation](./docs/SCHEMA.md) which is generated from the JSON Schema
+- [AT Protocol Lexicons](./lexicons/)
 
-| Name                                      | Description     | Plat.                                                                                                                 | Lang.    | Source Code                                                 |
-|-------------------------------------------|-----------------|-----------------------------------------------------------------------------------------------------------------------|----------|-------------------------------------------------------------|
-| **[Vantage](https://vantage.deniz.blue)** | Example Web App | 🌐                                                                                                                    | TS+React | [./apps/web](./apps/vantage)                                |
-| **Event Viewer**                          | Kuylar's WIP    | <img src="https://github.com/deniz-blue/md-emojis/raw/main/emojis/platform/android.svg" align="center" height="24" /> | Kotlin   | [kuylar/EventViewer](https://github.com/kuylar/EventViewer) |
+__Packages__: We publish a few packages to make it easier to work with the data format:
 
-Applications are the different clients that can be used to view and interact with events.
+- [@evnt/schema](./packages/schema/): Types and Zod validation
+- [@evnt/partial-date](./packages/partial-date/): Helpers for working with partial dates using Temporal API
+- [@evnt/translations](./packages/translations/): Helper for working with Translations type
+- [@evnt/convert](./packages/convert/): Converters between Open Evnt and other formats (such as iCalendar, Community Lexicon, schema.org, etc.)
+- [@evnt/pretty](./packages/pretty/): Opinionated helpers for pretty-printing of event data
 
-Applications share links to the application selector (eventsl.ink)
+__Applications__
 
-Events can be served over **HTTP** or [ATProto](https://atproto.com).
+- [landing](./apps/landing/): A landing page for the project hosted at https://evnt.directory
 
-## ATProto
+__Related Projects__: Not on this repository;
 
-Event data can be served over [ATProto](https://atproto.com) using the `at://` URI scheme. This allows events to be stored as ATProto records, which can be easily shared and discovered within the ATProto ecosystem. We use the `directory.evnt.event` collection for event records, but this is not strictly required. The content of the record should be the `EventData` schema.
+- [eventsl.ink](https://github.com/openevnt/eventslink): Share event links independently of the website or platform it's on
+- [Vantage](https://github.com/deniz-blue/vantage): Proof-of-concept calendar application built on top of Open Evnt
 
-## Event Repositories
+## Contributing
 
-An easy way to share and distribute event data is through event repositories which use GitHub pages. You can use [this template repository](https://github.com/deniz-blue/events-repo-template) to create your own event repository.
+### Contributing to the specification
 
-A list of event repositories:
-- [deniz-blue/events-data](https://github.com/deniz-blue/events-data): FOSS, tech, other public events.
-- [deniz-blue/events-data-scraped](https://github.com/deniz-blue/events-data-scraped): Scraped event data from various sources.
+The specification is open for contributions! If you have suggestions for improvements or want to add something, feel free to open an issue or a pull request.
 
-_Open an issue or PR to add your event repository to this list_
+When making a pull request, only update `docs/README.md`, `packages/schema` and `lexicons-src`. The JSON Schema and the Markdown documentation will be generated from these files.
 
-## Relevant XKCD
+### Contributing to the code
 
-![](https://imgs.xkcd.com/comics/standards.png)
+This monorepo uses pnpm as the package manager. Run `pnpm install` to install dependencies.
 
+You can run tests using `pnpm test`. We use Vitest for testing.
