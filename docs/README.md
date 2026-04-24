@@ -113,8 +113,7 @@ __Invalid examples:__
 __ABNF Notation:__
 
 ```
-partial-date = date [ "T" time ] [ "[" timezone "]" ]
-date = year [ "-" month [ "-" day ] ]
+partialdate = year [ "-" month [ "-" day [ "T" time ] ] ] "[" timezone "]"
 time = hour ":" minute
 year = 4DIGIT
 month = 2DIGIT ; 01-12
