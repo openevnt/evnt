@@ -36,10 +36,6 @@ export const ExampleSection = () => {
 									addr: "123 Main St, Anytown, USA",
 									postalCode: "12345",
 								},
-								coordinates: {
-									lat: 40.7128,
-									lng: -74.006,
-								},
 							},
 						],
 						instances: [

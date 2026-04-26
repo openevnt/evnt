@@ -2,12 +2,13 @@ import { Anchor, Button, Code, List, Stack, Text } from "@mantine/core";
 import { Section } from "../Section";
 import { CodeHighlight, CodeHighlightTabs } from "@mantine/code-highlight";
 import { IconExternalLink } from "@tabler/icons-react";
+import { Titlecard } from "../Titlecard";
 
 export const SpecificationSection = () => {
 	return (
 		<Section title="Specification">
 			<Text>
-				You can find the specification for Evnt in <Anchor href="https://github.com/openevnt/evnt/blob/main/docs/README.md" target="_blank" rel="noopener noreferrer">
+				You can find the specification document for <Titlecard /> in <Anchor href="https://github.com/openevnt/evnt/blob/main/docs/README.md" target="_blank" rel="noopener noreferrer">
 					docs/README.md
 				</Anchor> file in the GitHub repository.
 			</Text>
@@ -26,11 +27,20 @@ export const SpecificationSection = () => {
 			</Stack>
 
 			<Text>
-				We have a npm package for the schema that uses <Anchor href="https://zod.dev" target="_blank" rel="noopener noreferrer">
-					Zod
-				</Anchor> and provides TypeScript types as well as runtime validation. You can find it on npm as <Anchor href="https://www.npmjs.com/package/@evnt/schema" target="_blank" rel="noopener noreferrer">
-					@evnt/schema
-				</Anchor>.
+				The specification is also published as a JSON Schema, which can be found in <Anchor href="https://github.com/openevnt/evnt/blob/main/event-data.schema.json" target="_blank" rel="noopener noreferrer">
+					event-data.schema.json
+				</Anchor>. You can also use the raw link to the JSON Schema as a <Code>$schema</Code> reference in your own JSON Schema documents:
+			</Text>
+
+			<CodeHighlight
+				styles={{
+					code: { paddingRight: 60 },
+				}}
+				code="https://raw.githubusercontent.com/openevnt/evnt/refs/heads/main/event-data.schema.json"
+			/>
+
+			<Text>
+				We also publish various npm packages for working with <Titlecard />, such as <Code>@evnt/schema</Code> which provides Zod schema definitions or <Code>@evnt/partial-date</Code> which contains utilities for working with partial dates.
 			</Text>
 
 			<CodeHighlightTabs
@@ -40,35 +50,6 @@ export const SpecificationSection = () => {
 					{ language: "bash", code: "yarn add @evnt/schema", fileName: "yarn" },
 				]}
 			/>
-
-			<Text>
-				We also auto-generate a couple things using the <Code>@evnt/schema</Code> code:
-			</Text>
-
-			<List spacing="xl">
-				<List.Item>
-					<Text>
-						A <Text span fw="bold">JSON Schema</Text> for the event data, which can be used for validation and type generation. You can find it in <Anchor href="https://github.com/openevnt/evnt/blob/main/event-data.schema.json" target="_blank" rel="noopener noreferrer">
-							event-data.schema.json
-						</Anchor>. Here's a raw link you can use as <Code>$schema</Code>:
-					</Text>
-				</List.Item>
-
-				<CodeHighlight
-					styles={{
-						code: { paddingRight: 60 },
-					}}
-					code="https://raw.githubusercontent.com/openevnt/evnt/refs/heads/main/event-data.schema.json"
-				/>
-
-				<List.Item>
-					<Text>
-						A <Anchor href="https://github.com/openevnt/evnt/blob/main/docs/SCHEMA.md" target="_blank" rel="noopener noreferrer">
-							markdown document
-						</Anchor> that documents all the type information.
-					</Text>
-				</List.Item>
-			</List>
 		</Section>
 	);
 };

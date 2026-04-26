@@ -1,20 +1,18 @@
 import { Anchor, Button, Code, Group, List, Text } from "@mantine/core";
 import { Section } from "../Section";
 import { IconExternalLink } from "@tabler/icons-react";
+import { Titlecard } from "../Titlecard";
 
 export const ATProtoSection = () => {
 	return (
-		<Section title="ATProto">
+		<Section title="AT Protocol">
 			<Text>
-				The Evnt format is compatible with <Anchor href="https://atproto.com" target="_blank" rel="noopener noreferrer">
-					ATProto
-				</Anchor>.
+				Open Evnt can be used with the <Anchor href="https://atproto.com" target="_blank" rel="noopener noreferrer">
+					AT Protocol
+				</Anchor>!
 			</Text>
 			<Text>
-				Applications should use the <Code>directory.evnt.event</Code> collection for events.
-			</Text>
-			<Text>
-				You can find the lexicons below! Keep in mind that <Code>Translations</Code> type is not supported in lexicons so they are marked as <Code>unknown</Code> in the lexicon.
+				We publish lexicons for Open Evnt under the <Code>directory.evnt</Code> namespace, and they can be found on PDSls and GitHub.
 			</Text>
 			<Group justify="center">
 				<Button
@@ -37,17 +35,14 @@ export const ATProtoSection = () => {
 				</Button>
 			</Group>
 			<Text>
-				Currently the standard collection for events is the <Anchor component="a" href="https://github.com/lexicon-community/lexicon/blob/main/community/lexicon/calendar/event.json" target="_blank" rel="noopener noreferrer">
+				The widely used <Anchor component="a" href="https://github.com/lexicon-community/lexicon/blob/main/community/lexicon/calendar/event.json" target="_blank" rel="noopener noreferrer">
 					<Code>community.lexicon.calendar.event</Code>
-				</Anchor> lexicon. Open Evnt and the community lexicons are not fully compatible.
+				</Anchor> lexicon and <Titlecard /> are incompatible.
 			</Text>
 			<Text>
-				Applications wishing to support both lexicons can use the same TID and do conversion between the formats.
-			</Text>
-			<Text>
-				The <Anchor component="a" href="https://github.com/lexicon-community/lexicon/blob/main/community/lexicon/calendar/event.json" target="_blank" rel="noopener noreferrer">
+				<Anchor component="a" href="https://github.com/lexicon-community/lexicon/blob/main/community/lexicon/calendar/event.json" target="_blank" rel="noopener noreferrer">
 					<Code>community.lexicon.calendar.rsvp</Code>
-				</Anchor> lexicons can be used for RSVPs since <Code>subject</Code> field is a <Code>com.atproto.repo.strongRef</Code> and allows referencing the event in the <Code>directory.evnt.event</Code> collection.
+				</Anchor> records can be used for RSVPs in AT Protocol.
 			</Text>
 		</Section>
 	);

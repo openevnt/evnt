@@ -6,6 +6,11 @@ import { CodeHighlightAdapterProvider, createShikiAdapter } from "@mantine/code-
 const theme = createTheme({
 	fontFamily: "Lexend, " + DEFAULT_THEME.fontFamily,
 	components: {
+		Button: {
+			defaultProps: {
+				radius: "xl",
+			},
+		},
 		Tooltip: {
 			defaultProps: {
 				color: "dark",

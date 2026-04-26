@@ -1,54 +1,50 @@
-import { Alert, Box, Button, Center, Flex, Group, Paper, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Center, Container, Flex, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import { IconArrowDown, IconExternalLink } from "@tabler/icons-react";
-import type { EventData } from "@evnt/schema";
+import { Titlecard } from "../Titlecard";
 
 export const HeroSection = () => {
-	const exampleData: EventData = {
-		v: "0.1",
-		name: { en: "Some Hackathon" },
-		venues: [
-			{
-				id: "0",
-				name: { en: "Somewhere" },
-				$type: "directory.evnt.venue.physical",
-			},
-			{
-				id: "1",
-				name: { en: "And Online" },
-				$type: "directory.evnt.venue.online",
-				url: "https://example.com",
-			},
-		],
-		instances: [
-			{
-				venueIds: ["0", "1"],
-				start: "2027-03-08T09:00[UTC]",
-				end: "2027-03-08T18:00[UTC]",
-			},
-			{
-				venueIds: ["0", "1"],
-				start: "2027-03-09T09:00[UTC]",
-				end: "2027-03-09T18:00[UTC]",
-			},
-		],
-	};
-
-	const cardPart = (
-		<Stack gap={0}>
-			<Paper withBorder w="calc(min(100%, 400px))" h={200}>
-				<iframe
-					title="Example Event"
-					src={`https://vantage.deniz.blue/embed?${new URLSearchParams({
-						data: JSON.stringify(exampleData),
-					})}`}
-					style={{ border: "none", margin: 0, padding: 0, width: "100%", height: "100%" }}
-				/>
-			</Paper>
-			<Text c="dimmed" fz="xs">
-				Rendered using Vantage
-			</Text>
+	return (
+		<Stack w="100%" justify="center">
+			<Container size="xl" mih="calc(80svh - 60px)" w="100%">
+				<Stack align="start" justify="start" h="100%" w="100%" py="calc(var(--mantine-spacing-xl) * 5)">
+					<Stack align="start" maw="500px" gap="xs">
+						<Group gap="xs">
+							<img src="/favicon.ico" alt="Open Evnt Logo" style={{ height: "32px", verticalAlign: "middle" }} />
+							<Titlecard fw="bold" fz="h2" />
+						</Group>
+						<Title order={1}>
+							A <Text inline inherit span td="underline">modern</Text> data format for social events
+						</Title>
+						<Text>
+							Localizable, extensible and flexible data format for events, designed to be used in a wide range of applications and contexts.
+						</Text>
+						<Group gap={4}>
+							<Button
+								component="a"
+								href="https://github.com/openevnt/evnt/blob/main/docs/README.md"
+								target="_blank"
+								rightSection={<IconExternalLink />}
+								variant="light"
+								color="gray.8"
+							>
+								Specification
+							</Button>
+							<Button
+								component="a"
+								href="#applications"
+								rightSection={<IconArrowDown />}
+								variant="light"
+								color="green"
+							>
+								Apps
+							</Button>
+						</Group>
+					</Stack>
+				</Stack>
+			</Container>
 		</Stack>
-	);
+	)
+
 
 	return (
 		<Flex mih="calc(100svh - 60px)" display="flex" w="100%">
@@ -67,48 +63,13 @@ export const HeroSection = () => {
 								</Stack>
 
 								<Stack gap={4}>
-									<Group gap={4}>
-										<Button
-											component="a"
-											href="https://github.com/openevnt/evnt"
-											target="_blank"
-											rightSection={<IconExternalLink />}
-											variant="light"
-										>
-											GitHub
-										</Button>
-										<Button
-											component="a"
-											href="#applications"
-											rightSection={<IconArrowDown />}
-											variant="light"
-											color="green"
-										>
-											Apps
-										</Button>
-									</Group>
+
 
 									<Group>
-										<Button
-											component="a"
-											href="https://github.com/openevnt/evnt/blob/main/docs/README.md"
-											target="_blank"
-											rightSection={<IconExternalLink />}
-											variant="light"
-											color="gray.8"
-										>
-											Specification
-										</Button>
+
 									</Group>
 								</Stack>
-
-								<Box hiddenFrom="sm">
-									{cardPart}
-								</Box>
 							</Stack>
-							<Box visibleFrom="sm">
-								{cardPart}
-							</Box>
 						</Group>
 					</Stack>
 				</Center>

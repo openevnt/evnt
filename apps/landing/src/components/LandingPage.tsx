@@ -11,19 +11,20 @@ import { ComparisionSection } from "./sections/ComparisionSection";
 
 export const LandingPage = () => {
 	return (
-		<Container size="sm">
-			<Stack gap="10rem" w="100%">
-				<HeroSection />
-				<WhySection />
-				<FeaturesSection />
-				<ApplicationsSection />
-				<SpecificationSection />
-				<ATProtoSection />
-				<ComparisionSection />
-				<ExampleSection />
-				<ValidatorSection />
-				<Space h="100dvh" />
-			</Stack>
-		</Container>
+		<Stack w="100%">
+			<HeroSection />
+			<Container size="md" w="100%">
+				<Stack gap="6rem" w="100%">
+					<WhySection />
+					<FeaturesSection />
+					<ApplicationsSection />
+					<SpecificationSection />
+					<ATProtoSection />
+					<ExampleSection />
+					<ValidatorSection />
+				</Stack>
+			</Container>
+			<Space h="100dvh" />
+		</Stack>
 	)
 };

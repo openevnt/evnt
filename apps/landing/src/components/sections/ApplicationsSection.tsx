@@ -1,78 +1,50 @@
 import { Anchor, Button, Group, ScrollArea, Stack, Table, Text, Tooltip } from "@mantine/core"
 import { Section } from "../Section"
 import { IconBrandReact, IconExternalLink, IconGlobe, IconWorld } from "@tabler/icons-react"
+import { Titlecard } from "../Titlecard"
 
 export const ApplicationsSection = () => {
 	return (
 		<Section title="Applications">
-			<Text>
-				Evnt is still a relatively new project, so there aren't many applications using it yet.
-			</Text>
-
 			<ScrollArea.Autosize scrollbars="x" offsetScrollbars>
 				<Table
 					withTableBorder
 					striped
+					style={{ textWrap: "nowrap" }}
 					data={{
-						caption: "Applications using evnt",
+						caption: "Let us know if you're building an application using Open Evnt!",
 						head: [
 							"Application",
 							"Description",
-							"",
 							"Source",
 						],
 						body: [
 							[
 								<Anchor href="https://vantage.deniz.blue" target="_blank" rel="noopener noreferrer">
-									<Group align="center" gap={4} wrap="nowrap">
-										<img src="https://vantage.deniz.blue/favicon.ico" alt="Vantage Logo" style={{ width: 24, height: 24 }} />
-										Vantage
-									</Group>
+									Vantage ↗
 								</Anchor>,
-								<Text fz="sm">
-									Reference web app for viewing and embedding Evnt data
+								<Text>
+									Proof-of-concept calendar application that uses <Titlecard />
 								</Text>,
-								<Group gap={4} wrap="nowrap">
-									<Tooltip label="Web">
-										<IconWorld />
-									</Tooltip>
-									<Text>/</Text>
-									<Tooltip label="React">
-										<IconBrandReact />
-									</Tooltip>
-								</Group>,
 								<Anchor href="https://github.com/openevnt/evnt/blob/main/apps/vantage" target="_blank" rel="noopener noreferrer">
-									Link
+									Link ↗
+								</Anchor>
+							],
+							[
+								<Anchor href="https://eventsl.ink" target="_blank" rel="noopener noreferrer">
+									eventsl.ink ↗
+								</Anchor>,
+								<Text>
+									Create event sharing links without being tied to any app
+								</Text>,
+								<Anchor href="https://github.com/openevnt/eventslink" target="_blank" rel="noopener noreferrer">
+									Link ↗
 								</Anchor>
 							]
 						],
 					}}
 				/>
 			</ScrollArea.Autosize>
-
-			<Text>
-				These applications all support the <Anchor href="https://eventsl.ink" target="_blank" rel="noopener noreferrer">
-					eventsl.ink
-				</Anchor> link format which allows you to share links to your events that can be opened in any of these applications.
-			</Text>
-
-			<Stack align="center">
-				<Button
-					component="a"
-					href="https://eventsl.ink"
-					target="_blank"
-					rel="noopener noreferrer"
-					rightSection={<IconExternalLink />}
-					color="green"
-					variant="light"
-				>
-					eventsl.ink
-				</Button>
-			</Stack>
-
-			<Text>
-				If you're building an application using Evnt, please let us know!
-			</Text>
 		</Section>
 	)
 }

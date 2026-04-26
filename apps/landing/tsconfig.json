@@ -4,10 +4,22 @@
 	],
 	"extends": "@repo/typescript-config/vite.json",
 	"compilerOptions": {
-		"paths": {
-			"~/*": [
-				"./src/*"
-			]
-		}
+		"jsx": "react-jsx",
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"useDefineForClassFields": true,
+		"lib": [
+			"ESNext",
+			"DOM"
+		],
+		"types": [
+			"vite/client"
+		],
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"noEmit": true,
+		"noImplicitReturns": true,
+		"strict": true,
 	}
 }
