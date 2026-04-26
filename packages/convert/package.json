@@ -12,6 +12,7 @@
 	},
 	"exports": {
 		".": "./src/index.ts",
+		"./activitystreams": "./src/vendor/activitystreams/index.ts",
 		"./google": "./src/vendor/google/index.ts",
 		"./community-lexicon": "./src/vendor/community-lexicon/index.ts",
 		"./icalendar": "./src/vendor/icalendar/index.ts",
@@ -20,6 +21,7 @@
 	"publishConfig": {
 		"exports": {
 			".": "./dist/index.js",
+			"./activitystreams": "./dist/vendor/activitystreams/index.js",
 			"./google": "./dist/vendor/google/index.js",
 			"./community-lexicon": "./dist/vendor/community-lexicon/index.js",
 			"./icalendar": "./dist/vendor/icalendar/index.js",
