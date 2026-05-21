@@ -119,7 +119,7 @@ export const convertFromLexicon = (
 	for (let link of event.uris || [])
 		builder.addLink(l => l.setUrl(link.uri).setName(link.name ?? "", language));
 
-	for (let [_index, media] of (event.media || []).entries()) {
+	for (let media of (event.media ?? [])) {
 		if (did) builder.data.components?.push({
 			$type: "directory.evnt.component.splashMedia",
 			media: {
@@ -130,7 +130,11 @@ export const convertFromLexicon = (
 						// Fallback mechanism
 						url: `https://blobs.blue/${did}/blob/${media.content.ref.$link}`,
 						mimeType: media.content.mimeType,
-					}
+						dimensions: media.aspect_ratio ? {
+							width: media.aspect_ratio.width,
+							height: media.aspect_ratio.height,
+						} : undefined,
+					},
 				],
 			} as Media,
 			roles: [
