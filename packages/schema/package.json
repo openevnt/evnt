@@ -1,9 +1,9 @@
 {
 	"name": "@evnt/schema",
-	"version": "0.0.9",
+	"version": "0.0.9-next.0",
 	"type": "module",
-	"description": "Zod Schema for Open Evnt",
-	"author": "deniz.blue <deniz@deniz.blue>",
+	"description": "Zod Schema for OpenEvnt",
+	"author": "OpenEvnt",
 	"keywords": [],
 	"files": [
 		"/dist"

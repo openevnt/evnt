@@ -1,7 +1,7 @@
 import z from "zod";
 import { TranslationsSchema } from "../types/Translations";
 import { VenueSchema } from "./venue/Venue";
-import { EventInstanceSchema } from "./EventInstance";
+import { EventInstanceSchema } from "./instance/EventInstance";
 import { EventComponentSchema } from "./components/EventComponent";
 import { EventStatusSchema } from "./enums/EventStatus";
 

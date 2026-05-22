@@ -20,6 +20,7 @@ export const PhysicalVenueSchema = z.object({
 	$type: z.literal(VenueTypeSchema.enum["directory.evnt.venue.physical"]),
 	...BaseVenueSchema.shape,
 	address: AddressSchema.optional(),
+	maps: z.record(z.string(), z.union([z.string(), z.string().array()])).optional().meta({ description: "A record of map service names and entity types to identifiers for the venue's location" }),
 }).meta({
 	id: "PhysicalVenue",
 	title: "Physical Venue",

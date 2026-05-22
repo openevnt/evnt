@@ -2,11 +2,17 @@ import z from "zod";
 import { LinkComponentSchema } from "./LinkComponent";
 import { SourceComponentSchema } from "./SourceComponent";
 import { SplashMediaComponentSchema } from "./SplashMediaComponent";
+import { LanguagesComponentSchema } from "./LanguagesComponent";
+import { MarkdownComponentSchema } from "./MarkdownComponent";
+import { BlueSkyRichtextComponentSchema } from "./BlueSkyRichtextComponent";
 
 const KnownEventComponentsMap = {
 	"directory.evnt.component.link": LinkComponentSchema,
 	"directory.evnt.component.source": SourceComponentSchema,
 	"directory.evnt.component.splashMedia": SplashMediaComponentSchema,
+	"directory.evnt.component.languages": LanguagesComponentSchema,
+	"directory.evnt.component.markdown": MarkdownComponentSchema,
+	"directory.evnt.component.blueSkyRichtext": BlueSkyRichtextComponentSchema,
 } as const;
 
 export type KnownEventComponent = {

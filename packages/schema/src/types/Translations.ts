@@ -1,12 +1,12 @@
 import { z } from "zod";
 import type { Translations } from "@evnt/translations";
 
-export type LanguageKey = z.infer<typeof LanguageKeySchema>;
-export const LanguageKeySchema = z.string().meta({
+export type LanguageCode = z.infer<typeof LanguageCodeSchema>;
+export const LanguageCodeSchema = z.string().meta({
 	description: "BCP37 language code",
 });
 
-export const TranslationsSchema = z.record(LanguageKeySchema, z.string().optional())
+export const TranslationsSchema = z.record(LanguageCodeSchema, z.string().optional())
 	.meta({
 		id: "Translations",
 		description: "A multilingual string",
