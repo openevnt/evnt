@@ -1,0 +1,25 @@
+import type { Translations } from "../../types/Translations";
+import type { AnyComponent } from "../component";
+
+export namespace Activity {
+	/** A time in the format HH:MM */
+	export type Time = `${string}:${string}`;
+
+	/** A duration in the format H:MM, H can be 1+ digits */
+	export type Duration = `${string}:${string}`;
+
+	export interface Slot {
+		/** The day of the activity, starting from 1 */
+		day?: number;
+		time?: Time;
+		duration?: Duration;
+	}
+};
+
+export interface Activity {
+	/** The name of the activity */
+	name: Translations;
+	slot?: Activity.Slot;
+	components?: AnyComponent[];
+};
+
