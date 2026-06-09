@@ -1,6 +1,6 @@
 import z from "zod";
+import type { BlueSkyRichtextComponent } from "@evnt/types";
 
-export type BlueSkyRichtextComponent = z.infer<typeof BlueSkyRichtextComponentSchema>;
 export const BlueSkyRichtextComponentSchema = z.object({
 	$type: z.literal("directory.evnt.component.blueSkyRichtext"),
 	text: z.string(),
@@ -11,4 +11,4 @@ export const BlueSkyRichtextComponentSchema = z.object({
 		}),
 		features: z.looseObject({ $type: z.string() }).array(),
 	}).array(),
-}).meta({ id: "BlueSkyRichtextComponent" });
+}).meta({ id: "BlueSkyRichtextComponent" }) satisfies z.ZodType<BlueSkyRichtextComponent>;

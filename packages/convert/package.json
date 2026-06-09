@@ -45,6 +45,7 @@
 		"@evnt/builder": "workspace:^",
 		"@evnt/schema": "workspace:^",
 		"@evnt/translations": "workspace:^",
+		"@evnt/types": "workspace:^",
 		"ical.js": "^2.2.1",
 		"schema-dts": "^1.1.5",
 		"zod": "^4.3.6"

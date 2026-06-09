@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import type { EventData } from "@evnt/schema";
+import type { OpenEvnt } from "@evnt/types";
 import { convertFromActivityStreamsEvent, convertToActivityStreamsEvent } from "../src/vendor/activitystreams";
 
 describe("activitystreams converter", () => {
-	test("converts ActivityStreams Event into EventData", () => {
+	test("converts ActivityStreams Event into OpenEvnt", () => {
 		const eventData = convertFromActivityStreamsEvent({
 			type: "Event",
 			name: "Open Evnt Meetup",
@@ -28,7 +28,7 @@ describe("activitystreams converter", () => {
 		expect(eventData.instances?.[0]?.start).toBe("2026-07-10T15:30[UTC]");
 		expect(eventData.instances?.[0]?.end).toBe("2026-07-10T18:00[UTC]");
 		expect(eventData.venues?.[0]?.$type).toBe("directory.evnt.venue.physical");
-		expect((eventData.venues?.[0] as EventData["venues"][number] & { address?: { countryCode?: string } })?.address?.countryCode).toBe("LT");
+		expect((eventData.venues?.[0] as OpenEvnt["venues"][number] & { address?: { countryCode?: string } })?.address?.countryCode).toBe("LT");
 		expect(eventData.components?.some((component) => component.$type === "directory.evnt.component.link")).toBe(true);
 		expect(eventData.components?.some((component) => component.$type === "directory.evnt.richtext.markdown")).toBe(true);
 	});
@@ -52,8 +52,8 @@ describe("activitystreams converter", () => {
 		});
 	});
 
-	test("embeds canonical EventData when converting to ActivityStreams", () => {
-		const input: EventData = {
+	test("embeds canonical OpenEvnt when converting to ActivityStreams", () => {
+		const input: OpenEvnt = {
 			v: "0.1",
 			name: { en: "Conference" },
 			instances: [{
@@ -72,7 +72,7 @@ describe("activitystreams converter", () => {
 	});
 
 	test("uses embedded evntData when present and valid", () => {
-		const embedded: EventData = {
+		const embedded: OpenEvnt = {
 			v: "0.1",
 			name: { en: "Embedded" },
 			components: [{

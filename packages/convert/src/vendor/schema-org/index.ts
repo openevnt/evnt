@@ -1,4 +1,4 @@
-import type { EventData, PartialDate, Translations, Venue } from "@evnt/schema";
+import type { OpenEvnt, PartialDate, Translations, Venue } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { TranslationsUtil } from "@evnt/translations";
 import type { Event, PronounceableText, Role, Text, TextObject, Thing, WithContext } from "schema-dts";
@@ -12,7 +12,7 @@ export const convertFromSchemaOrg = (
 		language?: string,
 		timezone?: string,
 	} = {},
-): EventData => {
+): OpenEvnt => {
 	const inverseT = (str: string | null | undefined): Translations | undefined => {
 		if (!str) return;
 		return { [language]: str };
@@ -113,7 +113,7 @@ export const convertFromSchemaOrg = (
 };
 
 export const convertToSchemaOrg = (
-	data: EventData,
+	data: OpenEvnt,
 	{
 		language = "en",
 		timezone = "UTC",

@@ -20,3 +20,5 @@ export type EventStatus =
 	| "postponed"
 	| "cancelled"
 	| "suspended"
+
+

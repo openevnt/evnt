@@ -1,4 +1,4 @@
-import type { EventData, PartialDate, Venue } from "@evnt/schema";
+import type { OpenEvnt, PartialDate, Venue } from "@evnt/types";
 import { EventDataSchema } from "@evnt/schema";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { TranslationsUtil } from "@evnt/translations";
@@ -62,7 +62,7 @@ const readUrlLike = (value: unknown): string | undefined => {
 		?? asNonEmptyString(value.id);
 };
 
-const withTranslation = (value: string | undefined, language: string): EventData["name"] => {
+const withTranslation = (value: string | undefined, language: string): OpenEvnt["name"] => {
 	if (!value) return {};
 	return { [language]: value };
 };
@@ -90,7 +90,7 @@ export const convertFromActivityStreamsEvent = (
 	}: {
 		assumeLanguage?: string;
 	} = {},
-): EventData => {
+): OpenEvnt => {
 	if (isRecord(data.evntData)) {
 		const embedded = EventDataSchema.safeParse(data.evntData);
 		if (embedded.success) return embedded.data;
@@ -154,7 +154,7 @@ export const convertFromActivityStreamsEvent = (
 		});
 	}
 
-	const components: NonNullable<EventData["components"]> = [];
+	const components: NonNullable<OpenEvnt["components"]> = [];
 	const addUrlAsLink = (url: unknown) => {
 		const href = readUrlLike(url);
 		if (!href) return;
@@ -227,7 +227,7 @@ export const convertFromActivityStreamsEvent = (
 };
 
 export const convertToActivityStreamsEvent = (
-	data: EventData,
+	data: OpenEvnt,
 	{
 		language = "en",
 		includeContext = true,
@@ -304,9 +304,9 @@ export const convertToActivityStreamsEvent = (
 			for (const source of component.media.sources) {
 				if (!source.url) continue;
 				attachments.push({
-					type: source.mimeType?.startsWith("video/") ? "Video" : "Image",
+					type: source.blob?.mimeType?.startsWith("video/") ? "Video" : "Image",
 					url: source.url,
-					mediaType: source.mimeType,
+					mediaType: source.blob?.mimeType,
 					name: component.media.alt ? TranslationsUtil.translate(component.media.alt, [language]) : undefined,
 				});
 			}

@@ -1,4 +1,4 @@
-import type { OnlineVenue } from "@evnt/schema";
+import type { OnlineVenue } from "@evnt/types";
 import { VenueBuilder } from "./VenueBuilder";
 import type { EventBuilder } from "../EventBuilder";
 

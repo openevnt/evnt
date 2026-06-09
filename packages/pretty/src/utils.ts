@@ -1,8 +1,8 @@
 import { PartialDateUtil } from "@evnt/partial-date";
-import type { EventData } from "@evnt/schema";
+import type { OpenEvnt } from "@evnt/types";
 
 export class EventUtil {
-	static allTimezones(event: EventData): string[] {
+	static allTimezones(event: OpenEvnt): string[] {
 		const timezones: string[] = [];
 
 		for (const instance of event.instances ?? []) {
@@ -15,7 +15,7 @@ export class EventUtil {
 		return timezones;
 	}
 
-	static majorityTimezone(event: EventData): string | null {
+	static majorityTimezone(event: OpenEvnt): string | null {
 		const timezones = this.allTimezones(event);
 		if (timezones.length === 0) return null;
 		const counts: Record<string, number> = {};

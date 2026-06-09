@@ -1,4 +1,4 @@
-import type { Translations } from "@evnt/schema";
+import type { Translations } from "@evnt/types";
 
 export interface TranslationSetter<ReturnType> {
 	(str: string, language?: string): ReturnType;
@@ -26,7 +26,7 @@ type BuilderCtor<TOut, TParent, TBuilder extends Builder<TOut>> =
 	new (arg?: TOut, parent?: TParent) => TBuilder;
 
 export function createBuilderAdder<
-	TItem extends Record<string, unknown>,
+	TItem extends object,
 	TParent,
 	TBuilt extends TItem,
 	TBuilder extends Builder<TBuilt>,

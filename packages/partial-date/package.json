@@ -1,7 +1,7 @@
 {
 	"name": "@evnt/partial-date",
-	"version": "0.0.2",
-	"description": "Utility for handling OpenEvnt PartialDate values",
+	"version": "0.1.0",
+	"description": "OpenEvnt PartialDate utilities",
 	"type": "module",
 	"scripts": {
 		"build": "tsc"
@@ -25,7 +25,9 @@
 	"license": "MIT",
 	"packageManager": "pnpm@11.0.0-beta.6",
 	"devDependencies": {
-		"temporal-polyfill-lite": "^0.3.4",
 		"typescript": "^6.0.2"
+	},
+	"dependencies": {
+		"@evnt/types": "workspace:^"
 	}
 }

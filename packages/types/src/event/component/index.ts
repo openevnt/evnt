@@ -1,11 +1,17 @@
 import type { LinkComponent } from "./LinkComponent";
 import type { SourceComponent } from "./SourceComponent";
 import type { SplashMediaComponent } from "./SplashMediaComponent";
+import type { LanguagesComponent } from "./LanguagesComponent";
+import type { MarkdownComponent } from "./MarkdownComponent";
+import type { BlueSkyRichtextComponent } from "./BlueSkyRichtextComponent";
 
 export interface ComponentTypes {
 	"directory.evnt.component.source": SourceComponent;
 	"directory.evnt.component.link": LinkComponent;
 	"directory.evnt.component.splashMedia": SplashMediaComponent;
+	"directory.evnt.component.languages": LanguagesComponent;
+	"directory.evnt.component.markdown": MarkdownComponent;
+	"directory.evnt.component.blueSkyRichtext": BlueSkyRichtextComponent;
 };
 
 export type KnownComponent = ComponentTypes[keyof ComponentTypes];
@@ -14,4 +20,4 @@ export type UnknownComponent = { $type: string & { _brand?: never } } & Record<s
 export type Component<Type extends (keyof ComponentTypes | (string & {})) = keyof ComponentTypes> =
 	Type extends keyof ComponentTypes ? ComponentTypes[Type] : UnknownComponent;
 
-export type AnyComponent = Component<keyof ComponentTypes | (string & {})>;
+export type AnyComponent = KnownComponent | UnknownComponent;

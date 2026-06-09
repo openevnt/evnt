@@ -1,4 +1,4 @@
-import type { EventData, PartialDate, Translations } from "@evnt/schema";
+import type { OpenEvnt, PartialDate, Translations } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { TranslationsUtil } from "@evnt/translations";
 import { calendar_v3 } from "googleapis";
@@ -7,7 +7,7 @@ export const convertFromGoogle = (data: calendar_v3.Schema$Event, {
 	assumeLanguage = "en",
 }: {
 	assumeLanguage?: string;
-} = {}): EventData => {
+} = {}): OpenEvnt => {
 	const inverseT = (str: string | null | undefined): Translations | undefined => {
 		if (!str) return undefined;
 		return {
@@ -15,7 +15,7 @@ export const convertFromGoogle = (data: calendar_v3.Schema$Event, {
 		};
 	}
 
-	let venues: EventData["venues"] = [];
+	let venues: OpenEvnt["venues"] = [];
 
 	if (data.location) {
 		// string ??? what tf do we do here

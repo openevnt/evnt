@@ -1,6 +1,6 @@
 import z from "zod";
+import type { EventStatus } from "@evnt/types";
 
-export type EventStatus = z.infer<typeof EventStatusSchema>;
 export const EventStatusSchema = z.union([
     z.literal("planned").meta({ description: "No disruptions - event is planned or has already occurred" }),
     z.literal("uncertain").meta({ description: "Event is not finalized" }),
@@ -9,4 +9,4 @@ export const EventStatusSchema = z.union([
     z.literal("suspended").meta({ description: "The event may be postponed or cancelled" }),
 ]).meta({
     id: "EventStatus",
-});
+}) satisfies z.ZodType<EventStatus>;

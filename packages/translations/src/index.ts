@@ -1,54 +1,73 @@
-export type Translations = {
-	[languageCode: string]: string | undefined;
-};
+import type { Translations } from "@evnt/types";
 
-export class TranslationsUtil {
+export type MaybeTranslations = Translations | null | undefined;
+
+export const TranslationsUtil = new class {
+	values(translations: Translations): string[] {
+		return Object.values(translations).filter((value): value is string => !!value);
+	}
+
+	languages(translations: Translations): string[] {
+		return Object.keys(translations).filter(key => !!translations[key]);
+	}
+
+	normalize(translations: Translations): Translations {
+		const result: Translations = {};
+		for (const [key, value] of Object.entries(translations))
+			if (typeof value === "string" && value.trim() !== "")
+				result[key] = value;
+		return result;
+	}
+
+	add(translations: Translations, code: string, text: string): Translations {
+		return { ...translations, [code]: text };
+	}
+
 	/** Creates a translator function based on preferred languages */
-	static createTranslator(preferredLanguages?: string[]) {
-		return (t?: Translations | null) => this.translate(t, preferredLanguages);
+	createTranslator(preferredLanguages?: string[]) {
+		return (t?: MaybeTranslations) => this.translate(t, preferredLanguages);
 	}
 
 	/** Translates a translations object based on preferred languages */
-	static translate(t?: Translations | null, preferredLanguages?: string[]): string {
-		if (!t) return "";
-		const langs = preferredLanguages || ["en"];
-		for (const lang of langs) {
-			if (lang && t[lang]) return t[lang]!;
-		}
-		return Object.values(t).find(v => typeof v === "string") || "";
+	translate(translations?: MaybeTranslations, preferredLanguages: string[] = ["en"]): string {
+		if (!translations) return "";
+
+		for (const lang of preferredLanguages)
+			if (translations[lang]) return translations[lang]!;
+
+		return Object.values(translations).find(Boolean) || "";
 	}
 
 	/** Merges multiple translations objects into one */
-	static merge(...translations: (Translations | undefined | null)[]): Translations {
+	merge(...list: MaybeTranslations[]): Translations {
 		const result: Translations = {};
-		for (const t of translations) {
-			if (!t) continue;
-			for (const [key, value] of Object.entries(t)) {
-				result[key] = value;
-			}
-		}
+		for (const entry of list.filter(Boolean) as Translations[])
+			for (const [key, value] of Object.entries(entry))
+				if (Boolean(value))
+					result[key] = value;
+
 		return result;
 	}
 
 	/** Checks if a translations object is empty */
-	static isEmpty(t?: Translations | null): boolean {
-		if (!t) return true;
-		return Object.values(t).every((value) => !value || value.trim() === "");
+	isEmpty(translations?: MaybeTranslations): boolean {
+		if (!translations) return true;
+		return Object.values(translations).every((value) => !value);
 	}
 
 	/**
-	 * Searches translations for a query and returns matched text.
+	 * Finds the first translation whose value contains the query, case-insensitive.
 	 * 
 	 * @example
 	 * const t = { en: "Hello World", fr: "Bonjour le monde" };
-	 * UtilTranslations.search(t, "world");
+	 * TranslationsUtil.find(t, "world");
 	 * => { en: "Hello World" }
 	 * 
 	 * @param t Translations object to search
-	 * @param query Search this substring
+	 * @param query Substring to search for
 	 * @returns Translations object with single key or null if not found
 	 */
-	static search(t?: Translations | null, query: string = ""): Translations | null {
+	find(t?: MaybeTranslations, query: string = ""): Translations | null {
 		if (!t) return null;
 		for (const key of Object.keys(t)) {
 			const value = t[key];
@@ -60,11 +79,37 @@ export class TranslationsUtil {
 		return null;
 	}
 
-	static languagesOf(t: Translations): string[] {
-		return Object.keys(t).filter(key => !!t[key]) as string[];
-	}
-
-	static withTranslation(t: Translations, lang: string, value: string): Translations {
-		return { ...t, [lang]: value };
+	/** Returns a new Translations object without the specified language codes */
+	omit(translations: Translations, ...codes: string[]): Translations {
+		const result = { ...translations };
+		for (const code of codes)
+			delete result[code];
+		return result;
 	}
 }
+
+export const LanguageCodeUtil = new class {
+	/** Checks if a language code is recognized by runtime Intl */
+	isRecognized(code: string): boolean {
+		try {
+			new Intl.Locale(code);
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
+	/** Gets the name of a language code in a specified locale using runtime Intl */
+	getName(code: string, displayLocale: string = "en"): string | null {
+		try {
+			return new Intl.DisplayNames(displayLocale, { type: "language" }).of(code) || null;
+		} catch {
+			return null;
+		}
+	}
+
+	/** Gets the name of a language code in its own locale using runtime Intl */
+	getAutonym(code: string): string | null {
+		return this.getName(code, code);
+	}
+};

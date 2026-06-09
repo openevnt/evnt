@@ -1,14 +1,15 @@
 import { JsonInput, Paper, Stack, Text, Title } from "@mantine/core";
 import { Section } from "../Section";
 import { useState } from "react";
-import { EventDataSchema, type EventData } from "@evnt/schema";
+import { EventDataSchema } from "@evnt/schema";
+import type { OpenEvnt } from "@evnt/types";
 import { z } from "zod";
 
 export const ValidatorSection = () => {
 	const [value, setValue] = useState(JSON.stringify({
 		v: "0.1",
 		name: { en: "Event" },
-	} as EventData, null, 2));
+	} as OpenEvnt, null, 2));
 
 	let error: string | null = null;
 	let object: unknown = null;

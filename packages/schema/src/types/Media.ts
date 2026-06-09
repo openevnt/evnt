@@ -1,8 +1,8 @@
 import z from "zod";
+import type { Media, MediaPresentation } from "@evnt/types";
 import { TranslationsSchema } from "./Translations";
 import { MediaSourceSchema } from "./MediaSource";
 
-export type MediaPresentation = z.infer<typeof MediaPresentationSchema>;
 export const MediaPresentationSchema = z.object({
 	blurhash: z.string().optional().meta({ description: " A BlurHash representation of the media item" }),
 	dominantColor: z.string()
@@ -13,9 +13,8 @@ export const MediaPresentationSchema = z.object({
 	id: "MediaPresentation",
 	title: "Media Presentation",
 	description: "The presentation details of a media item",
-});
+}) satisfies z.ZodType<MediaPresentation>;
 
-export type Media = z.infer<typeof MediaSchema>;
 export const MediaSchema = z.object({
 	sources: MediaSourceSchema.array().min(1).meta({ description: "The sources for the media item" }),
 	alt: TranslationsSchema.optional().meta({ description: "Alternative text for the media item" }),
@@ -27,4 +26,4 @@ export const MediaSchema = z.object({
 	id: "Media",
 	title: "Media",
 	description: "A media item, such as an image or video",
-});
+}) satisfies z.ZodType<Media>;

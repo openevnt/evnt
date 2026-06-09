@@ -41,7 +41,7 @@ __Table of Contents__
 
 ```ts
 interface Translations {
-	[language: string]: string | undefined;
+	[language: string]: string;
 }
 ```
 
@@ -87,12 +87,6 @@ A `PartialDate` **must** include an IANA Timezone identifier wrapped in square b
 
 A `PartialDate` **must not** include an UTC offset (e.g. `Z` or `+02:00`) or a seconds component.
 
-> [!WARNING]
-> The IANA timezone identifier was added in `v:"0.1"` of the specification.
-> If a `PartialDate` does not include a timezone identifier, assume it's in `UTC`.
-> 
-> __Example:__ `2025-11-12T11:00` should be treated as `2025-11-12T11:00[UTC]`
-
 __Examples:__
 
 - `2025[Europe/London]` - 2025 in the Europe/London timezone
@@ -120,7 +114,7 @@ month = 2DIGIT ; 01-12
 day = 2DIGIT ; 01-31
 hour = 2DIGIT ; 00-23
 minute = 2DIGIT ; 00-59
-timezone = *( ALPHA / DIGIT / "-" / "_" / "/" )
+timezone = 1*( ALPHA / DIGIT / "-" / "_" / "/" / "+" )
 ```
 
 ## `EventStatus`
@@ -295,8 +289,24 @@ __Optional fields:__
 - `address`: Optional physical address information.
   - `addr`: The full address as a single string.
   - `countryCode`: The ISO 3166-1 alpha-2 country code of the venue (e.g. `US` for United States, `LT` for Lithuania etc.). This can be used for filtering and display purposes.
+- `maps`: A record of identifiers for the venue's location in external map services.
+  - Keys are **NSIDs** following the pattern `{reverseDomain}.{entityType}`, uniquely identifying a map service and the entity type it represents.
+  - Values are the identifier(s) assigned by that service for this location. A string represents a single identifier; an array represents multiple (e.g., separate IDs for the building and its address point).
 
-_Examples_:
+__Well-known map service NSIDs:__
+
+| NSID | Service | Entity Type |
+|------|---------|-------------|
+| `org.openstreetmap.node` | OpenStreetMap | Node (point of interest) |
+| `org.openstreetmap.way` | OpenStreetMap | Way (building outline, road) |
+| `org.openstreetmap.relation` | OpenStreetMap | Relation (multi-polygon, route) |
+| `com.google.places` | Google Places | Place ID |
+| `com.foursquare` | Foursquare | Venue ID |
+| `com.what3words` | what3words | 3-word address |
+| `org.geonames` | GeoNames | Feature ID |
+| `wiki.data` | Wikidata | Entity QID |
+
+_Examples_:__
 
 ```ts
 let venue: PhysicalVenue = {
@@ -306,6 +316,11 @@ let venue: PhysicalVenue = {
 	address: {
 		addr: "Central Park West & 5th Ave, New York, NY 10024, USA",
 		countryCode: "US",
+	},
+	maps: {
+		"org.openstreetmap.node": "33194753",
+		"com.google.places": "ChIJ9ywB38FZwokRfiFtNi0o6Ag",
+		"com.what3words": "volume.mountain.light",
 	},
 }
 ```

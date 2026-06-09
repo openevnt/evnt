@@ -8,3 +8,5 @@ export interface LanguagesComponent {
 	$type: "directory.evnt.component.languages";
 	languages: LanguagesComponent.LanguageInfo[];
 };
+
+export type LanguageInfo = LanguagesComponent.LanguageInfo;

@@ -1,6 +1,6 @@
 import { Text } from "@mantine/core";
 import { Section } from "../Section";
-import type { EventData } from "@evnt/schema";
+import type { OpenEvnt } from "@evnt/types";
 import { CodeHighlight, CodeHighlightTabs } from "@mantine/code-highlight";
 
 export const ExampleSection = () => {
@@ -105,7 +105,7 @@ export const ExampleSection = () => {
 							}
 						],
 					},
-				] as EventData[]).map((event, i) => ({
+				] as OpenEvnt[]).map((event, i) => ({
 					code: JSON.stringify(event, null, 2),
 					language: "json",
 					fileName: event.name.en!,

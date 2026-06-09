@@ -29,6 +29,7 @@
 	"dependencies": {
 		"@evnt/partial-date": "workspace:^",
 		"@evnt/schema": "workspace:^",
-		"@evnt/translations": "workspace:^"
+		"@evnt/translations": "workspace:^",
+		"@evnt/types": "workspace:^"
 	}
 }

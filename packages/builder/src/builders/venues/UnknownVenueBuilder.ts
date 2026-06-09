@@ -1,6 +1,6 @@
-import type { UnknownVenue } from "@evnt/schema";
-import type { EventBuilder } from "../EventBuilder";
+import type { UnknownVenue } from "@evnt/types";
 import { VenueBuilder } from "./VenueBuilder";
+import type { EventBuilder } from "../EventBuilder";
 
 export class UnknownVenueBuilder extends VenueBuilder<"directory.evnt.venue.unknown"> {
 	constructor(venue?: UnknownVenue, parent?: EventBuilder) {

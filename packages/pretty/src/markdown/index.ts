@@ -1,4 +1,4 @@
-import type { PartialDate, Translations } from "@evnt/schema";
+import type { PartialDate, Translations } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { Range, SnippetIcon, SnippetLabel, TSnippet } from "../core/snippet";
 import { TranslationsUtil } from "@evnt/translations";

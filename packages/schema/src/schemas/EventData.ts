@@ -1,4 +1,5 @@
 import z from "zod";
+import type { OpenEvnt } from "@evnt/types";
 import { TranslationsSchema } from "../types/Translations";
 import { VenueSchema } from "./venue/Venue";
 import { EventInstanceSchema } from "./instance/EventInstance";
@@ -24,7 +25,6 @@ const preprocessEvent = (input: any) => {
 	return data;
 };
 
-export type EventData = z.infer<typeof EventDataSchema>;
 export const EventDataSchema = z.preprocess(preprocessEvent, z.object({
 	$type: z.literal($NSID).optional().meta({ description: "The type of the event data" }),
 	v: z.literal("0.1").meta({ description: "The version of the Event Data schema" }),
@@ -46,4 +46,4 @@ export const EventDataSchema = z.preprocess(preprocessEvent, z.object({
 	title: "Event Data",
 	description: "An event",
 	$id: $ID,
-});
+}) satisfies z.ZodType<OpenEvnt>;

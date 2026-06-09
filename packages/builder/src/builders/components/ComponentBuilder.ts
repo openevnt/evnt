@@ -1,18 +1,13 @@
-import type { EventComponent, KnownEventComponent } from "@evnt/schema";
 import type { EventBuilder } from "../EventBuilder";
+import type { KnownEventComponent, UnknownEventComponent } from "@evnt/schema";
 
-export class ComponentBuilder<
-	Type extends KnownEventComponent["$type"],
-	Component extends Extract<KnownEventComponent, { $type: Type }> = Extract<KnownEventComponent, { $type: Type }>
-> {
-	component: Component;
-	parent?: EventBuilder;
-	constructor(component: Component, parent?: EventBuilder) {
+export class ComponentBuilder<T extends KnownEventComponent | UnknownEventComponent = KnownEventComponent> {
+	protected component: T;
+	protected parent?: EventBuilder;
+	constructor(component: T, parent?: EventBuilder) {
 		this.component = component;
 		this.parent = parent;
 	}
 
-	build(): EventComponent {
-		return this.component;
-	}
-};
+	build = () => this.component;
+}

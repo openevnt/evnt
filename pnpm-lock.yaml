@@ -299,6 +299,9 @@ importers:
       '@evnt/schema':
         specifier: workspace:^
         version: link:../schema
+      '@evnt/types':
+        specifier: workspace:^
+        version: link:../types
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:^
@@ -324,6 +327,9 @@ importers:
       '@evnt/translations':
         specifier: workspace:^
         version: link:../translations
+      '@evnt/types':
+        specifier: workspace:^
+        version: link:../types
       ical.js:
         specifier: ^2.2.1
         version: 2.2.1
@@ -401,10 +407,11 @@ importers:
         version: 6.0.3
 
   packages/partial-date:
+    dependencies:
+      '@evnt/types':
+        specifier: workspace:^
+        version: link:../types
     devDependencies:
-      temporal-polyfill-lite:
-        specifier: ^0.3.4
-        version: 0.3.4
       typescript:
         specifier: ^6.0.2
         version: 6.0.2
@@ -420,6 +427,9 @@ importers:
       '@evnt/translations':
         specifier: workspace:^
         version: link:../translations
+      '@evnt/types':
+        specifier: workspace:^
+        version: link:../types
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:^
@@ -457,6 +467,10 @@ importers:
         version: 6.0.3
 
   packages/translations:
+    dependencies:
+      '@evnt/types':
+        specifier: workspace:^
+        version: link:../types
     devDependencies:
       typescript:
         specifier: ^6.0.2

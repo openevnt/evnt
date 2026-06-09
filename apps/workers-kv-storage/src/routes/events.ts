@@ -1,4 +1,5 @@
-import { EventData, EventDataSchema } from "@evnt/schema";
+import type { OpenEvnt } from "@evnt/types";
+import { EventDataSchema } from "@evnt/schema";
 import { Context, Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { cors } from "hono/cors";
@@ -19,7 +20,7 @@ const checkPermissions = (metadata: KVMetadata, method: Permission, email?: Emai
 
 export const userCreateEvent = async (
 	c: Context<{ Bindings: CloudflareBindings }>,
-	data: EventData,
+	data: OpenEvnt,
 	email: Email,
 ): Promise<string> => {
 	const id = crypto.randomUUID();
@@ -47,10 +48,10 @@ export const userCreateEvent = async (
 export const userModifyEvent = async (
 	c: Context<{ Bindings: CloudflareBindings }>,
 	id: string,
-	data: EventData,
+	data: OpenEvnt,
 	email: Email,
 ): Promise<any> => {
-	const existing = await c.env.KV.getWithMetadata<EventData, KVMetadata>(`events:${id}`, "json");
+	const existing = await c.env.KV.getWithMetadata<OpenEvnt, KVMetadata>(`events:${id}`, "json");
 
 	if (!existing.value || !existing.metadata)
 		return c.json({ error: "Event not found" }, 404);
@@ -85,7 +86,7 @@ export const events = new Hono<{ Bindings: CloudflareBindings }>()
 			const {
 				metadata,
 				value: data,
-			} = await c.env.KV.getWithMetadata<EventData, KVMetadata>(`events:${c.req.param("id")}`, "json");
+			} = await c.env.KV.getWithMetadata<OpenEvnt, KVMetadata>(`events:${c.req.param("id")}`, "json");
 
 			if (!data || !metadata) return c.json({ error: "Event not found" }, 404);
 
@@ -135,7 +136,7 @@ export const events = new Hono<{ Bindings: CloudflareBindings }>()
 		"/:id",
 		async (c) => {
 			const id = c.req.param("id");
-			const existing = await c.env.KV.getWithMetadata<EventData, KVMetadata>(`events:${id}`, "json");
+			const existing = await c.env.KV.getWithMetadata<OpenEvnt, KVMetadata>(`events:${id}`, "json");
 
 			if (!existing.value || !existing.metadata)
 				return c.json({ error: "Event not found" }, 404);

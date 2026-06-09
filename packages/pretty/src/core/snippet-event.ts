@@ -1,4 +1,4 @@
-import type { EventData, EventInstance, PartialDate, Venue } from "@evnt/schema";
+import type { OpenEvnt, EventInstance, PartialDate, Venue } from "@evnt/types";
 import type { Range, SnippetLabel, TSnippet } from "./snippet";
 import { TranslationsUtil } from "@evnt/translations";
 import { PartialDateUtil } from "@evnt/partial-date";
@@ -56,7 +56,7 @@ const isNextDay = ({ start, end }: Range<PartialDate.YearMonthDay>): boolean => 
 	return endMs - startMs === 24 * 60 * 60 * 1000;
 };
 
-export const snippetEvent = (data: EventData, opts?: {
+export const snippetEvent = (data: OpenEvnt, opts?: {
 	maxVenues?: number;
 	maxInstances?: number;
 	maxGroups?: number;

@@ -1,4 +1,5 @@
-import type { Address, PartialDate, Translations } from "@evnt/schema";
+import type { PartialDate, Translations } from "@evnt/types";
+import type { Address } from "@evnt/schema";
 
 export type Range<T> = { start: T; end: T };
 

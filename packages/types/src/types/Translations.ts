@@ -1,3 +1,3 @@
 export type Translations = {
-	[languageCode: string]: string | undefined;
+	[languageCode: string]: string;
 };

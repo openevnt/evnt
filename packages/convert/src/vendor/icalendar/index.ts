@@ -1,4 +1,4 @@
-import type { EventData, PartialDate } from "@evnt/schema";
+import type { OpenEvnt, PartialDate } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { TranslationsUtil } from "@evnt/translations";
 import ICAL from "ical.js";
@@ -10,10 +10,10 @@ export const convertFromVEvent = (
 	}: {
 		language?: string;
 	} = {},
-): EventData => {
+): OpenEvnt => {
 	const event = new ICAL.Event(vevent);
 
-	const eventData: EventData = {
+	const eventData: OpenEvnt = {
 		v: "0.1",
 		name: { [language]: event.summary || "" },
 		instances: [],
@@ -79,7 +79,7 @@ export const convertFromVEvent = (
 	return eventData;
 };
 
-export const convertToVEvent = (data: EventData, {
+export const convertToVEvent = (data: OpenEvnt, {
 	language = "en",
 }: {
 	language?: string;

@@ -1,4 +1,4 @@
-import type { PhysicalVenue, LatLng } from "@evnt/schema";
+import type { PhysicalVenue } from "@evnt/types";
 import { VenueBuilder } from "./VenueBuilder";
 import type { EventBuilder } from "../EventBuilder";
 
@@ -9,11 +9,6 @@ export class PhysicalVenueBuilder extends VenueBuilder<"directory.evnt.venue.phy
 			name: {},
 			$type: "directory.evnt.venue.physical",
 		}, parent);
-	}
-
-	setCoordinates(latlng: LatLng) {
-		this.venue.coordinates = latlng;
-		return this;
 	}
 
 	setCountryCode(countryCode: string) {

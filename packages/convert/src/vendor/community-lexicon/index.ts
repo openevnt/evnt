@@ -1,4 +1,5 @@
-import type { EventData, Media, PartialDate, PhysicalVenue } from "@evnt/schema";
+import type { OpenEvnt, Media, PhysicalVenue } from "@evnt/types";
+import type { PartialDate } from "@evnt/partial-date";
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { CommunityLexiconCalendarEvent } from "../../lexicons";
 import { EventBuilder, PhysicalVenueBuilder } from "@evnt/builder";
@@ -38,7 +39,7 @@ export const convertFromLexicon = (
 		did?: AtprotoDid;
 		language?: string;
 	} = {},
-): EventData => {
+): OpenEvnt => {
 	const builder = new EventBuilder();
 
 	if (event.name) builder.setName(event.name, language);
@@ -78,10 +79,6 @@ export const convertFromLexicon = (
 			case "community.lexicon.location.geo":
 				upsertPhysicalVenue(location.name ?? "", b => b
 					.setId(index.toString())
-					.setCoordinates({
-						lat: parseInt(location.latitude ?? "0"),
-						lng: parseInt(location.longitude ?? "0"),
-					})
 				);
 				break;
 			default:
@@ -93,8 +90,8 @@ export const convertFromLexicon = (
 	}
 
 	if (event.startsAt || event.endsAt) {
-		builder.addInstance(i => i
-			.setStart(event.startsAt ? PartialDateUtil.format({
+		builder.addInstance(i => {
+			if (event.startsAt) i.setStart(PartialDateUtil.format({
 				year: new Date(event.startsAt).getUTCFullYear(),
 				month: new Date(event.startsAt).getUTCMonth() + 1,
 				day: new Date(event.startsAt).getUTCDate(),
@@ -102,8 +99,8 @@ export const convertFromLexicon = (
 				minute: new Date(event.startsAt).getUTCMinutes(),
 				timezone: "UTC",
 				precision: (new Date(event.startsAt).getUTCHours() === 0 && new Date(event.startsAt).getUTCMinutes() === 0) ? "day" : "time",
-			} as PartialDate.Parsed) : undefined)
-			.setEnd(event.endsAt ? PartialDateUtil.format({
+			} as PartialDate.Parsed));
+			if (event.endsAt) i.setEnd(PartialDateUtil.format({
 				year: new Date(event.endsAt).getUTCFullYear(),
 				month: new Date(event.endsAt).getUTCMonth() + 1,
 				day: new Date(event.endsAt).getUTCDate(),
@@ -111,9 +108,10 @@ export const convertFromLexicon = (
 				minute: new Date(event.endsAt).getUTCMinutes(),
 				timezone: "UTC",
 				precision: (new Date(event.endsAt).getUTCHours() === 0 && new Date(event.endsAt).getUTCMinutes() === 0) ? "day" : "time",
-			} as PartialDate.Parsed) : undefined)
-			.addAllVenues()
-		);
+			} as PartialDate.Parsed));
+			i.addAllVenues();
+			return i;
+		});
 	}
 
 	for (let link of event.uris || [])
@@ -126,14 +124,12 @@ export const convertFromLexicon = (
 				alt: media.alt ? { [language]: media.alt } : undefined,
 				sources: [
 					{
-						blob: media.content,
+						blob: {
+							...media.content,
+							$type: "blob",
+						},
 						// Fallback mechanism
 						url: `https://blobs.blue/${did}/blob/${media.content.ref.$link}`,
-						mimeType: media.content.mimeType,
-						dimensions: media.aspect_ratio ? {
-							width: media.aspect_ratio.width,
-							height: media.aspect_ratio.height,
-						} : undefined,
 					},
 				],
 			} as Media,

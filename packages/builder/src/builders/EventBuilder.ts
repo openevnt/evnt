@@ -1,4 +1,5 @@
-import type { EventData, EventStatus, KnownEventComponent, LinkComponent, UnknownEventComponent } from "@evnt/schema";
+import type { OpenEvnt, EventStatus, LinkComponent } from "@evnt/types";
+import type { KnownEventComponent, UnknownEventComponent } from "@evnt/schema";
 import { createBuilderAdder, createTranslationAdder } from "../utils/helpers";
 import { InstanceBuilder } from "./InstanceBuilder";
 import { UnknownVenueBuilder } from "./venues/UnknownVenueBuilder";
@@ -8,9 +9,9 @@ import { VenueBuilder } from "./venues/VenueBuilder";
 import { LinkBuilder } from "./components/LinkBuilder";
 
 export class EventBuilder {
-	data: EventData;
+	data: OpenEvnt;
 
-	constructor(data?: EventData) {
+	constructor(data?: OpenEvnt) {
 		this.data = data ?? {
 			v: "0.1",
 			name: {},

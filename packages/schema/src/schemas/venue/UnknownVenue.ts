@@ -1,9 +1,8 @@
 import z from "zod";
-import { VenueTypeSchema } from "./VenueType";
+import type { UnknownVenue } from "@evnt/types";
 import { BaseVenueSchema } from "./BaseVenue";
 
-export type UnknownVenue = z.infer<typeof UnknownVenueSchema>;
 export const UnknownVenueSchema = z.object({
-	$type: z.literal(VenueTypeSchema.enum["directory.evnt.venue.unknown"]),
+	$type: z.literal("directory.evnt.venue.unknown"),
 	...BaseVenueSchema.shape,
-}).meta({ id: "UnknownVenue" });
+}).meta({ id: "UnknownVenue" }) satisfies z.ZodType<UnknownVenue>;

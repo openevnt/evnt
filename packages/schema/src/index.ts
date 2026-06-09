@@ -10,7 +10,6 @@ export * from "./schemas/enums/EventStatus";
 export * from "./schemas/venue/PhysicalVenue";
 export * from "./schemas/venue/OnlineVenue";
 export * from "./schemas/venue/UnknownVenue";
-export * from "./schemas/venue/VenueType";
 export * from "./schemas/components/EventComponent";
 export * from "./schemas/components/LinkComponent";
 export * from "./schemas/components/SourceComponent";
@@ -19,14 +18,14 @@ export * from "./schemas/components/BlueSkyRichtextComponent";
 export * from "./schemas/components/LanguagesComponent";
 export * from "./schemas/components/MarkdownComponent";
 
-export type { PartialDate } from "@evnt/partial-date";
-export type { Translations } from "@evnt/translations";
+// All canonical types come from @evnt/types
+export * from "@evnt/types";
 
-import type { EventData, $NSID } from "./schemas/EventData";
+import type { $NSID } from "./schemas/EventData";
+import type { OpenEvnt } from "@evnt/types";
 import type { } from "@atcute/lexicons/ambient";
 declare module "@atcute/lexicons/ambient" {
 	interface Records {
-		[$NSID]: EventData & { $type: typeof $NSID };
+		[$NSID]: OpenEvnt & { $type: typeof $NSID };
 	}
 }
-

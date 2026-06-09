@@ -1,11 +1,13 @@
-import type { LinkComponent, PartialDate } from "@evnt/schema";
-import { ComponentBuilder } from "./ComponentBuilder";
+import type { LinkComponent, PartialDate } from "@evnt/types";
 import type { EventBuilder } from "../EventBuilder";
-import { createTranslationAdder } from "../../utils/helpers";
+import { ComponentBuilder } from "./ComponentBuilder";
 
-export class LinkBuilder extends ComponentBuilder<"directory.evnt.component.link"> {
-	constructor(data: LinkComponent = { $type: "directory.evnt.component.link", url: "" }, parent?: EventBuilder) {
-		super(data, parent);
+export class LinkBuilder extends ComponentBuilder<LinkComponent> {
+	constructor(component?: LinkComponent, parent?: EventBuilder) {
+		super(component ?? {
+			$type: "directory.evnt.component.link",
+			url: "",
+		}, parent);
 	}
 
 	setUrl(url: string) {
@@ -13,7 +15,11 @@ export class LinkBuilder extends ComponentBuilder<"directory.evnt.component.link
 		return this;
 	}
 
-	setName = createTranslationAdder(() => this.component.name ??= {}, this);
+	setName(name: string, language?: string) {
+		this.component.name ??= {};
+		this.component.name[language ?? "en"] = name;
+		return this;
+	}
 
 	setDisabled(disabled: boolean) {
 		this.component.disabled = disabled;

@@ -1,11 +1,7 @@
 import z from "zod";
 import { PartialDateRegex, PartialDateUtil } from "@evnt/partial-date";
 
-export const PartialDateSchema = z.preprocess((o: any) => {
-	if (typeof o === "string" && !o.endsWith("]"))
-		return o + "[UTC]";
-	return o;
-}, z.string())
+export const PartialDateSchema = z.string()
 	.refine((val) => PartialDateUtil.isValid(val), { error: "Invalid PartialDate format" })
 	.meta({
 		id: "PartialDate",

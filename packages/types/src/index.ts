@@ -9,6 +9,8 @@ export * from "./event/component/LanguagesComponent";
 export * from "./event/component/LinkComponent";
 export * from "./event/component/SourceComponent";
 export * from "./event/component/SplashMediaComponent";
+export * from "./event/component/MarkdownComponent";
+export * from "./event/component/BlueSkyRichtextComponent";
 export * from "./event/venue/index";
 export * from "./event/venue/OnlineVenue";
 export * from "./event/venue/PhysicalVenue";
