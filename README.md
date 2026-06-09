@@ -1,7 +1,7 @@
 # <img src="https://github.com/deniz-blue/md-emojis/raw/main/emojis/denizblue/evnt.svg" width="32px" style="vertical-align: middle;" /> Open Evnt
 
 [![](https://shields.io/badge/visit_the-website-blue)](https://evnt.directory)
-[![](https://shields.io/badge/read_the-specification-blue)](./docs/README.md)
+[![](https://shields.io/badge/read_the-specification-blue)](./docs/full-spec.md)
 [![](https://shields.io/badge/join_the-discord-blue)](https://deniz.blue/discord-invite?id=1493641727980994710)
 [![](https://shields.io/badge/join_the-matrix-blue)](https://matrix.to/#/#evnt:catgirl.cloud)
 [![](https://shields.io/badge/follow_on-bluesky-blue)](https://bsky.app/profile/evnt.directory)
@@ -10,10 +10,9 @@ A modern data format for events.
 
 This monorepo contains a lot of things:
 
-__Specification__: The data format specification document, [**can be found here**](./docs/README.md). There's also:
+__Specification__: The data format specification document, [**can be found here**](./docs/full-spec.md). There's also:
 
 - [JSON Schema](./event-data.schema.json) of the data format
-- [Markdown documentation](./docs/SCHEMA.md) which is generated from the JSON Schema
 - [AT Protocol Lexicons](./lexicons/)
 
 __Packages__: We publish a few NPM packages to make it easier to work with the data format:
@@ -26,7 +25,7 @@ __Packages__: We publish a few NPM packages to make it easier to work with the d
 
 __Applications__
 
-- [landing](./apps/landing/): A landing page for the project hosted at https://evnt.directory
+- [landing](https://evnt.directory): A landing page for the project hosted at https://evnt.directory
 
 __Other Links__
 
@@ -52,7 +51,7 @@ If you want to build an application, a library, or anything else using Open Evnt
 
 The specification is open for contributions! If you have suggestions for improvements or have ideas or just want provide constructive criticism, feel free to open an issue or a pull request.
 
-When making a pull request, only update `docs/README.md`, `packages/schema` and `lexicons-src`. The JSON Schema and the Markdown documentation will be generated from these files.
+When making a pull request, only update `docs/full-spec.md`, `packages/schema` and `lexicons-src`. The JSON Schema and the Markdown documentation will be generated from these files.
 
 ### Contributing to the code
 

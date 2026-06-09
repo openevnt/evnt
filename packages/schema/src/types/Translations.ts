@@ -3,7 +3,7 @@ import type { Translations } from "@evnt/types";
 
 export type LanguageCode = z.infer<typeof LanguageCodeSchema>;
 export const LanguageCodeSchema = z.string().meta({
-	description: "BCP37 language code",
+	description: "BCP47 language code",
 });
 
 export const TranslationsSchema = z.record(LanguageCodeSchema, z.string())

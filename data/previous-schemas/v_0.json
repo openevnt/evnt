@@ -61,7 +61,7 @@
 			"type": "object",
 			"propertyNames": {
 				"type": "string",
-				"description": "BCP37 or ISO 639-1 language code"
+				"description": "BCP47 or ISO 639-1 language code"
 			},
 			"additionalProperties": {
 				"type": "string"

@@ -304,7 +304,7 @@ __Well-known map service NSIDs:__
 | `com.foursquare` | Foursquare | Venue ID |
 | `com.what3words` | what3words | 3-word address |
 | `org.geonames` | GeoNames | Feature ID |
-| `wiki.data` | Wikidata | Entity QID |
+| `org.wikidata.entity` | Wikidata | Entity QID |
 
 _Examples_:__
 

@@ -3,6 +3,7 @@
 node_modules
 .react-router
 build/
+cache
 .turbo
 dist
 .tmp
