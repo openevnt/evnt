@@ -1,5 +1,4 @@
-import type { OpenEvnt, Media, PhysicalVenue } from "@evnt/types";
-import type { PartialDate } from "@evnt/partial-date";
+import type { OpenEvnt, Media, PartialDate, PhysicalVenue } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { CommunityLexiconCalendarEvent } from "../../lexicons";
 import { EventBuilder, PhysicalVenueBuilder } from "@evnt/builder";

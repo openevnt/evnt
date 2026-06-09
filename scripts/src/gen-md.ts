@@ -13,11 +13,11 @@ export const genMarkdownDocs = async (dest: string | URL) => {
 
 	const list = convertSchemas(namedModels);
 	list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-	// Put EventDataSchema first
-	const eventDataIndex = list.findIndex((m) => m.name === "EventDataSchema");
-	if (eventDataIndex !== -1) {
-		const [eventDataModel] = list.splice(eventDataIndex, 1);
-		list.unshift(eventDataModel!);
+	// Put OpenEvntSchema first
+	const openEvntIndex = list.findIndex((m) => m.name === "OpenEvntSchema");
+	if (openEvntIndex !== -1) {
+		const [openEvntModel] = list.splice(openEvntIndex, 1);
+		list.unshift(openEvntModel!);
 	}
 	writeFileSync(
 		dest,

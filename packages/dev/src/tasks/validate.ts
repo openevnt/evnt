@@ -1,4 +1,4 @@
-import { EventDataSchema } from "@evnt/schema";
+import { OpenEvntSchema } from "@evnt/schema";
 import { JSONParseError, SchemaValidationError } from "../errors";
 import { ZodError } from "zod";
 
@@ -13,7 +13,7 @@ export const validateJsonFile = (
         throw new JSONParseError(filePath, e as SyntaxError);
     }
 
-    const { success, error, data } = EventDataSchema.safeParse(json);
+    const { success, error, data } = OpenEvntSchema.safeParse(json);
     if (!success) throw new SchemaValidationError(filePath, error as ZodError, content);
     return data;
 };

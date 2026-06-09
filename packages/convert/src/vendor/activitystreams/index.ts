@@ -1,5 +1,5 @@
 import type { OpenEvnt, PartialDate, Venue } from "@evnt/types";
-import { EventDataSchema } from "@evnt/schema";
+import { OpenEvntSchema } from "@evnt/schema";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { TranslationsUtil } from "@evnt/translations";
 
@@ -92,7 +92,7 @@ export const convertFromActivityStreamsEvent = (
 	} = {},
 ): OpenEvnt => {
 	if (isRecord(data.evntData)) {
-		const embedded = EventDataSchema.safeParse(data.evntData);
+		const embedded = OpenEvntSchema.safeParse(data.evntData);
 		if (embedded.success) return embedded.data;
 	}
 
@@ -294,32 +294,33 @@ export const convertToActivityStreamsEvent = (
 	const urls: string[] = [];
 	const attachments: Record<string, unknown>[] = [];
 
-	for (const component of data.components || []) {
+	for (const component of (data.components || []) as { $type: string; url?: string; media?: unknown; markdown?: string; text?: string }[]) {
 		if (component.$type === "directory.evnt.component.link" || component.$type === "directory.evnt.component.source") {
-			urls.push(component.url);
+			if (component.url) urls.push(component.url);
 			continue;
 		}
 
 		if (component.$type === "directory.evnt.component.splashMedia") {
-			for (const source of component.media.sources) {
+			const splash = component as { $type: "directory.evnt.component.splashMedia"; media: { sources: { url?: string; blob?: { mimeType?: string } }[]; alt?: Record<string, string> } };
+			for (const source of splash.media.sources) {
 				if (!source.url) continue;
 				attachments.push({
 					type: source.blob?.mimeType?.startsWith("video/") ? "Video" : "Image",
 					url: source.url,
 					mediaType: source.blob?.mimeType,
-					name: component.media.alt ? TranslationsUtil.translate(component.media.alt, [language]) : undefined,
+					name: splash.media.alt ? TranslationsUtil.translate(splash.media.alt, [language]) : undefined,
 				});
 			}
 			continue;
 		}
 
 		if (component.$type === "directory.evnt.richtext.markdown") {
-			if (!object.content) object.content = component.markdown;
+			if (!object.content && component.markdown) object.content = component.markdown;
 			continue;
 		}
 
 		if (component.$type === "app.bsky.richtext") {
-			if (!object.content) object.content = component.text;
+			if (!object.content && component.text) object.content = component.text;
 		}
 	}
 

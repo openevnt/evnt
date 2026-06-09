@@ -1,14 +1,14 @@
 import { describe, expect, test } from "vitest";
-import { EventDataSchema } from "../src/schemas/EventData";
+import { OpenEvntSchema } from "../src/schemas/OpenEvnt";
 
 test("basic parsing", () => {
-	expect(() => EventDataSchema.parse({})).toThrow();
+	expect(() => OpenEvntSchema.parse({})).toThrow();
 
-	expect(() => EventDataSchema.parse({ v: "0.1", name: {} })).not.toThrow();
+	expect(() => OpenEvntSchema.parse({ v: "0.1", name: {} })).not.toThrow();
 });
 
 test("venueIds reference", () => {
-	expect(() => EventDataSchema.parse({
+	expect(() => OpenEvntSchema.parse({
 		v: "0.1",
 		name: {},
 		venues: [
@@ -19,7 +19,7 @@ test("venueIds reference", () => {
 		],
 	})).not.toThrow();
 
-	expect(() => EventDataSchema.parse({
+	expect(() => OpenEvntSchema.parse({
 		v: "0.1",
 		name: {},
 		venues: [
@@ -33,7 +33,7 @@ test("venueIds reference", () => {
 
 describe("components", () => {
 	test("known link component validated", () => {
-		expect(() => EventDataSchema.parse({
+		expect(() => OpenEvntSchema.parse({
 			v: "0.1",
 			name: {},
 			components: [
@@ -41,7 +41,7 @@ describe("components", () => {
 			],
 		})).toThrow();
 
-		expect(() => EventDataSchema.parse({
+		expect(() => OpenEvntSchema.parse({
 			v: "0.1",
 			name: {},
 			components: [
@@ -51,7 +51,7 @@ describe("components", () => {
 	});
 
 	test("unknown components", () => {
-		expect(() => EventDataSchema.parse({
+		expect(() => OpenEvntSchema.parse({
 			v: "0.1",
 			name: {},
 			components: [
@@ -64,7 +64,7 @@ describe("components", () => {
 
 describe("v0 compatibility", () => {
 	test("parsing v0.1 data", () => {
-		expect(() => EventDataSchema.parse({
+		expect(() => OpenEvntSchema.parse({
 			v: 0,
 			name: {},
 			venues: [
@@ -78,7 +78,7 @@ describe("v0 compatibility", () => {
 			],
 		})).not.toThrow();
 
-		const parsed = EventDataSchema.parse({
+		const parsed = OpenEvntSchema.parse({
 			v: 0,
 			name: {},
 			venues: [

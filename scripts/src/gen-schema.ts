@@ -1,8 +1,8 @@
 import { writeFileSync } from "node:fs";
-import { EventDataSchema } from "@evnt/schema";
+import { OpenEvntSchema } from "@evnt/schema";
 
 export const genJsonSchema = async (dest: string | URL) => {
-	const jsonSchema = EventDataSchema.toJSONSchema({
+	const jsonSchema = OpenEvntSchema.toJSONSchema({
 		override(ctx) {
 			// Remove examples/defaultSnippets/default from TranslationsSchema to reduce size
 			if (!!ctx.jsonSchema.$ref) {

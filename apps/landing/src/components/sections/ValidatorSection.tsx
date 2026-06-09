@@ -1,7 +1,7 @@
 import { JsonInput, Paper, Stack, Text, Title } from "@mantine/core";
 import { Section } from "../Section";
 import { useState } from "react";
-import { EventDataSchema } from "@evnt/schema";
+import { OpenEvntSchema } from "@evnt/schema";
 import type { OpenEvnt } from "@evnt/types";
 import { z } from "zod";
 
@@ -20,7 +20,7 @@ export const ValidatorSection = () => {
 	}
 
 	if (object) {
-		let result = EventDataSchema.safeParse(object);
+		let result = OpenEvntSchema.safeParse(object);
 		if (!result.success) error = z.prettifyError(result.error);
 	}
 

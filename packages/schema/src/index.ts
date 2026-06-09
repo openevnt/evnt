@@ -3,7 +3,7 @@ export * from "./types/PartialDate";
 export * from "./types/Media";
 export * from "./types/MediaSource";
 export * from "./schemas/venue/Venue";
-export * from "./schemas/EventData";
+export * from "./schemas/OpenEvnt";
 export * from "./schemas/instance/EventInstance";
 export * from "./schemas/instance/EventActivity";
 export * from "./schemas/enums/EventStatus";
@@ -21,7 +21,7 @@ export * from "./schemas/components/MarkdownComponent";
 // All canonical types come from @evnt/types
 export * from "@evnt/types";
 
-import type { $NSID } from "./schemas/EventData";
+import type { $NSID } from "./schemas/OpenEvnt";
 import type { OpenEvnt } from "@evnt/types";
 import type { } from "@atcute/lexicons/ambient";
 declare module "@atcute/lexicons/ambient" {

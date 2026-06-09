@@ -25,7 +25,7 @@ const preprocessEvent = (input: any) => {
 	return data;
 };
 
-export const EventDataSchema = z.preprocess(preprocessEvent, z.object({
+export const OpenEvntSchema = z.preprocess(preprocessEvent, z.object({
 	$type: z.literal($NSID).optional().meta({ description: "The type of the event data" }),
 	v: z.literal("0.1").meta({ description: "The version of the Event Data schema" }),
 
@@ -42,7 +42,7 @@ export const EventDataSchema = z.preprocess(preprocessEvent, z.object({
 }, {
 	message: "Incorrect venueIds reference(s)",
 }).meta({
-	id: "EventData",
+	id: "OpenEvnt",
 	title: "Event Data",
 	description: "An event",
 	$id: $ID,
