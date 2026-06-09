@@ -25,7 +25,7 @@ declare module "@evnt/types" {
 	}
 }
 
-export const PartialDateRegex = /^(?<year>\d{4})(?:-(?<month>\d{2})(?:-(?<day>\d{2})(?:T(?<time>(?<hour>\d{2}):(?<minute>\d{2}))?)?)?)?(?:\[(?<timezone>[\w\/+]+)\])?$/;
+export const PartialDateRegex = /^(?<year>\d{4})(?:-(?<month>\d{2})(?:-(?<day>\d{2})(?:T(?<time>(?<hour>\d{2}):(?<minute>\d{2}))?)?)?)?\[(?<timezone>[\-\w\/+]+)\]$/;
 
 export const PartialDateUtil = new class {
 	// == Validation methods ==
@@ -55,7 +55,7 @@ export const PartialDateUtil = new class {
 
 		const { year, month, day, hour, minute, timezone } = match.groups;
 		const parsed: PartialDate.Parsed.Fields = {
-			timezone: timezone ? timezone : "UTC",
+			timezone: timezone!,
 			year: parseInt(year!, 10),
 			month: month ? parseInt(month, 10) : 1,
 			day: day ? parseInt(day, 10) : 1,

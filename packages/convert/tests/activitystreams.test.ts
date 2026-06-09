@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 import type { OpenEvnt } from "@evnt/types";
-import { convertFromActivityStreamsEvent, convertToActivityStreamsEvent } from "../src/vendor/activitystreams";
+import { activitystreams } from "../src/formats/activitystreams";
+
+const { from, to } = activitystreams;
+const convertFromActivityStreamsEvent = from!;
+const convertToActivityStreamsEvent = to!;
 
 describe("activitystreams converter", () => {
 	test("converts ActivityStreams Event into OpenEvnt", () => {

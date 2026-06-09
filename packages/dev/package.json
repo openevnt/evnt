@@ -1,6 +1,6 @@
 {
 	"name": "@evnt/dev",
-	"description": "Build static files of events",
+	"description": "CLI for working with OpenEvnt events",
 	"version": "0.1.0",
 	"type": "module",
 	"author": "deniz.blue",
@@ -8,34 +8,30 @@
 	"files": [
 		"/dist"
 	],
-	"bin": "./dist/cli.js",
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"homepage": "https://github.com/openevnt/evnt#readme",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/openevnt/evnt.git",
-		"directory": "packages/dev"
+	"bin": {
+		"openevnt": "./dist/cli.js"
 	},
 	"scripts": {
-		"build": "tsc && ts-add-js-extension --dir=dist",
-		"dev": "tsx watch ./src/cli.ts"
+		"build": "tsc",
+		"dev": "tsx ./src/cli.ts"
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
 		"@types/babel__code-frame": "^7.27.0",
 		"@types/node": "^25.6.0",
-		"ts-add-js-extension": "^1.6.6",
+		"cac": "^7.0.0",
+		"picocolors": "^1.1.1",
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.3"
 	},
 	"dependencies": {
-		"@actions/core": "^3.0.0",
-		"@actions/github": "^9.1.0",
 		"@babel/code-frame": "^7.27.1",
+		"@evnt/convert": "workspace:*",
+		"@evnt/partial-date": "workspace:*",
+		"@evnt/pretty": "workspace:*",
 		"@evnt/schema": "workspace:*",
+		"@evnt/types": "workspace:*",
 		"jsonc-parser": "^3.3.1",
-		"temporal-polyfill-lite": "^0.3.4",
 		"zod": "^4.3.6"
 	}
 }

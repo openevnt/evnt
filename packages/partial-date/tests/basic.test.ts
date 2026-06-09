@@ -2,11 +2,11 @@ import { expect, test } from "vitest";
 import { PartialDateUtil } from "../src/index";
 
 test("parses correctly", () => {
-	expect(PartialDateUtil.isValid("2024")).toBe(true);
-	expect(PartialDateUtil.isValid("2024-05")).toBe(true);
-	expect(PartialDateUtil.isValid("2024-05-20")).toBe(true);
-	expect(PartialDateUtil.isValid("2024-05-20T14:30")).toBe(true);
+	expect(PartialDateUtil.isValid("2024[UTC]")).toBe(true);
+	expect(PartialDateUtil.isValid("2024-05[UTC]")).toBe(true);
+	expect(PartialDateUtil.isValid("2024-05-20[UTC]")).toBe(true);
 	expect(PartialDateUtil.isValid("2024-05-20T14:30[America/New_York]")).toBe(true);
+	expect(PartialDateUtil.isValid("2024-05-20T14:30[Europe/London]")).toBe(true);
 
 	expect(PartialDateUtil.isValid("2024-1")).toBe(false);
 	expect(PartialDateUtil.isValid("2024-05-")).toBe(false);

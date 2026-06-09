@@ -1,7 +1,44 @@
 # @evnt/partial-date
 
-[Open Evnt](https://evnt.directory) partial date utilities.
+Partial date parsing and formatting for [Open Evnt](https://evnt.directory).
 
-Requires Temporal support. For environments without Temporal, you can use the [temporal-polyfill-lite](https://npmx.dev/package/temporal-polyfill-lite) package.
+Partial dates are strings with a **required** timezone bracket, supporting
+any precision from year-only down to minute:
+
+```
+2026[UTC]
+2026-06[Europe/London]
+2026-06-15[America/New_York]
+2026-06-15T18:00[Europe/London]
+2026-06-15T18:00[Etc/GMT+5]
+```
+
+## Usage
+
+```ts
+import { PartialDateUtil } from "@evnt/partial-date";
+
+// Parse a PartialDate string into a structured object
+const parsed = PartialDateUtil.parse("2026-06-15T18:00[Europe/London]");
+// { year: 2026, month: 6, day: 15, hour: 18, minute: 0, timezone: "Europe/London", precision: "time" }
+
+// Format back to a string
+const str = PartialDateUtil.format(parsed);
+// "2026-06-15T18:00[Europe/London]"
+
+// Convert to a Temporal.ZonedDateTime (requires Temporal API)
+const zdt = PartialDateUtil.asZonedDateTime(parsed);
+```
+
+## Requirements
+
+Requires the [Temporal API](https://tc39.es/proposal-temporal/docs/).
+For environments without native Temporal, use
+[temporal-polyfill-lite](https://npmx.dev/package/temporal-polyfill-lite).
+
+## Regex
+
+`PartialDateRegex` is also exported for use in validation contexts.
+
 
 

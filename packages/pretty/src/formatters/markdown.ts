@@ -1,8 +1,11 @@
 import type { LinkSummary } from "../types";
 import type { FormatConfig } from "./base";
+import { PlainTextFormatter } from "./base";
 import { EmojiFormatter } from "./emoji";
 
 export class MarkdownFormatter extends EmojiFormatter {
+	static defaults: FormatConfig = PlainTextFormatter.defaults;
+
 	constructor(config: FormatConfig) {
 		super(config);
 	}
