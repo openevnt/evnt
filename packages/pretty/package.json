@@ -1,6 +1,6 @@
 {
 	"name": "@evnt/pretty",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"type": "module",
 	"author": "deniz.blue <deniz@deniz.blue>",
 	"keywords": [],
@@ -11,15 +11,13 @@
 		"build": "tsc"
 	},
 	"exports": {
-		".": "./src/index.ts",
-		"./markdown": "./src/markdown/index.ts"
+		".": "./src/index.ts"
 	},
 	"publishConfig": {
 		"main": "./dist/index.js",
 		"types": "./dist/index.d.ts",
 		"exports": {
-			".": "./dist/index.js",
-			"./markdown": "./dist/markdown/index.js"
+			".": "./dist/index.js"
 		}
 	},
 	"devDependencies": {
@@ -28,7 +26,6 @@
 	},
 	"dependencies": {
 		"@evnt/partial-date": "workspace:^",
-		"@evnt/schema": "workspace:^",
 		"@evnt/translations": "workspace:^",
 		"@evnt/types": "workspace:^"
 	}
