@@ -1,8 +1,13 @@
 import type { LinkSummary } from "../types";
-import { PlainTextFormatter } from "./base";
+import type { FormatConfig } from "./base";
+import { EmojiFormatter } from "./emoji";
 
-export class MarkdownFormatter extends PlainTextFormatter {
-	// == Sections =======================================
+export class MarkdownFormatter extends EmojiFormatter {
+	constructor(config: FormatConfig) {
+		super(config);
+	}
+
+	// == Sections ========================================
 
 	protected override formatHeader(text: string): string {
 		return `**${text}**`;
@@ -18,7 +23,6 @@ export class MarkdownFormatter extends PlainTextFormatter {
 		const icon = this.config.emoji[venue.type] ?? "";
 		let name = venue.name;
 
-		// Make online venue URL clickable when detail is the URL
 		if (venue.type === "online" && venue.detail) {
 			name = this.mdLink(venue.name, venue.detail);
 		}
@@ -44,10 +48,7 @@ export class MarkdownFormatter extends PlainTextFormatter {
 
 	protected override formatDescription(text: string): string {
 		const firstPara = text.split("\n\n")[0] ?? text;
-		const truncated = firstPara.length > 200
-			? firstPara.slice(0, 200) + "…"
-			: firstPara;
-		return truncated;
+		return firstPara.length > 200 ? firstPara.slice(0, 200) + "…" : firstPara;
 	}
 
 	// == Markdown helpers ================================

@@ -1,13 +1,27 @@
 import { PartialDateUtil } from "@evnt/partial-date";
-import type { PartialDate, EventStatus } from "@evnt/types";
+import type { EventStatus, PartialDate } from "@evnt/types";
 import type { AnalyzedEvent, DateGroup, VenueSummary, ActivitySummary, LinkSummary } from "../types";
-import type { FormatConfig } from "../format-config";
+
+// == Config ==============================================
+
+export type TimestampStyle = "off" | "both" | "only";
+
+export interface FormatConfig {
+	language: string;
+	timezone: string;
+	showStatus: boolean;
+	showActivities: boolean;
+	showLinks: boolean;
+	showDescription: boolean;
+	compactDates: boolean;
+	emoji: Record<string, string>;
+	statusIcons: Record<EventStatus, string>;
+}
 
 // == Helpers ==============================================
 
 const hasDay = (pd: PartialDate) => PartialDateUtil.has(pd, "day");
 const hasTime = (pd: PartialDate) => PartialDateUtil.has(pd, "time");
-const hasMonth = (pd: PartialDate) => PartialDateUtil.has(pd, "month");
 
 const parseFields = (pd: PartialDate): PartialDate.Parsed.Fields =>
 	PartialDateUtil.parse(pd) as PartialDate.Parsed.Fields;
@@ -32,11 +46,36 @@ const isSameDay = (a: PartialDate, b: PartialDate): boolean => {
 // == Base formatter =======================================
 
 export class PlainTextFormatter {
+	static defaults: FormatConfig = {
+		language: "en",
+		timezone: "UTC",
+		showStatus: false,
+		showActivities: false,
+		showLinks: false,
+		showDescription: false,
+		compactDates: true,
+		emoji: {
+			calendar: "📅",
+			clock: "🕐",
+			online: "🌐",
+			physical: "📍",
+			unknown: "📍",
+			link: "🔗",
+			activity: "🎭",
+		},
+		statusIcons: {
+			planned: "",
+			uncertain: "🟡",
+			postponed: "🟡",
+			cancelled: "🔴",
+			suspended: "🟠",
+		},
+	};
+
 	constructor(protected config: FormatConfig) {}
 
 	// == Top-level =======================================
 
-	/** Render a full event summary. */
 	formatEvent(event: AnalyzedEvent): string {
 		const lines: string[] = [];
 
@@ -88,8 +127,7 @@ export class PlainTextFormatter {
 	}
 
 	formatStatus(status: EventStatus, text: string): string {
-		const icon = this.config.statusIcons[status] ?? "";
-		return [icon, text].filter(Boolean).join(" ");
+		return text;
 	}
 
 	// == Date groups =====================================
@@ -97,64 +135,33 @@ export class PlainTextFormatter {
 	protected formatDateGroup(group: DateGroup): string {
 		const dateStr = this.formatDateEntries(group.entries);
 		const timeStr = group.timeRanges.map(tr => this.formatTimeRange(tr.start, tr.end)).filter(Boolean).join(", ");
-
-		const parts = [
-			this.config.emoji.calendar,
-			dateStr,
-		];
-
-		if (timeStr) {
-			const firstTime = group.timeRanges[0]?.start ?? group.timeRanges[0]?.end;
-			const clockIcon = firstTime && hasTime(firstTime) ? this.clockEmoji(firstTime as PartialDate) : this.config.emoji.clock;
-			parts.push("·", clockIcon ?? this.config.emoji.clock ?? "🕐", timeStr);
-		}
-
-		return parts.filter(Boolean).join(" ");
-	}
-
-	/** Map a time-precision PartialDate to a clock face emoji. */
-	protected clockEmoji(pd: PartialDate): string {
-		const parsed = PartialDateUtil.parse(pd);
-		if (parsed.precision !== "time") return this.config.emoji.clock ?? "🕐";
-		const hour12 = (parsed.hour % 12) || 12;
-		const base = parsed.minute >= 30 ? 0x1F55C : 0x1F550;
-		return String.fromCodePoint(base + hour12 - 1);
+		return [dateStr, timeStr].filter(Boolean).join(" · ");
 	}
 
 	protected formatDateEntries(entries: { start?: PartialDate; end?: PartialDate }[]): string {
 		if (entries.length === 0) return "";
 
-		// Single date
 		if (entries.length === 1) {
 			const e = entries[0]!;
-			if (e.start && e.end && isSameDay(e.start, e.end)) {
-				return this.formatDate(e.start);
-			}
-			if (e.start && e.end) {
-				return this.formatDateRange(e.start, e.end);
-			}
+			if (e.start && e.end && isSameDay(e.start, e.end)) return this.formatDate(e.start);
+			if (e.start && e.end) return this.formatDateRange(e.start, e.end);
 			if (e.start) return this.formatDate(e.start);
 			if (e.end) return this.formatDate(e.end);
 			return "";
 		}
 
-		// Consecutive range: start of first → end of last
 		const allDays: PartialDate[] = [];
 		for (const e of entries) {
-			if (e.start && hasDay(e.start)) {
-				allDays.push(asDay(e.start));
-			}
+			if (e.start && hasDay(e.start)) allDays.push(asDay(e.start));
 		}
 
 		if (allDays.length >= 2 && this.isConsecutiveRange(allDays)) {
 			return this.formatDateRange(allDays[0]!, allDays[allDays.length - 1]!);
 		}
 
-		// Non-consecutive list
 		return allDays.map(d => this.formatDate(d)).join(", ");
 	}
 
-	/** True when all days in the sorted list are consecutive (no gaps). */
 	protected isConsecutiveRange(days: PartialDate[]): boolean {
 		for (let i = 1; i < days.length; i++) {
 			const prev = parseFields(days[i - 1]!);
@@ -230,7 +237,6 @@ export class PlainTextFormatter {
 			hour12: false,
 		});
 
-		// Timezone hint when different from user's timezone
 		if (parsed.timezone !== this.config.timezone) {
 			const withTime = pd as PartialDate.YearMonthDayTime;
 			const instant = PartialDateUtil.asZonedDateTime(withTime).toInstant();
@@ -240,9 +246,7 @@ export class PlainTextFormatter {
 				hour12: false,
 				timeZone: this.config.timezone,
 			});
-			if (time !== localTime) {
-				return `${time} (${localTime})`;
-			}
+			if (time !== localTime) return `${time} (${localTime})`;
 		}
 
 		return time;
@@ -251,21 +255,13 @@ export class PlainTextFormatter {
 	// == Venues ==========================================
 
 	protected formatVenue(venue: VenueSummary): string {
-		const icon = this.config.emoji[venue.type] ?? "";
-		const parts = [icon, venue.name].filter(Boolean);
-
-		if (venue.detail) {
-			parts.push("·", venue.detail);
-		}
-
-		return parts.join(" ");
+		return [venue.name, venue.detail].filter(Boolean).join(" · ");
 	}
 
 	// == Activities ======================================
 
 	protected formatActivity(activity: ActivitySummary): string {
-		const icon = this.config.emoji.activity ?? "";
-		const parts: string[] = [icon, activity.name].filter(Boolean);
+		const parts: string[] = [activity.name];
 
 		if (activity.time) {
 			const timeStr = activity.duration
@@ -274,9 +270,7 @@ export class PlainTextFormatter {
 			parts.push("·", timeStr);
 		}
 
-		if (activity.day) {
-			parts.push(`(Day ${activity.day})`);
-		}
+		if (activity.day) parts.push(`(Day ${activity.day})`);
 
 		return parts.join(" ");
 	}
@@ -284,24 +278,18 @@ export class PlainTextFormatter {
 	// == Links ===========================================
 
 	protected formatLink(link: LinkSummary): string {
-		const icon = this.config.emoji.link ?? "";
-		const text = link.name ?? link.url;
-		return [icon, text].filter(Boolean).join(" ");
+		return link.name ?? link.url;
 	}
 
 	// == Description =====================================
 
 	protected formatDescription(text: string): string {
-		// Shorten to first paragraph / first few lines
 		const firstPara = text.split("\n\n")[0] ?? text;
-		const truncated = firstPara.length > 200
-			? firstPara.slice(0, 200) + "…"
-			: firstPara;
-		return truncated;
+		return firstPara.length > 200 ? firstPara.slice(0, 200) + "…" : firstPara;
 	}
 }
 
-// == Helpers ==============================================
+// == Shared helpers =======================================
 
 const addDuration = (time: string, duration: string): string => {
 	const [th, tm] = time.split(":").map(Number);

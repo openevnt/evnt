@@ -17,10 +17,9 @@ One call:
 
 ```ts
 renderMarkdown(event, {
-  language: "de",
-  timezone: "Europe/Berlin",
-  showLinks: true,
-  showActivities: true,
+	language: "de",
+	timezone: "Europe/Berlin",
+	showLinks: true,
 });
 ```
 
@@ -33,16 +32,14 @@ const analyzed = analyzeEvent(event, { language: "fr", mergeInstances: true });
 
 const plain = new PlainTextFormatter({ language: "fr" }).formatEvent(analyzed);
 const md    = new MarkdownFormatter({ language: "fr" }).formatEvent(analyzed);
-const dc    = new DiscordFormatter({ language: "fr" }).formatEvent(analyzed);
+const dc    = new DiscordFormatter({ ...DiscordFormatter.defaults, language: "fr" }).formatEvent(analyzed);
 ```
 
-## Config
+## Layers
 
-Two separate configs, merged at convenience level. No key conflicts.
+### AnalyzeConfig & analyzeEvent
 
-### AnalyzeConfig
-
-Controls how the event data is interpreted.
+Controls how the event data is interpreted. Defined in `analyze-config.ts`.
 
 | Option           | Default | What it does                                                                                            |
 |------------------|---------|---------------------------------------------------------------------------------------------------------|
@@ -51,9 +48,15 @@ Controls how the event data is interpreted.
 | `maxVenues`      | `3`     | Collapse to "N locations" past this                                                                     |
 | `maxDates`       | `5`     | Collapse date groups past this                                                                          |
 
-### FormatConfig
+```ts
+const analyzed = analyzeEvent(event, { language: "de" });
+```
 
-Controls how the output looks.
+### PlainTextFormatter & FormatConfig
+
+The base formatter — pure text, no emoji, no markdown. Good for SMS, notifications, CLI output.
+
+Config defined in `formatters/base.ts`. Used by `EmojiFormatter` and `MarkdownFormatter` too.
 
 | Option            | Default       | What it does                                         |
 |-------------------|---------------|------------------------------------------------------|
@@ -67,34 +70,72 @@ Controls how the output looks.
 | `emoji`           | _(see below)_ | Icon overrides                                       |
 | `statusIcons`     | _(see below)_ | Status icon overrides                                |
 
+Each formatter has `static defaults` to fill in the blanks:
+
+```ts
+new MarkdownFormatter({ ...MarkdownFormatter.defaults, language: "fr" });
+```
+
+```ts
+const f = new PlainTextFormatter({ language: "de" });
+console.log(f.formatEvent(analyzed));
+// Tech Meetup
+// Jun 15 · 18:00–21:00
+// Google Campus · 6 Pancras Square, GB
+```
+
 Set any emoji or status icon to `""` to suppress it. Example: `statusIcons: { planned: "" }` renders just "Planned" with no emoji.
+
+### EmojiFormatter
+
+Extends `PlainTextFormatter`. Adds calendar/clock/venue/link/activity emoji and status icons. The clock emoji is dynamically picked to match the hour (🕐–🕛).
+
+### MarkdownFormatter
+
+Extends `EmojiFormatter`. Bolds the header, italicizes the label, makes online URLs clickable.
+
+```ts
+const f = new MarkdownFormatter({ language: "de" });
+// **Tech Meetup**
+// 📅 Jun 15 · 18:00–21:00
+// 📍 Google Campus · 6 Pancras Square, GB
+```
+
+### DiscordFormatter & DiscordFormatConfig
+
+Extends `MarkdownFormatter`. Config defined in `formatters/discord.ts`.
+
+| Option           | Default | What it does                                                           |
+|------------------|---------|------------------------------------------------------------------------|
+| `timestampStyle` | `"off"` | `"off"` = text, `"both"` = timestamp + text, `"only"` = timestamp only |
+
+When `timestampStyle` is `"only"` or `"both"`, dates/times use Discord inline timestamps (`<t:unix:style>`) that render in each user's local timezone. Also uses masked links (`[text](url)`) and blockquote prefixes (`-#`).
+
+```ts
+new DiscordFormatter({
+	...DiscordFormatter.defaults,
+	timestampStyle: "only",
+});
+```
 
 ### Emoji defaults
 
 ```ts
 emoji: {
-  calendar: "📅",
-  clock: "🕐",
-  online: "🌐",
-  physical: "📍",
-  unknown: "📍",
-  link: "🔗",
-  activity: "🎭",
+	calendar: "📅",
+	clock: "🕐",
+	online: "🌐",
+	physical: "📍",
+	unknown: "📍",
+	link: "🔗",
+	activity: "🎭",
 }
 
 statusIcons: {
-  planned: "✅",
-  uncertain: "🟡",
-  postponed: "⏰",
-  cancelled: "❌",
-  suspended: "⏸️",
+	planned: "",
+	uncertain: "🟡",
+	postponed: "🟡",
+	cancelled: "🔴",
+	suspended: "🟠",
 }
 ```
-
-## Formatters
-
-The three formatters form a class hierarchy:
-
-- **PlainTextFormatter** -- base, works standalone (CLIs, SMS, notifications)
-- **MarkdownFormatter** extends it -- adds bold, italic, clickable links
-- **DiscordFormatter** extends MarkdownFormatter -- Discord link syntax (`<url>`), blockquote prefixes
