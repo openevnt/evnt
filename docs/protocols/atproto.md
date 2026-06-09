@@ -15,7 +15,7 @@ These can be found on [PDSls](https://pds.ls/at://evnt.directory/com.atproto.lex
 
 ## Community lexicon interop
 
-The widely-used `community.lexicon.calendar.event` lexicon is structurally different from Open Evnt, but `@evnt/convert` includes a converter:
+The `community.lexicon.calendar.event` lexicon is structurally different from Open Evnt, but `@evnt/convert` includes a converter:
 
 ```ts
 import { communityLexicon } from "@evnt/convert";
@@ -32,4 +32,15 @@ Event data can be stored as AT Protocol records and fetched via AT URIs. The [ev
 
 `https://eventsl.ink/e?at=at://did:plc:ir2qabq56znbbinhktehjmc6/directory.evnt.event/3mgnekiomev2y`
 
-Vantage also supports fetching events from AT Protocol PDS instances, enabling a decentralized event discovery ecosystem.
+Vantage also fetches events from AT Protocol PDS instances for decentralized event discovery.
+
+## Sidecar records
+
+For AT Protocol applications that want both broad compatibility and rich event data, publish both a `community.lexicon.calendar.event` record and a `directory.evnt.event` record under the same rkey:
+
+```
+at://did:plc:example/directory.evnt.event/SAME_RKEY          -- full Open Evnt data
+at://did:plc:example/community.lexicon.calendar.event/SAME_RKEY -- basic Lexicon data
+```
+
+Apps that only understand Community Lexicon (atmo.rsvp, smokesignal.events) read the Lexicon record. Apps that understand Open Evnt (Vantage) read the `directory.evnt` record. Both identify the same event by the same record key. This is not a conversion -- it is dual publication from a single canonical source.

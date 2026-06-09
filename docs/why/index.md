@@ -1,8 +1,10 @@
 # Why Open Evnt
 
-Most event data formats were designed for specific use cases, not for general purpose event representation. iCalendar (RFC 5545) was built for calendar interoperability: recurrence rules, attendees, free/busy queries. The community lexicon was built for the AT Protocol social graph. Both are good at what they were designed for. Neither is good at representing what an event actually is.
+Events today are scattered. A conference is on Luma for tickets, Google Calendar for scheduling, BlueSky for announcements, and a website for details. Each platform stores a partial copy. Users check five places to find what is happening. Developers maintain five integrations. The event itself lives in none of them.
 
-Open Evnt is a file format that focuses on the event itself: what happens, where it happens, and when it happens.
+Most event data formats were designed for one specific system -- a calendar, a social network, a website. They work well inside that system. But they are not designed to describe an event on its own terms, and they cannot carry event data between systems without losing information.
+
+Open Evnt is a file format that focuses on the event itself: what happens, where it happens, and when it happens. It is designed to be the single source of truth -- one file that contains everything about an event, ready to be converted to any platform format without data loss.
 
 ## What makes it different
 
@@ -16,7 +18,7 @@ Open Evnt is a file format that focuses on the event itself: what happens, where
 
 **Extensible without limits.** The component system lets anyone add any field. Ticket links, dietary info, organizer bios -- none require a spec update.
 
-**Converts to and from existing formats.** iCalendar, ActivityStreams, Schema.org, Google Events, Community Lexicon. Your existing tooling does not need to change overnight.
+**Converts to and from existing formats.** iCalendar, ActivityStreams, Schema.org, Google Events, Community Lexicon. Use Open Evnt as your canonical format and convert to whatever platform you need -- your event data is not trapped in a single ecosystem.
 
 ## What this means for developers
 
@@ -33,7 +35,7 @@ Every team that builds an events system independently discovers the same edge ca
 | `start_ts TIMESTAMPTZ` | An event announced as "March 2026" | You add a `precision` column. Every query checks it. You have reinvented PartialDate. |
 | `name TEXT` | French and German names | You add `name_fr`, `name_de`, then a translations table with joins. You have reinvented the Translations type. |
 | `venue VARCHAR` | A hybrid event with physical + online venue | You normalize venues, add a join table, duplicate venue assignment per day. You have reinvented instance-venue decoupling. |
-| `metadata JSONB` | Ticket URLs, organizer bios, dietary info | Your team uses different keys. Some collide. None have docs. Open Evnt's component system is this escape hatch, designed from the start with namespace ownership. |
+| `metadata JSONB` | Ticket URLs, organizer bios, dietary info | Your team uses different keys. Some collide. None have docs. Open Evnt's component system provides this escape hatch, designed from the start so different teams can add fields without stepping on each other. |
 | Nothing | Google Calendar export | You write a one-off iCalendar converter. It has bugs. You maintain it forever. |
 
 Open Evnt is those edge cases, solved and documented. The npm packages (`@evnt/schema`, `@evnt/convert`, `@evnt/partial-date`, `@evnt/pretty`) provide the tooling you would otherwise write from scratch. The spec and rationale pages document the decisions so your next hire does not need to rediscover them.
@@ -44,4 +46,4 @@ A team of one can ignore a format and hand-roll their schema. A team of ten inhe
 
 Open Evnt is plain JSON. Any file with the correct structure is valid. The canonical JSON Schema is published at the [GitHub repository](https://raw.githubusercontent.com/openevnt/evnt/refs/heads/main/event-data.schema.json) and can be used for validation.
 
-Tooling for validation, conversion, pretty-printing, and scaffolding is available under the `@evnt/*` namespace on npm, but the format has no dependency on any of these packages. 
+Tooling for validation, conversion, pretty-printing, and scaffolding is available under the `@evnt/*` namespace on npm, but the format has no dependency on any of these packages.

@@ -1,6 +1,6 @@
 # Instances
 
-A single start and end time is not enough for real events. A three-day conference with different hours each day cannot be represented as one continuous timespan. A rotating meetup that uses a different venue each month cannot be represented as one location.
+A conference runs 9 to 6 on Monday, 10 to 5 on Tuesday, and all day Wednesday. A meetup moves to a different bar each month. One start time and one end time cannot capture this.
 
 Open Evnt solves this with instances. Each occurrence of the event gets its own start, end, and venue references. They share the same event metadata (name, description, components) but have independent times and locations.
 

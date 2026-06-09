@@ -14,7 +14,7 @@ Event data should preserve the wall-clock time (the intended time at the locatio
 
 ## What is a PartialDate
 
-Open Evnt uses a single string type called PartialDate. Precision varies from year-only down to minute, and the timezone is always explicit.
+Open Evnt uses a single string type called PartialDate. It is a date format that allows year-only (2026), year-month (2026-03), or full dates with timezone. Precision varies from year-only down to minute, and the timezone is always explicit.
 
 ```
 YYYY(-MM(-DD(THH:mm)?)?)?[TZ]

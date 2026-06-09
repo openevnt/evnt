@@ -6,7 +6,7 @@ Most formats handle this in one of two ways: hardcode every imaginable field (th
 
 ## How it works
 
-Components are objects with a `$type` string that identifies their schema. The root object contains the universal event structure (version, name, status, label, venues, instances). Everything beyond these built-in fields lives in components with their own namespaced types.
+Each component has a type label that says what it is. The root object contains the universal event structure (version, name, status, label, venues, instances). Everything beyond these built-in fields lives in components with their own named types.
 
 ```json
 {
@@ -20,13 +20,13 @@ Components are objects with a `$type` string that identifies their schema. The r
 }
 ```
 
-This is a future compatibility guarantee. Adding a ticket link, an organizer field, or dietary information does not require a new version of the spec. It requires a new component type -- defined under a namespace you control.
+Adding a ticket link, an organizer field, or dietary information does not require a new version of the spec. It requires a new component type -- defined under a namespace you control.
 
 ## Future compatibility
 
-Because component types are namespaced (like AT Protocol or Java package notation), no two organizations can collide. A ticketing platform defines `com.ticketmaster.pricing`. A conference tool defines `com.pretalx.track`. Both coexist in the same event without conflict.
+Component types use a namespaced format (like `com.example.mytype`) so no two organizations can collide. A ticketing platform defines `com.ticketmaster.pricing`. A conference tool defines `com.pretalx.track`. Both coexist in the same event without conflict.
 
-Applications that do not understand a component type must preserve it when editing. This means tools can evolve independently -- an app that does not understand ticket pricing will not delete pricing data when saving an event. This is critical for ecosystem trust and forward compatibility.
+Applications that do not understand a component type must preserve it when editing. An app that does not understand ticket pricing will not delete pricing data when saving an event. This allows tools to evolve independently without breaking each other's data.
 
 ## Existing types
 
@@ -47,4 +47,4 @@ Real projects already define custom types:
 | `blue.deniz.events.organizer` | events-data | Organizer with contacts and avatar |
 | `at.markpub.markdown` | events-data | Markdown descriptions |
 
-The format is not opinionated about ticketing, RSVPs, organizers, or any other application-specific concern. Those live in components, not in the core spec. Define your own `$type` under your namespace -- no permission needed.
+The format is not opinionated about ticketing, RSVPs, organizers, or any other application-specific concern. Those live in components, not in the core spec. Define your own type under your namespace -- no permission needed.

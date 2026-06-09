@@ -2,16 +2,16 @@
 
 Convenience tooling for working with Open Evnt is published under the `@evnt` scope on npm. The format itself has no dependency on these packages.
 
-| Package | npm install | Description |
-|---------|-------------|-------------|
-| `@evnt/types` | `npm install @evnt/types` | TypeScript type definitions for the format |
-| `@evnt/schema` | `npm install @evnt/schema` | Zod validation schemas, re-exports types |
-| `@evnt/partial-date` | `npm install @evnt/partial-date` | Partial date parsing and formatting |
-| `@evnt/translations` | `npm install @evnt/translations` | Multilingual text utilities |
-| `@evnt/builder` | `npm install @evnt/builder` | Builder pattern for constructing events |
-| `@evnt/pretty` | `npm install @evnt/pretty` | Layered formatters (plain, markdown, Discord) |
-| `@evnt/convert` | `npm install @evnt/convert` | Convert to/from iCalendar, ActivityStreams, Schema.org, Google, Community Lexicon |
-| `@evnt/dev` | `npm install -D @evnt/dev` | CLI tool for validation, display, conversion, scaffolding (also works via `npx`) |
+| Package | npm install | What it solves | Description |
+|---------|-------------|----------------|-------------|
+| `@evnt/types` | `npm install @evnt/types` | Type-safe event data in your TypeScript project | TypeScript type definitions for the format |
+| `@evnt/schema` | `npm install @evnt/schema` | Validate incoming event data against the spec at runtime | Zod validation schemas, re-exports types |
+| `@evnt/partial-date` | `npm install @evnt/partial-date` | Parse and format imprecise dates (year-only, month-only) | Partial date parsing and formatting |
+| `@evnt/translations` | `npm install @evnt/translations` | Resolve multilingual event content by language preference | Multilingual text utilities |
+| `@evnt/builder` | `npm install @evnt/builder` | Construct complex event objects with a fluent API | Builder pattern for constructing events |
+| `@evnt/pretty` | `npm install @evnt/pretty` | Format events as human-readable text for any medium | Layered formatters (plain, markdown, Discord) |
+| `@evnt/convert` | `npm install @evnt/convert` | Exchange event data with iCalendar, Schema.org, ActivityStreams, and more | Convert to/from iCalendar, ActivityStreams, Schema.org, Google, Community Lexicon |
+| `@evnt/dev` | `npm install -D @evnt/dev` | Validate, convert, and scaffold events from the terminal | CLI tool for validation, display, conversion, scaffolding (also works via `npx`) |
 
 ## Schema validation
 

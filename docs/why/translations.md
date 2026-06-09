@@ -2,7 +2,7 @@
 
 In most event formats, internationalization is a convention. An app stores `name_en` and `name_fr` fields, or keeps a separate translation table, or does not support it at all. The format does not help.
 
-Open Evnt makes every user-facing field a Translations object: a map of language codes to strings. This is the type of the field, not an optional add-on. An event with a single English name is valid. An event with twelve translations is equally valid. The format does not distinguish between them.
+Open Evnt makes every user-facing field a Translations object: a map of language codes like `en` for English (BCP47) to strings. This is the type of the field, not an optional add-on. An event with a single English name is valid. An event with twelve translations is equally valid. The format does not distinguish between them.
 
 ```json
 {
@@ -12,7 +12,7 @@ Open Evnt makes every user-facing field a Translations object: a map of language
 
 The resolution algorithm recommended for consumers is:
 
-1. Exact language match
+1. Exact BCP47 language match
 2. Language subtag without region
 3. Language subtag only
 4. English

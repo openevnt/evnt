@@ -4,17 +4,16 @@ iCalendar (RFC 5545) is a calendar interchange protocol. It handles recurrence r
 
 ## What iCalendar does well
 
-Recurrence rules (RRULE) are the most mature in any event format. Attendee management, RSVP, and free/busy queries are first-class features. It is the universal calendar interchange format, supported by every calendar application and device.
+Recurrence rules (RRULE) are the most mature in any event format. Attendee management, RSVP, and free/busy queries are first-class features. iCalendar is the universal calendar interchange format, supported by every calendar application and device.
 
 ## Where it falls short
 
-- **One language per event.** The SUMMARY, DESCRIPTION, and LOCATION properties hold a single text value. Language tagging via the LANGUAGE parameter exists, but there is no mechanism for providing translations.
-- **No partial dates.** Every date must be a complete timestamp. An event known only by month requires a fabricated date.
-- **One VEVENT per timeframe.** A three-day conference with different hours each day requires either three separate VEVENTs (losing the parent relationship) or a recurrence rule with overrides.
+- **One language per event.** The SUMMARY, DESCRIPTION, and LOCATION properties hold a single text value. There is no mechanism for providing multiple translations of the same property.
+- **No partial dates.** iCalendar supports date-only values (YYYYMMDD for whole-day events), but there is no way to represent month (2026-06) or year (2026) precision. An event known only by month requires a fabricated day.
+- **One DTSTART/DTEND pair per VEVENT.** A three-day conference with different hours each day requires either three separate VEVENTs (losing the parent relationship) or a recurrence rule with overrides.
 - **One LOCATION per VEVENT.** A hybrid event with a physical venue and a livestream requires stuffing both into one string.
-- **Custom data has no namespace.** X-properties like `X-TICKET-URL` have no collision protection, no schema enforcement, and no guarantee of preservation across edits.
-- **Format overhead.** RFC 5545 is a 300-page document. A valid VEVENT requires a VCALENDAR wrapper, PRODID, VERSION, UID, and MIME content-type before you describe the event.
-- **MIME-based transport.** iCalendar is not plain JSON. Consuming it requires a MIME parser on top of the VCALENDAR structure.
+- **Custom data has no namespace.** X-properties like X-TICKET-URL have no collision protection, no schema enforcement, and no guarantee of preservation across edits.
+- **Format overhead.** A valid VEVENT requires a VCALENDAR wrapper, PRODID, VERSION, UID, and MIME content-type before you describe the event. iCalendar is not plain JSON -- consuming it requires a MIME parser on top of the VCALENDAR structure.
 
 ## Side by side
 
@@ -31,7 +30,7 @@ Ukraine: separate VEVENT              3 instances, same event
 Fake date: 2026-06-01T00:00Z          Partial date: 2026-06[UTC]
 ```
 
-**iCalendar** version:
+**iCalendar version:**
 
 ```
 BEGIN:VEVENT
@@ -44,34 +43,20 @@ END:VEVENT
 ... (repeat for day 2, day 3)
 BEGIN:VEVENT
 UID:conf-ua@example.com
-DTSTART:20260601T000000Z    ← invented date
+DTSTART:20260601T000000Z    -- invented date
 SUMMARY:Technolohichna Zustrich
 END:VEVENT
 ```
 
-**Open Evnt** version:
-
-```json
-{
-  "v": "0.1",
-  "name": { "en": "Tech Conference", "lt": "Technologijų Konferencija", "uk": "Технологічна Конференція" },
-  "venues": [
-    { "id": "hall", "$type": "directory.evnt.venue.physical", "name": { "en": "Main Hall" } },
-    { "id": "stream", "$type": "directory.evnt.venue.online", "name": { "en": "Livestream" }, "url": "https://..." }
-  ],
-  "instances": [
-    { "venueIds": ["hall", "stream"], "start": "2026-06-15T09:00[Europe/Vilnius]", "end": "2026-06-15T18:00[Europe/Vilnius]" },
-    { "venueIds": ["hall", "stream"], "start": "2026-06-16T10:00[Europe/Vilnius]", "end": "2026-06-16T17:00[Europe/Vilnius]" },
-    { "venueIds": ["hall", "stream"], "start": "2026-06-17[Europe/Vilnius]" }
-  ],
-  "components": [
-    { "$type": "directory.evnt.component.link", "url": "https://example.com/tickets", "name": { "en": "Tickets" } }
-  ]
-}
-```
-
-One document. All three languages in the same name field. Three instances with independent times. Two venues cleanly separated. Ticket link as a typed component. No fabricated dates.
-
 ## When to use which
 
-**Use iCalendar for** recurrence rules, calendar sync, or attendee management. **Use Open Evnt for** multilingual events, partial dates, hybrid venues, or custom metadata. **Use both** -- write in Open Evnt, convert to iCalendar for calendar distribution via `@evnt/convert`. Converting from Open Evnt to iCalendar loses data because iCalendar cannot represent multilingual names, partial dates, or multiple instances.
+**Use iCalendar when:**
+
+- **You need recurrence rules.** RRULE is the most powerful recurrence system available. If your events have patterns like "every second Tuesday except the third month of odd years," iCalendar handles it natively. Open Evnt does not yet define a recurrence model.
+- **You need calendar sync with mainstream tools.** Every calendar app imports and exports iCalendar. If your event data must land on a user's personal calendar, iCalendar is the path in.
+- **You need attendee management and RSVP.** iCalendar has built-in ORGANIZER, ATTENDEE, and STATUS properties.
+- **You are building a calendar application that exchanges events with other calendar software.** iCalendar is the interchange format for calendar data.
+
+**Use Open Evnt for everything else.** Open Evnt handles [translations](why/translations), [partial dates](why/partial-date), [multiple instances](why/instances), [decoupled venues](why/venues), and [typed extensions](why/components) natively -- each of which requires a data-stuffing workaround in iCalendar. Use it as your canonical event format and convert to iCalendar on export.
+
+**How they work together.** Author and manage events in Open Evnt, convert to iCalendar for calendar sync using `@evnt/convert`. Converting from Open Evnt to iCalendar loses data that iCalendar cannot represent -- multilingual names, partial dates, multiple instances, and typed components. This is a one-way conversion by design: iCalendar is the distribution format, not the source of truth.
