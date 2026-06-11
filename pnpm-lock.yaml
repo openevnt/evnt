@@ -189,6 +189,9 @@ importers:
 
   .:
     devDependencies:
+      '@evnt/convert':
+        specifier: workspace:*
+        version: link:packages/convert
       '@evnt/schema':
         specifier: workspace:*
         version: link:packages/schema

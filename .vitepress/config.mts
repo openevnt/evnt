@@ -29,7 +29,9 @@ export default defineConfig({
 		nav: [
 			{ text: "Home", link: "/" },
 			{ text: "Specification", link: "/README" },
+			{ text: "Quickstart", link: "/getting-started" },
 			{ text: "Playground", link: "/playground" },
+			{ text: "Convert", link: "/convert" },
 			{
 				text: "Community",
 				items: [
@@ -44,7 +46,9 @@ export default defineConfig({
 		sidebar: [
 			{ text: "Home", link: "/" },
 			{ text: "Specification", link: "/README" },
+			{ text: "Quickstart", link: "/getting-started" },
 			{ text: "Playground", link: "/playground" },
+			{ text: "Convert", link: "/convert" },
 			{
 				text: "Design & Motivation",
 				items: [

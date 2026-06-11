@@ -8,6 +8,7 @@
 		"docs:preview": "vitepress preview"
 	},
 	"devDependencies": {
+		"@evnt/convert": "workspace:*",
 		"@evnt/schema": "workspace:*",
 		"turbo": "^2.7.2",
 		"vitepress": "^1.6.4",
