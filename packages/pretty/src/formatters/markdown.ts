@@ -1,12 +1,12 @@
-import type { LinkSummary } from "../types";
-import type { FormatConfig } from "./base";
-import { PlainTextFormatter } from "./base";
-import { EmojiFormatter } from "./emoji";
+import type { Venue } from "@evnt/types";
+import { EmojiFormatter, type EmojiFormatConfig } from "./emoji";
 
 export class MarkdownFormatter extends EmojiFormatter {
-	static defaults: FormatConfig = PlainTextFormatter.defaults;
+	static markdownDefaults: EmojiFormatConfig = {
+		...EmojiFormatter.emojiDefaults,
+	};
 
-	constructor(config: FormatConfig) {
+	constructor(config: EmojiFormatConfig) {
 		super(config);
 	}
 
@@ -22,36 +22,35 @@ export class MarkdownFormatter extends EmojiFormatter {
 
 	// == Venues ==========================================
 
-	protected override formatVenue(venue: import("../types").VenueSummary): string {
-		const icon = this.config.emoji[venue.type] ?? "";
-		let name = venue.name;
+	protected override formatGroupVenues(venueIds: string[], venueMap: Map<string, Venue>): string {
+		const names: string[] = [];
 
-		if (venue.type === "online" && venue.detail) {
-			name = this.mdLink(venue.name, venue.detail);
+		for (const id of venueIds) {
+			const venue = venueMap.get(id);
+			if (!venue) continue;
+
+			const icon = this.venueIcon(venue.$type);
+			const baseName = this.resolveText(venue.name);
+			let display = [icon, baseName].filter(Boolean).join(" ");
+
+			if (venue.$type === "directory.evnt.venue.online" && "url" in venue && venue.url) {
+				display = [icon, this.mdLink(baseName, venue.url as string)].filter(Boolean).join(" ");
+			}
+
+			names.push(display);
 		}
 
-		const parts = [icon, name].filter(Boolean);
-
-		if (venue.type === "physical" && venue.detail) {
-			parts.push("·", this.mdSubtext(venue.detail));
-		}
-
-		return parts.join(" ");
+		return names.join(", ");
 	}
+
+
 
 	// == Links ===========================================
 
-	protected override formatLink(link: LinkSummary): string {
-		const icon = this.config.emoji.link ?? "";
-		const text = link.name ? this.mdLink(link.name, link.url) : link.url;
+	protected override formatLink(url: string, name?: string): string {
+		const icon = (this.config as EmojiFormatConfig).emoji.link ?? "";
+		const text = name ? this.mdLink(name, url) : url;
 		return [icon, text].filter(Boolean).join(" ");
-	}
-
-	// == Description =====================================
-
-	protected override formatDescription(text: string): string {
-		const firstPara = text.split("\n\n")[0] ?? text;
-		return firstPara.length > 200 ? firstPara.slice(0, 200) + "…" : firstPara;
 	}
 
 	// == Markdown helpers ================================

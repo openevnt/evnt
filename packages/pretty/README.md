@@ -1,19 +1,17 @@
 # @evnt/pretty
 
-Turn an OpenEvnt event into a short human-readable summary. Good for notifications, CLI output, markdown, Discord, etc.
+Format an OpenEvnt event as a short human-readable summary. Notifications, CLI output, markdown, Discord, etc.
 
 ```ts
 import { renderMarkdown } from "@evnt/pretty";
 
-const md = renderMarkdown(event);
+renderMarkdown(event);
 // **Tech Meetup**
-// 📅 Jun 15 · 18:00–21:00
-// 📍 Google Campus · 6 Pancras Square, GB
+// Jun 15 · 18:00-21:00
+// Google Campus · 6 Pancras Square, GB
 ```
 
-## Usage
-
-One call:
+## One call
 
 ```ts
 renderMarkdown(event, {
@@ -23,119 +21,106 @@ renderMarkdown(event, {
 });
 ```
 
-Or DIY with the separate layers:
+## Or compose yourself
 
 ```ts
-import { analyzeEvent, PlainTextFormatter, MarkdownFormatter, DiscordFormatter } from "@evnt/pretty";
+import { MarkdownFormatter, PlainTextFormatter, groupDates, formatDate, addDuration } from "@evnt/pretty";
 
-const analyzed = analyzeEvent(event, { language: "fr", mergeInstances: true });
+const md = new MarkdownFormatter({ language: "fr" }).formatEvent(event);
+const plain = new PlainTextFormatter({ language: "fr" }).formatEvent(event);
 
-const plain = new PlainTextFormatter({ language: "fr" }).formatEvent(analyzed);
-const md    = new MarkdownFormatter({ language: "fr" }).formatEvent(analyzed);
-const dc    = new DiscordFormatter({ ...DiscordFormatter.defaults, language: "fr" }).formatEvent(analyzed);
+// just the date grouping
+const groups = groupDates(event.instances ?? [], true);
+
+// just format a PartialDate
+formatDate("2026-06-15[Europe/London]", { language: "en", compactDates: true, timezone: "UTC" });
+// "Jun 15"
+
+addDuration("14:00", "01:30");
+// "15:30"
 ```
 
-## Layers
+## Package structure
 
-### AnalyzeConfig & analyzeEvent
-
-Controls how the event data is interpreted. Defined in `analyze-config.ts`.
-
-| Option           | Default | What it does                                                                                            |
-|------------------|---------|---------------------------------------------------------------------------------------------------------|
-| `language`       | `"en"`  | Language to resolve translations to (BCP47)                                                             |
-| `mergeInstances` | `true`  | Merge consecutive dates into ranges ("Oct 12-14"), group matching non-consecutive days ("Jul 1, 8, 15") |
-| `maxVenues`      | `3`     | Collapse to "N locations" past this                                                                     |
-| `maxDates`       | `5`     | Collapse date groups past this                                                                          |
-
-```ts
-const analyzed = analyzeEvent(event, { language: "de" });
+```
+src/
+├── index.ts              re-exports everything
+├── types.ts              DateGroup, SingleDate, DateRange, DateList, TimeSlot
+├── analyze-config.ts     AnalyzeConfig { mergeInstances }
+├── analyze.ts            groupDates() -- groups instances by venue + time pattern
+├── date.ts               formatDate, formatTime, formatTimeRange, formatDateRange
+├── duration.ts           addDuration
+└── formatters/
+    ├── base.ts           PlainTextFormatter + FormatConfig
+    ├── emoji.ts          EmojiFormatter + EmojiFormatConfig
+    ├── markdown.ts       MarkdownFormatter
+    └── discord.ts        DiscordFormatter + DiscordFormatConfig
 ```
 
-### PlainTextFormatter & FormatConfig
+Standalone utils (date, duration) are useful without the formatter classes.
 
-The base formatter — pure text, no emoji, no markdown. Good for SMS, notifications, CLI output.
+## Formatters
 
-Config defined in `formatters/base.ts`. Used by `EmojiFormatter` and `MarkdownFormatter` too.
+| Formatter | Extends | Adds | Config |
+|-----------|---------|------|--------|
+| PlainTextFormatter | - | raw text | FormatConfig (language, timezone, compactDates, show*, max*) |
+| EmojiFormatter | PlainTextFormatter | calendar/clock/venue/status emoji | EmojiFormatConfig (+ emoji, statusIcons) |
+| MarkdownFormatter | EmojiFormatter | bold, italic, clickable links | EmojiFormatConfig |
+| DiscordFormatter | MarkdownFormatter | inline timestamps, blockquotes | DiscordFormatConfig (+ timestampStyle) |
 
-| Option            | Default       | What it does                                         |
-|-------------------|---------------|------------------------------------------------------|
-| `language`        | `"en"`        | Locale for `Intl.DateTimeFormat`                     |
-| `timezone`        | `"UTC"`       | IANA timezone for local time display                 |
-| `showStatus`      | `false`       | Show status (Cancelled, Uncertain, etc.)             |
-| `showActivities`  | `false`       | Show activity sub-items                              |
-| `showLinks`       | `false`       | Show link components                                 |
-| `showDescription` | `false`       | Show description (from markdown/richtext components) |
-| `compactDates`    | `true`        | "Jun 15" vs "June 15, 2026"                          |
-| `emoji`           | _(see below)_ | Icon overrides                                       |
-| `statusIcons`     | _(see below)_ | Status icon overrides                                |
+Set any emoji or status icon to `""` to suppress it.
 
-Each formatter has `static defaults` to fill in the blanks:
+## Config
 
-```ts
-new MarkdownFormatter({ ...MarkdownFormatter.defaults, language: "fr" });
-```
+### FormatConfig (base)
 
-```ts
-const f = new PlainTextFormatter({ language: "de" });
-console.log(f.formatEvent(analyzed));
-// Tech Meetup
-// Jun 15 · 18:00–21:00
-// Google Campus · 6 Pancras Square, GB
-```
+| Option | Default | Does |
+|--------|---------|------|
+| language | "en" | locale for dates/times |
+| timezone | "UTC" | IANA timezone for local time display |
+| mergeInstances | true | merge consecutive days into ranges |
+| showStatus | false | show cancelled/uncertain etc |
+| showLinks | false | show link components |
+| compactDates | true | "Jun 15" vs "June 15, 2026" |
+| maxDates | 5 | max date groups to show |
 
-Set any emoji or status icon to `""` to suppress it. Example: `statusIcons: { planned: "" }` renders just "Planned" with no emoji.
-
-### EmojiFormatter
-
-Extends `PlainTextFormatter`. Adds calendar/clock/venue/link/activity emoji and status icons. The clock emoji is dynamically picked to match the hour (🕐–🕛).
-
-### MarkdownFormatter
-
-Extends `EmojiFormatter`. Bolds the header, italicizes the label, makes online URLs clickable.
-
-```ts
-const f = new MarkdownFormatter({ language: "de" });
-// **Tech Meetup**
-// 📅 Jun 15 · 18:00–21:00
-// 📍 Google Campus · 6 Pancras Square, GB
-```
-
-### DiscordFormatter & DiscordFormatConfig
-
-Extends `MarkdownFormatter`. Config defined in `formatters/discord.ts`.
-
-| Option           | Default | What it does                                                           |
-|------------------|---------|------------------------------------------------------------------------|
-| `timestampStyle` | `"off"` | `"off"` = text, `"both"` = timestamp + text, `"only"` = timestamp only |
-
-When `timestampStyle` is `"only"` or `"both"`, dates/times use Discord inline timestamps (`<t:unix:style>`) that render in each user's local timezone. Also uses masked links (`[text](url)`) and blockquote prefixes (`-#`).
-
-```ts
-new DiscordFormatter({
-	...DiscordFormatter.defaults,
-	timestampStyle: "only",
-});
-```
-
-### Emoji defaults
+### EmojiFormatConfig
 
 ```ts
 emoji: {
-	calendar: "📅",
-	clock: "🕐",
-	online: "🌐",
-	physical: "📍",
-	unknown: "📍",
+	calendar: "📅", clock: "🕐",
+	online: "🌐", physical: "📍", unknown: "📍",
 	link: "🔗",
-	activity: "🎭",
 }
-
 statusIcons: {
-	planned: "",
-	uncertain: "🟡",
-	postponed: "🟡",
-	cancelled: "🔴",
-	suspended: "🟠",
+	planned: "", uncertain: "🟡", postponed: "🟡",
+	cancelled: "🔴", suspended: "🟠",
 }
+```
+
+### DiscordFormatConfig
+
+```ts
+timestampStyle: "off" | "both" | "only"
+```
+
+"off" = text, "both" = timestamp + text, "only" = timestamp only.
+
+## Example outputs
+
+```
+# PlainTextFormatter
+Tech Meetup
+Jun 15 · 18:00-21:00
+Google Campus
+
+# MarkdownFormatter
+**Tech Meetup**
+Jun 15 · 18:00-21:00
+Google Campus
+
+# DiscordFormatter (timestampStyle: "only")
+**Tech Meetup**
+<t:1718460000:f>
+Google Campus
 ```

@@ -1,32 +1,33 @@
 import { PartialDateUtil } from "@evnt/partial-date";
-import type { PartialDate } from "@evnt/types";
-import type { FormatConfig, TimestampStyle } from "./base";
-import { PlainTextFormatter } from "./base";
+import type { PartialDate, Venue } from "@evnt/types";
+import type { DateGroup } from "../types";
 import { MarkdownFormatter } from "./markdown";
+import type { EmojiFormatConfig } from "./emoji";
 
 // == Config ==============================================
 
-export interface DiscordFormatConfig extends FormatConfig {
+export type TimestampStyle = "off" | "both" | "only";
+
+export interface DiscordFormatConfig extends EmojiFormatConfig {
 	timestampStyle: TimestampStyle;
 }
 
 export class DiscordFormatter extends MarkdownFormatter {
-	static defaults: DiscordFormatConfig = {
-		...PlainTextFormatter.defaults,
+	static discordDefaults: DiscordFormatConfig = {
+		...MarkdownFormatter.markdownDefaults,
 		timestampStyle: "off",
 	};
 
 	constructor(config: DiscordFormatConfig) {
 		super(config);
 	}
+
 	// == Links ===========================================
 
-	// Discord supports [text](url) for masked links
 	protected override mdLink(text: string, url: string): string {
 		return `[${text}](${url})`;
 	}
 
-	// Discord uses # for blockquotes
 	protected override mdSubtext(text: string): string {
 		return text.split("\n").map(line => `-# ${line}`).join("\n");
 	}
@@ -37,22 +38,17 @@ export class DiscordFormatter extends MarkdownFormatter {
 		return (this.config as DiscordFormatConfig).timestampStyle ?? "off";
 	}
 
-	/** Convert a PartialDate to a Unix seconds timestamp for Discord syntax. */
 	private unixTs(pd: PartialDate): number {
 		return PartialDateUtil.toInstant(pd, "low").epochMilliseconds / 1000;
 	}
 
-	/** Pick a Discord timestamp style character based on precision. */
 	private tsChar(pd: PartialDate): string {
 		return PartialDateUtil.has(pd, "time") ? "f" : "D";
 	}
 
-	/** Format as Discord inline timestamp, e.g. `<t:1718460000:f>`. */
 	private discordTs(pd: PartialDate): string {
 		return `<t:${Math.floor(this.unixTs(pd))}:${this.tsChar(pd)}>`;
 	}
-
-	// Override date/time formatting when timestamps are enabled
 
 	protected override formatDate(pd: PartialDate): string {
 		if (this.tsStyle === "off") return super.formatDate(pd);
@@ -75,7 +71,7 @@ export class DiscordFormatter extends MarkdownFormatter {
 		return ts;
 	}
 
-	protected override formatTimeRange(start: PartialDate | undefined, end: PartialDate | undefined): string {
+	protected override formatTimeRange(start?: PartialDate, end?: PartialDate): string {
 		if (this.tsStyle === "off") return super.formatTimeRange(start, end);
 
 		if (start && end) {
@@ -91,20 +87,24 @@ export class DiscordFormatter extends MarkdownFormatter {
 		return "";
 	}
 
-	// Override clock emoji since the timestamp already shows time
-	protected override clockEmoji(pd: PartialDate): string {
+	protected override clockEmoji(_pd: PartialDate): string {
 		if (this.tsStyle !== "off") return "";
-		return super.clockEmoji(pd);
+		return super.clockEmoji(_pd);
 	}
 
-	// Override calendar emoji since the timestamp already shows date
-	protected override formatDateGroup(group: import("../types").DateGroup): string {
+	protected override formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
 		if (this.tsStyle === "only") {
-			// Just timestamps, no emoji
-			const dateStr = this.formatDateEntries(group.entries);
-			const timeStr = group.timeRanges.map(tr => this.formatTimeRange(tr.start, tr.end)).filter(Boolean).join(", ");
-			return [dateStr, timeStr].filter(Boolean).join(" · ");
+			const dateStr = this.formatDateShape(group.dates);
+			const timeStr = group.times.map(t => this.formatTimeRange(t.start, t.end)).filter(Boolean).join(", ");
+
+			const venueNames = group.venueIds
+				.map(id => venueMap.get(id))
+				.filter(Boolean)
+				.map(v => this.resolveText(v!.name));
+			const venueStr = venueNames.length > 0 ? venueNames.join(", ") : "";
+
+			return [dateStr, timeStr, venueStr].filter(Boolean).join(" · ");
 		}
-		return super.formatDateGroup(group);
+		return super.formatDateGroup(group, venueMap);
 	}
 }
