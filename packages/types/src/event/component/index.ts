@@ -10,8 +10,8 @@ export interface ComponentTypes {
 	"directory.evnt.component.link": LinkComponent;
 	"directory.evnt.component.splashMedia": SplashMediaComponent;
 	"directory.evnt.component.languages": LanguagesComponent;
-	"directory.evnt.component.markdown": MarkdownComponent;
-	"directory.evnt.component.blueSkyRichtext": BlueSkyRichtextComponent;
+	"directory.evnt.richtext.markdown": MarkdownComponent;
+	"directory.evnt.richtext.bluesky": BlueSkyRichtextComponent;
 };
 
 export type KnownComponent = ComponentTypes[keyof ComponentTypes];

@@ -11,8 +11,8 @@ const KnownEventComponentsMap = {
 	"directory.evnt.component.source": SourceComponentSchema,
 	"directory.evnt.component.splashMedia": SplashMediaComponentSchema,
 	"directory.evnt.component.languages": LanguagesComponentSchema,
-	"directory.evnt.component.markdown": MarkdownComponentSchema,
-	"directory.evnt.component.blueSkyRichtext": BlueSkyRichtextComponentSchema,
+	"directory.evnt.richtext.markdown": MarkdownComponentSchema,
+	"directory.evnt.richtext.bluesky": BlueSkyRichtextComponentSchema,
 } as const;
 
 export type KnownEventComponent = {

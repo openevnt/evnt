@@ -28,10 +28,8 @@ export default defineConfig({
 
 		nav: [
 			{ text: "Home", link: "/" },
-			{ text: "Specification", link: "/README" },
-			{ text: "Quickstart", link: "/getting-started" },
-			{ text: "Playground", link: "/playground" },
-			{ text: "Convert", link: "/convert" },
+			{ text: "Quickstart", link: "/guide/getting-started" },
+			{ text: "Specification", link: "/spec/" },
 			{
 				text: "Community",
 				items: [
@@ -45,41 +43,37 @@ export default defineConfig({
 
 		sidebar: [
 			{ text: "Home", link: "/" },
-			{ text: "Specification", link: "/README" },
-			{ text: "Quickstart", link: "/getting-started" },
-			{ text: "Playground", link: "/playground" },
-			{ text: "Convert", link: "/convert" },
+			{ text: "Quickstart", link: "/guide/getting-started" },
 			{
 				text: "Design & Motivation",
 				items: [
-					{ text: "Why Open Evnt", link: "/why/" },
-					{ text: "Translations", link: "/why/translations" },
-					{ text: "Partial Dates", link: "/why/partial-date" },
-					{ text: "Instances", link: "/why/instances" },
-					{ text: "Components", link: "/why/components" },
-					{ text: "Venues", link: "/why/venues" },
+					{ text: "Ethos", link: "/guide/ethos" },
+					{ text: "The Root Object", link: "/guide/root" },
+					{ text: "Translations", link: "/guide/translations" },
+					{ text: "Partial Dates", link: "/guide/partial-date" },
+					{ text: "Venues", link: "/guide/venues" },
+					{ text: "Instances", link: "/guide/instances" },
+					{ text: "Components", link: "/guide/components" },
 				],
 			},
 			{
-				text: "Compared to",
+				text: "Tools",
 				items: [
-					{ text: "iCalendar", link: "/formats/icalendar" },
-					{ text: "Schema.org", link: "/formats/schema-org" },
-					{ text: "Lexicon Community", link: "/formats/community-lexicon" },
-					{ text: "ActivityStreams", link: "/formats/activitystreams" },
+					{ text: "Playground", link: "/playground" },
+					{ text: "Convert", link: "/convert" },
+				],
+			},
+			{
+				text: "Reference",
+				items: [
+					{ text: "Specification", link: "/spec/" },
 				],
 			},
 			{
 				text: "Protocols",
 				items: [
-					{ text: "AT Protocol", link: "/protocols/atproto" },
-					{ text: "HTTPS", link: "/protocols/http" },
-				],
-			},
-			{
-				text: "Packages",
-				items: [
-					{ text: "Packages", link: "/packages/" },
+					{ text: "HTTP", link: "/protocol/http" },
+					{ text: "AT Protocol", link: "/protocol/atproto" },
 				],
 			},
 		],

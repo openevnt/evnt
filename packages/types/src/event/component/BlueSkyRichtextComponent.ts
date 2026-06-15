@@ -1,5 +1,5 @@
 export interface BlueSkyRichtextComponent {
-	$type: "directory.evnt.component.blueSkyRichtext";
+	$type: "directory.evnt.richtext.bluesky";
 	text: string;
 	facets: {
 		index: { byteStart: number; byteEnd: number };

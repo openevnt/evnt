@@ -2,7 +2,7 @@ import z from "zod";
 import type { BlueSkyRichtextComponent } from "@evnt/types";
 
 export const BlueSkyRichtextComponentSchema = z.object({
-	$type: z.literal("directory.evnt.component.blueSkyRichtext"),
+	$type: z.literal("directory.evnt.richtext.bluesky"),
 	text: z.string(),
 	facets: z.object({
 		index: z.object({

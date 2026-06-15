@@ -270,8 +270,8 @@ const summarizeLinks = (components: AnyComponent[], language: string): LinkSumma
 
 const extractDescription = (components: AnyComponent[]): string | undefined => {
 	for (const comp of components) {
-		if (comp.$type === "directory.evnt.component.markdown") {
-			return (comp as { content: string }).content;
+		if (comp.$type === "directory.evnt.richtext.markdown") {
+			return (comp as { markdown: string }).markdown;
 		}
 		if (comp.$type === "app.bsky.richtext") {
 			return (comp as { text: string }).text;
