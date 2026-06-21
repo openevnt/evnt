@@ -2,16 +2,16 @@ import type { LinkComponent } from "./LinkComponent";
 import type { SourceComponent } from "./SourceComponent";
 import type { SplashMediaComponent } from "./SplashMediaComponent";
 import type { LanguagesComponent } from "./LanguagesComponent";
-import type { MarkdownComponent } from "./MarkdownComponent";
-import type { BlueSkyRichtextComponent } from "./BlueSkyRichtextComponent";
+import type { RichTextMarkdownComponent } from "./RichTextMarkdownComponent";
+import type { RichTextBlueskyComponent } from "./RichTextBlueskyComponent";
 
 export interface ComponentTypes {
 	"directory.evnt.component.source": SourceComponent;
 	"directory.evnt.component.link": LinkComponent;
 	"directory.evnt.component.splashMedia": SplashMediaComponent;
 	"directory.evnt.component.languages": LanguagesComponent;
-	"directory.evnt.richtext.markdown": MarkdownComponent;
-	"directory.evnt.richtext.bluesky": BlueSkyRichtextComponent;
+	"directory.evnt.richtext.markdown": RichTextMarkdownComponent;
+	"directory.evnt.richtext.bluesky": RichTextBlueskyComponent;
 };
 
 export type KnownComponent = ComponentTypes[keyof ComponentTypes];

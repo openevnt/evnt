@@ -1,25 +1,9 @@
 {
-	"include": [
-		"src/"
-	],
+	"extends": "@repo/typescript-config/base.json",
 	"compilerOptions": {
 		"rootDir": "./src",
 		"outDir": "./dist",
-		"module": "esnext",
-		"target": "esnext",
-		"types": [],
-		"lib": [
-			"esnext"
-		],
-		"sourceMap": true,
-		"declaration": true,
-		"declarationMap": true,
-		"strict": true,
-		"jsx": "react-jsx",
-		"verbatimModuleSyntax": true,
-		"isolatedModules": true,
-		"noUncheckedSideEffectImports": true,
-		"moduleDetection": "force",
-		"skipLibCheck": true,
-	}
+		"lib": ["ESNext"],
+	},
+	"include": ["src/"]
 }

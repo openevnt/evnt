@@ -8,7 +8,7 @@ const convertToActivityStreamsEvent = to!;
 
 describe("activitystreams converter", () => {
 	test("converts ActivityStreams Event into OpenEvnt", () => {
-		const eventData = convertFromActivityStreamsEvent({
+		const eventData = convertFromActivityStreamsEvent(JSON.stringify({
 			type: "Event",
 			name: "Open Evnt Meetup",
 			startTime: "2026-07-10T18:30:00+03:00",
@@ -25,7 +25,7 @@ describe("activitystreams converter", () => {
 				"https://example.com/events/open-evnt-meetup",
 			],
 			content: "Weekly gathering for local organizers.",
-		});
+		}));
 
 		expect(eventData.v).toBe("0.1");
 		expect(eventData.name.en).toBe("Open Evnt Meetup");
@@ -38,7 +38,7 @@ describe("activitystreams converter", () => {
 	});
 
 	test("maps online locations and date-only startTime", () => {
-		const eventData = convertFromActivityStreamsEvent({
+		const eventData = convertFromActivityStreamsEvent(JSON.stringify({
 			type: "Event",
 			name: "Livestream",
 			startTime: "2026-08-01",
@@ -47,7 +47,7 @@ describe("activitystreams converter", () => {
 				name: "YouTube",
 				href: "https://youtube.com/live/abc",
 			},
-		});
+		}));
 
 		expect(eventData.instances?.[0]?.start).toBe("2026-08-01[UTC]");
 		expect(eventData.venues?.[0]).toMatchObject({
@@ -66,7 +66,8 @@ describe("activitystreams converter", () => {
 			}],
 		};
 
-		const asEvent = convertToActivityStreamsEvent(input);
+		const raw = convertToActivityStreamsEvent(input);
+		const asEvent = JSON.parse(raw);
 
 		expect(asEvent.type).toBe("Event");
 		expect(asEvent.name).toBe("Conference");
@@ -85,11 +86,11 @@ describe("activitystreams converter", () => {
 			}],
 		};
 
-		const fromAs = convertFromActivityStreamsEvent({
+		const fromAs = convertFromActivityStreamsEvent(JSON.stringify({
 			type: "Event",
 			name: "Ignored name",
 			evntData: embedded,
-		});
+		}));
 
 		expect(fromAs).toEqual(embedded);
 	});

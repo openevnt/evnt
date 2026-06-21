@@ -1,5 +1,5 @@
 import type { OpenEvnt, EventStatus, LinkComponent } from "@evnt/types";
-import type { KnownEventComponent, UnknownEventComponent } from "@evnt/schema";
+import type { KnownComponent, UnknownComponent } from "@evnt/types";
 import { createBuilderAdder, createTranslationAdder } from "../utils/helpers";
 import { InstanceBuilder } from "./InstanceBuilder";
 import { UnknownVenueBuilder } from "./venues/UnknownVenueBuilder";
@@ -45,7 +45,7 @@ export class EventBuilder {
 		return new VenueBuilder(venue, this);
 	}
 
-	addCustomComponent(component: UnknownEventComponent) {
+	addCustomComponent(component: UnknownComponent) {
 		this.data.components ??= [];
 		this.data.components.push(component);
 		return this;
@@ -59,7 +59,7 @@ export class EventBuilder {
 				: typeof arg === "string"
 					? { $type: "directory.evnt.component.link", url: arg }
 					: arg;
-		this.data.components.push(component as KnownEventComponent);
+		this.data.components.push(component as KnownComponent);
 		return this;
 	}
 }

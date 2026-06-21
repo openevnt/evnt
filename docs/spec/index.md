@@ -525,9 +525,9 @@ Markdown content with an optional language hint.
 
 ```
 directory.evnt.richtext.markdown
-  $type:     "directory.evnt.richtext.markdown"
-  markdown:  string              REQUIRED
-  language:  string?             OPTIONAL
+  $type:    "directory.evnt.richtext.markdown"
+  content:  string              REQUIRED
+  language: string?             OPTIONAL
 ```
 
 `language`: A BCP47 language tag for the markdown content. Producers SHOULD populate this field when the language is known.

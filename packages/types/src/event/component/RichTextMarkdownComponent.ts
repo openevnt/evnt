@@ -1,5 +1,5 @@
-export interface MarkdownComponent {
+export interface RichTextMarkdownComponent {
 	$type: "directory.evnt.richtext.markdown";
-	markdown: string;
+	content: string;
 	language?: string;
 };

@@ -5,9 +5,11 @@ import type { FormatConfig } from "./base";
 import { PlainTextFormatter } from "./base";
 
 export interface EmojiFormatConfig extends FormatConfig {
-	emoji: Record<string, string>;
+	emoji: Record<string, string> | false;
 	statusIcons: Record<EventStatus, string>;
 }
+
+export type EmojiFormatOptions = Partial<EmojiFormatConfig> & { emoji?: Record<string, string> | false };
 
 const hasTime = (pd: PartialDate) => PartialDateUtil.has(pd, "time");
 
@@ -32,13 +34,25 @@ export class EmojiFormatter extends PlainTextFormatter {
 	};
 
 	constructor(config: EmojiFormatConfig) {
+		if (config.emoji === false) {
+			config = { ...config, emoji: {}, statusIcons: { planned: "", uncertain: "", postponed: "", cancelled: "", suspended: "" } };
+		}
 		super(config);
+	}
+
+	private get emojiMap(): Record<string, string> {
+		const cfg = this.config as EmojiFormatConfig;
+		return cfg.emoji === false ? {} : cfg.emoji;
+	}
+
+	private get statusIconMap(): Record<EventStatus, string> {
+		return (this.config as EmojiFormatConfig).statusIcons;
 	}
 
 	// == Status ==========================================
 
 	override formatStatus(status: EventStatus, text: string): string {
-		const icon = (this.config as EmojiFormatConfig).statusIcons[status] ?? "";
+		const icon = this.statusIconMap[status] ?? "";
 		return [icon, text].filter(Boolean).join(" ");
 	}
 
@@ -48,14 +62,14 @@ export class EmojiFormatter extends PlainTextFormatter {
 		const dateStr = this.formatDateShape(group.dates);
 		const timeStr = group.times.map(t => this.formatTimeRange(t.start, t.end)).filter(Boolean).join(", ");
 
-		const parts = [(this.config as EmojiFormatConfig).emoji.calendar, dateStr].filter(Boolean);
+		const parts = [this.emojiMap.calendar, dateStr].filter(Boolean);
 
 		if (timeStr) {
 			const firstTime = group.times[0]?.start ?? group.times[0]?.end;
 			const clockIcon = firstTime && hasTime(firstTime)
 				? this.clockEmoji(firstTime)
-				: (this.config as EmojiFormatConfig).emoji.clock;
-			parts.push("·", clockIcon ?? (this.config as EmojiFormatConfig).emoji.clock ?? "🕐", timeStr);
+				: this.emojiMap.clock;
+			parts.push("·", clockIcon ?? this.emojiMap.clock ?? "🕐", timeStr);
 		}
 
 		const venueStr = this.formatGroupVenues(group.venueIds, venueMap);
@@ -78,17 +92,16 @@ export class EmojiFormatter extends PlainTextFormatter {
 	}
 
 	protected venueIcon($type: string): string {
-		const cfg = this.config as EmojiFormatConfig;
 		switch ($type) {
-			case "directory.evnt.venue.physical": return cfg.emoji.physical ?? "";
-			case "directory.evnt.venue.online": return cfg.emoji.online ?? "";
-			default: return cfg.emoji.unknown ?? "";
+			case "directory.evnt.venue.physical": return this.emojiMap.physical ?? "";
+			case "directory.evnt.venue.online": return this.emojiMap.online ?? "";
+			default: return this.emojiMap.unknown ?? "";
 		}
 	}
 
 	protected clockEmoji(pd: PartialDate): string {
 		const parsed = PartialDateUtil.parse(pd);
-		if (parsed.precision !== "time") return (this.config as EmojiFormatConfig).emoji.clock ?? "🕐";
+		if (parsed.precision !== "time") return this.emojiMap.clock ?? "🕐";
 		const hour12 = (parsed.hour % 12) || 12;
 		const base = parsed.minute >= 30 ? 0x1F55C : 0x1F550;
 		return String.fromCodePoint(base + hour12 - 1);
@@ -97,7 +110,7 @@ export class EmojiFormatter extends PlainTextFormatter {
 	// == Links ===========================================
 
 	protected override formatLink(url: string, name?: string): string {
-		const icon = (this.config as EmojiFormatConfig).emoji.link ?? "";
+		const icon = this.emojiMap.link ?? "";
 		return [icon, super.formatLink(url, name)].filter(Boolean).join(" ");
 	}
 }

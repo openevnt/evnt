@@ -112,16 +112,21 @@ export const schemaOrg: FormatConverter = {
 			}));
 		};
 
+		const pickTranslation = (translations: Translations | undefined): string | undefined => {
+			if (!translations) return undefined;
+			return translate(translations, [language, "en", ...Object.keys(translations)]);
+		};
+
 		return JSON.stringify({
 			"@context": "https://schema.org",
 			"@type": "Event",
-			name: nameAsPronounceable(data.name),
+			name: pickTranslation(data.name) ?? "Untitled Event",
 			startDate: data.instances?.[0]?.start,
 			endDate: data.instances?.[0]?.end,
 			location: data.venues?.[0]?.name
 				? {
 					"@type": "Place",
-					name: Object.values(data.venues[0]!.name)[0],
+					name: pickTranslation(data.venues[0]!.name) ?? "Unknown",
 				}
 				: undefined,
 		}, null, "\t");

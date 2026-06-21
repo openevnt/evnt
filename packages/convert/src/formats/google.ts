@@ -2,7 +2,7 @@ import type { OpenEvnt, PartialDate } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { createTranslations } from "../utils/translations";
 import { asNonEmptyString } from "../utils/text";
-import { dateToPartialDate, isMidnight } from "../utils/date";
+import { dateToPartialDate } from "../utils/date";
 import type { FormatConverter, ConvertOptions } from "../types";
 
 interface GoogleCalendarEvent {
@@ -56,10 +56,12 @@ export const google: FormatConverter = {
 			return undefined;
 		};
 
+		const lang = opts?.language ?? "en";
+		const name = createTranslations(data.summary, lang);
+
 		return {
 			v: "0.1",
-			name: createTranslations(data.summary, opts?.language ?? "en")
-				|| { [opts?.language ?? "en"]: "No Title" },
+			name: Object.keys(name).length > 0 ? name : { [lang]: "No Title" },
 			venues: venues.length > 0 ? venues : undefined,
 			instances: [{
 				venueIds: venues.map((v) => v.id),

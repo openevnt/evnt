@@ -6,7 +6,7 @@ export default document({
 	defs: {
 		main: object({
 			properties: {
-				markdown: required(string()),
+				content: required(string()),
 				language: string({
 					format: "language",
 				}),

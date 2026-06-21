@@ -98,8 +98,8 @@ export const icalendar: FormatConverter = {
 
 		if (event.description) {
 			out.components!.push({
-				$type: "app.bsky.richtext",
-				description: { text: event.description, facets: [] },
+				$type: "directory.evnt.richtext.markdown",
+				content: event.description,
 			});
 		}
 

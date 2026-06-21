@@ -23,6 +23,7 @@
 		"build": "tsc && ts-add-js-extension --dir=dist"
 	},
 	"devDependencies": {
+		"@repo/typescript-config": "workspace:^",
 		"ts-add-js-extension": "^1.6.6",
 		"typescript": "^6.0.3"
 	}

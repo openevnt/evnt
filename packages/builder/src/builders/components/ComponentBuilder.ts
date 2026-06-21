@@ -1,7 +1,7 @@
 import type { EventBuilder } from "../EventBuilder";
-import type { KnownEventComponent, UnknownEventComponent } from "@evnt/schema";
+import type { KnownComponent, UnknownComponent } from "@evnt/types";
 
-export class ComponentBuilder<T extends KnownEventComponent | UnknownEventComponent = KnownEventComponent> {
+export class ComponentBuilder<T extends KnownComponent | UnknownComponent = KnownComponent> {
 	protected component: T;
 	protected parent?: EventBuilder;
 	constructor(component: T, parent?: EventBuilder) {

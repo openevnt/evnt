@@ -140,7 +140,7 @@ export const communityLexicon: FormatConverter = {
 		if (event.description) {
 			builder.data.components ??= [];
 			builder.data.components.push({
-				$type: "app.bsky.richtext",
+				$type: "directory.evnt.richtext.bluesky",
 				text: event.description,
 				facets: event.facets,
 			});

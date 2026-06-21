@@ -1,4 +1,4 @@
-export interface BlueSkyRichtextComponent {
+export interface RichTextBlueskyComponent {
 	$type: "directory.evnt.richtext.bluesky";
 	text: string;
 	facets: {

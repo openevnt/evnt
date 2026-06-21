@@ -122,7 +122,7 @@ export const activitystreams: FormatConverter = {
 			components.push({
 				$type: "directory.evnt.richtext.markdown",
 				language,
-				markdown: content ?? summary ?? "",
+				content: content ?? summary ?? "",
 			});
 		}
 
@@ -207,11 +207,11 @@ export const activitystreams: FormatConverter = {
 			}
 
 			if (type === "directory.evnt.richtext.markdown") {
-				if (!object.content && typeof c.markdown === "string") object.content = c.markdown;
+				if (!object.content && typeof c.content === "string") object.content = c.content;
 				continue;
 			}
 
-			if (type === "app.bsky.richtext") {
+			if (type === "directory.evnt.richtext.bluesky") {
 				if (!object.content && typeof c.text === "string") object.content = c.text;
 			}
 		}
