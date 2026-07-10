@@ -2,12 +2,15 @@
 
 Open Evnt is a data format for events.
 
-Other formats can handle events that fit in a box - one name, one date, one location. When your event has a name in three languages, a date you only know as "June 2026," and both a livestream and a physical venue - the box doesn't fit. Your data ends up with a fake date, details crammed into the description field, or left out entirely. The description becomes a dumping ground - apps can't do anything useful with it, and anyone reading it has to pick through text to find what matters.
+Open Evnt can represent events of any type, in any language, with any level of detail. It can describe a single-day conference with live streaming, a multi-day festival, or anything in between. Designed to be machine-readable and as accurate as possible, it can be used to power apps, websites, and other tools that need to understand events.
 
-Open Evnt doesn't have a box. It handles names in any number of languages, dates at whatever precision you have, multiple venues on the same instance, and custom fields when you need them. Not as workarounds - as features.
+Open Evnt is a JSON-based format, with a simple structure that can be extended to meet your needs. It's meant to fix two big issues:
 
-Describe your event accurately. As it actually is.
-## What that looks like
+- **Data-stuffing**: Many event formats are designed to fit a single type of event, and when your event doesn't fit that type, you end up cramming data into fields that don't make sense. A description field becomes a dumping ground for details that don't fit anywhere else, and apps can't do anything useful with it. Open Evnt is designed to handle events as they actually are, without forcing them into a box.
+
+- **Fragmentation**: Since there really was never a standard for detailed event data, every app and website has its own format. There is barely any interoperability between them, and event data is often locked into a single platform. Open Evnt is designed to be a standard that everyone can use, so that event data can be shared and reused across apps and websites.
+
+## An example
 
 ```json
 {
@@ -35,9 +38,28 @@ Describe your event accurately. As it actually is.
 			"name": { "en": "Livestream" },
 			"url": "https://live.example.com/summer-workshops"
 		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.richtext.markdown",
+			"content": "An example description!",
+			"flavor": "gfm"
+		},
+		{
+			"$type": "directory.evnt.component.link",
+			"url": "https://example.com/summer-workshops"
+		}
 	]
 }
 ```
+
+**Summer Workshop Series**
+
+July 2026, City Park and Livestream
+
+An example description!
+
+Link: example.com/summer-workshops
 
 ## Start here
 

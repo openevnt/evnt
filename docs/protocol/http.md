@@ -1,6 +1,6 @@
 # HTTP
 
-Open Evnt is JSON. Serving it over HTTP is just serving JSON with two details.
+Open Evnt is designed to be served over HTTP. You can host your event data on any static file server, a CDN, or an S3 bucket.
 
 ## File extension (optional)
 
@@ -18,14 +18,8 @@ The `+json` suffix means any parser that handles `application/*+json` can decode
 
 ## CORS
 
-If you want other websites to fetch your events, add:
+If you want other websites to be able to fetch your events, add this header to your HTTP response:
 
 ```
 Access-Control-Allow-Origin: *
 ```
-
-This is the only CORS header you need for public event data. Without it, browser-side JavaScript can't read your events.
-
-## That's it
-
-Put the file on any static file server, a CDN, or an S3 bucket. There's no special routing, no well-known endpoint, no directory index convention. Open Evnt isn't a protocol - it's a format that happens to work well over HTTP.
