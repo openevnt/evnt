@@ -29,13 +29,13 @@ For readability, these keywords appear in lowercase in this document.
 
 ### 1.3 Terminology
 
-| Term | Definition |
-|------|------------|
-| Event | A planned happening, represented as an `OpenEvnt` object |
-| Producer | Software that creates or emits Open Evnt documents |
-| Consumer | Software that reads or processes Open Evnt documents |
-| Instance | A single continuous occurrence of an event with its own time and venue references |
-| Component | A typed piece of additional event metadata, extensible by `$type` |
+| Term         | Definition                                                                               |
+|--------------|------------------------------------------------------------------------------------------|
+| Event        | A planned happening, represented as an `OpenEvnt` object                                 |
+| Producer     | Software that creates or emits Open Evnt documents                                       |
+| Consumer     | Software that reads or processes Open Evnt documents                                     |
+| Instance     | A single continuous occurrence of an event with its own time and venue references        |
+| Component    | A typed piece of additional event metadata, extensible by `$type`                        |
 | Partial Date | A string representing a date and/or time with varying precision and an explicit timezone |
 
 ---
@@ -48,7 +48,7 @@ The root object representing a single event.
 
 ```
 OpenEvnt
-  $type:      "directory.evnt.event"?     OPTIONAL
+  $type:      "directory.evnt.event"?   OPTIONAL
   v:          "0.1"                     REQUIRED
   name:       Translations              REQUIRED
   label:      Translations?             OPTIONAL
@@ -66,7 +66,7 @@ OpenEvnt
 
 **`name`**: The event name as a [Translations](#22-translations) object. MUST have at least one entry.
 
-**`label`**: A short label or subtitle as a [Translations](#22-translations) object. Typically displayed as smaller text under the name in UI lists and cards.
+**`label`**: A [Translations](#22-translations) object for representing an additional name for the event, for distinguishing it from similarly named events. Producers SHOULD use this field when the event has a name that might be ambiguous (e.g. "SomeCon") to provide a more specific label (e.g. "SomeCon 2025"). Consumers MAY display this label alongside the main name.
 
 **`status`**: An [EventStatus](#23-eventstatus) value describing the current planning state. When absent, consumers MUST treat the event as `"planned"`.
 
@@ -109,16 +109,16 @@ An enum representing the planning state of an event or instance.
 EventStatus: "planned" | "uncertain" | "postponed" | "cancelled" | "suspended"
 ```
 
-| Variant | Description | Dates valid? |
-|---------|-------------|-------------|
-| `planned` | Event is scheduled as described (default) | Yes |
-| `uncertain` | Event may be rescheduled or cancelled | Unknown |
-| `postponed` | Event moved to a later, unknown date | No |
-| `cancelled` | Event will not take place | No |
-| `suspended` | Event paused; future unknown | No |
+| Variant     | Description                               | Dates valid? |
+|-------------|-------------------------------------------|--------------|
+| `planned`   | Event is scheduled as described (default) | Yes          |
+| `uncertain` | Event may be rescheduled or cancelled     | Unknown      |
+| `postponed` | Event moved to a later, unknown date      | No           |
+| `cancelled` | Event will not take place                 | No           |
+| `suspended` | Event paused; future unknown              | No           |
 
 - `planned` is the initial state and the default when `status` is absent.
-- `cancelled` is a terminal state — it MUST NOT transition to any other status.
+- `cancelled` is a terminal state - it MUST NOT transition to any other status.
 - Any non-terminal status MAY return to `planned`.
 
 When `status` is not `"planned"`, consumers SHOULD treat associated dates as potentially invalid.
@@ -196,12 +196,12 @@ The grammar is adapted from [RFC 9557](https://www.rfc-editor.org/rfc/rfc9557) (
 
 ### 3.2 Precision levels
 
-| Level | Pattern | Example |
-|-------|---------|---------|
-| Year | `2025[Europe/London]` | Only the year is known |
-| Month | `2025-11[Europe/London]` | Year and month known |
-| Day | `2025-11-12[Europe/London]` | Full date known |
-| Time | `2025-11-12T11:00[Europe/London]` | Date and time (without seconds) known |
+| Level | Pattern                           | Example                               |
+|-------|-----------------------------------|---------------------------------------|
+| Year  | `2025[Europe/London]`             | Only the year is known                |
+| Month | `2025-11[Europe/London]`          | Year and month known                  |
+| Day   | `2025-11-12[Europe/London]`       | Full date known                       |
+| Time  | `2025-11-12T11:00[Europe/London]` | Date and time (without seconds) known |
 
 ### 3.3 Constraints
 
@@ -234,15 +234,15 @@ Two `PartialDate` values MAY be compared only when they share the same precision
 
 ### 3.7 Invalid examples
 
-| Value | Reason |
-|-------|--------|
-| `2025-11-12T11:00Z` | UTC offset, not timezone bracket |
-| `2025-11-12T11:00+02:00` | UTC offset, not timezone bracket |
-| `2025-11-12T11:00[Europe/London` | Missing closing bracket |
-| `2025-11-12T11:00:00[Europe/London]` | Seconds not allowed |
-| `2025-11-12T11[Europe/London]` | Time must include minutes |
-| `2025-11T11:00[Europe/London]` | Time without day |
-| `2025T11:00[Europe/London]` | Time without month and day |
+| Value                                | Reason                           |
+|--------------------------------------|----------------------------------|
+| `2025-11-12T11:00Z`                  | UTC offset, not timezone bracket |
+| `2025-11-12T11:00+02:00`             | UTC offset, not timezone bracket |
+| `2025-11-12T11:00[Europe/London`     | Missing closing bracket          |
+| `2025-11-12T11:00:00[Europe/London]` | Seconds not allowed              |
+| `2025-11-12T11[Europe/London]`       | Time must include minutes        |
+| `2025-11T11:00[Europe/London]`       | Time without day                 |
+| `2025T11:00[Europe/London]`          | Time without month and day       |
 
 ---
 
@@ -301,16 +301,16 @@ MapReferences
 
 Keys are reverse-domain NSIDs. Values are the identifier(s) assigned by that service.
 
-| NSID | Service | Entity |
-|------|---------|--------|
-| `org.openstreetmap.node` | OpenStreetMap | Node (POI) |
-| `org.openstreetmap.way` | OpenStreetMap | Way (building) |
+| NSID                         | Service       | Entity          |
+|------------------------------|---------------|-----------------|
+| `org.openstreetmap.node`     | OpenStreetMap | Node (POI)      |
+| `org.openstreetmap.way`      | OpenStreetMap | Way (building)  |
 | `org.openstreetmap.relation` | OpenStreetMap | Relation (area) |
-| `com.google.places` | Google Places | Place ID |
-| `com.foursquare` | Foursquare | Venue ID |
-| `com.what3words` | what3words | 3-word address |
-| `org.geonames` | GeoNames | Feature ID |
-| `org.wikidata.entity` | Wikidata | Entity QID |
+| `com.google.places`          | Google Places | Place ID        |
+| `com.foursquare`             | Foursquare    | Venue ID        |
+| `com.what3words`             | what3words    | 3-word address  |
+| `org.geonames`               | GeoNames      | Feature ID      |
+| `org.wikidata.entity`        | Wikidata      | Entity QID      |
 
 ### 4.3 OnlineVenue
 
@@ -367,6 +367,8 @@ EventInstance
 
 **`id`**: An optional local identifier for the instance.
 
+**`activities`**: An array of [Activity](#55-activity) objects representing scheduled sub-items within this instance (e.g. conference talks, workshops, performances). See [Activity](#55-activity) for the full definition.
+
 **`components`**: An array of [EventComponent](#6-components) objects representing additional metadata specific to this instance.
 
 **`venueIds`**: References to [Venues](#4-venues) defined in the parent `OpenEvnt.venues`. MUST be an array (possibly empty). Duplicate values MUST NOT appear. Each value MUST match the `id` field of a venue in `venues`. If a value does not match any venue, consumers SHOULD treat it as an error.
@@ -415,6 +417,84 @@ Each instance MAY have its own `status`, independent of the event-level status.
 ```
 
 Instance-level status overrides the event-level status for that instance only.
+
+### 5.5 Activity
+
+An activity is a scheduled sub-item within an instance: a conference talk, workshop, performance, or social hour.
+
+```
+Activity
+  name:        Translations              REQUIRED
+  slot:        ActivitySlot?             OPTIONAL
+  location:    ActivityLocation?         OPTIONAL
+  components:  EventComponent[]?         OPTIONAL
+```
+
+**`name`**: The activity name as a [Translations](#22-translations) object. MUST have at least one entry.
+
+**`slot`**: When the activity takes place within the instance's time window.
+
+**`location`**: A label for the room, stage, or area within the venue where this activity takes place. Not a [Venue](#4-venues) reference - use `ActivityLocation` for sub-venue naming.
+
+**`components`**: Activity-specific metadata. See [Components](#6-components).
+
+#### ActivitySlot
+
+```
+ActivitySlot
+  time?:     "hh:mm"          OPTIONAL
+  duration?: "hh:mm"          OPTIONAL
+```
+
+**`time`**: Clock time in 24h format. Hours 00–23, minutes 00–59. Represents unanchored clock time - inherits timezone context from the parent instance's `PartialDate`.
+
+**`duration`**: Duration in hours:minutes. Minutes limited to 00–59; hours are unbounded.
+
+| Slot shape                                | Meaning      |
+|-------------------------------------------|--------------|
+| `{}`                                      | Untimed      |
+| `{ "time": "15:00" }`                     | Starts 15:00 |
+| `{ "time": "15:00", "duration": "1:00" }` | 15:00–16:00  |
+
+#### ActivityLocation
+
+```
+ActivityLocation
+  name:     Translations              REQUIRED
+```
+
+**`name`**: A label for the room or area, e.g. `{ "en": "Janson" }`, `{ "en": "Main Stage" }`, `{ "en": "Workshop Tent" }`.
+
+#### Example
+
+```json
+{
+  "instances": [
+    {
+      "venueIds": ["campus"],
+      "start": "2026-02-07[Europe/Brussels]",
+      "end": "2026-02-07T19:00[Europe/Brussels]",
+      "activities": [
+        {
+          "name": { "en": "Opening Keynote" },
+          "slot": { "time": "09:30", "duration": "0:50" },
+          "location": { "name": { "en": "Janson" } }
+        },
+        {
+          "name": { "en": "Rust for Linux" },
+          "slot": { "time": "13:00", "duration": "0:50" },
+          "location": { "name": { "en": "Janson" } }
+        },
+        {
+          "name": { "en": "LLVM Workshop" },
+          "slot": { "time": "10:30", "duration": "8:30" },
+          "location": { "name": { "en": "K.3.201" } }
+        }
+      ]
+    }
+  ]
+}
+```
 
 ---
 
@@ -578,15 +658,6 @@ Optional version parameter:
 
 ```
 application/evnt+json; v=0.1
-```
-
-### 8.6 HTTP serving
-
-HTTP servers serving Open Evnt files SHOULD include these headers:
-
-```
-Content-Type: application/evnt+json
-Access-Control-Allow-Origin: *
 ```
 
 ---
