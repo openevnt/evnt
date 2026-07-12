@@ -7,7 +7,7 @@ import {
 	writeFileSync,
 	rmSync,
 } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { OpenEvntSchema } from "@evnt/schema";
 import { PlainTextFormatter } from "@evnt/pretty";
 import { SchemaValidationError } from "../errors.js";
@@ -31,7 +31,7 @@ const titleOf = (event: { name?: Record<string, string> }): string => {
 
 export default async function (opts: { dir: string; out: string; feed?: string }) {
 	const { dir, out: rawOut, feed = "feed.json" } = opts;
-	const out = join(process.cwd(), rawOut);
+	const out = resolve(rawOut);
 
 	if (!existsSync(dir)) {
 		console.error(`Directory not found: ${dir}`);
