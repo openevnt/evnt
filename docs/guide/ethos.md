@@ -21,4 +21,3 @@ It's better to be vague and correct than precise and wrong. You should never hav
 ### Extend, don't fork
 
 The core handles common cases. When you need more, there's a slot for that. No coordination needed, no waiting for the spec.
-

@@ -1,36 +1,36 @@
 {
-  "defs": {
-    "main": {
-      "properties": {
-        "url": {
-          "type": "string"
-        },
-        "blob": {
-          "type": "blob"
-        },
-        "mimeType": {
-          "type": "string"
-        },
-        "dimensions": {
-          "ref": "directory.evnt.media.source#dimensions",
-          "type": "ref"
-        }
-      },
-      "type": "object"
-    },
-    "dimensions": {
-      "properties": {
-        "width": {
-          "type": "string"
-        },
-        "height": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.media.source",
-  "lexicon": 1,
-  "revision": 1
+	"defs": {
+		"main": {
+			"properties": {
+				"url": {
+					"type": "string"
+				},
+				"blob": {
+					"type": "blob"
+				},
+				"mimeType": {
+					"type": "string"
+				},
+				"dimensions": {
+					"ref": "directory.evnt.media.source#dimensions",
+					"type": "ref"
+				}
+			},
+			"type": "object"
+		},
+		"dimensions": {
+			"properties": {
+				"width": {
+					"type": "string"
+				},
+				"height": {
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.media.source",
+	"lexicon": 1,
+	"revision": 1
 }

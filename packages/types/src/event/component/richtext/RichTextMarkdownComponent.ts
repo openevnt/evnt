@@ -3,4 +3,4 @@ export interface RichTextMarkdownComponent {
 	content: string;
 	language?: string;
 	flavor?: string;
-};
+}

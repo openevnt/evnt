@@ -5,8 +5,8 @@ import { formats, type FormatId } from "@evnt/convert";
 const help = `Convert an OpenEvnt event to another format.
 
 Supported formats: ${Object.entries(formats)
-		.map(([key, fmt]) => `  ${key} — ${fmt.description ?? fmt.name} (.${fmt.extensions.join(", .")})`)
-		.join("\n")}`;
+	.map(([key, fmt]) => `  ${key} — ${fmt.description ?? fmt.name} (.${fmt.extensions.join(", .")})`)
+	.join("\n")}`;
 
 export default async function (event: unknown, flags: { format?: string; out?: string }) {
 	const fmtName = flags.format as FormatId | undefined;

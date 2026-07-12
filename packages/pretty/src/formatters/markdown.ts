@@ -43,8 +43,6 @@ export class MarkdownFormatter extends EmojiFormatter {
 		return names.join(", ");
 	}
 
-
-
 	// == Links ===========================================
 
 	protected override formatLink(url: string, name?: string): string {

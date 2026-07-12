@@ -9,12 +9,13 @@ export const BaseVenueSchema = z.object({
 });
 
 export const preprocessVenue = (obj: any) => {
-	if (typeof obj === "object" && obj !== null) return {
-		...obj,
-		$type: obj["$type"] || `directory.evnt.venue.${obj["type"] || obj["venueType"]}`,
-		id: obj["id"] || obj["venueId"],
-		name: obj["name"] || obj["venueName"],
-	};
+	if (typeof obj === "object" && obj !== null)
+		return {
+			...obj,
+			$type: obj["$type"] || `directory.evnt.venue.${obj["type"] || obj["venueType"]}`,
+			id: obj["id"] || obj["venueId"],
+			name: obj["name"] || obj["venueName"],
+		};
 
 	return obj;
 };

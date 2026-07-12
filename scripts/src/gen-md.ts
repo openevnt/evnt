@@ -4,12 +4,11 @@ import { convertSchemas, formatModelsAsMarkdown } from "zod2md";
 export const genMarkdownDocs = async (dest: string | URL) => {
 	const module = await import("@evnt/schema");
 	const { $ID, $NSID, ...schemas } = module;
-	const namedModels = Object.entries(schemas)
-		.map(([name, schema]) => ({
-			name,
-			schema,
-			path: `schemas/${name}`,
-		}));
+	const namedModels = Object.entries(schemas).map(([name, schema]) => ({
+		name,
+		schema,
+		path: `schemas/${name}`,
+	}));
 
 	const list = convertSchemas(namedModels);
 	list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));

@@ -6,15 +6,8 @@
 		"module": "esnext",
 		"target": "esnext",
 		"types": [],
-		"lib": [
-			"esnext"
-		],
+		"lib": ["esnext"]
 	},
-	"include": [
-		"src"
-	],
-	"exclude": [
-		"node_modules",
-		"dist"
-	]
+	"include": ["src"],
+	"exclude": ["node_modules", "dist"]
 }

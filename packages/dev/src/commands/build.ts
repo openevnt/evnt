@@ -1,4 +1,12 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync, rmSync } from "node:fs";
+import {
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	readdirSync,
+	statSync,
+	writeFileSync,
+	rmSync,
+} from "node:fs";
 import { join, relative } from "node:path";
 import { OpenEvntSchema } from "@evnt/schema";
 import { SchemaValidationError, JSONParseError } from "../errors";

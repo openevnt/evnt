@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"rootDir": "./src",
 		"outDir": "./dist",
-		"lib": ["ESNext"],
+		"lib": ["ESNext"]
 	},
 	"include": ["src/"]
 }

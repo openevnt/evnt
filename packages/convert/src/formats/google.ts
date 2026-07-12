@@ -41,9 +41,7 @@ export const google: FormatConverter = {
 
 				if (obj.timeZone) {
 					// Convert to the target timezone using locale string
-					const localized = new Date(
-						date.toLocaleString("en-US", { timeZone: obj.timeZone }),
-					);
+					const localized = new Date(date.toLocaleString("en-US", { timeZone: obj.timeZone }));
 					return dateToPartialDate(localized, obj.timeZone);
 				}
 				return dateToPartialDate(date, "UTC");
@@ -63,11 +61,13 @@ export const google: FormatConverter = {
 			v: "0.1",
 			name: Object.keys(name).length > 0 ? name : { [lang]: "No Title" },
 			venues: venues.length > 0 ? venues : undefined,
-			instances: [{
-				venueIds: venues.map((v) => v.id),
-				start: asPartialDate(data.start),
-				end: asPartialDate(data.end),
-			}],
+			instances: [
+				{
+					venueIds: venues.map((v) => v.id),
+					start: asPartialDate(data.start),
+					end: asPartialDate(data.end),
+				},
+			],
 		};
 	},
 };

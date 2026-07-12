@@ -32,7 +32,11 @@ describe("PartialDate comparisons", () => {
 		expect(PartialDateUtil.intersects("2024-05[UTC]", "2024-06[UTC]")).toBe(false);
 
 		// Adjacent boundaries do not intersect because comparisons are strict.
-		expect(PartialDateUtil.intersects("2024-05-01T10:00[UTC]", "2024-05-01T10:00[UTC]")).toBe(false);
-		expect(PartialDateUtil.intersects("2024-05-01T10:00[UTC]", "2024-05-01T10:01[UTC]")).toBe(false);
+		expect(PartialDateUtil.intersects("2024-05-01T10:00[UTC]", "2024-05-01T10:00[UTC]")).toBe(
+			false,
+		);
+		expect(PartialDateUtil.intersects("2024-05-01T10:00[UTC]", "2024-05-01T10:01[UTC]")).toBe(
+			false,
+		);
 	});
 });

@@ -3,6 +3,6 @@ import { EventComponentSchema } from "../src/schemas/components/EventComponent";
 
 describe("jsonschema", () => {
 	test("event components", () => {
-		assertType(Array.isArray(EventComponentSchema.toJSONSchema().oneOf))
-	})
+		assertType(Array.isArray(EventComponentSchema.toJSONSchema().oneOf));
+	});
 });

@@ -12,12 +12,11 @@ export namespace Activity {
 		time?: Time;
 		duration?: Duration;
 	}
-};
+}
 
 export interface Activity {
 	/** The name of the activity */
 	name: Translations;
 	slot?: Activity.Slot;
 	components?: AnyComponent[];
-};
-
+}

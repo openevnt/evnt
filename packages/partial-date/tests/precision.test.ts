@@ -26,12 +26,20 @@ describe("PartialDate precision and shape helpers", () => {
 		expect(PartialDateUtil.setPrecision("2024[UTC]", "month", "high")).toBe("2024-12[UTC]");
 		expect(PartialDateUtil.setPrecision("2024-02[UTC]", "day", "low")).toBe("2024-02-01[UTC]");
 		expect(PartialDateUtil.setPrecision("2024-02[UTC]", "day", "high")).toBe("2024-02-29[UTC]");
-		expect(PartialDateUtil.setPrecision("2024-05-20[UTC]", "time", "low")).toBe("2024-05-20T00:00[UTC]");
-		expect(PartialDateUtil.setPrecision("2024-05-20[UTC]", "time", "high")).toBe("2024-05-20T23:59[UTC]");
+		expect(PartialDateUtil.setPrecision("2024-05-20[UTC]", "time", "low")).toBe(
+			"2024-05-20T00:00[UTC]",
+		);
+		expect(PartialDateUtil.setPrecision("2024-05-20[UTC]", "time", "high")).toBe(
+			"2024-05-20T23:59[UTC]",
+		);
 	});
 
 	test("withTimezone rewrites timezone without changing local fields", () => {
-		expect(PartialDateUtil.withTimezone("2024-05-20T14:30[UTC]", "Europe/Berlin")).toBe("2024-05-20T14:30[Europe/Berlin]");
-		expect(PartialDateUtil.withTimezone("2024-05[UTC]", "America/New_York")).toBe("2024-05[America/New_York]");
+		expect(PartialDateUtil.withTimezone("2024-05-20T14:30[UTC]", "Europe/Berlin")).toBe(
+			"2024-05-20T14:30[Europe/Berlin]",
+		);
+		expect(PartialDateUtil.withTimezone("2024-05[UTC]", "America/New_York")).toBe(
+			"2024-05[America/New_York]",
+		);
 	});
 });

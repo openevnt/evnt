@@ -29,7 +29,10 @@ export class DiscordFormatter extends MarkdownFormatter {
 	}
 
 	protected override mdSubtext(text: string): string {
-		return text.split("\n").map(line => `-# ${line}`).join("\n");
+		return text
+			.split("\n")
+			.map((line) => `-# ${line}`)
+			.join("\n");
 	}
 
 	// == Timestamps ======================================
@@ -95,12 +98,15 @@ export class DiscordFormatter extends MarkdownFormatter {
 	protected override formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
 		if (this.tsStyle === "only") {
 			const dateStr = this.formatDateShape(group.dates);
-			const timeStr = group.times.map(t => this.formatTimeRange(t.start, t.end)).filter(Boolean).join(", ");
+			const timeStr = group.times
+				.map((t) => this.formatTimeRange(t.start, t.end))
+				.filter(Boolean)
+				.join(", ");
 
 			const venueNames = group.venueIds
-				.map(id => venueMap.get(id))
+				.map((id) => venueMap.get(id))
 				.filter(Boolean)
-				.map(v => this.resolveText(v!.name));
+				.map((v) => this.resolveText(v!.name));
 			const venueStr = venueNames.length > 0 ? venueNames.join(", ") : "";
 
 			return [dateStr, timeStr, venueStr].filter(Boolean).join(" · ");

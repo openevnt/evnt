@@ -10,7 +10,10 @@ const hasTime = (pd: PartialDate) => PartialDateUtil.has(pd, "time");
 // == Formatting ==========================================
 
 /** Format a PartialDate as a locale-aware string. */
-export function formatDate(pd: PartialDate, config: Pick<FormatConfig, "language" | "compactDates" | "timezone">): string {
+export function formatDate(
+	pd: PartialDate,
+	config: Pick<FormatConfig, "language" | "compactDates" | "timezone">,
+): string {
 	const parsed = PartialDateUtil.parse(pd);
 
 	if (config.compactDates) {
@@ -19,7 +22,11 @@ export function formatDate(pd: PartialDate, config: Pick<FormatConfig, "language
 				return parsed.year.toString();
 			case "month": {
 				const dt = new Date(Date.UTC(parsed.year, parsed.month - 1));
-				return dt.toLocaleDateString(config.language, { year: "numeric", month: "short", timeZone: "UTC" });
+				return dt.toLocaleDateString(config.language, {
+					year: "numeric",
+					month: "short",
+					timeZone: "UTC",
+				});
 			}
 			case "day":
 			case "time": {
@@ -49,12 +56,19 @@ export function formatDate(pd: PartialDate, config: Pick<FormatConfig, "language
 }
 
 /** Format a date range as "Jun 14–16". */
-export function formatDateRange(start: PartialDate, end: PartialDate, config: Pick<FormatConfig, "language" | "compactDates" | "timezone">): string {
+export function formatDateRange(
+	start: PartialDate,
+	end: PartialDate,
+	config: Pick<FormatConfig, "language" | "compactDates" | "timezone">,
+): string {
 	return `${formatDate(start, config)}–${formatDate(end, config)}`;
 }
 
 /** Format a time-only PartialDate as "14:00". Shows local time offset when timezone differs. */
-export function formatTime(pd: PartialDate, config: Pick<FormatConfig, "language" | "timezone">): string {
+export function formatTime(
+	pd: PartialDate,
+	config: Pick<FormatConfig, "language" | "timezone">,
+): string {
 	const parsed = PartialDateUtil.parse(pd);
 	if (parsed.precision !== "time") return "";
 

@@ -43,23 +43,27 @@ export const activitystreams: FormatConverter = {
 			const longitude = asNumber(rawLocation.longitude);
 
 			const addressRaw = rawLocation.address;
-			const addressLine = typeof addressRaw === "string"
-				? addressRaw
-				: isRecord(addressRaw)
-					? asNonEmptyString(addressRaw.streetAddress)
-						?? asNonEmptyString(addressRaw.addressLocality)
-						?? asNonEmptyString(addressRaw.name)
-					: undefined;
+			const addressLine =
+				typeof addressRaw === "string"
+					? addressRaw
+					: isRecord(addressRaw)
+						? (asNonEmptyString(addressRaw.streetAddress) ??
+							asNonEmptyString(addressRaw.addressLocality) ??
+							asNonEmptyString(addressRaw.name))
+						: undefined;
 			const countryCodeRaw = isRecord(addressRaw)
 				? asNonEmptyString(addressRaw.addressCountry)
 				: undefined;
-			const countryCode = countryCodeRaw && countryCodeRaw.length === 2
-				? countryCodeRaw.toUpperCase()
-				: undefined;
+			const countryCode =
+				countryCodeRaw && countryCodeRaw.length === 2 ? countryCodeRaw.toUpperCase() : undefined;
 
 			const type = asNonEmptyString(rawLocation.type)?.toLowerCase();
 			const looksOnline = type === "link" || type === "linkobject" || type === "virtualplace";
-			const hasPhysicalData = latitude !== undefined || longitude !== undefined || addressLine !== undefined || countryCode !== undefined;
+			const hasPhysicalData =
+				latitude !== undefined ||
+				longitude !== undefined ||
+				addressLine !== undefined ||
+				countryCode !== undefined;
 
 			if (locationUrl && (looksOnline || !hasPhysicalData)) {
 				venues.push({
@@ -99,7 +103,11 @@ export const activitystreams: FormatConverter = {
 
 			const mediaType = asNonEmptyString(attachment.mediaType) ?? "";
 			const attachmentType = asNonEmptyString(attachment.type)?.toLowerCase();
-			const isMedia = mediaType.startsWith("image/") || mediaType.startsWith("video/") || attachmentType === "image" || attachmentType === "video";
+			const isMedia =
+				mediaType.startsWith("image/") ||
+				mediaType.startsWith("video/") ||
+				attachmentType === "image" ||
+				attachmentType === "video";
 
 			if (isMedia) {
 				components.push({
@@ -135,11 +143,16 @@ export const activitystreams: FormatConverter = {
 			v: "0.1",
 			name: nameStr ? createTranslations(nameStr, language) : { [language]: "Untitled Event" },
 			venues: venues.length > 0 ? venues : undefined,
-			instances: (start || end || venues.length > 0) ? [{
-				venueIds: venues.map((v) => v.id),
-				start: start ? parseDateString(start) : undefined,
-				end: end ? parseDateString(end) : undefined,
-			}] : undefined,
+			instances:
+				start || end || venues.length > 0
+					? [
+							{
+								venueIds: venues.map((v) => v.id),
+								start: start ? parseDateString(start) : undefined,
+								end: end ? parseDateString(end) : undefined,
+							},
+						]
+					: undefined,
 			components: components.length > 0 ? components : undefined,
 		};
 	},
@@ -154,7 +167,8 @@ export const activitystreams: FormatConverter = {
 
 		object.evntData = data;
 
-		const primaryInstance = data.instances?.find((inst) => inst.start || inst.end) ?? data.instances?.[0];
+		const primaryInstance =
+			data.instances?.find((inst) => inst.start || inst.end) ?? data.instances?.[0];
 		if (primaryInstance?.start) {
 			const iso = partialDateToIso(primaryInstance.start);
 			if (iso) object.startTime = iso;
@@ -193,7 +207,13 @@ export const activitystreams: FormatConverter = {
 			}
 
 			if (type === "directory.evnt.component.splashMedia") {
-				const splash = c as unknown as { $type: string; media: { sources: Array<{ url?: string; blob?: { mimeType?: string } }>; alt?: Record<string, string> } };
+				const splash = c as unknown as {
+					$type: string;
+					media: {
+						sources: Array<{ url?: string; blob?: { mimeType?: string } }>;
+						alt?: Record<string, string>;
+					};
+				};
 				for (const source of splash.media.sources) {
 					if (!source.url) continue;
 					attachments.push({

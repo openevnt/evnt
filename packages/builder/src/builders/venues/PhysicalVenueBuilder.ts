@@ -4,11 +4,14 @@ import type { EventBuilder } from "../EventBuilder";
 
 export class PhysicalVenueBuilder extends VenueBuilder<"directory.evnt.venue.physical"> {
 	constructor(venue?: PhysicalVenue, parent?: EventBuilder) {
-		super(venue ?? {
-			id: "",
-			name: {},
-			$type: "directory.evnt.venue.physical",
-		}, parent);
+		super(
+			venue ?? {
+				id: "",
+				name: {},
+				$type: "directory.evnt.venue.physical",
+			},
+			parent,
+		);
 	}
 
 	setCountryCode(countryCode: string) {

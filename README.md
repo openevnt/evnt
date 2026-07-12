@@ -10,12 +10,12 @@ A modern data format for events.
 
 This monorepo contains a lot of things:
 
-__Specification__: The data format specification document, [**can be found here**](./docs/full-spec.md). There's also:
+**Specification**: The data format specification document, [**can be found here**](./docs/full-spec.md). There's also:
 
 - [JSON Schema](./event-data.schema.json) of the data format
 - [AT Protocol Lexicons](./lexicons/)
 
-__Packages__: We publish a few NPM packages to make it easier to work with the data format:
+**Packages**: We publish a few NPM packages to make it easier to work with the data format:
 
 - [@evnt/schema](./packages/schema/): Types and Zod validation
 - [@evnt/partial-date](./packages/partial-date/): Helpers for working with partial dates using Temporal API
@@ -23,11 +23,11 @@ __Packages__: We publish a few NPM packages to make it easier to work with the d
 - [@evnt/convert](./packages/convert/): Converters between Open Evnt and other formats (such as iCalendar, Community Lexicon, schema.org, etc.)
 - [@evnt/pretty](./packages/pretty/): Opinionated helpers for pretty-printing of event data
 
-__Applications__
+**Applications**
 
 - [landing](https://evnt.directory): A landing page for the project hosted at https://evnt.directory
 
-__Other Links__
+**Other Links**
 
 - [Discord](https://deniz.blue/discord-invite?id=1493641727980994710)
 - [Matrix](https://matrix.to/#/#evnt:catgirl.cloud)
@@ -36,7 +36,7 @@ __Other Links__
   - [Scheduling is complex: Why we need Partial Dates](https://evnt.leaflet.pub/3mjeydgshtk2z)
   - [Instances & Venues](https://evnt.leaflet.pub/3mjjufibxx22a)
 
-__Related Projects__
+**Related Projects**
 
 - [eventsl.ink](https://github.com/openevnt/eventslink): Share event links independently of the website or platform it's on
 - [Vantage](https://github.com/deniz-blue/vantage): Proof-of-concept calendar application built on top of Open Evnt

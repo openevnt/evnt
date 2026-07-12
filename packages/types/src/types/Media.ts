@@ -4,12 +4,12 @@ export interface Media {
 	sources: MediaSource[];
 	alt?: Translations;
 	presentation?: MediaPresentation;
-};
+}
 
 export interface MediaDimensions {
 	width: number;
 	height: number;
-};
+}
 
 export interface MediaSource {
 	url?: string;
@@ -21,9 +21,9 @@ export interface MediaSource {
 		size: number;
 		mimeType: string;
 	};
-};
+}
 
 export interface MediaPresentation {
 	blurhash?: string;
 	dominantColor?: `#${string}`;
-};
+}

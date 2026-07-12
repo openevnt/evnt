@@ -22,12 +22,9 @@
 		<div class="editor-section">
 			<label>{{ direction === "to" ? "Open Evnt JSON" : selectedFormatName + " Input" }}</label>
 			<div class="presets">
-				<button
-					v-for="p in presets"
-					:key="p.label"
-					class="preset-btn"
-					@click="input = p.value"
-				>{{ p.label }}</button>
+				<button v-for="p in presets" :key="p.label" class="preset-btn" @click="input = p.value">
+					{{ p.label }}
+				</button>
 			</div>
 			<textarea
 				v-model="input"
@@ -38,19 +35,11 @@
 			></textarea>
 		</div>
 
-		<button class="convert-btn" @click="convert" :disabled="!input.trim()">
-			Convert
-		</button>
+		<button class="convert-btn" @click="convert" :disabled="!input.trim()">Convert</button>
 
 		<div v-if="output !== null" class="editor-section">
 			<label>{{ direction === "to" ? selectedFormatName + " Output" : "Open Evnt JSON" }}</label>
-			<textarea
-				:value="output"
-				rows="8"
-				spellcheck="false"
-				class="code-input"
-				readonly
-			></textarea>
+			<textarea :value="output" rows="8" spellcheck="false" class="code-input" readonly></textarea>
 			<button class="copy-btn" @click="copyOutput">
 				{{ copied ? "Copied!" : "Copy to clipboard" }}
 			</button>
@@ -82,10 +71,7 @@ for (const [id, fmt] of Object.entries(formats)) {
 const formatOptions: FormatOption[] = Object.entries(formats).map(([id, fmt]) => ({
 	id: id as FormatId,
 	name: fmt.name,
-	directions: [
-		...(fmt.to ? ["to" as const] : []),
-		...(fmt.from ? ["from" as const] : []),
-	],
+	directions: [...(fmt.to ? ["to" as const] : []), ...(fmt.from ? ["from" as const] : [])],
 }));
 
 const direction = ref<Direction>("to");
@@ -310,7 +296,9 @@ import { watch } from "vue";
 	color: var(--vp-c-brand-1);
 	cursor: pointer;
 	white-space: nowrap;
-	transition: background 0.15s, color 0.15s;
+	transition:
+		background 0.15s,
+		color 0.15s;
 }
 
 .preset-btn:hover {
@@ -369,7 +357,9 @@ import { watch } from "vue";
 	border-radius: 4px;
 	font-size: 0.8125rem;
 	cursor: pointer;
-	transition: background 0.15s, color 0.15s;
+	transition:
+		background 0.15s,
+		color 0.15s;
 }
 
 .copy-btn:hover {

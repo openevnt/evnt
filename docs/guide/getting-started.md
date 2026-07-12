@@ -10,10 +10,10 @@ An event needs a name and a version marker. That's the minimum.
 
 ```json
 {
-  "v": "0.1",
-  "name": {
-    "en": "Brussels Community Festival"
-  }
+	"v": "0.1",
+	"name": {
+		"en": "Brussels Community Festival"
+	}
 }
 ```
 
@@ -27,12 +27,12 @@ The festival is in a mixed neighborhood. Flyers go out in French and Dutch, and 
 
 ```json
 {
-  "v": "0.1",
-  "name": {
-    "en": "Brussels Community Festival",
-    "fr": "Festival Communautaire de Bruxelles",
-    "nl": "Brussel Gemeenschapsfestival"
-  }
+	"v": "0.1",
+	"name": {
+		"en": "Brussels Community Festival",
+		"fr": "Festival Communautaire de Bruxelles",
+		"nl": "Brussel Gemeenschapsfestival"
+	}
 }
 ```
 
@@ -44,18 +44,18 @@ You know it's happening in June 2026, but the exact day isn't locked yet because
 
 ```json
 {
-  "v": "0.1",
-  "name": {
-    "en": "Brussels Community Festival",
-    "fr": "Festival Communautaire de Bruxelles",
-    "nl": "Brussel Gemeenschapsfestival"
-  },
-  "instances": [
-    {
-      "venueIds": [],
-      "start": "2026-06[Europe/Brussels]"
-    }
-  ]
+	"v": "0.1",
+	"name": {
+		"en": "Brussels Community Festival",
+		"fr": "Festival Communautaire de Bruxelles",
+		"nl": "Brussel Gemeenschapsfestival"
+	},
+	"instances": [
+		{
+			"venueIds": [],
+			"start": "2026-06[Europe/Brussels]"
+		}
+	]
 }
 ```
 
@@ -69,17 +69,17 @@ Parc du Cinquantenaire. Add it as a physical venue and connect it to the instanc
 
 ```json
 {
-  "id": "venue-main",
-  "$type": "directory.evnt.venue.physical",
-  "name": {
-    "en": "Parc du Cinquantenaire",
-    "fr": "Parc du Cinquantenaire",
-    "nl": "Jubelpark"
-  },
-  "address": {
-    "addr": "Parc du Cinquantenaire, 1000 Bruxelles",
-    "countryCode": "BE"
-  }
+	"id": "venue-main",
+	"$type": "directory.evnt.venue.physical",
+	"name": {
+		"en": "Parc du Cinquantenaire",
+		"fr": "Parc du Cinquantenaire",
+		"nl": "Jubelpark"
+	},
+	"address": {
+		"addr": "Parc du Cinquantenaire, 1000 Bruxelles",
+		"countryCode": "BE"
+	}
 }
 ```
 
@@ -87,12 +87,12 @@ The `id` links the venue to the instance via `venueIds`.
 
 ```json
 {
-  "instances": [
-    {
-      "venueIds": ["venue-main"],
-      "start": "2026-06[Europe/Brussels]"
-    }
-  ]
+	"instances": [
+		{
+			"venueIds": ["venue-main"],
+			"start": "2026-06[Europe/Brussels]"
+		}
+	]
 }
 ```
 
@@ -102,10 +102,10 @@ Some people can't make it to Brussels (valid excuse). Set up a livestream.
 
 ```json
 {
-  "id": "venue-stream",
-  "$type": "directory.evnt.venue.online",
-  "name": { "en": "Livestream" },
-  "url": "https://live.example.com/bfest-2026"
+	"id": "venue-stream",
+	"$type": "directory.evnt.venue.online",
+	"name": { "en": "Livestream" },
+	"url": "https://live.example.com/bfest-2026"
 }
 ```
 
@@ -113,12 +113,12 @@ Now reference both venues on the instance. In-person people go to the park, remo
 
 ```json
 {
-  "instances": [
-    {
-      "venueIds": ["venue-main", "venue-stream"],
-      "start": "2026-06[Europe/Brussels]"
-    }
-  ]
+	"instances": [
+		{
+			"venueIds": ["venue-main", "venue-stream"],
+			"start": "2026-06[Europe/Brussels]"
+		}
+	]
 }
 ```
 
@@ -130,18 +130,18 @@ Add a link component so people can find the stream, grab tickets, or point and l
 
 ```json
 {
-  "components": [
-    {
-      "$type": "directory.evnt.component.link",
-      "url": "https://live.example.com/bfest-2026",
-      "name": { "en": "Watch Live" }
-    },
-    {
-      "$type": "directory.evnt.component.link",
-      "url": "https://example.com/tickets",
-      "name": { "en": "Get Tickets" }
-    }
-  ]
+	"components": [
+		{
+			"$type": "directory.evnt.component.link",
+			"url": "https://live.example.com/bfest-2026",
+			"name": { "en": "Watch Live" }
+		},
+		{
+			"$type": "directory.evnt.component.link",
+			"url": "https://example.com/tickets",
+			"name": { "en": "Get Tickets" }
+		}
+	]
 }
 ```
 
@@ -163,56 +163,56 @@ Same shape as `name`, but meant for display as a subtitle. Apps can show it smal
 
 ```json
 {
-  "v": "0.1",
-  "name": {
-    "en": "Brussels Community Festival",
-    "fr": "Festival Communautaire de Bruxelles",
-    "nl": "Brussel Gemeenschapsfestival"
-  },
-  "label": {
-    "en": "June 2026",
-    "fr": "Juin 2026",
-    "nl": "Juni 2026"
-  },
-  "venues": [
-    {
-      "id": "venue-main",
-      "$type": "directory.evnt.venue.physical",
-      "name": {
-        "en": "Parc du Cinquantenaire",
-        "fr": "Parc du Cinquantenaire",
-        "nl": "Jubelpark"
-      },
-      "address": {
-        "addr": "Parc du Cinquantenaire, 1000 Bruxelles",
-        "countryCode": "BE"
-      }
-    },
-    {
-      "id": "venue-stream",
-      "$type": "directory.evnt.venue.online",
-      "name": { "en": "Livestream" },
-      "url": "https://live.example.com/bfest-2026"
-    }
-  ],
-  "instances": [
-    {
-      "venueIds": ["venue-main", "venue-stream"],
-      "start": "2026-06[Europe/Brussels]"
-    }
-  ],
-  "components": [
-    {
-      "$type": "directory.evnt.component.link",
-      "url": "https://live.example.com/bfest-2026",
-      "name": { "en": "Watch Live" }
-    },
-    {
-      "$type": "directory.evnt.component.link",
-      "url": "https://example.com/tickets",
-      "name": { "en": "Get Tickets" }
-    }
-  ]
+	"v": "0.1",
+	"name": {
+		"en": "Brussels Community Festival",
+		"fr": "Festival Communautaire de Bruxelles",
+		"nl": "Brussel Gemeenschapsfestival"
+	},
+	"label": {
+		"en": "June 2026",
+		"fr": "Juin 2026",
+		"nl": "Juni 2026"
+	},
+	"venues": [
+		{
+			"id": "venue-main",
+			"$type": "directory.evnt.venue.physical",
+			"name": {
+				"en": "Parc du Cinquantenaire",
+				"fr": "Parc du Cinquantenaire",
+				"nl": "Jubelpark"
+			},
+			"address": {
+				"addr": "Parc du Cinquantenaire, 1000 Bruxelles",
+				"countryCode": "BE"
+			}
+		},
+		{
+			"id": "venue-stream",
+			"$type": "directory.evnt.venue.online",
+			"name": { "en": "Livestream" },
+			"url": "https://live.example.com/bfest-2026"
+		}
+	],
+	"instances": [
+		{
+			"venueIds": ["venue-main", "venue-stream"],
+			"start": "2026-06[Europe/Brussels]"
+		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.component.link",
+			"url": "https://live.example.com/bfest-2026",
+			"name": { "en": "Watch Live" }
+		},
+		{
+			"$type": "directory.evnt.component.link",
+			"url": "https://example.com/tickets",
+			"name": { "en": "Get Tickets" }
+		}
+	]
 }
 ```
 

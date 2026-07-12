@@ -4,13 +4,15 @@ import { SchemaValidationError, JSONParseError } from "../src/index";
 
 describe("SchemaValidationError", () => {
 	test("stores path, zodError, and fileContent", () => {
-		const zodError = new ZodError([{
-			code: "invalid_type",
-			expected: "string",
-			received: "number",
-			path: ["name"],
-			message: "Expected string, received number",
-		}]);
+		const zodError = new ZodError([
+			{
+				code: "invalid_type",
+				expected: "string",
+				received: "number",
+				path: ["name"],
+				message: "Expected string, received number",
+			},
+		]);
 		const error = new SchemaValidationError("/path/to/file.json", zodError, "content");
 		expect(error.path).toBe("/path/to/file.json");
 		expect(error.zodError).toBe(zodError);
@@ -18,13 +20,15 @@ describe("SchemaValidationError", () => {
 	});
 
 	test("getCodeFrames returns a string", () => {
-		const zodError = new ZodError([{
-			code: "invalid_type",
-			expected: "string",
-			received: "number",
-			path: ["name"],
-			message: "Expected string, received number",
-		}]);
+		const zodError = new ZodError([
+			{
+				code: "invalid_type",
+				expected: "string",
+				received: "number",
+				path: ["name"],
+				message: "Expected string, received number",
+			},
+		]);
 		const error = new SchemaValidationError("/path/file.json", zodError, '{"name": 42}');
 		const frames = error.getCodeFrames();
 		expect(typeof frames).toBe("string");

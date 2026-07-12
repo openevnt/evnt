@@ -2,20 +2,19 @@ import type { Translations } from "@evnt/types";
 
 export type MaybeTranslations = Translations | null | undefined;
 
-export const TranslationsUtil = new class {
+export const TranslationsUtil = new (class {
 	values(translations: Translations): string[] {
 		return Object.values(translations).filter((value): value is string => !!value);
 	}
 
 	languages(translations: Translations): string[] {
-		return Object.keys(translations).filter(key => !!translations[key]);
+		return Object.keys(translations).filter((key) => !!translations[key]);
 	}
 
 	normalize(translations: Translations): Translations {
 		const result: Translations = {};
 		for (const [key, value] of Object.entries(translations))
-			if (typeof value === "string" && value.trim() !== "")
-				result[key] = value;
+			if (typeof value === "string" && value.trim() !== "") result[key] = value;
 		return result;
 	}
 
@@ -32,8 +31,7 @@ export const TranslationsUtil = new class {
 	translate(translations?: MaybeTranslations, preferredLanguages: string[] = ["en"]): string {
 		if (!translations) return "";
 
-		for (const lang of preferredLanguages)
-			if (translations[lang]) return translations[lang]!;
+		for (const lang of preferredLanguages) if (translations[lang]) return translations[lang]!;
 
 		return Object.values(translations).find(Boolean) || "";
 	}
@@ -42,9 +40,7 @@ export const TranslationsUtil = new class {
 	merge(...list: MaybeTranslations[]): Translations {
 		const result: Translations = {};
 		for (const entry of list.filter(Boolean) as Translations[])
-			for (const [key, value] of Object.entries(entry))
-				if (Boolean(value))
-					result[key] = value;
+			for (const [key, value] of Object.entries(entry)) if (Boolean(value)) result[key] = value;
 
 		return result;
 	}
@@ -57,12 +53,12 @@ export const TranslationsUtil = new class {
 
 	/**
 	 * Finds the first translation whose value contains the query, case-insensitive.
-	 * 
+	 *
 	 * @example
 	 * const t = { en: "Hello World", fr: "Bonjour le monde" };
 	 * TranslationsUtil.find(t, "world");
 	 * => { en: "Hello World" }
-	 * 
+	 *
 	 * @param t Translations object to search
 	 * @param query Substring to search for
 	 * @returns Translations object with single key or null if not found
@@ -82,13 +78,12 @@ export const TranslationsUtil = new class {
 	/** Returns a new Translations object without the specified language codes */
 	omit(translations: Translations, ...codes: string[]): Translations {
 		const result = { ...translations };
-		for (const code of codes)
-			delete result[code];
+		for (const code of codes) delete result[code];
 		return result;
 	}
-}
+})();
 
-export const LanguageCodeUtil = new class {
+export const LanguageCodeUtil = new (class {
 	/** Checks if a language code is recognized by runtime Intl */
 	isRecognized(code: string): boolean {
 		try {
@@ -112,4 +107,4 @@ export const LanguageCodeUtil = new class {
 	getAutonym(code: string): string | null {
 		return this.getName(code, code);
 	}
-};
+})();

@@ -4,10 +4,13 @@ import { ComponentBuilder } from "./ComponentBuilder";
 
 export class LinkBuilder extends ComponentBuilder<LinkComponent> {
 	constructor(component?: LinkComponent, parent?: EventBuilder) {
-		super(component ?? {
-			$type: "directory.evnt.component.link",
-			url: "",
-		}, parent);
+		super(
+			component ?? {
+				$type: "directory.evnt.component.link",
+				url: "",
+			},
+			parent,
+		);
 	}
 
 	setUrl(url: string) {

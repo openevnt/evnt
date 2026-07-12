@@ -1,4 +1,14 @@
-import { array, document, object, record, ref, required, string, union, unknown } from '@atcute/lexicon-doc/builder';
+import {
+	array,
+	document,
+	object,
+	record,
+	ref,
+	required,
+	string,
+	union,
+	unknown,
+} from "@atcute/lexicon-doc/builder";
 
 export default document({
 	id: "directory.evnt.media",
@@ -6,11 +16,13 @@ export default document({
 	defs: {
 		main: object({
 			properties: {
-				sources: required(array({
-					items: ref({
-						ref: "directory.evnt.media.source",
+				sources: required(
+					array({
+						items: ref({
+							ref: "directory.evnt.media.source",
+						}),
 					}),
-				})),
+				),
 				alt: unknown(),
 				presentation: ref({
 					ref: "directory.evnt.media#presentation",

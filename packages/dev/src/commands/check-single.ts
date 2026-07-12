@@ -28,8 +28,14 @@ export default function (json: unknown, label: string) {
 			try {
 				const pa = PartialDateUtil.parse(inst.start as any);
 				const pb = PartialDateUtil.parse(inst.end as any);
-				const fa = pa as any, fb = pb as any;
-				const cmp = (fa.year - fb.year) || ((fa.month ?? 1) - (fb.month ?? 1)) || ((fa.day ?? 1) - (fb.day ?? 1)) || ((fa.hour ?? 0) - (fb.hour ?? 0)) || ((fa.minute ?? 0) - (fb.minute ?? 0));
+				const fa = pa as any,
+					fb = pb as any;
+				const cmp =
+					fa.year - fb.year ||
+					(fa.month ?? 1) - (fb.month ?? 1) ||
+					(fa.day ?? 1) - (fb.day ?? 1) ||
+					(fa.hour ?? 0) - (fb.hour ?? 0) ||
+					(fa.minute ?? 0) - (fb.minute ?? 0);
 				if (cmp > 0) issues.push(`${il}: start is after end`);
 			} catch {
 				issues.push(`${il}: invalid date format`);

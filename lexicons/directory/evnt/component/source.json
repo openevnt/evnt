@@ -1,16 +1,16 @@
 {
-  "defs": {
-    "main": {
-      "description": "A source of information about the event",
-      "properties": {
-        "url": {
-          "type": "string"
-        }
-      },
-      "required": ["url"],
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.component.source",
-  "lexicon": 1
+	"defs": {
+		"main": {
+			"description": "A source of information about the event",
+			"properties": {
+				"url": {
+					"type": "string"
+				}
+			},
+			"required": ["url"],
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.component.source",
+	"lexicon": 1
 }

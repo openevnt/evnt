@@ -1,15 +1,12 @@
 {
 	"name": "@evnt/convert",
 	"version": "0.1.0",
-	"type": "module",
-	"author": "deniz.blue <deniz@deniz.blue>",
 	"keywords": [],
+	"author": "deniz.blue <deniz@deniz.blue>",
 	"files": [
 		"/dist"
 	],
-	"scripts": {
-		"build": "tsc"
-	},
+	"type": "module",
 	"exports": {
 		".": "./src/index.ts",
 		"./icalendar": "./src/formats/icalendar.ts",
@@ -19,6 +16,7 @@
 		"./community-lexicon": "./src/formats/community-lexicon.ts"
 	},
 	"publishConfig": {
+		"types": "./dist/index.d.ts",
 		"exports": {
 			".": "./dist/index.js",
 			"./icalendar": "./dist/formats/icalendar.js",
@@ -26,8 +24,20 @@
 			"./schema-org": "./dist/formats/schema-org.js",
 			"./google": "./dist/formats/google.js",
 			"./community-lexicon": "./dist/formats/community-lexicon.js"
-		},
-		"types": "./dist/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"dependencies": {
+		"@evnt/builder": "workspace:^",
+		"@evnt/partial-date": "workspace:^",
+		"@evnt/schema": "workspace:^",
+		"@evnt/translations": "workspace:^",
+		"@evnt/types": "workspace:^",
+		"ical.js": "^2.2.1",
+		"schema-dts": "^1.1.5",
+		"zod": "^4.3.6"
 	},
 	"devDependencies": {
 		"@atcute/lex-cli": "^2.8.1",
@@ -39,15 +49,5 @@
 	},
 	"optionalDependencies": {
 		"googleapis": "^171.4.0"
-	},
-	"dependencies": {
-		"@evnt/partial-date": "workspace:^",
-		"@evnt/builder": "workspace:^",
-		"@evnt/schema": "workspace:^",
-		"@evnt/translations": "workspace:^",
-		"@evnt/types": "workspace:^",
-		"ical.js": "^2.2.1",
-		"schema-dts": "^1.1.5",
-		"zod": "^4.3.6"
 	}
 }

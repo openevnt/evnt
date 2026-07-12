@@ -1,29 +1,29 @@
 {
-  "defs": {
-    "main": {
-      "properties": {
-        "name": {
-          "type": "unknown"
-        },
-        "address": {
-          "ref": "directory.evnt.venue.physical#address",
-          "type": "ref"
-        }
-      },
-      "type": "object"
-    },
-    "address": {
-      "properties": {
-        "addr": {
-          "type": "string"
-        },
-        "countryCode": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.venue.physical",
-  "lexicon": 1
+	"defs": {
+		"main": {
+			"properties": {
+				"name": {
+					"type": "unknown"
+				},
+				"address": {
+					"ref": "directory.evnt.venue.physical#address",
+					"type": "ref"
+				}
+			},
+			"type": "object"
+		},
+		"address": {
+			"properties": {
+				"addr": {
+					"type": "string"
+				},
+				"countryCode": {
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.venue.physical",
+	"lexicon": 1
 }

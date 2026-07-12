@@ -1,54 +1,54 @@
 {
-  "defs": {
-    "main": {
-      "description": "An OpenEvnt event record",
-      "key": "tid",
-      "record": {
-        "properties": {
-          "v": {
-            "type": "string"
-          },
-          "name": {
-            "type": "unknown"
-          },
-          "venues": {
-            "items": {
-              "refs": [
-                "directory.evnt.venue.online",
-                "directory.evnt.venue.physical",
-                "directory.evnt.venue.unknown"
-              ],
-              "type": "union"
-            },
-            "type": "array"
-          },
-          "instances": {
-            "items": {
-              "ref": "directory.evnt.event.instance",
-              "type": "ref"
-            },
-            "type": "array"
-          },
-          "components": {
-            "items": {
-              "refs": [
-                "directory.evnt.component.link",
-                "directory.evnt.component.source",
-                "directory.evnt.component.splashMedia",
-                "app.bsky.richtext"
-              ],
-              "type": "union"
-            },
-            "type": "array"
-          }
-        },
-        "required": ["v", "name"],
-        "type": "object"
-      },
-      "type": "record"
-    }
-  },
-  "id": "directory.evnt.event",
-  "lexicon": 1,
-  "revision": 1
+	"defs": {
+		"main": {
+			"description": "An OpenEvnt event record",
+			"key": "tid",
+			"record": {
+				"properties": {
+					"v": {
+						"type": "string"
+					},
+					"name": {
+						"type": "unknown"
+					},
+					"venues": {
+						"items": {
+							"refs": [
+								"directory.evnt.venue.online",
+								"directory.evnt.venue.physical",
+								"directory.evnt.venue.unknown"
+							],
+							"type": "union"
+						},
+						"type": "array"
+					},
+					"instances": {
+						"items": {
+							"ref": "directory.evnt.event.instance",
+							"type": "ref"
+						},
+						"type": "array"
+					},
+					"components": {
+						"items": {
+							"refs": [
+								"directory.evnt.component.link",
+								"directory.evnt.component.source",
+								"directory.evnt.component.splashMedia",
+								"app.bsky.richtext"
+							],
+							"type": "union"
+						},
+						"type": "array"
+					}
+				},
+				"required": ["v", "name"],
+				"type": "object"
+			},
+			"type": "record"
+		}
+	},
+	"id": "directory.evnt.event",
+	"lexicon": 1,
+	"revision": 1
 }

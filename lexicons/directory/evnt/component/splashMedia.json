@@ -1,24 +1,24 @@
 {
-  "defs": {
-    "main": {
-      "description": "A media item (such as an image or video) that can be used as a splash media for the event",
-      "properties": {
-        "media": {
-          "ref": "directory.evnt.media",
-          "type": "ref"
-        },
-        "roles": {
-          "items": {
-            "type": "string",
-            "enum": ["background"]
-          },
-          "type": "array"
-        }
-      },
-      "required": ["media"],
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.component.splashMedia",
-  "lexicon": 1
+	"defs": {
+		"main": {
+			"description": "A media item (such as an image or video) that can be used as a splash media for the event",
+			"properties": {
+				"media": {
+					"ref": "directory.evnt.media",
+					"type": "ref"
+				},
+				"roles": {
+					"items": {
+						"type": "string",
+						"enum": ["background"]
+					},
+					"type": "array"
+				}
+			},
+			"required": ["media"],
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.component.splashMedia",
+	"lexicon": 1
 }

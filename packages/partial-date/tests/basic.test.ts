@@ -26,4 +26,3 @@ test("parses correctly", () => {
 		precision: "time",
 	});
 });
-

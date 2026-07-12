@@ -53,6 +53,8 @@ export default async function (dir: string) {
 		}
 	}
 
-	console.log(`\n${pc.green(String(valid))} valid, ${invalid > 0 ? pc.red(String(invalid)) : String(invalid)} invalid`);
+	console.log(
+		`\n${pc.green(String(valid))} valid, ${invalid > 0 ? pc.red(String(invalid)) : String(invalid)} invalid`,
+	);
 	if (invalid > 0) process.exit(1);
 }

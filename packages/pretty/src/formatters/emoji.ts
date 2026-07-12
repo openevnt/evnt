@@ -9,7 +9,9 @@ export interface EmojiFormatConfig extends FormatConfig {
 	statusIcons: Record<EventStatus, string>;
 }
 
-export type EmojiFormatOptions = Partial<EmojiFormatConfig> & { emoji?: Record<string, string> | false };
+export type EmojiFormatOptions = Partial<EmojiFormatConfig> & {
+	emoji?: Record<string, string> | false;
+};
 
 const hasTime = (pd: PartialDate) => PartialDateUtil.has(pd, "time");
 
@@ -35,7 +37,11 @@ export class EmojiFormatter extends PlainTextFormatter {
 
 	constructor(config: EmojiFormatConfig) {
 		if (config.emoji === false) {
-			config = { ...config, emoji: {}, statusIcons: { planned: "", uncertain: "", postponed: "", cancelled: "", suspended: "" } };
+			config = {
+				...config,
+				emoji: {},
+				statusIcons: { planned: "", uncertain: "", postponed: "", cancelled: "", suspended: "" },
+			};
 		}
 		super(config);
 	}
@@ -60,15 +66,17 @@ export class EmojiFormatter extends PlainTextFormatter {
 
 	protected override formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
 		const dateStr = this.formatDateShape(group.dates);
-		const timeStr = group.times.map(t => this.formatTimeRange(t.start, t.end)).filter(Boolean).join(", ");
+		const timeStr = group.times
+			.map((t) => this.formatTimeRange(t.start, t.end))
+			.filter(Boolean)
+			.join(", ");
 
 		const parts = [this.emojiMap.calendar, dateStr].filter(Boolean);
 
 		if (timeStr) {
 			const firstTime = group.times[0]?.start ?? group.times[0]?.end;
-			const clockIcon = firstTime && hasTime(firstTime)
-				? this.clockEmoji(firstTime)
-				: this.emojiMap.clock;
+			const clockIcon =
+				firstTime && hasTime(firstTime) ? this.clockEmoji(firstTime) : this.emojiMap.clock;
 			parts.push("·", clockIcon ?? this.emojiMap.clock ?? "🕐", timeStr);
 		}
 
@@ -93,17 +101,20 @@ export class EmojiFormatter extends PlainTextFormatter {
 
 	protected venueIcon($type: string): string {
 		switch ($type) {
-			case "directory.evnt.venue.physical": return this.emojiMap.physical ?? "";
-			case "directory.evnt.venue.online": return this.emojiMap.online ?? "";
-			default: return this.emojiMap.unknown ?? "";
+			case "directory.evnt.venue.physical":
+				return this.emojiMap.physical ?? "";
+			case "directory.evnt.venue.online":
+				return this.emojiMap.online ?? "";
+			default:
+				return this.emojiMap.unknown ?? "";
 		}
 	}
 
 	protected clockEmoji(pd: PartialDate): string {
 		const parsed = PartialDateUtil.parse(pd);
 		if (parsed.precision !== "time") return this.emojiMap.clock ?? "🕐";
-		const hour12 = (parsed.hour % 12) || 12;
-		const base = parsed.minute >= 30 ? 0x1F55C : 0x1F550;
+		const hour12 = parsed.hour % 12 || 12;
+		const base = parsed.minute >= 30 ? 0x1f55c : 0x1f550;
 		return String.fromCodePoint(base + hour12 - 1);
 	}
 

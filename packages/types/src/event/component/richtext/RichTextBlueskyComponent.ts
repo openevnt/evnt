@@ -5,4 +5,4 @@ export interface RichTextBlueskyComponent {
 		index: { byteStart: number; byteEnd: number };
 		features: { $type: string }[];
 	}[];
-};
+}

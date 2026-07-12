@@ -7,13 +7,8 @@
 		"target": "ESNext",
 		"useDefineForClassFields": true,
 		"module": "ESNext",
-		"lib": [
-			"ESNext",
-			"DOM"
-		],
-		"types": [
-			"vite/client"
-		],
+		"lib": ["ESNext", "DOM"],
+		"types": ["vite/client"],
 		"sourceMap": true,
 		"resolveJsonModule": true,
 		"noEmit": true,

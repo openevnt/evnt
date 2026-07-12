@@ -21,26 +21,30 @@ export class EventBuilder {
 	build = () => this.data;
 
 	setName = createTranslationAdder(() => this.data.name, this);
-	setLabel = createTranslationAdder(() => this.data.label ??= {}, this);
+	setLabel = createTranslationAdder(() => (this.data.label ??= {}), this);
 
 	setStatus(status: EventStatus) {
 		this.data.status = status;
 		return this;
 	}
 
-	addInstance = createBuilderAdder(() => this.data.instances ??= [], InstanceBuilder, this);
+	addInstance = createBuilderAdder(() => (this.data.instances ??= []), InstanceBuilder, this);
 	getInstance(index: number) {
-		const instances = this.data.instances ??= [];
+		const instances = (this.data.instances ??= []);
 		if (index < 0 || index >= instances.length) throw new Error("Instance index out of bounds");
 		return new InstanceBuilder(instances[index], this);
 	}
 
 	addUnknownVenue = createBuilderAdder(() => (this.data.venues ??= []), UnknownVenueBuilder, this);
-	addPhysicalVenue = createBuilderAdder(() => (this.data.venues ??= []), PhysicalVenueBuilder, this);
+	addPhysicalVenue = createBuilderAdder(
+		() => (this.data.venues ??= []),
+		PhysicalVenueBuilder,
+		this,
+	);
 	addOnlineVenue = createBuilderAdder(() => (this.data.venues ??= []), OnlineVenueBuilder, this);
 	getVenueWithId(venueId: string) {
-		const venues = this.data.venues ??= [];
-		const venue = venues.find(v => v.id === venueId);
+		const venues = (this.data.venues ??= []);
+		const venue = venues.find((v) => v.id === venueId);
 		if (!venue) throw new Error("Venue with given ID not found");
 		return new VenueBuilder(venue, this);
 	}
@@ -49,7 +53,7 @@ export class EventBuilder {
 		this.data.components ??= [];
 		this.data.components.push(component);
 		return this;
-	};
+	}
 
 	addLink(arg: string | LinkComponent | ((b: LinkBuilder) => LinkBuilder)) {
 		this.data.components ??= [];

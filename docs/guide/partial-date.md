@@ -30,9 +30,7 @@ A year, optionally a month, optionally a day, optionally a time. Every value MUS
 
 ```json
 {
-  "instances": [
-    { "venueIds": ["hall"], "start": "2026-06[Europe/Berlin]" }
-  ]
+	"instances": [{ "venueIds": ["hall"], "start": "2026-06[Europe/Berlin]" }]
 }
 ```
 
@@ -40,15 +38,15 @@ That's a real event happening sometime in June 2026 in Berlin. No fabrication.
 
 ### Invalid examples
 
-| Value | Why it's invalid |
-|-------|-----------------|
-| `2025-11-12T11:00Z` | UTC offset `Z`, not allowed |
-| `2025-11-12T11:00+02:00` | UTC offset, not allowed |
-| `2025-11-12T11:00[Europe/London` | Missing closing bracket |
-| `2025-11-12T11:00:00[Europe/London]` | Seconds not allowed |
-| `2025-11-12T11[Europe/London]` | Time without minutes |
-| `2025-11T11:00[Europe/London]` | Time without day |
-| `2025T11:00[Europe/London]` | Time without month and day |
+| Value                                | Why it's invalid            |
+| ------------------------------------ | --------------------------- |
+| `2025-11-12T11:00Z`                  | UTC offset `Z`, not allowed |
+| `2025-11-12T11:00+02:00`             | UTC offset, not allowed     |
+| `2025-11-12T11:00[Europe/London`     | Missing closing bracket     |
+| `2025-11-12T11:00:00[Europe/London]` | Seconds not allowed         |
+| `2025-11-12T11[Europe/London]`       | Time without minutes        |
+| `2025-11T11:00[Europe/London]`       | Time without day            |
+| `2025T11:00[Europe/London]`          | Time without month and day  |
 
 ## Why a new format instead of ISO 8601 / RFC 3339?
 
@@ -78,17 +76,19 @@ If the timezone is implicit from the venue, model it explicitly instead of relyi
 
 ```json
 {
-  "venues": [
-    {
-      "id": "hall",
-      "$type": "directory.evnt.venue.physical",
-      "name": { "en": "Concert Hall" }
-    }
-  ],
-  "instances": [{
-    "venueIds": ["hall"],
-    "start": "2025-11-12T19:00[Europe/Berlin]"
-  }]
+	"venues": [
+		{
+			"id": "hall",
+			"$type": "directory.evnt.venue.physical",
+			"name": { "en": "Concert Hall" }
+		}
+	],
+	"instances": [
+		{
+			"venueIds": ["hall"],
+			"start": "2025-11-12T19:00[Europe/Berlin]"
+		}
+	]
 }
 ```
 
@@ -122,10 +122,8 @@ PartialDate lets you represent events exactly as they're known, no fabrication:
 
 ```json
 {
-  "name": { "en": "Summer Music Festival" },
-  "instances": [
-    { "venueIds": ["field"], "start": "2026-06[Europe/Berlin]" }
-  ]
+	"name": { "en": "Summer Music Festival" },
+	"instances": [{ "venueIds": ["field"], "start": "2026-06[Europe/Berlin]" }]
 }
 ```
 

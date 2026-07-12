@@ -24,15 +24,19 @@ describe("renderMarkdown", () => {
 	test("renders venue name when linked from instance", () => {
 		const event: OpenEvnt = {
 			...baseEvent,
-			venues: [{
-				id: "v1",
-				$type: "directory.evnt.venue.physical",
-				name: { en: "Test Venue" },
-			}],
-			instances: [{
-				venueIds: ["v1"],
-				start: date,
-			}],
+			venues: [
+				{
+					id: "v1",
+					$type: "directory.evnt.venue.physical",
+					name: { en: "Test Venue" },
+				},
+			],
+			instances: [
+				{
+					venueIds: ["v1"],
+					start: date,
+				},
+			],
 		};
 		const result = renderMarkdown(event);
 		expect(result).toContain("Test Venue");
@@ -41,10 +45,12 @@ describe("renderMarkdown", () => {
 	test("renders date from instance", () => {
 		const event: OpenEvnt = {
 			...baseEvent,
-			instances: [{
-				venueIds: [],
-				start: date,
-			}],
+			instances: [
+				{
+					venueIds: [],
+					start: date,
+				},
+			],
 		};
 		const result = renderMarkdown(event);
 		expect(result).toContain("Jan");
@@ -54,10 +60,12 @@ describe("renderMarkdown", () => {
 		const event: OpenEvnt = {
 			...baseEvent,
 			instances: [{ venueIds: [], start: date }],
-			components: [{
-				$type: "directory.evnt.component.link",
-				url: "https://example.com",
-			}],
+			components: [
+				{
+					$type: "directory.evnt.component.link",
+					url: "https://example.com",
+				},
+			],
 		};
 		const result = renderMarkdown(event, { showLinks: true });
 		expect(result).toContain("example.com");
@@ -66,16 +74,20 @@ describe("renderMarkdown", () => {
 	test("renders online venue URL from instance", () => {
 		const event: OpenEvnt = {
 			...baseEvent,
-			venues: [{
-				id: "v1",
-				$type: "directory.evnt.venue.online",
-				name: { en: "Zoom" },
-				url: "https://zoom.us/j/123",
-			}],
-			instances: [{
-				venueIds: ["v1"],
-				start: date,
-			}],
+			venues: [
+				{
+					id: "v1",
+					$type: "directory.evnt.venue.online",
+					name: { en: "Zoom" },
+					url: "https://zoom.us/j/123",
+				},
+			],
+			instances: [
+				{
+					venueIds: ["v1"],
+					start: date,
+				},
+			],
 		};
 		const result = renderMarkdown(event);
 		expect(result).toContain("Zoom");

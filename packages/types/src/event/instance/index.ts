@@ -11,4 +11,4 @@ export interface EventInstance {
 	status?: EventStatus;
 	activities?: Activity[];
 	components?: AnyComponent[];
-};
+}

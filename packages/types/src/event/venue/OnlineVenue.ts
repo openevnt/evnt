@@ -5,4 +5,4 @@ export interface OnlineVenue extends BaseVenue {
 
 	/** The URL of the online venue */
 	url?: string;
-};
+}

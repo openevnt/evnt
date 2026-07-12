@@ -72,7 +72,8 @@ export default async function (outFile?: string) {
 			name: vName,
 			$type: `directory.evnt.venue.${type}`,
 		};
-		if (addr || countryCode) venue.address = { addr: addr || undefined, countryCode: countryCode || undefined };
+		if (addr || countryCode)
+			venue.address = { addr: addr || undefined, countryCode: countryCode || undefined };
 		if (url) venue.url = url;
 		venues.push(venue as unknown as Venue);
 	}

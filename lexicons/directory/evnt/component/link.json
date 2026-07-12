@@ -1,28 +1,28 @@
 {
-  "defs": {
-    "main": {
-      "description": "A link to an external resource related to the event",
-      "properties": {
-        "url": {
-          "type": "string"
-        },
-        "name": {
-          "type": "unknown"
-        },
-        "disabled": {
-          "type": "boolean"
-        },
-        "opensAt": {
-          "type": "unknown"
-        },
-        "closesAt": {
-          "type": "unknown"
-        }
-      },
-      "required": ["url"],
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.component.link",
-  "lexicon": 1
+	"defs": {
+		"main": {
+			"description": "A link to an external resource related to the event",
+			"properties": {
+				"url": {
+					"type": "string"
+				},
+				"name": {
+					"type": "unknown"
+				},
+				"disabled": {
+					"type": "boolean"
+				},
+				"opensAt": {
+					"type": "unknown"
+				},
+				"closesAt": {
+					"type": "unknown"
+				}
+			},
+			"required": ["url"],
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.component.link",
+	"lexicon": 1
 }

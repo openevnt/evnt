@@ -12,12 +12,12 @@ export interface ComponentTypes {
 	"directory.evnt.component.languages": LanguagesComponent;
 	"directory.evnt.richtext.markdown": RichTextMarkdownComponent;
 	"directory.evnt.richtext.bluesky": RichTextBlueskyComponent;
-};
+}
 
 export type KnownComponent = ComponentTypes[keyof ComponentTypes];
 export type UnknownComponent = { $type: string & { _brand?: never } } & Record<string, unknown>;
 
-export type Component<Type extends (keyof ComponentTypes | (string & {})) = keyof ComponentTypes> =
+export type Component<Type extends keyof ComponentTypes | (string & {}) = keyof ComponentTypes> =
 	Type extends keyof ComponentTypes ? ComponentTypes[Type] : UnknownComponent;
 
 export type AnyComponent = KnownComponent | UnknownComponent;

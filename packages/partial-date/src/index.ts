@@ -7,7 +7,11 @@ declare module "@evnt/types" {
 	export namespace PartialDate {
 		type TimezoneIdentifier = string;
 		export type Precision = "year" | "month" | "day" | "time";
-		export type Parsed = Parsed.YearOnly | Parsed.YearMonth | Parsed.YearMonthDay | Parsed.YearMonthDayTime;
+		export type Parsed =
+			| Parsed.YearOnly
+			| Parsed.YearMonth
+			| Parsed.YearMonthDay
+			| Parsed.YearMonthDayTime;
 		export namespace Parsed {
 			export type Fields = {
 				timezone: TimezoneIdentifier;
@@ -19,15 +23,18 @@ declare module "@evnt/types" {
 			};
 			export type YearOnly = Pick<Fields, "year" | "timezone"> & { precision: "year" };
 			export type YearMonth = Pick<Fields, "year" | "month" | "timezone"> & { precision: "month" };
-			export type YearMonthDay = Pick<Fields, "year" | "month" | "day" | "timezone"> & { precision: "day" };
+			export type YearMonthDay = Pick<Fields, "year" | "month" | "day" | "timezone"> & {
+				precision: "day";
+			};
 			export type YearMonthDayTime = Fields & { precision: "time" };
 		}
 	}
 }
 
-export const PartialDateRegex = /^(?<year>\d{4})(?:-(?<month>\d{2})(?:-(?<day>\d{2})(?:T(?<time>(?<hour>\d{2}):(?<minute>\d{2}))?)?)?)?\[(?<timezone>[\-\w\/+]+)\]$/;
+export const PartialDateRegex =
+	/^(?<year>\d{4})(?:-(?<month>\d{2})(?:-(?<day>\d{2})(?:T(?<time>(?<hour>\d{2}):(?<minute>\d{2}))?)?)?)?\[(?<timezone>[\-\w\/+]+)\]$/;
 
-export const PartialDateUtil = new class {
+export const PartialDateUtil = new (class {
 	// == Validation methods ==
 
 	/** Checks if a string is a valid PartialDate */
@@ -83,7 +90,8 @@ export const PartialDateUtil = new class {
 		let str = parsed.year.toString();
 		if (this.has(parsed, "month")) str += `-${String(parsed.month).padStart(2, "0")}`;
 		if (this.has(parsed, "day")) str += `-${String(parsed.day).padStart(2, "0")}`;
-		if (this.has(parsed, "time")) str += `T${String(parsed.hour).padStart(2, "0")}:${String(parsed.minute).padStart(2, "0")}`;
+		if (this.has(parsed, "time"))
+			str += `T${String(parsed.hour).padStart(2, "0")}:${String(parsed.minute).padStart(2, "0")}`;
 		str += `[${parsed.timezone}]`;
 		return str as PartialDate;
 	}
@@ -97,19 +105,37 @@ export const PartialDateUtil = new class {
 
 	has(pd: PartialDate | PartialDate.Parsed, field: "year"): true;
 	has(pd: PartialDate.Parsed, field: "time"): pd is PartialDate.Parsed.YearMonthDayTime;
-	has(pd: PartialDate.Parsed, field: "day"): pd is PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime;
-	has(pd: PartialDate.Parsed, field: "month"): pd is PartialDate.Parsed.YearMonth | PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime;
+	has(
+		pd: PartialDate.Parsed,
+		field: "day",
+	): pd is PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime;
+	has(
+		pd: PartialDate.Parsed,
+		field: "month",
+	): pd is
+		| PartialDate.Parsed.YearMonth
+		| PartialDate.Parsed.YearMonthDay
+		| PartialDate.Parsed.YearMonthDayTime;
 	has(pd: PartialDate, field: "time"): pd is PartialDate.YearMonthDayTime;
 	has(pd: PartialDate, field: "day"): pd is PartialDate.YearMonthDay | PartialDate.YearMonthDayTime;
-	has(pd: PartialDate, field: "month"): pd is PartialDate.YearMonth | PartialDate.YearMonthDay | PartialDate.YearMonthDayTime;
+	has(
+		pd: PartialDate,
+		field: "month",
+	): pd is PartialDate.YearMonth | PartialDate.YearMonthDay | PartialDate.YearMonthDayTime;
 	has(pd: PartialDate | PartialDate.Parsed, field: PartialDate.Precision): boolean {
 		if (field === "year") return true;
 		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
 		switch (field) {
-			case "time": return parsed.precision === "time";
-			case "day": return parsed.precision === "day" || parsed.precision === "time";
-			case "month": return parsed.precision === "month" || parsed.precision === "day" || parsed.precision === "time";
-			default: return false;
+			case "time":
+				return parsed.precision === "time";
+			case "day":
+				return parsed.precision === "day" || parsed.precision === "time";
+			case "month":
+				return (
+					parsed.precision === "month" || parsed.precision === "day" || parsed.precision === "time"
+				);
+			default:
+				return false;
 		}
 	}
 
@@ -126,35 +152,67 @@ export const PartialDateUtil = new class {
 		if (start.year === end.year) equalPrecision = "year";
 		if (equalPrecision === "year" && start.month === end.month) equalPrecision = "month";
 		if (equalPrecision === "month" && start.day === end.day) equalPrecision = "day";
-		if (equalPrecision === "day" && start.hour === end.hour && start.minute === end.minute) equalPrecision = "time";
+		if (equalPrecision === "day" && start.hour === end.hour && start.minute === end.minute)
+			equalPrecision = "time";
 		return equalPrecision;
 	}
 
 	// == Modification methods ==
 
-	lowerPrecision(pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay, to: "day"): PartialDate.YearMonthDay;
-	lowerPrecision(pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay | PartialDate.YearMonth, to: "month"): PartialDate.YearMonth;
-	lowerPrecision(pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay | PartialDate.YearMonth | PartialDate.YearOnly, to: "year"): PartialDate.YearOnly;
+	lowerPrecision(
+		pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay,
+		to: "day",
+	): PartialDate.YearMonthDay;
+	lowerPrecision(
+		pd: PartialDate.YearMonthDayTime | PartialDate.YearMonthDay | PartialDate.YearMonth,
+		to: "month",
+	): PartialDate.YearMonth;
+	lowerPrecision(
+		pd:
+			| PartialDate.YearMonthDayTime
+			| PartialDate.YearMonthDay
+			| PartialDate.YearMonth
+			| PartialDate.YearOnly,
+		to: "year",
+	): PartialDate.YearOnly;
 	lowerPrecision(pd: PartialDate, to: Exclude<PartialDate.Precision, "time">): PartialDate {
 		const { year, month, day, timezone } = this.parse(pd) as PartialDate.Parsed.Fields;
 		switch (to) {
-			case "day": return this.format({ year, month, day, timezone, precision: "day" });
-			case "month": return this.format({ year, month, timezone, precision: "month" });
-			case "year": return this.format({ year, timezone, precision: "year" });
+			case "day":
+				return this.format({ year, month, day, timezone, precision: "day" });
+			case "month":
+				return this.format({ year, month, timezone, precision: "month" });
+			case "year":
+				return this.format({ year, timezone, precision: "year" });
 		}
 	}
 
 	setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "year"): PartialDate.YearOnly;
-	setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "month", mode: "low" | "high"): PartialDate.YearMonth;
-	setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "day", mode: "low" | "high"): PartialDate.YearMonthDay;
-	setPrecision(pd: PartialDate | PartialDate.Parsed, precision: "time", mode: "low" | "high"): PartialDate.YearMonthDayTime;
-	setPrecision(pd: PartialDate | PartialDate.Parsed, precision: PartialDate.Precision, mode?: "low" | "high"): PartialDate {
+	setPrecision(
+		pd: PartialDate | PartialDate.Parsed,
+		precision: "month",
+		mode: "low" | "high",
+	): PartialDate.YearMonth;
+	setPrecision(
+		pd: PartialDate | PartialDate.Parsed,
+		precision: "day",
+		mode: "low" | "high",
+	): PartialDate.YearMonthDay;
+	setPrecision(
+		pd: PartialDate | PartialDate.Parsed,
+		precision: "time",
+		mode: "low" | "high",
+	): PartialDate.YearMonthDayTime;
+	setPrecision(
+		pd: PartialDate | PartialDate.Parsed,
+		precision: PartialDate.Precision,
+		mode?: "low" | "high",
+	): PartialDate {
 		const parsed = (typeof pd === "string" ? this.parse(pd) : pd) as PartialDate.Parsed;
 		let { year, month, day, hour, minute, timezone } = parsed as PartialDate.Parsed.Fields;
 
 		if (mode) {
-			if (parsed.precision === "year")
-				month = mode === "low" ? 1 : 12;
+			if (parsed.precision === "year") month = mode === "low" ? 1 : 12;
 			if (parsed.precision === "year" || parsed.precision === "month")
 				day = mode === "low" ? 1 : new Temporal.PlainYearMonth(year, month).daysInMonth;
 
@@ -165,10 +223,14 @@ export const PartialDateUtil = new class {
 		}
 
 		switch (precision) {
-			case "year": return this.format({ year, timezone, precision: "year" });
-			case "month": return this.format({ year, month, timezone, precision: "month" });
-			case "day": return this.format({ year, month, day, timezone, precision: "day" });
-			case "time": return this.format({ year, month, day, hour, minute, timezone, precision: "time" });
+			case "year":
+				return this.format({ year, timezone, precision: "year" });
+			case "month":
+				return this.format({ year, month, timezone, precision: "month" });
+			case "day":
+				return this.format({ year, month, day, timezone, precision: "day" });
+			case "time":
+				return this.format({ year, month, day, hour, minute, timezone, precision: "time" });
 		}
 	}
 
@@ -184,9 +246,15 @@ export const PartialDateUtil = new class {
 	parsedFromTemporal(obj: Temporal.PlainDate): PartialDate.Parsed.YearMonthDay;
 	parsedFromTemporal(obj: Temporal.PlainDateTime): PartialDate.Parsed.YearMonthDayTime;
 	parsedFromTemporal(obj: Temporal.ZonedDateTime): PartialDate.Parsed.YearMonthDayTime;
-	parsedFromTemporal(obj: Temporal.ZonedDateTime | Temporal.PlainDateTime | Temporal.PlainDate | Temporal.PlainYearMonth): PartialDate.Parsed {
+	parsedFromTemporal(
+		obj:
+			| Temporal.ZonedDateTime
+			| Temporal.PlainDateTime
+			| Temporal.PlainDate
+			| Temporal.PlainYearMonth,
+	): PartialDate.Parsed {
 		return {
-			precision: ("hour" in obj && "minute" in obj) ? "time" : ("day" in obj ? "day" : "month"),
+			precision: "hour" in obj && "minute" in obj ? "time" : "day" in obj ? "day" : "month",
 			year: obj.year,
 			month: obj.month,
 			day: "day" in obj ? obj.day : undefined,
@@ -205,23 +273,58 @@ export const PartialDateUtil = new class {
 
 	// == Conversions to Temporal types ==
 
-	asPlainYearMonth(pd: PartialDate.YearMonth | PartialDate.YearMonthDay | PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonth | PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime): Temporal.PlainYearMonth {
-		const parsed = typeof pd === "string" ? this.parse(pd) as Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly> : pd;
+	asPlainYearMonth(
+		pd:
+			| PartialDate.YearMonth
+			| PartialDate.YearMonthDay
+			| PartialDate.YearMonthDayTime
+			| PartialDate.Parsed.YearMonth
+			| PartialDate.Parsed.YearMonthDay
+			| PartialDate.Parsed.YearMonthDayTime,
+	): Temporal.PlainYearMonth {
+		const parsed =
+			typeof pd === "string"
+				? (this.parse(pd) as Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly>)
+				: pd;
 		return new Temporal.PlainYearMonth(parsed.year, parsed.month, "iso8601");
 	}
 
-	asPlainDate(pd: PartialDate.YearMonthDay | PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDay | PartialDate.Parsed.YearMonthDayTime): Temporal.PlainDate {
-		const parsed = typeof pd === "string" ? this.parse(pd) as Exclude<PartialDate.Parsed, PartialDate.Parsed.YearOnly | PartialDate.Parsed.YearMonth> : pd;
+	asPlainDate(
+		pd:
+			| PartialDate.YearMonthDay
+			| PartialDate.YearMonthDayTime
+			| PartialDate.Parsed.YearMonthDay
+			| PartialDate.Parsed.YearMonthDayTime,
+	): Temporal.PlainDate {
+		const parsed =
+			typeof pd === "string"
+				? (this.parse(pd) as Exclude<
+						PartialDate.Parsed,
+						PartialDate.Parsed.YearOnly | PartialDate.Parsed.YearMonth
+					>)
+				: pd;
 		return new Temporal.PlainDate(parsed.year, parsed.month, parsed.day, "iso8601");
 	}
 
-	asPlainDateTime(pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime): Temporal.PlainDateTime {
-		const parsed = typeof pd === "string" ? this.parse(pd) as PartialDate.Parsed.YearMonthDayTime : pd;
-		return new Temporal.PlainDateTime(parsed.year, parsed.month, parsed.day, parsed.hour, parsed.minute).withCalendar("iso8601");
+	asPlainDateTime(
+		pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime,
+	): Temporal.PlainDateTime {
+		const parsed =
+			typeof pd === "string" ? (this.parse(pd) as PartialDate.Parsed.YearMonthDayTime) : pd;
+		return new Temporal.PlainDateTime(
+			parsed.year,
+			parsed.month,
+			parsed.day,
+			parsed.hour,
+			parsed.minute,
+		).withCalendar("iso8601");
 	}
 
-	asZonedDateTime(pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime): Temporal.ZonedDateTime {
-		const parsed = typeof pd === "string" ? this.parse(pd) as PartialDate.Parsed.YearMonthDayTime : pd;
+	asZonedDateTime(
+		pd: PartialDate.YearMonthDayTime | PartialDate.Parsed.YearMonthDayTime,
+	): Temporal.ZonedDateTime {
+		const parsed =
+			typeof pd === "string" ? (this.parse(pd) as PartialDate.Parsed.YearMonthDayTime) : pd;
 		return this.asPlainDateTime(parsed).toZonedDateTime(parsed.timezone);
 	}
 
@@ -229,10 +332,18 @@ export const PartialDateUtil = new class {
 		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
 		let temporal: Intl.FormattableTemporalObject;
 		switch (parsed.precision) {
-			case "year": temporal = new Temporal.PlainYearMonth(parsed.year, 1); break;
-			case "month": temporal = PartialDateUtil.asPlainYearMonth(parsed); break;
-			case "day": temporal = PartialDateUtil.asPlainDate(parsed); break;
-			case "time": temporal = PartialDateUtil.asZonedDateTime(parsed).toInstant(); break;
+			case "year":
+				temporal = new Temporal.PlainYearMonth(parsed.year, 1);
+				break;
+			case "month":
+				temporal = PartialDateUtil.asPlainYearMonth(parsed);
+				break;
+			case "day":
+				temporal = PartialDateUtil.asPlainDate(parsed);
+				break;
+			case "time":
+				temporal = PartialDateUtil.asZonedDateTime(parsed).toInstant();
+				break;
 		}
 		return temporal;
 	}
@@ -272,8 +383,14 @@ export const PartialDateUtil = new class {
 	 * outer --======--
 	 * ```
 	 */
-	isContainedIn(inner: PartialDate | PartialDate.Parsed, outer: PartialDate | PartialDate.Parsed): boolean {
-		return Temporal.Instant.compare(this.toInstant(inner, "low"), this.toInstant(outer, "low")) >= 0 && Temporal.Instant.compare(this.toInstant(inner, "high"), this.toInstant(outer, "high")) <= 0;
+	isContainedIn(
+		inner: PartialDate | PartialDate.Parsed,
+		outer: PartialDate | PartialDate.Parsed,
+	): boolean {
+		return (
+			Temporal.Instant.compare(this.toInstant(inner, "low"), this.toInstant(outer, "low")) >= 0 &&
+			Temporal.Instant.compare(this.toInstant(inner, "high"), this.toInstant(outer, "high")) <= 0
+		);
 	}
 
 	/**
@@ -287,7 +404,10 @@ export const PartialDateUtil = new class {
 	 * ```
 	 */
 	intersects(a: PartialDate | PartialDate.Parsed, b: PartialDate | PartialDate.Parsed): boolean {
-		return Temporal.Instant.compare(this.toInstant(a, "low"), this.toInstant(b, "high")) < 0 && Temporal.Instant.compare(this.toInstant(a, "high"), this.toInstant(b, "low")) > 0;
+		return (
+			Temporal.Instant.compare(this.toInstant(a, "low"), this.toInstant(b, "high")) < 0 &&
+			Temporal.Instant.compare(this.toInstant(a, "high"), this.toInstant(b, "low")) > 0
+		);
 	}
 
 	// == Humanization methods ==
@@ -295,11 +415,29 @@ export const PartialDateUtil = new class {
 	toLocaleString(pd: PartialDate | PartialDate.Parsed, locales: string[] = ["en"]): string {
 		const parsed = typeof pd === "string" ? this.parse(pd) : pd;
 		switch (parsed.precision) {
-			case "year": return parsed.year.toString();
-			case "month": return this.asPlainYearMonth(parsed).toLocaleString(locales, { year: "numeric", month: "long" });
-			case "day": return this.asPlainDate(parsed).toLocaleString(locales, { year: "numeric", month: "long", day: "numeric" });
-			case "time": return this.asZonedDateTime(parsed).toInstant().toLocaleString(locales, { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
+			case "year":
+				return parsed.year.toString();
+			case "month":
+				return this.asPlainYearMonth(parsed).toLocaleString(locales, {
+					year: "numeric",
+					month: "long",
+				});
+			case "day":
+				return this.asPlainDate(parsed).toLocaleString(locales, {
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+				});
+			case "time":
+				return this.asZonedDateTime(parsed)
+					.toInstant()
+					.toLocaleString(locales, {
+						year: "numeric",
+						month: "long",
+						day: "numeric",
+						hour: "2-digit",
+						minute: "2-digit",
+					});
 		}
 	}
-}
-
+})();

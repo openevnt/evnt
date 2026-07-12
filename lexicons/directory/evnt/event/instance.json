@@ -1,20 +1,20 @@
 {
-  "defs": {
-    "main": {
-      "description": "An instance of an event",
-      "properties": {
-        "start": {
-          "type": "string",
-          "description": "A PartialDate where some components may not be known"
-        },
-        "end": {
-          "type": "string",
-          "description": "A PartialDate where some components may not be known"
-        }
-      },
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.event.instance",
-  "lexicon": 1
+	"defs": {
+		"main": {
+			"description": "An instance of an event",
+			"properties": {
+				"start": {
+					"type": "string",
+					"description": "A PartialDate where some components may not be known"
+				},
+				"end": {
+					"type": "string",
+					"description": "A PartialDate where some components may not be known"
+				}
+			},
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.event.instance",
+	"lexicon": 1
 }

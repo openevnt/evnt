@@ -12,7 +12,7 @@ The one field you can't skip. Every event has a name, and it supports multiple l
 
 A subtitle. Apps typically show it smaller under the name - "Vilnius" under "Tech Meetup," or "Day Pass" under "Conference 2026."
 
-Why its own field instead of putting it in the name? Name is what the event *is*. Label is context that helps you pick it out in a list - a city, a pass type, a theme. A dedicated field means apps can display it differently (smaller, dimmer, different color) without extra work.
+Why its own field instead of putting it in the name? Name is what the event _is_. Label is context that helps you pick it out in a list - a city, a pass type, a theme. A dedicated field means apps can display it differently (smaller, dimmer, different color) without extra work.
 
 Labels are always plaintext - no rich text, no formatting. Descriptions (which can be formatted) live in components instead.
 
@@ -33,7 +33,6 @@ The closed set matters because every status has a visual treatment. If apps coul
 Status is about planning, not time. An event in the past can still be "cancelled" (it never happened) or "planned" (it happened as scheduled). There's no "past" status because that's determined by the instance dates, not a status field.
 
 Cancelled vs suspended: cancelled is done, suspended is "we'll see." Apps should archive cancelled events and keep suspended ones visible.
-
 
 ## What's not on the root
 

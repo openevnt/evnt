@@ -4,16 +4,17 @@ A single name field doesn't work for events.
 
 ## The problem
 
-Events happen in the real world, and the real world has more than one language. A conference in Berlin has a German name *and* an English name. A festival in Montreal needs French, English, maybe Mohawk. A global online conference might have a dozen languages.
+Events happen in the real world, and the real world has more than one language. A conference in Berlin has a German name _and_ an English name. A festival in Montreal needs French, English, maybe Mohawk. A global online conference might have a dozen languages.
 
 Every existing format handles this by pretending it doesn't exist.
 
 ```json
 {
-  "name": "Tech Meetup",
-  "description": "A meetup about tech. In Lithuanian: Susitikimas apie technologijas."
+	"name": "Tech Meetup",
+	"description": "A meetup about tech. In Lithuanian: Susitikimas apie technologijas."
 }
 ```
+
 You stuff everything into one field. Structured data becomes unstructured prose. It works, but it's ugly - everyone has seen "English Below ↓" crammed into the end of a localized string.
 
 The workaround is always the same: invent a convention (`name:en`, `name:lt`, a parallel `_translations` field), document it nowhere, and hope consumers guess correctly.
@@ -24,10 +25,10 @@ Open Evnt uses a flat object mapping [BCP47](https://www.rfc-editor.org/rfc/bcp/
 
 ```json
 {
-  "name": {
-    "en": "Tech Meetup",
-    "lt": "Tech Susitikimas"
-  }
+	"name": {
+		"en": "Tech Meetup",
+		"lt": "Tech Susitikimas"
+	}
 }
 ```
 
@@ -37,16 +38,16 @@ That's it. A language tag, a string. No nesting, no arrays of `{ lang, value }` 
 
 Three alternatives were considered:
 
-| Approach | Problem |
-|----------|---------|
-| Separate fields (`name_en`, `name_lt`) | Pollutes the object with ad-hoc keys, no standard naming convention. |
-| Array of `{ lang, value }` | Allows duplicate languages (which one wins?). No natural lookup. JSON-LD already uses objects for this. |
-| **Flat object `{ en: "...", lt: "..." }`** | Simple, natural lookup, BCP47 validation is straightforward, mirrors existing web conventions. |
+| Approach                                   | Problem                                                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Separate fields (`name_en`, `name_lt`)     | Pollutes the object with ad-hoc keys, no standard naming convention.                                    |
+| Array of `{ lang, value }`                 | Allows duplicate languages (which one wins?). No natural lookup. JSON-LD already uses objects for this. |
+| **Flat object `{ en: "...", lt: "..." }`** | Simple, natural lookup, BCP47 validation is straightforward, mirrors existing web conventions.          |
 
 The object form also maps directly to how you'd use it in code:
 
 ```ts
-event.name[userLanguage] ?? event.name["en"] ?? Object.values(event.name)[0]
+event.name[userLanguage] ?? event.name["en"] ?? Object.values(event.name)[0];
 ```
 
 ### Why BCP47?
@@ -73,7 +74,7 @@ When a consumer needs a single string for a user's preferred language, the spec 
 
 ### Why `en` as the hardcoded fallback?
 
-Pragmatism. The overwhelming majority of events that bother to have machine-readable data also have an English name. Publishing an event with *zero* English coverage is unusual enough that the fallback ordering before it - exact match > regionless > primary > `en` - catches almost every realistic case.
+Pragmatism. The overwhelming majority of events that bother to have machine-readable data also have an English name. Publishing an event with _zero_ English coverage is unusual enough that the fallback ordering before it - exact match > regionless > primary > `en` - catches almost every realistic case.
 
 If your audience primarily speaks Lithuanian and the event has `{ lt: "..." }` but no `en`, step 5 (any available entry) catches it. `en` is the "you really have nothing?" safety net.
 
@@ -81,7 +82,7 @@ If your audience primarily speaks Lithuanian and the event has `{ lt: "..." }` b
 
 Different consumers have different needs. A global event directory might want a more aggressive fallback chain. A local Lithuanian-only app might skip step 3 entirely and go straight to step 5 after checking `lt`. Mandating a single algorithm would force suboptimal UX on some consumers.
 
-The algorithm is a *good default*. Deviating from it is fine as long as the result is at least as good for the user.
+The algorithm is a _good default_. Deviating from it is fine as long as the result is at least as good for the user.
 
 ## Edge cases
 
@@ -103,7 +104,7 @@ If you're collecting event data from an API that returns a single string, wrappi
 
 ```json
 {
-  "name": { "en": "Event Title" }
+	"name": { "en": "Event Title" }
 }
 ```
 
@@ -111,7 +112,7 @@ Don't guess the language if you don't know it. `und` (undetermined) is a valid B
 
 ```json
 {
-  "name": { "und": "Event Title" }
+	"name": { "und": "Event Title" }
 }
 ```
 
@@ -121,19 +122,19 @@ Because Translations is used for `name`, `label`, link names, venue names, media
 
 ```json
 {
-  "name": { "en": "Tech Conf", "lt": "Tech Konferencija" },
-  "label": { "en": "Vilnius", "lt": "Vilniuje" },
-  "venues": [
-    {
-      "name": { "en": "Vilnius Convention Centre", "lt": "Vilniaus konferencijų centras" }
-    }
-  ],
-  "components": [
-    {
-      "$type": "directory.evnt.component.link",
-      "name": { "en": "Get Tickets", "lt": "Gauti bilietus" }
-    }
-  ]
+	"name": { "en": "Tech Conf", "lt": "Tech Konferencija" },
+	"label": { "en": "Vilnius", "lt": "Vilniuje" },
+	"venues": [
+		{
+			"name": { "en": "Vilnius Convention Centre", "lt": "Vilniaus konferencijų centras" }
+		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.component.link",
+			"name": { "en": "Get Tickets", "lt": "Gauti bilietus" }
+		}
+	]
 }
 ```
 

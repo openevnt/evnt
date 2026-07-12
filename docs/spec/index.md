@@ -30,7 +30,7 @@ For readability, these keywords appear in lowercase in this document.
 ### 1.3 Terminology
 
 | Term         | Definition                                                                               |
-|--------------|------------------------------------------------------------------------------------------|
+| ------------ | ---------------------------------------------------------------------------------------- |
 | Event        | A planned happening, represented as an `OpenEvnt` object                                 |
 | Producer     | Software that creates or emits Open Evnt documents                                       |
 | Consumer     | Software that reads or processes Open Evnt documents                                     |
@@ -110,7 +110,7 @@ EventStatus: "planned" | "uncertain" | "postponed" | "cancelled" | "suspended"
 ```
 
 | Variant     | Description                               | Dates valid? |
-|-------------|-------------------------------------------|--------------|
+| ----------- | ----------------------------------------- | ------------ |
 | `planned`   | Event is scheduled as described (default) | Yes          |
 | `uncertain` | Event may be rescheduled or cancelled     | Unknown      |
 | `postponed` | Event moved to a later, unknown date      | No           |
@@ -197,7 +197,7 @@ The grammar is adapted from [RFC 9557](https://www.rfc-editor.org/rfc/rfc9557) (
 ### 3.2 Precision levels
 
 | Level | Pattern                           | Example                               |
-|-------|-----------------------------------|---------------------------------------|
+| ----- | --------------------------------- | ------------------------------------- |
 | Year  | `2025[Europe/London]`             | Only the year is known                |
 | Month | `2025-11[Europe/London]`          | Year and month known                  |
 | Day   | `2025-11-12[Europe/London]`       | Full date known                       |
@@ -235,7 +235,7 @@ Two `PartialDate` values MAY be compared only when they share the same precision
 ### 3.7 Invalid examples
 
 | Value                                | Reason                           |
-|--------------------------------------|----------------------------------|
+| ------------------------------------ | -------------------------------- |
 | `2025-11-12T11:00Z`                  | UTC offset, not timezone bracket |
 | `2025-11-12T11:00+02:00`             | UTC offset, not timezone bracket |
 | `2025-11-12T11:00[Europe/London`     | Missing closing bracket          |
@@ -302,7 +302,7 @@ MapReferences
 Keys are reverse-domain NSIDs. Values are the identifier(s) assigned by that service.
 
 | NSID                         | Service       | Entity          |
-|------------------------------|---------------|-----------------|
+| ---------------------------- | ------------- | --------------- |
 | `org.openstreetmap.node`     | OpenStreetMap | Node (POI)      |
 | `org.openstreetmap.way`      | OpenStreetMap | Way (building)  |
 | `org.openstreetmap.relation` | OpenStreetMap | Relation (area) |
@@ -391,10 +391,18 @@ When an event has multiple occurrences with different times or venues, each occu
 
 ```json
 {
-  "instances": [
-    { "venueIds": ["hall"], "start": "2026-06-15T09:00[Europe/Vilnius]", "end": "2026-06-15T18:00[Europe/Vilnius]" },
-    { "venueIds": ["hall"], "start": "2026-06-16T10:00[Europe/Vilnius]", "end": "2026-06-16T17:00[Europe/Vilnius]" }
-  ]
+	"instances": [
+		{
+			"venueIds": ["hall"],
+			"start": "2026-06-15T09:00[Europe/Vilnius]",
+			"end": "2026-06-15T18:00[Europe/Vilnius]"
+		},
+		{
+			"venueIds": ["hall"],
+			"start": "2026-06-16T10:00[Europe/Vilnius]",
+			"end": "2026-06-16T17:00[Europe/Vilnius]"
+		}
+	]
 }
 ```
 
@@ -408,11 +416,11 @@ Each instance MAY have its own `status`, independent of the event-level status.
 
 ```json
 {
-  "status": "planned",
-  "instances": [
-    { "venueIds": ["hall"], "status": "planned", "start": "2026-06-15[Europe/Vilnius]" },
-    { "venueIds": ["hall"], "status": "uncertain", "start": "2026-06-16[Europe/Vilnius]" }
-  ]
+	"status": "planned",
+	"instances": [
+		{ "venueIds": ["hall"], "status": "planned", "start": "2026-06-15[Europe/Vilnius]" },
+		{ "venueIds": ["hall"], "status": "uncertain", "start": "2026-06-16[Europe/Vilnius]" }
+	]
 }
 ```
 
@@ -451,7 +459,7 @@ ActivitySlot
 **`duration`**: Duration in hours:minutes. Minutes limited to 00–59; hours are unbounded.
 
 | Slot shape                                | Meaning      |
-|-------------------------------------------|--------------|
+| ----------------------------------------- | ------------ |
 | `{}`                                      | Untimed      |
 | `{ "time": "15:00" }`                     | Starts 15:00 |
 | `{ "time": "15:00", "duration": "1:00" }` | 15:00–16:00  |
@@ -469,30 +477,30 @@ ActivityLocation
 
 ```json
 {
-  "instances": [
-    {
-      "venueIds": ["campus"],
-      "start": "2026-02-07[Europe/Brussels]",
-      "end": "2026-02-07T19:00[Europe/Brussels]",
-      "activities": [
-        {
-          "name": { "en": "Opening Keynote" },
-          "slot": { "time": "09:30", "duration": "0:50" },
-          "location": { "name": { "en": "Janson" } }
-        },
-        {
-          "name": { "en": "Rust for Linux" },
-          "slot": { "time": "13:00", "duration": "0:50" },
-          "location": { "name": { "en": "Janson" } }
-        },
-        {
-          "name": { "en": "LLVM Workshop" },
-          "slot": { "time": "10:30", "duration": "8:30" },
-          "location": { "name": { "en": "K.3.201" } }
-        }
-      ]
-    }
-  ]
+	"instances": [
+		{
+			"venueIds": ["campus"],
+			"start": "2026-02-07[Europe/Brussels]",
+			"end": "2026-02-07T19:00[Europe/Brussels]",
+			"activities": [
+				{
+					"name": { "en": "Opening Keynote" },
+					"slot": { "time": "09:30", "duration": "0:50" },
+					"location": { "name": { "en": "Janson" } }
+				},
+				{
+					"name": { "en": "Rust for Linux" },
+					"slot": { "time": "13:00", "duration": "0:50" },
+					"location": { "name": { "en": "Janson" } }
+				},
+				{
+					"name": { "en": "LLVM Workshop" },
+					"slot": { "time": "10:30", "duration": "8:30" },
+					"location": { "name": { "en": "K.3.201" } }
+				}
+			]
+		}
+	]
 }
 ```
 

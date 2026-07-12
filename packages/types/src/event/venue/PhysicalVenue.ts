@@ -12,7 +12,7 @@ export interface PhysicalVenueMapService {
 	"com.what3words": never;
 	"org.geonames": never;
 	"wiki.data": never;
-};
+}
 
 export namespace PhysicalVenue {
 	export interface Address {
@@ -22,8 +22,8 @@ export namespace PhysicalVenue {
 		postalCode?: string;
 		/** Full address string (most likely excluding country and postal code) */
 		addr?: string;
-	};
-};
+	}
+}
 
 export interface PhysicalVenue extends BaseVenue {
 	$type: "directory.evnt.venue.physical";
@@ -42,5 +42,5 @@ export interface PhysicalVenue extends BaseVenue {
 	 * A string value represents a single identifier; an array represents multiple
 	 * (e.g., separate IDs for the building and its address point).
 	 */
-	maps?: Record<(keyof PhysicalVenueMapService | (string & {})), string | string[]>;
-};
+	maps?: Record<keyof PhysicalVenueMapService | (string & {}), string | string[]>;
+}

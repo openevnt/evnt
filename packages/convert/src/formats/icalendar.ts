@@ -18,14 +18,17 @@ export const icalendar: FormatConverter = {
 
 		const partialDateToICALTime = (date: PartialDate) => {
 			const parsed = PartialDateUtil.parse(date);
-			return new ICAL.Time({
-				year: parsed.year,
-				month: "month" in parsed ? parsed.month : 1,
-				day: "day" in parsed ? parsed.day : 1,
-				hour: "hour" in parsed ? parsed.hour : 0,
-				minute: "minute" in parsed ? parsed.minute : 0,
-				isDate: parsed.precision !== "time",
-			}, ICAL.Timezone.utcTimezone);
+			return new ICAL.Time(
+				{
+					year: parsed.year,
+					month: "month" in parsed ? parsed.month : 1,
+					day: "day" in parsed ? parsed.day : 1,
+					hour: "hour" in parsed ? parsed.hour : 0,
+					minute: "minute" in parsed ? parsed.minute : 0,
+					isDate: parsed.precision !== "time",
+				},
+				ICAL.Timezone.utcTimezone,
+			);
 		};
 
 		let startDate: ICAL.Time | null = null;

@@ -6,4 +6,4 @@ export interface BaseVenue {
 
 	/** The name of the venue */
 	name: Translations;
-};
+}

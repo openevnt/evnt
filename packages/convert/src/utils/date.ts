@@ -5,14 +5,10 @@ import { PartialDateUtil } from "@evnt/partial-date";
 import type { PartialDate } from "@evnt/types";
 
 /** Guess whether a time value represents midnight (for precision inference). */
-export const isMidnight = (hour: number, minute: number): boolean =>
-	hour === 0 && minute === 0;
+export const isMidnight = (hour: number, minute: number): boolean => hour === 0 && minute === 0;
 
 /** Build a PartialDate string from a Date and a timezone ID. */
-export const dateToPartialDate = (
-	date: Date,
-	timezone: string,
-): PartialDate => {
+export const dateToPartialDate = (date: Date, timezone: string): PartialDate => {
 	const hour = date.getUTCHours();
 	const minute = date.getUTCMinutes();
 	const precision: "day" | "time" = isMidnight(hour, minute) ? "day" : "time";

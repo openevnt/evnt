@@ -20,7 +20,10 @@ export default defineConfig({
 		["meta", { property: "og:type", content: "website" }],
 		["meta", { name: "twitter:title", content: title }],
 		["meta", { name: "twitter:description", content: description }],
-		["meta", { name: "keywords", content: "event, events, data format, multilingual, partial dates" }],
+		[
+			"meta",
+			{ name: "keywords", content: "event, events, data format, multilingual, partial dates" },
+		],
 		["meta", { name: "author", content: "Open Evnt Contributors" }],
 	],
 
@@ -48,9 +51,7 @@ export default defineConfig({
 			{ text: "Quickstart", link: "/guide/getting-started" },
 			{
 				text: "Reference",
-				items: [
-					{ text: "Specification", link: "/spec/" },
-				],
+				items: [{ text: "Specification", link: "/spec/" }],
 			},
 			{
 				text: "Design & Motivation",

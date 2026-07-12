@@ -24,7 +24,13 @@ renderMarkdown(event, {
 ## Or compose yourself
 
 ```ts
-import { MarkdownFormatter, PlainTextFormatter, groupDates, formatDate, addDuration } from "@evnt/pretty";
+import {
+	MarkdownFormatter,
+	PlainTextFormatter,
+	groupDates,
+	formatDate,
+	addDuration,
+} from "@evnt/pretty";
 
 const md = new MarkdownFormatter({ language: "fr" }).formatEvent(event);
 const plain = new PlainTextFormatter({ language: "fr" }).formatEvent(event);
@@ -61,12 +67,12 @@ Standalone utils (date, duration) are useful without the formatter classes.
 
 ## Formatters
 
-| Formatter | Extends | Adds | Config |
-|-----------|---------|------|--------|
-| PlainTextFormatter | - | raw text | FormatConfig (language, timezone, compactDates, show*, max*) |
-| EmojiFormatter | PlainTextFormatter | calendar/clock/venue/status emoji | EmojiFormatConfig (+ emoji, statusIcons) |
-| MarkdownFormatter | EmojiFormatter | bold, italic, clickable links | EmojiFormatConfig |
-| DiscordFormatter | MarkdownFormatter | inline timestamps, blockquotes | DiscordFormatConfig (+ timestampStyle) |
+| Formatter          | Extends            | Adds                              | Config                                                       |
+| ------------------ | ------------------ | --------------------------------- | ------------------------------------------------------------ |
+| PlainTextFormatter | -                  | raw text                          | FormatConfig (language, timezone, compactDates, show*, max*) |
+| EmojiFormatter     | PlainTextFormatter | calendar/clock/venue/status emoji | EmojiFormatConfig (+ emoji, statusIcons)                     |
+| MarkdownFormatter  | EmojiFormatter     | bold, italic, clickable links     | EmojiFormatConfig                                            |
+| DiscordFormatter   | MarkdownFormatter  | inline timestamps, blockquotes    | DiscordFormatConfig (+ timestampStyle)                       |
 
 Set any emoji or status icon to `""` to suppress it.
 
@@ -74,15 +80,15 @@ Set any emoji or status icon to `""` to suppress it.
 
 ### FormatConfig (base)
 
-| Option | Default | Does |
-|--------|---------|------|
-| language | "en" | locale for dates/times |
-| timezone | "UTC" | IANA timezone for local time display |
-| mergeInstances | true | merge consecutive days into ranges |
-| showStatus | false | show cancelled/uncertain etc |
-| showLinks | false | show link components |
-| compactDates | true | "Jun 15" vs "June 15, 2026" |
-| maxDates | 5 | max date groups to show |
+| Option         | Default | Does                                 |
+| -------------- | ------- | ------------------------------------ |
+| language       | "en"    | locale for dates/times               |
+| timezone       | "UTC"   | IANA timezone for local time display |
+| mergeInstances | true    | merge consecutive days into ranges   |
+| showStatus     | false   | show cancelled/uncertain etc         |
+| showLinks      | false   | show link components                 |
+| compactDates   | true    | "Jun 15" vs "June 15, 2026"          |
+| maxDates       | 5       | max date groups to show              |
 
 ### EmojiFormatConfig
 
@@ -101,7 +107,7 @@ statusIcons: {
 ### DiscordFormatConfig
 
 ```ts
-timestampStyle: "off" | "both" | "only"
+timestampStyle: "off" | "both" | "only";
 ```
 
 "off" = text, "both" = timestamp + text, "only" = timestamp only.

@@ -16,12 +16,11 @@ import { MarkdownFormatter } from "./formatters/markdown";
 
 export interface PrettyOptions extends AnalyzeConfig, EmojiFormatConfig {}
 
-export type PrettyOptionsInput = Partial<PrettyOptions> & { emoji?: Record<string, string> | false };
+export type PrettyOptionsInput = Partial<PrettyOptions> & {
+	emoji?: Record<string, string> | false;
+};
 
-export const renderMarkdown = (
-	event: OpenEvnt,
-	options?: PrettyOptionsInput,
-): string => {
+export const renderMarkdown = (event: OpenEvnt, options?: PrettyOptionsInput): string => {
 	const merged: PrettyOptions = {
 		...defaultAnalyzeConfig,
 		...MarkdownFormatter.markdownDefaults,

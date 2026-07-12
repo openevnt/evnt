@@ -39,6 +39,3 @@ For environments without native Temporal, use
 ## Regex
 
 `PartialDateRegex` is also exported for use in validation contexts.
-
-
-

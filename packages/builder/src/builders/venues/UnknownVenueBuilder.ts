@@ -4,10 +4,13 @@ import type { EventBuilder } from "../EventBuilder";
 
 export class UnknownVenueBuilder extends VenueBuilder<"directory.evnt.venue.unknown"> {
 	constructor(venue?: UnknownVenue, parent?: EventBuilder) {
-		super(venue ?? {
-			id: "",
-			name: {},
-			$type: "directory.evnt.venue.unknown",
-		}, parent);
+		super(
+			venue ?? {
+				id: "",
+				name: {},
+				$type: "directory.evnt.venue.unknown",
+			},
+			parent,
+		);
 	}
 }

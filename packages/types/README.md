@@ -22,8 +22,8 @@ let link: Component<"directory.evnt.component.link"> = {
 
 ```ts
 declare module "@evnt/types" {
-  interface ComponentTypes {
-	"my.custom.component": MyCustomComponent;
-  }
+	interface ComponentTypes {
+		"my.custom.component": MyCustomComponent;
+	}
 }
 ```

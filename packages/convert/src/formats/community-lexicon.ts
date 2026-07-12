@@ -37,14 +37,19 @@ export const communityLexicon: FormatConverter = {
 
 		if (event.name) builder.setName(event.name, language);
 
-		const upsertPhysicalVenue = (name: string, fn: (b: PhysicalVenueBuilder) => PhysicalVenueBuilder) => {
+		const upsertPhysicalVenue = (
+			name: string,
+			fn: (b: PhysicalVenueBuilder) => PhysicalVenueBuilder,
+		) => {
 			const idx = builder.data.venues?.findIndex(
 				(v) => v.$type === "directory.evnt.venue.physical" && v.name[language] === name,
 			);
 			builder.data.venues ??= [];
 			if (idx !== undefined && idx >= 0) {
 				const venue = builder.data.venues[idx]!;
-				builder.data.venues[idx] = fn(new PhysicalVenueBuilder(venue as PhysicalVenue, builder)).build();
+				builder.data.venues[idx] = fn(
+					new PhysicalVenueBuilder(venue as PhysicalVenue, builder),
+				).build();
 			} else {
 				builder.addPhysicalVenue((b) => fn(b).setName(name, language));
 			}
@@ -54,27 +59,29 @@ export const communityLexicon: FormatConverter = {
 			switch (location.$type) {
 				case "community.lexicon.calendar.event#uri":
 					builder.addOnlineVenue((v) =>
-						v.setId(index.toString())
+						v
+							.setId(index.toString())
 							.setName(location.name ?? "", language)
-							.setUrl(location.uri)
+							.setUrl(location.uri),
 					);
 					break;
 				case "community.lexicon.location.address":
 					upsertPhysicalVenue(location.name ?? "", (b) =>
-						b.setId(index.toString())
+						b
+							.setId(index.toString())
 							.setCountryCode(location.country)
-							.setAddressLine([location.street, location.locality, location.region].filter(Boolean).join(" "))
+							.setAddressLine(
+								[location.street, location.locality, location.region].filter(Boolean).join(" "),
+							),
 					);
 					break;
 				case "community.lexicon.location.fsq":
 				case "community.lexicon.location.geo":
-					upsertPhysicalVenue(location.name ?? "", (b) =>
-						b.setId(index.toString())
-					);
+					upsertPhysicalVenue(location.name ?? "", (b) => b.setId(index.toString()));
 					break;
 				default:
 					builder.addUnknownVenue((v) =>
-						v.setId(index.toString()).setName(location.name ?? "", language)
+						v.setId(index.toString()).setName(location.name ?? "", language),
 					);
 			}
 		}

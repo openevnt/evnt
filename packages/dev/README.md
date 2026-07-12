@@ -42,4 +42,3 @@ openevnt new --out my-event.json
 - **stdout output**: Convert commands write to stdout by default for piping
 - **Color output**: Uses `picocolors` for green/red/yellow indicators
 - **Registry-based convert**: Uses `@evnt/convert` format registry internally
-

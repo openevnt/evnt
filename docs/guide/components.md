@@ -16,9 +16,9 @@ A component is a typed block of additional metadata attached to an event.
 
 ```json
 {
-  "$type": "directory.evnt.component.link",
-  "url": "https://example.com/tickets",
-  "name": { "en": "Get Tickets" }
+	"$type": "directory.evnt.component.link",
+	"url": "https://example.com/tickets",
+	"name": { "en": "Get Tickets" }
 }
 ```
 

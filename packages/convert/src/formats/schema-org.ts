@@ -29,8 +29,9 @@ export const schemaOrg: FormatConverter = {
 				if (item["@type"] === "PronounceableText" || item["@type"] === "TextObject") {
 					const text = asNonEmptyString(item.textValue ?? item.text);
 					if (!text) continue;
-					const langs: string[] = (Array.isArray(item.inLanguage) ? item.inLanguage : [item.inLanguage])
-						.filter((l: unknown): l is string => typeof l === "string");
+					const langs: string[] = (
+						Array.isArray(item.inLanguage) ? item.inLanguage : [item.inLanguage]
+					).filter((l: unknown): l is string => typeof l === "string");
 					for (const lang of langs.length > 0 ? langs : [language]) {
 						translations[lang] = text;
 					}
@@ -50,7 +51,10 @@ export const schemaOrg: FormatConverter = {
 			if (dateStr.length === 10) return dateStr as PartialDate;
 
 			if (!dateStr.includes("T")) {
-				return dateStr.split("-").map((v) => parseInt(v, 10).toString().padStart(2, "0")).join("-") as PartialDate;
+				return dateStr
+					.split("-")
+					.map((v) => parseInt(v, 10).toString().padStart(2, "0"))
+					.join("-") as PartialDate;
 			}
 
 			const date = new Date(dateStr);
@@ -62,9 +66,8 @@ export const schemaOrg: FormatConverter = {
 		const location = data.location;
 
 		if (isRecord(location)) {
-			const venueName = parseTextFromSchema(location.name)
-				?? createTranslations(asNonEmptyString(location.name), language)
-				?? { [language]: "Unknown" };
+			const venueName = parseTextFromSchema(location.name) ??
+				createTranslations(asNonEmptyString(location.name), language) ?? { [language]: "Unknown" };
 
 			venues.push({
 				id: "0",
@@ -72,8 +75,8 @@ export const schemaOrg: FormatConverter = {
 				$type: "directory.evnt.venue.physical",
 				address: {
 					addr: isRecord(location.address)
-						? asNonEmptyString(location.address.streetAddress)
-							?? asNonEmptyString(location.address.addressLocality)
+						? (asNonEmptyString(location.address.streetAddress) ??
+							asNonEmptyString(location.address.addressLocality))
 						: undefined,
 					countryCode: isRecord(location.address)
 						? asNonEmptyString(location.address.addressCountry)
@@ -92,11 +95,14 @@ export const schemaOrg: FormatConverter = {
 			v: "0.1",
 			name: parseTextFromSchema(data.name) ?? { [language]: "Untitled Event" },
 			venues: venues.length > 0 ? venues : undefined,
-			instances: [{
-				venueIds: venues.map((v) => v.id),
-				start: typeof data.startDate === "string" ? convertPartialDate(data.startDate) : undefined,
-				end: typeof data.endDate === "string" ? convertPartialDate(data.endDate) : undefined,
-			}],
+			instances: [
+				{
+					venueIds: venues.map((v) => v.id),
+					start:
+						typeof data.startDate === "string" ? convertPartialDate(data.startDate) : undefined,
+					end: typeof data.endDate === "string" ? convertPartialDate(data.endDate) : undefined,
+				},
+			],
 		};
 	},
 
@@ -117,18 +123,22 @@ export const schemaOrg: FormatConverter = {
 			return translate(translations, [language, "en", ...Object.keys(translations)]);
 		};
 
-		return JSON.stringify({
-			"@context": "https://schema.org",
-			"@type": "Event",
-			name: pickTranslation(data.name) ?? "Untitled Event",
-			startDate: data.instances?.[0]?.start,
-			endDate: data.instances?.[0]?.end,
-			location: data.venues?.[0]?.name
-				? {
-					"@type": "Place",
-					name: pickTranslation(data.venues[0]!.name) ?? "Unknown",
-				}
-				: undefined,
-		}, null, "\t");
+		return JSON.stringify(
+			{
+				"@context": "https://schema.org",
+				"@type": "Event",
+				name: pickTranslation(data.name) ?? "Untitled Event",
+				startDate: data.instances?.[0]?.start,
+				endDate: data.instances?.[0]?.end,
+				location: data.venues?.[0]?.name
+					? {
+							"@type": "Place",
+							name: pickTranslation(data.venues[0]!.name) ?? "Unknown",
+						}
+					: undefined,
+			},
+			null,
+			"\t",
+		);
 	},
 };

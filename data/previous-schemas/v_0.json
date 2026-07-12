@@ -48,10 +48,7 @@
 			}
 		}
 	},
-	"required": [
-		"v",
-		"name"
-	],
+	"required": ["v", "name"],
 	"additionalProperties": false,
 	"id": "EventData",
 	"title": "Event Data",
@@ -163,11 +160,7 @@
 					"type": "string"
 				}
 			},
-			"required": [
-				"type",
-				"id",
-				"name"
-			],
+			"required": ["type", "id", "name"],
 			"additionalProperties": false,
 			"id": "PhysicalVenue",
 			"title": "Physical Venue",
@@ -204,10 +197,7 @@
 					"title": "Longitude"
 				}
 			},
-			"required": [
-				"lat",
-				"lng"
-			],
+			"required": ["lat", "lng"],
 			"additionalProperties": false,
 			"id": "LatLng"
 		},
@@ -230,11 +220,7 @@
 					"type": "string"
 				}
 			},
-			"required": [
-				"type",
-				"id",
-				"name"
-			],
+			"required": ["type", "id", "name"],
 			"additionalProperties": false,
 			"id": "OnlineVenue"
 		},
@@ -254,11 +240,7 @@
 					"$ref": "#/$defs/Translations"
 				}
 			},
-			"required": [
-				"type",
-				"id",
-				"name"
-			],
+			"required": ["type", "id", "name"],
 			"additionalProperties": false,
 			"id": "UnknownVenue"
 		},
@@ -288,9 +270,7 @@
 					"$ref": "#/$defs/EventStatus"
 				}
 			},
-			"required": [
-				"venueIds"
-			],
+			"required": ["venueIds"],
 			"additionalProperties": false,
 			"id": "EventInstance",
 			"title": "Event Instance",
@@ -301,12 +281,7 @@
 			"id": "PartialDate",
 			"description": "An ISO 8601 date and time string that may be incomplete (e.g. '2023', '2023-05') and does not include timezone information (forced UTC)",
 			"regex": "^\\d{4}(-\\d{2}(-\\d{2}(T\\d{2}:\\d{2})?)?)?$",
-			"examples": [
-				"2023",
-				"2023-05",
-				"2023-05-15",
-				"2023-05-15T13:45"
-			],
+			"examples": ["2023", "2023-05", "2023-05-15", "2023-05-15T13:45"],
 			"defaultSnippets": [
 				{
 					"label": "Current Date&Time",
@@ -327,10 +302,7 @@
 							"$ref": "#/$defs/LinkComponent"
 						}
 					},
-					"required": [
-						"type",
-						"data"
-					],
+					"required": ["type", "data"],
 					"additionalProperties": false
 				},
 				{
@@ -344,10 +316,7 @@
 							"$ref": "#/$defs/SourceComponent"
 						}
 					},
-					"required": [
-						"type",
-						"data"
-					],
+					"required": ["type", "data"],
 					"additionalProperties": false
 				},
 				{
@@ -370,17 +339,11 @@
 									"$ref": "#/$defs/Media"
 								}
 							},
-							"required": [
-								"roles",
-								"media"
-							],
+							"required": ["roles", "media"],
 							"additionalProperties": false
 						}
 					},
-					"required": [
-						"type",
-						"data"
-					],
+					"required": ["type", "data"],
 					"additionalProperties": false
 				},
 				{
@@ -406,10 +369,7 @@
 							"type": "object"
 						}
 					},
-					"required": [
-						"type",
-						"data"
-					],
+					"required": ["type", "data"],
 					"additionalProperties": false
 				}
 			],
@@ -443,9 +403,7 @@
 					"$ref": "#/$defs/PartialDate"
 				}
 			},
-			"required": [
-				"url"
-			],
+			"required": ["url"],
 			"additionalProperties": false,
 			"id": "LinkComponent"
 		},
@@ -457,9 +415,7 @@
 					"description": "The URL of the source"
 				}
 			},
-			"required": [
-				"url"
-			],
+			"required": ["url"],
 			"additionalProperties": false,
 			"id": "SourceComponent",
 			"description": "A source of information about the event, such as a news article, a social media post, an official announcement etc."
@@ -484,9 +440,7 @@
 					"$ref": "#/$defs/MediaPresentation"
 				}
 			},
-			"required": [
-				"sources"
-			],
+			"required": ["sources"],
 			"additionalProperties": false,
 			"id": "Media",
 			"title": "Media",
@@ -509,9 +463,7 @@
 					"type": "string"
 				}
 			},
-			"required": [
-				"url"
-			],
+			"required": ["url"],
 			"additionalProperties": false,
 			"id": "MediaSource",
 			"title": "Media Source",
@@ -533,10 +485,7 @@
 					"description": "The height of the media in pixels"
 				}
 			},
-			"required": [
-				"width",
-				"height"
-			],
+			"required": ["width", "height"],
 			"additionalProperties": false,
 			"id": "MediaDimensions",
 			"title": "Media Dimensions",

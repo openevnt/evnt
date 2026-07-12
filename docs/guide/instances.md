@@ -8,14 +8,16 @@ Most formats assume one event equals one occurrence at one time.
 DTSTART:20251112T190000
 DTEND:20251112T220000
 ```
+
 iCalendar has one start and one end. If an event happens across three days, you either repeat the whole event three times (and lose the connection between them) or use recurrence rules that are famously hard to get right.
 
 ```json
 {
-  "startDate": "2025-11-12",
-  "endDate": "2025-11-14"
+	"startDate": "2025-11-12",
+	"endDate": "2025-11-14"
 }
 ```
+
 Other formats (like Schema.org) can represent a date range, but it's still one occurrence with one start and one end. If day one is at a different venue than day two, or has different hours, there's no way to express that without creating separate events.
 
 The bet these formats make: an event is a single block on a calendar. That's true for a meeting. It's false for almost everything else - conferences, festivals, tours, workshops.
@@ -40,10 +42,18 @@ Partial dates make this especially useful - an instance can start "sometime in J
 
 ```json
 {
-  "instances": [
-    { "venueIds": ["hall"], "start": "2026-06-15T09:00[Europe/Vilnius]", "end": "2026-06-15T18:00[Europe/Vilnius]" },
-    { "venueIds": ["hall"], "start": "2026-06-16T10:00[Europe/Vilnius]", "end": "2026-06-16T17:00[Europe/Vilnius]" }
-  ]
+	"instances": [
+		{
+			"venueIds": ["hall"],
+			"start": "2026-06-15T09:00[Europe/Vilnius]",
+			"end": "2026-06-15T18:00[Europe/Vilnius]"
+		},
+		{
+			"venueIds": ["hall"],
+			"start": "2026-06-16T10:00[Europe/Vilnius]",
+			"end": "2026-06-16T17:00[Europe/Vilnius]"
+		}
+	]
 }
 ```
 
@@ -71,13 +81,16 @@ Each id in the array matches a venue's `id` from the event's `venues` list. Toge
 
 ```json
 {
-  "venues": [
-    { "id": "hall", "$type": "directory.evnt.venue.physical", "name": { "en": "Main Hall" } },
-    { "id": "stream", "$type": "directory.evnt.venue.online", "name": { "en": "Livestream" }, "url": "https://..." }
-  ],
-  "instances": [
-    { "venueIds": ["hall", "stream"], "start": "2026-06-15T09:00[Europe/Vilnius]" }
-  ]
+	"venues": [
+		{ "id": "hall", "$type": "directory.evnt.venue.physical", "name": { "en": "Main Hall" } },
+		{
+			"id": "stream",
+			"$type": "directory.evnt.venue.online",
+			"name": { "en": "Livestream" },
+			"url": "https://..."
+		}
+	],
+	"instances": [{ "venueIds": ["hall", "stream"], "start": "2026-06-15T09:00[Europe/Vilnius]" }]
 }
 ```
 
@@ -99,8 +112,6 @@ You could flip it and ask: why not start + duration instead of start + end? Beca
 
 End has to be the same or lower precision than start. The reasoning: if you know the end time down to the minute, you probably know the start with at least the same detail. A start of "sometime on June 15" with an end of "exactly 6pm on June 16" is unusual enough that the spec doesn't optimize for it. If you need this, use day precision for both and express the end time in a component.
 
-
-
 ## Multi-day vs multiple instances
 
 Two patterns for events spanning multiple days:
@@ -117,10 +128,10 @@ An event with no instances is valid. It represents an event that hasn't been sch
 
 ```json
 {
-  "name": { "en": "Upcoming Workshop" },
-  "venues": [
-    { "id": "hall", "$type": "directory.evnt.venue.physical", "name": { "en": "Workshop Space" } }
-  ]
+	"name": { "en": "Upcoming Workshop" },
+	"venues": [
+		{ "id": "hall", "$type": "directory.evnt.venue.physical", "name": { "en": "Workshop Space" } }
+	]
 }
 ```
 

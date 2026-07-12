@@ -12,5 +12,5 @@ allowBuilds:
   workerd: true
 
 onlyBuiltDependencies:
-  - '@swc/core'
+  - "@swc/core"
   - esbuild

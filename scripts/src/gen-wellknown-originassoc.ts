@@ -10,10 +10,7 @@ export const genWellKnownOriginAssoc = async (data: InstancesJson, dest: string 
 		web_apps.push({
 			web_app_identity: instance.url,
 		});
-	};
+	}
 
-	writeFileSync(
-		dest,
-		JSON.stringify({ web_apps }, null, 2),
-	);
+	writeFileSync(dest, JSON.stringify({ web_apps }, null, 2));
 };

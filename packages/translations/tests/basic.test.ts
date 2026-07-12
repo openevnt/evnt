@@ -21,8 +21,7 @@ describe("TranslationsUtil", () => {
 	});
 
 	test("normalize removes empty and whitespace-only entries", () => {
-		expect(TranslationsUtil.normalize({ en: "Hello", fr: "", de: "  " }))
-			.toEqual({ en: "Hello" });
+		expect(TranslationsUtil.normalize({ en: "Hello", fr: "", de: "  " })).toEqual({ en: "Hello" });
 	});
 
 	test("add creates a new object without mutating the original", () => {
@@ -60,20 +59,12 @@ describe("TranslationsUtil", () => {
 	});
 
 	test("merge combines multiple translations (last wins for same key)", () => {
-		const result = TranslationsUtil.merge(
-			{ en: "Hello" },
-			{ fr: "Bonjour" },
-			{ en: "Hi" },
-		);
+		const result = TranslationsUtil.merge({ en: "Hello" }, { fr: "Bonjour" }, { en: "Hi" });
 		expect(result).toEqual({ en: "Hi", fr: "Bonjour" });
 	});
 
 	test("merge filters out undefined and null entries", () => {
-		const result = TranslationsUtil.merge(
-			{ en: "Hello" },
-			undefined,
-			null,
-		);
+		const result = TranslationsUtil.merge({ en: "Hello" }, undefined, null);
 		expect(result).toEqual({ en: "Hello" });
 	});
 

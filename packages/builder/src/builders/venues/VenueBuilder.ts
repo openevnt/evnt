@@ -2,7 +2,10 @@ import type { Venue } from "@evnt/types";
 import type { EventBuilder } from "../EventBuilder";
 import { createTranslationAdder } from "../../utils/helpers";
 
-type VenueType = "directory.evnt.venue.physical" | "directory.evnt.venue.online" | "directory.evnt.venue.unknown";
+type VenueType =
+	| "directory.evnt.venue.physical"
+	| "directory.evnt.venue.online"
+	| "directory.evnt.venue.unknown";
 
 export class VenueBuilder<Type extends VenueType = VenueType> {
 	venue: Extract<Venue, { $type: Type }>;

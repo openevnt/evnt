@@ -8,4 +8,4 @@ export interface LinkComponent {
 	disabled?: boolean;
 	opensAt?: PartialDate;
 	closesAt?: PartialDate;
-};
+}

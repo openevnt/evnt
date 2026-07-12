@@ -3,12 +3,9 @@
 		<div class="editor-section">
 			<label for="json-input">Event JSON</label>
 			<div class="presets">
-				<button
-					v-for="p in presets"
-					:key="p.label"
-					class="preset-btn"
-					@click="raw = p.json"
-				>{{ p.label }}</button>
+				<button v-for="p in presets" :key="p.label" class="preset-btn" @click="raw = p.json">
+					{{ p.label }}
+				</button>
 			</div>
 			<textarea
 				id="json-input"
@@ -214,7 +211,9 @@ function formatJson() {
 	color: var(--vp-c-brand-1);
 	cursor: pointer;
 	white-space: nowrap;
-	transition: background 0.15s, color 0.15s;
+	transition:
+		background 0.15s,
+		color 0.15s;
 }
 
 .preset-btn:hover {

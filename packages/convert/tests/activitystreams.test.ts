@@ -8,46 +8,59 @@ const convertToActivityStreamsEvent = to!;
 
 describe("activitystreams converter", () => {
 	test("converts ActivityStreams Event into OpenEvnt", () => {
-		const eventData = convertFromActivityStreamsEvent(JSON.stringify({
-			type: "Event",
-			name: "Open Evnt Meetup",
-			startTime: "2026-07-10T18:30:00+03:00",
-			endTime: "2026-07-10T21:00:00+03:00",
-			location: {
-				type: "Place",
-				name: "Community Hall",
-				address: {
-					streetAddress: "Main St 1",
-					addressCountry: "lt",
+		const eventData = convertFromActivityStreamsEvent(
+			JSON.stringify({
+				type: "Event",
+				name: "Open Evnt Meetup",
+				startTime: "2026-07-10T18:30:00+03:00",
+				endTime: "2026-07-10T21:00:00+03:00",
+				location: {
+					type: "Place",
+					name: "Community Hall",
+					address: {
+						streetAddress: "Main St 1",
+						addressCountry: "lt",
+					},
 				},
-			},
-			url: [
-				"https://example.com/events/open-evnt-meetup",
-			],
-			content: "Weekly gathering for local organizers.",
-		}));
+				url: ["https://example.com/events/open-evnt-meetup"],
+				content: "Weekly gathering for local organizers.",
+			}),
+		);
 
 		expect(eventData.v).toBe("0.1");
 		expect(eventData.name.en).toBe("Open Evnt Meetup");
 		expect(eventData.instances?.[0]?.start).toBe("2026-07-10T15:30[UTC]");
 		expect(eventData.instances?.[0]?.end).toBe("2026-07-10T18:00[UTC]");
 		expect(eventData.venues?.[0]?.$type).toBe("directory.evnt.venue.physical");
-		expect((eventData.venues?.[0] as OpenEvnt["venues"][number] & { address?: { countryCode?: string } })?.address?.countryCode).toBe("LT");
-		expect(eventData.components?.some((component) => component.$type === "directory.evnt.component.link")).toBe(true);
-		expect(eventData.components?.some((component) => component.$type === "directory.evnt.richtext.markdown")).toBe(true);
+		expect(
+			(eventData.venues?.[0] as OpenEvnt["venues"][number] & { address?: { countryCode?: string } })
+				?.address?.countryCode,
+		).toBe("LT");
+		expect(
+			eventData.components?.some(
+				(component) => component.$type === "directory.evnt.component.link",
+			),
+		).toBe(true);
+		expect(
+			eventData.components?.some(
+				(component) => component.$type === "directory.evnt.richtext.markdown",
+			),
+		).toBe(true);
 	});
 
 	test("maps online locations and date-only startTime", () => {
-		const eventData = convertFromActivityStreamsEvent(JSON.stringify({
-			type: "Event",
-			name: "Livestream",
-			startTime: "2026-08-01",
-			location: {
-				type: "Link",
-				name: "YouTube",
-				href: "https://youtube.com/live/abc",
-			},
-		}));
+		const eventData = convertFromActivityStreamsEvent(
+			JSON.stringify({
+				type: "Event",
+				name: "Livestream",
+				startTime: "2026-08-01",
+				location: {
+					type: "Link",
+					name: "YouTube",
+					href: "https://youtube.com/live/abc",
+				},
+			}),
+		);
 
 		expect(eventData.instances?.[0]?.start).toBe("2026-08-01[UTC]");
 		expect(eventData.venues?.[0]).toMatchObject({
@@ -60,10 +73,12 @@ describe("activitystreams converter", () => {
 		const input: OpenEvnt = {
 			v: "0.1",
 			name: { en: "Conference" },
-			instances: [{
-				venueIds: [],
-				start: "2026-09-20[Europe/Vilnius]",
-			}],
+			instances: [
+				{
+					venueIds: [],
+					start: "2026-09-20[Europe/Vilnius]",
+				},
+			],
 		};
 
 		const raw = convertToActivityStreamsEvent(input);
@@ -80,17 +95,21 @@ describe("activitystreams converter", () => {
 		const embedded: OpenEvnt = {
 			v: "0.1",
 			name: { en: "Embedded" },
-			components: [{
-				$type: "com.example.component",
-				foo: "bar",
-			}],
+			components: [
+				{
+					$type: "com.example.component",
+					foo: "bar",
+				},
+			],
 		};
 
-		const fromAs = convertFromActivityStreamsEvent(JSON.stringify({
-			type: "Event",
-			name: "Ignored name",
-			evntData: embedded,
-		}));
+		const fromAs = convertFromActivityStreamsEvent(
+			JSON.stringify({
+				type: "Event",
+				name: "Ignored name",
+				evntData: embedded,
+			}),
+		);
 
 		expect(fromAs).toEqual(embedded);
 	});

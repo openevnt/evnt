@@ -16,7 +16,7 @@ export default defineLexiconConfig({
 					"community.lexicon.location.geo",
 					"community.lexicon.location.hthree",
 				],
-			}
+			},
 		],
 	},
 });

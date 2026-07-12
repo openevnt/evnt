@@ -9,16 +9,18 @@ Most formats can only express one location per event, and that location is a sin
 ```
 LOCATION:123 Main St, Springfield
 ```
+
 iCalendar uses one `LOCATION` field. It works for a simple meeting at a single address. For anything more complex, you concatenate - "Main Hall / https://zoom.us/j/..." - which defeats the purpose.
 
 ```json
 {
-  "location": {
-    "name": "Convention Centre",
-    "address": "123 Main St, Springfield"
-  }
+	"location": {
+		"name": "Convention Centre",
+		"address": "123 Main St, Springfield"
+	}
 }
 ```
+
 Structured formats still embed the location directly on the event. If an event happens in the same room three times, the location is repeated each time. If it has both a room and a stream, there's no way to express both.
 
 This is data stuffing: the format forces you to cram multiple things into one slot because it doesn't have a way to say "this event happens at these locations."
@@ -39,13 +41,13 @@ A real-world location with an address.
 
 ```json
 {
-  "id": "hall",
-  "$type": "directory.evnt.venue.physical",
-  "name": { "en": "Concert Hall" },
-  "address": {
-    "addr": "123 Main St, Springfield",
-    "countryCode": "US"
-  }
+	"id": "hall",
+	"$type": "directory.evnt.venue.physical",
+	"name": { "en": "Concert Hall" },
+	"address": {
+		"addr": "123 Main St, Springfield",
+		"countryCode": "US"
+	}
 }
 ```
 
@@ -57,14 +59,14 @@ Physical venues can also link to external mapping services:
 
 ```json
 {
-  "id": "hall",
-  "$type": "directory.evnt.venue.physical",
-  "name": { "en": "Concert Hall" },
-  "address": { "addr": "123 Main St, Springfield", "countryCode": "US" },
-  "maps": {
-    "org.openstreetmap.node": "1234567",
-    "com.google.places": "ChIJN1t_tDEuEmsRUsoyG83frY4"
-  }
+	"id": "hall",
+	"$type": "directory.evnt.venue.physical",
+	"name": { "en": "Concert Hall" },
+	"address": { "addr": "123 Main St, Springfield", "countryCode": "US" },
+	"maps": {
+		"org.openstreetmap.node": "1234567",
+		"com.google.places": "ChIJN1t_tDEuEmsRUsoyG83frY4"
+	}
 }
 ```
 
@@ -76,10 +78,10 @@ A virtual location accessed via a URL.
 
 ```json
 {
-  "id": "stream",
-  "$type": "directory.evnt.venue.online",
-  "name": { "en": "Livestream" },
-  "url": "https://live.example.com/concert"
+	"id": "stream",
+	"$type": "directory.evnt.venue.online",
+	"name": { "en": "Livestream" },
+	"url": "https://live.example.com/concert"
 }
 ```
 
@@ -89,9 +91,9 @@ A venue that exists but whose type hasn't been determined.
 
 ```json
 {
-  "id": "unknown-venue",
-  "$type": "directory.evnt.venue.unknown",
-  "name": { "en": "Some Venue" }
+	"id": "unknown-venue",
+	"$type": "directory.evnt.venue.unknown",
+	"name": { "en": "Some Venue" }
 }
 ```
 

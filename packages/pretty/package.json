@@ -1,15 +1,12 @@
 {
 	"name": "@evnt/pretty",
 	"version": "0.1.1",
-	"type": "module",
-	"author": "deniz.blue <deniz@deniz.blue>",
 	"keywords": [],
+	"author": "deniz.blue <deniz@deniz.blue>",
 	"files": [
 		"/dist"
 	],
-	"scripts": {
-		"build": "tsc"
-	},
+	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
 	},
@@ -20,13 +17,16 @@
 			".": "./dist/index.js"
 		}
 	},
-	"devDependencies": {
-		"@repo/typescript-config": "workspace:^",
-		"typescript": "^6.0.3"
+	"scripts": {
+		"build": "tsc"
 	},
 	"dependencies": {
 		"@evnt/partial-date": "workspace:^",
 		"@evnt/translations": "workspace:^",
 		"@evnt/types": "workspace:^"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:^",
+		"typescript": "^6.0.3"
 	}
 }

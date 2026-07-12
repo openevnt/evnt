@@ -5,9 +5,10 @@ export interface TranslationSetter<ReturnType> {
 	(translations: Translations): ReturnType;
 }
 
-export const createTranslationAdder = <
-	ReturnType,
->(getter: () => Translations, parent: ReturnType): TranslationSetter<ReturnType> => {
+export const createTranslationAdder = <ReturnType>(
+	getter: () => Translations,
+	parent: ReturnType,
+): TranslationSetter<ReturnType> => {
 	return (arg: string | Translations, language?: string) => {
 		if (typeof arg === "string") arg = { [language ?? "en"]: arg };
 		const translations = getter();
@@ -22,24 +23,20 @@ type Builder<TOut> = {
 	build(): TOut;
 };
 
-type BuilderCtor<TOut, TParent, TBuilder extends Builder<TOut>> =
-	new (arg?: TOut, parent?: TParent) => TBuilder;
+type BuilderCtor<TOut, TParent, TBuilder extends Builder<TOut>> = new (
+	arg?: TOut,
+	parent?: TParent,
+) => TBuilder;
 
 export function createBuilderAdder<
 	TItem extends object,
 	TParent,
 	TBuilt extends TItem,
 	TBuilder extends Builder<TBuilt>,
->(
-	getter: () => TItem[],
-	BuilderClass: BuilderCtor<TBuilt, TParent, TBuilder>,
-	parent: TParent
-) {
+>(getter: () => TItem[], BuilderClass: BuilderCtor<TBuilt, TParent, TBuilder>, parent: TParent) {
 	return (arg: TItem | ((builder: TBuilder) => TBuilder)): TParent => {
 		const item: TItem =
-			typeof arg === "function"
-				? (arg(new BuilderClass(undefined, parent)).build() as TItem)
-				: arg;
+			typeof arg === "function" ? (arg(new BuilderClass(undefined, parent)).build() as TItem) : arg;
 
 		getter().push(item);
 		return parent;

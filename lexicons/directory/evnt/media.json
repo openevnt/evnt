@@ -1,38 +1,38 @@
 {
-  "defs": {
-    "main": {
-      "properties": {
-        "sources": {
-          "items": {
-            "ref": "directory.evnt.media.source",
-            "type": "ref"
-          },
-          "type": "array"
-        },
-        "alt": {
-          "type": "unknown"
-        },
-        "presentation": {
-          "ref": "directory.evnt.media#presentation",
-          "type": "ref"
-        }
-      },
-      "required": ["sources"],
-      "type": "object"
-    },
-    "presentation": {
-      "properties": {
-        "blurhash": {
-          "type": "string"
-        },
-        "dominantColor": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.media",
-  "lexicon": 1,
-  "revision": 1
+	"defs": {
+		"main": {
+			"properties": {
+				"sources": {
+					"items": {
+						"ref": "directory.evnt.media.source",
+						"type": "ref"
+					},
+					"type": "array"
+				},
+				"alt": {
+					"type": "unknown"
+				},
+				"presentation": {
+					"ref": "directory.evnt.media#presentation",
+					"type": "ref"
+				}
+			},
+			"required": ["sources"],
+			"type": "object"
+		},
+		"presentation": {
+			"properties": {
+				"blurhash": {
+					"type": "string"
+				},
+				"dominantColor": {
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.media",
+	"lexicon": 1,
+	"revision": 1
 }

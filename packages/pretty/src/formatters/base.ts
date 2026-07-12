@@ -60,7 +60,8 @@ export class PlainTextFormatter {
 		for (const v of event.venues ?? []) byId.set(v.id, v);
 
 		const groups = groupDates(event.instances ?? [], this.config.mergeInstances);
-		const shownCount = this.config.maxDates > 0 ? Math.min(groups.length, this.config.maxDates) : groups.length;
+		const shownCount =
+			this.config.maxDates > 0 ? Math.min(groups.length, this.config.maxDates) : groups.length;
 		for (let i = 0; i < shownCount; i++) {
 			lines.push(this.formatDateGroup(groups[i]!, byId));
 		}
@@ -70,7 +71,10 @@ export class PlainTextFormatter {
 
 		if (this.config.showLinks) {
 			for (const comp of event.components ?? []) {
-				if (comp.$type === "directory.evnt.component.link" || comp.$type === "directory.evnt.component.source") {
+				if (
+					comp.$type === "directory.evnt.component.link" ||
+					comp.$type === "directory.evnt.component.source"
+				) {
 					const c = comp as { url: string; name?: Record<string, string> };
 					lines.push(this.formatLink(c.url, c.name ? this.resolveText(c.name) : undefined));
 				}
@@ -98,7 +102,10 @@ export class PlainTextFormatter {
 
 	protected formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
 		const dateStr = this.formatDateShape(group.dates);
-		const timeStr = group.times.map(t => this.formatTimeRange(t.start, t.end)).filter(Boolean).join(", ");
+		const timeStr = group.times
+			.map((t) => this.formatTimeRange(t.start, t.end))
+			.filter(Boolean)
+			.join(", ");
 
 		const parts = [dateStr, timeStr].filter(Boolean);
 
@@ -124,7 +131,7 @@ export class PlainTextFormatter {
 			case "range":
 				return this.formatDateRange(shape.from, shape.to);
 			case "list":
-				return shape.dates.map(d => this.formatDate(d)).join(", ");
+				return shape.dates.map((d) => this.formatDate(d)).join(", ");
 		}
 	}
 

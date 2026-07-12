@@ -30,7 +30,5 @@ export const asNumber = (value: unknown): number | undefined => {
 export const readUrlLike = (value: unknown): string | undefined => {
 	if (typeof value === "string") return asNonEmptyString(value);
 	if (!isRecord(value)) return undefined;
-	return asNonEmptyString(value.href)
-		?? asNonEmptyString(value.url)
-		?? asNonEmptyString(value.id);
+	return asNonEmptyString(value.href) ?? asNonEmptyString(value.url) ?? asNonEmptyString(value.id);
 };

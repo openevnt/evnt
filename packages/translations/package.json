@@ -2,33 +2,33 @@
 	"name": "@evnt/translations",
 	"version": "0.1.0",
 	"description": "Utility for handling OpenEvnt Translations type",
-	"type": "module",
-	"scripts": {
-		"build": "tsc"
-	},
-	"main": "./src/index.ts",
-	"publishConfig": {
-		"main": "./dist/index.js",
-		"types": "./dist/index.d.ts"
-	},
-	"files": [
-		"/dist"
-	],
+	"keywords": [],
 	"homepage": "https://evnt.directory",
+	"license": "MIT",
+	"author": "deniz.blue <deniz@deniz.blue>",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/openevnt/evnt.git",
 		"directory": "packages/translations"
 	},
-	"keywords": [],
-	"author": "deniz.blue <deniz@deniz.blue>",
-	"license": "MIT",
-	"packageManager": "pnpm@11.0.0-beta.6",
+	"files": [
+		"/dist"
+	],
+	"type": "module",
+	"main": "./src/index.ts",
+	"publishConfig": {
+		"main": "./dist/index.js",
+		"types": "./dist/index.d.ts"
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"dependencies": {
+		"@evnt/types": "workspace:^"
+	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:^",
 		"typescript": "^6.0.2"
 	},
-	"dependencies": {
-		"@evnt/types": "workspace:^"
-	}
+	"packageManager": "pnpm@11.0.0-beta.6"
 }

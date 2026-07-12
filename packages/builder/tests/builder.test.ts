@@ -12,44 +12,32 @@ describe("EventBuilder", () => {
 	});
 
 	test("setName sets a translation", () => {
-		const event = new EventBuilder()
-			.setName("My Event", "en")
-			.build();
+		const event = new EventBuilder().setName("My Event", "en").build();
 		expect(event.name).toEqual({ en: "My Event" });
 	});
 
 	test("setLabel sets a label translation", () => {
-		const event = new EventBuilder()
-			.setLabel("Conference", "en")
-			.build();
+		const event = new EventBuilder().setLabel("Conference", "en").build();
 		expect(event.label).toEqual({ en: "Conference" });
 	});
 
 	test("setStatus sets event status", () => {
-		const event = new EventBuilder()
-			.setStatus("planned")
-			.build();
+		const event = new EventBuilder().setStatus("planned").build();
 		expect(event.status).toBe("planned");
 	});
 
 	test("addInstance creates an instance with defaults", () => {
-		const event = new EventBuilder()
-			.addInstance((i) => i)
-			.build();
+		const event = new EventBuilder().addInstance((i) => i).build();
 		expect(event.instances).toHaveLength(1);
 	});
 
 	test("addInstance with start date", () => {
-		const event = new EventBuilder()
-			.addInstance((i) => i.setStart(date))
-			.build();
+		const event = new EventBuilder().addInstance((i) => i.setStart(date)).build();
 		expect(event.instances![0]!.start).toBe(date);
 	});
 
 	test("addPhysicalVenue creates a physical venue", () => {
-		const event = new EventBuilder()
-			.addPhysicalVenue((v) => v.setName("Hall A", "en"))
-			.build();
+		const event = new EventBuilder().addPhysicalVenue((v) => v.setName("Hall A", "en")).build();
 		expect(event.venues).toHaveLength(1);
 		expect(event.venues![0]!.name).toEqual({ en: "Hall A" });
 		expect(event.venues![0]!.$type).toBe("directory.evnt.venue.physical");
@@ -64,17 +52,13 @@ describe("EventBuilder", () => {
 	});
 
 	test("addUnknownVenue creates an unknown venue", () => {
-		const event = new EventBuilder()
-			.addUnknownVenue((v) => v.setName("TBD", "en"))
-			.build();
+		const event = new EventBuilder().addUnknownVenue((v) => v.setName("TBD", "en")).build();
 		expect(event.venues).toHaveLength(1);
 		expect(event.venues![0]!.$type).toBe("directory.evnt.venue.unknown");
 	});
 
 	test("addLink creates a link component from string URL", () => {
-		const event = new EventBuilder()
-			.addLink("https://example.com")
-			.build();
+		const event = new EventBuilder().addLink("https://example.com").build();
 		expect(event.components).toHaveLength(1);
 		expect(event.components![0]).toMatchObject({
 			$type: "directory.evnt.component.link",
@@ -108,8 +92,7 @@ describe("EventBuilder", () => {
 	});
 
 	test("getInstance returns an InstanceBuilder for existing index", () => {
-		const builder = new EventBuilder()
-			.addInstance((i) => i.setStart(date));
+		const builder = new EventBuilder().addInstance((i) => i.setStart(date));
 		const instance = builder.getInstance(0);
 		expect(instance.build().start).toBe(date);
 	});
@@ -119,8 +102,7 @@ describe("EventBuilder", () => {
 	});
 
 	test("getVenueWithId returns a VenueBuilder", () => {
-		const builder = new EventBuilder()
-			.addPhysicalVenue((v) => v.setId("venue-1"));
+		const builder = new EventBuilder().addPhysicalVenue((v) => v.setId("venue-1"));
 		const venue = builder.getVenueWithId("venue-1");
 		expect(venue.build().id).toBe("venue-1");
 	});

@@ -1,4 +1,4 @@
-import { document, object, required, string } from '@atcute/lexicon-doc/builder';
+import { document, object, required, string } from "@atcute/lexicon-doc/builder";
 
 export default document({
 	id: "directory.evnt.richtext.markdown",

@@ -1,17 +1,17 @@
 {
-  "defs": {
-    "main": {
-      "properties": {
-        "name": {
-          "type": "unknown"
-        },
-        "url": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    }
-  },
-  "id": "directory.evnt.venue.online",
-  "lexicon": 1
+	"defs": {
+		"main": {
+			"properties": {
+				"name": {
+					"type": "unknown"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
+	},
+	"id": "directory.evnt.venue.online",
+	"lexicon": 1
 }

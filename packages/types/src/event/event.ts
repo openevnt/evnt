@@ -3,7 +3,6 @@ import type { AnyComponent } from "./component";
 import type { EventInstance } from "./instance";
 import type { Venue } from "./venue";
 
-
 export interface OpenEvnt {
 	v: "0.1";
 	$type?: "directory.evnt.event";
@@ -15,11 +14,4 @@ export interface OpenEvnt {
 	components?: AnyComponent[];
 }
 
-export type EventStatus =
-	| "planned"
-	| "uncertain"
-	| "postponed"
-	| "cancelled"
-	| "suspended"
-
-
+export type EventStatus = "planned" | "uncertain" | "postponed" | "cancelled" | "suspended";

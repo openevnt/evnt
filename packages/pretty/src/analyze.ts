@@ -42,8 +42,18 @@ interface DateEntry {
 }
 
 const getTimeKey = (entry: DateEntry): string => {
-	const startTime = entry.start && hasTime(entry.start) ? PartialDateUtil.parse(entry.start).precision === "time" ? entry.start : "" : "";
-	const endTime = entry.end && hasTime(entry.end) ? PartialDateUtil.parse(entry.end).precision === "time" ? entry.end : "" : "";
+	const startTime =
+		entry.start && hasTime(entry.start)
+			? PartialDateUtil.parse(entry.start).precision === "time"
+				? entry.start
+				: ""
+			: "";
+	const endTime =
+		entry.end && hasTime(entry.end)
+			? PartialDateUtil.parse(entry.end).precision === "time"
+				? entry.end
+				: ""
+			: "";
 	return `${startTime}|${endTime}`;
 };
 
@@ -86,11 +96,12 @@ const mergeEntries = (entries: DateEntry[]): MergedEntryGroup[] => {
 			const lastStart = lastEntry.start;
 			const thisStart = entry.start;
 
-			const isConsecutive = lastStart && thisStart && hasDay(lastStart) && hasDay(thisStart)
-				? isNextDay(roundToDay(lastStart), roundToDay(thisStart))
-				: false;
+			const isConsecutive =
+				lastStart && thisStart && hasDay(lastStart) && hasDay(thisStart)
+					? isNextDay(roundToDay(lastStart), roundToDay(thisStart))
+					: false;
 
-			const samePattern = last.entries.every(e => getTimeKey(e) === timeKey);
+			const samePattern = last.entries.every((e) => getTimeKey(e) === timeKey);
 
 			if (isConsecutive && samePattern) {
 				last.entries.push(entry);
@@ -166,8 +177,8 @@ export const groupDates = (instances: EventInstance[], merge: boolean): DateGrou
 		const venueIds = [...(insts[0]?.venueIds ?? [])].sort();
 
 		const entries: DateEntry[] = insts
-			.map(i => ({ start: i.start, end: i.end }))
-			.filter(e => e.start || e.end)
+			.map((i) => ({ start: i.start, end: i.end }))
+			.filter((e) => e.start || e.end)
 			.sort((a, b) => {
 				if (!a.start && !b.start) return 0;
 				if (!a.start) return -1;
