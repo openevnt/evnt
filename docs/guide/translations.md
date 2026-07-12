@@ -1,27 +1,45 @@
 # Why Translations
 
-A single name field doesn't work for events.
-
 ## The problem
 
-Events happen in the real world, and the real world has more than one language. A conference in Berlin has a German name _and_ an English name. A festival in Montreal needs French, English, maybe Mohawk. A global online conference might have a dozen languages.
+Events happen in the real world, and the real world has more than one language. A conference in Berlin has a German name _and_ an English name. A festival in Montreal needs French, English, maybe Mohawk. A global online conference might have a dozen languages. Who knows?
 
-Every existing format handles this by pretending it doesn't exist.
+Every existing format handles this issue by either pretending it doesn't exist or forgetting about it:
 
 ```json
 {
 	"name": "Tech Meetup",
-	"description": "A meetup about tech. In Lithuanian: Susitikimas apie technologijas."
+	"description": "English: A meetup about tech.\nLithuanian: Susitikimas apie technologijas."
 }
 ```
 
-You stuff everything into one field. Structured data becomes unstructured prose. It works, but it's ugly - everyone has seen "English Below ↓" crammed into the end of a localized string.
+Users that create the events have to write two languages into one description field, and the users who are looking at the details have to find the right language in a wall of text. We should be able to fix the "English Below ↓" problem, right?
 
-The workaround is always the same: invent a convention (`name:en`, `name:lt`, a parallel `_translations` field), document it nowhere, and hope consumers guess correctly.
+Some other formats try to solve it by inventing a convention for multiple fields:
 
-## The approach
+```json
+{
+	"name_en": "Tech Meetup",
+	"name_lt": "Tech Susitikimas"
+}
+```
 
-Open Evnt uses a flat object mapping [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) language tags to strings.
+But this is ad-hoc, non-standard, and doesn't scale. What if you want to add French? Or Spanish? Or a dozen other languages? You end up with a proliferation of fields like `name_fr`, `name_es`, `name_zh-Hans`, etc. It's messy and hard to maintain.
+
+How about an array of objects?
+
+```json
+{
+	"name": [
+		{ "lang": "en", "value": "Tech Meetup" },
+		{ "lang": "lt", "value": "Tech Susitikimas" }
+	]
+}
+```
+
+This is better, but it has its own problems. You can have duplicate languages, and it's not as easy to look up a specific language without iterating through the array.
+
+You could, however, instead extract the translations into a separate object:
 
 ```json
 {
@@ -32,34 +50,13 @@ Open Evnt uses a flat object mapping [BCP47](https://www.rfc-editor.org/rfc/bcp/
 }
 ```
 
-That's it. A language tag, a string. No nesting, no arrays of `{ lang, value }` pairs, no special metadata per translation.
+Actually, this is exactly what Open Evnt does! The `name` field is a Translations object, which is a flat mapping of [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) language tags to strings. This allows for any number of languages without polluting the main object with ad-hoc keys.
 
-### Why a flat object?
-
-Three alternatives were considered:
-
-| Approach                                   | Problem                                                                                                 |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| Separate fields (`name_en`, `name_lt`)     | Pollutes the object with ad-hoc keys, no standard naming convention.                                    |
-| Array of `{ lang, value }`                 | Allows duplicate languages (which one wins?). No natural lookup. JSON-LD already uses objects for this. |
-| **Flat object `{ en: "...", lt: "..." }`** | Simple, natural lookup, BCP47 validation is straightforward, mirrors existing web conventions.          |
-
-The object form also maps directly to how you'd use it in code:
+It's also easy to look up a specific language:
 
 ```ts
 event.name[userLanguage] ?? event.name["en"] ?? Object.values(event.name)[0];
 ```
-
-### Why BCP47?
-
-BCP47 is the established standard for language tags. It handles:
-
-- **Language only**: `en`, `lt`, `zh`
-- **With region**: `en-US`, `zh-CN`, `zh-TW`
-- **With script**: `zh-Hans`, `zh-Hant`
-- **Both**: `zh-Hans-CN`
-
-This covers every realistic multilingual event scenario. The spec doesn't mandate canonicalization (e.g. `EN` vs `en`), but consumers SHOULD handle case-insensitive matching per BCP47.
 
 ## Resolution algorithm
 
@@ -78,17 +75,20 @@ Pragmatism. The overwhelming majority of events that bother to have machine-read
 
 If your audience primarily speaks Lithuanian and the event has `{ lt: "..." }` but no `en`, step 5 (any available entry) catches it. `en` is the "you really have nothing?" safety net.
 
-### Why RECOMMENDED and not REQUIRED?
-
-Different consumers have different needs. A global event directory might want a more aggressive fallback chain. A local Lithuanian-only app might skip step 3 entirely and go straight to step 5 after checking `lt`. Mandating a single algorithm would force suboptimal UX on some consumers.
-
-The algorithm is a _good default_. Deviating from it is fine as long as the result is at least as good for the user.
-
 ## Edge cases
 
 ### Two translations for the same language
 
-BCP47 keys are unique by construction - you can't have `{ en: "...", en: "..." }` in JSON because duplicate keys are undefined behavior. If you need two English variants (e.g. US vs UK spelling), use region tags: `en-US` and `en-GB`.
+If you have two texts for the same language but different scripts, you can use the script subtag to distinguish them:
+
+```json
+{
+	"name": {
+		"zh-Hans": "Simplified Chinese",
+		"zh-Hant": "Traditional Chinese"
+	}
+}
+```
 
 ### Empty strings
 

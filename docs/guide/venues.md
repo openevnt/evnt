@@ -2,7 +2,7 @@
 
 ## The problem
 
-Where does an event happen? Sometimes it's a physical address. Sometimes it's a URL. Often it's both - a meetup with a room and a livestream.
+Where does an event happen? Sometimes it's a physical address. Sometimes it's a URL. It can also be both in the case of a hybrid event. Some events don't have a location at all!
 
 Most formats can only express one location per event, and that location is a single string.
 

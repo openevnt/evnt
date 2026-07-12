@@ -49,6 +49,8 @@ export default defineConfig({
 		sidebar: [
 			{ text: "Home", link: "/" },
 			{ text: "Quickstart", link: "/guide/getting-started" },
+			{ text: "Playground", link: "/playground" },
+			{ text: "Convert", link: "/convert" },
 			{
 				text: "Reference",
 				items: [{ text: "Specification", link: "/spec/" }],
@@ -63,13 +65,6 @@ export default defineConfig({
 					{ text: "Venues", link: "/guide/venues" },
 					{ text: "Instances", link: "/guide/instances" },
 					{ text: "Components", link: "/guide/components" },
-				],
-			},
-			{
-				text: "Tools",
-				items: [
-					{ text: "Playground", link: "/playground" },
-					{ text: "Convert", link: "/convert" },
 				],
 			},
 			{

@@ -17,7 +17,7 @@ Open Evnt is a JSON-based format, with a simple structure that can be extended t
 	"v": "0.1",
 	"name": {
 		"en": "Summer Workshop Series",
-		"fr": "Ateliers d'\u00e9t\u00e9",
+		"fr": "Ateliers d'été",
 		"de": "Sommer-Workshop-Reihe"
 	},
 	"instances": [
@@ -63,7 +63,7 @@ Link: example.com/summer-workshops
 
 ## Start here
 
-- **Try it** in the [Playground](/playground)
-- **Write your first event** with the [Quickstart](/guide/getting-started)
-- Read the [Specification](/spec/)
-- **Understand the design** in the [Why guides](/guide/root)
+- **Try it** in the [Playground](./playground)
+- **Write your first event** with the [Quickstart](./guide/getting-started)
+- Read the [Specification](./spec/index.md)
+- **Understand the design** in the [Why guides](./guide/root.md)
