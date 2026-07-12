@@ -1,6 +1,6 @@
 {
 	"name": "@evnt/dev",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "OpenEvnt CLI for working with Open Evnt files",
 	"keywords": [
 		"cli",
