@@ -1,5 +1,7 @@
 {
+	"name": "@repo/scripts",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"schema:generate": "tsx ./src/gen.ts"
 	},

@@ -1,7 +1,4 @@
-/**
- * Translation helpers shared across format converters.
- */
-import type { OpenEvnt, Translations } from "@evnt/types";
+import type { Translations } from "@evnt/types";
 
 /** Create a single‑language Translations object from a string and language code. */
 export const createTranslations = (

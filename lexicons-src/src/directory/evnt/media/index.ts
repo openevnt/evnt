@@ -2,11 +2,9 @@ import {
 	array,
 	document,
 	object,
-	record,
 	ref,
 	required,
 	string,
-	union,
 	unknown,
 } from "@atcute/lexicon-doc/builder";
 

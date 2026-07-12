@@ -1,15 +1,4 @@
-import {
-	array,
-	blob,
-	document,
-	object,
-	record,
-	ref,
-	required,
-	string,
-	union,
-	unknown,
-} from "@atcute/lexicon-doc/builder";
+import { blob, document, object, ref, string } from "@atcute/lexicon-doc/builder";
 
 export default document({
 	id: "directory.evnt.media.source",

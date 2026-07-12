@@ -32,7 +32,7 @@ declare module "@evnt/types" {
 }
 
 export const PartialDateRegex =
-	/^(?<year>\d{4})(?:-(?<month>\d{2})(?:-(?<day>\d{2})(?:T(?<time>(?<hour>\d{2}):(?<minute>\d{2}))?)?)?)?\[(?<timezone>[\-\w\/+]+)\]$/;
+	/^(?<year>\d{4})(?:-(?<month>\d{2})(?:-(?<day>\d{2})(?:T(?<time>(?<hour>\d{2}):(?<minute>\d{2}))?)?)?)?\[(?<timezone>[-\w/+]+)\]$/;
 
 export const PartialDateUtil = new (class {
 	// == Validation methods ==

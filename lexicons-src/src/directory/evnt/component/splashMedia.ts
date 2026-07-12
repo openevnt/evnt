@@ -1,13 +1,4 @@
-import {
-	object,
-	document,
-	string,
-	required,
-	unknown,
-	boolean,
-	ref,
-	array,
-} from "@atcute/lexicon-doc/builder";
+import { object, document, string, required, ref, array } from "@atcute/lexicon-doc/builder";
 
 export default document({
 	id: "directory.evnt.component.splashMedia",

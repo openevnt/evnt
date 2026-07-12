@@ -109,14 +109,14 @@ export const schemaOrg: FormatConverter = {
 	to: (data: OpenEvnt, opts?: ConvertOptions): string => {
 		const language = opts?.language ?? "en";
 
-		const nameAsPronounceable = (translations: Translations | undefined): unknown[] => {
-			if (!translations) return [];
-			return Object.entries(translations).map(([lang, text]) => ({
-				"@type": "PronounceableText",
-				inLanguage: lang,
-				textValue: text,
-			}));
-		};
+		// const nameAsPronounceable = (translations: Translations | undefined): unknown[] => {
+		// 	if (!translations) return [];
+		// 	return Object.entries(translations).map(([lang, text]) => ({
+		// 		"@type": "PronounceableText",
+		// 		inLanguage: lang,
+		// 		textValue: text,
+		// 	}));
+		// };
 
 		const pickTranslation = (translations: Translations | undefined): string | undefined => {
 			if (!translations) return undefined;

@@ -1,16 +1,8 @@
 packages:
   - packages/*
-  - apps/*
   - scripts
 
-loglevel: debug
-
 allowBuilds:
-  core-js-pure: true
-  esbuild: true
-  sharp: true
-  workerd: true
+  esbuild: set this to true or false
 
-onlyBuiltDependencies:
-  - "@swc/core"
-  - esbuild
+loglevel: debug

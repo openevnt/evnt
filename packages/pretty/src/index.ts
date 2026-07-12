@@ -10,7 +10,7 @@ export * from "./formatters/discord.js";
 
 import type { OpenEvnt } from "@evnt/types";
 import type { AnalyzeConfig } from "./analyze-config.js";
-import type { EmojiFormatConfig, EmojiFormatOptions } from "./formatters/emoji.js";
+import type { EmojiFormatConfig } from "./formatters/emoji.js";
 import { defaultAnalyzeConfig } from "./analyze-config.js";
 import { MarkdownFormatter } from "./formatters/markdown.js";
 

@@ -1,5 +1,4 @@
 import type { OpenEvnt, PartialDate } from "@evnt/types";
-import { PartialDateUtil } from "@evnt/partial-date";
 import { createTranslations } from "../utils/translations.js";
 import { asNonEmptyString } from "../utils/text.js";
 import { dateToPartialDate } from "../utils/date.js";

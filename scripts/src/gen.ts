@@ -14,4 +14,4 @@ const jsonSchema = OpenEvntSchema.toJSONSchema({
 	},
 });
 
-writeFileSync(OUTPUT, JSON.stringify(jsonSchema, null, 2));
+writeFileSync(OUTPUT, JSON.stringify(jsonSchema, null, "\t"));
