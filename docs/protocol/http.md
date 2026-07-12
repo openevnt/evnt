@@ -23,3 +23,15 @@ If you want other websites to be able to fetch your events, add this header to y
 ```
 Access-Control-Allow-Origin: *
 ```
+
+## Discovery
+
+When returning HTML web pages, you can add a `<link>` tag to the `<head>` of your page to point to your Open Evnt data:
+
+```html
+<link rel="alternate" type="application/evnt+json" href="https://example.com/my-event.evnt.json">
+```
+
+## Lists
+
+You can use [JSON Feed](https://jsonfeed.org/) to publish a list of events. JSON Feed is a simple format for syndicating content, and it can be used to list multiple Open Evnt files.

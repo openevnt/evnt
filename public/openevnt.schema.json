@@ -3,7 +3,7 @@
 	"id": "EventData",
 	"title": "Event Data",
 	"description": "An event",
-	"$id": "https://raw.githubusercontent.com/openevnt/evnt/refs/heads/main/event-data.schema.json",
+	"$id": "https://evnt.directory/openevnt.schema.json",
 	"type": "object",
 	"properties": {
 		"$type": {

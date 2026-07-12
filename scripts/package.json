@@ -1,25 +1,14 @@
 {
-	"name": "scripts",
-	"version": "1.0.0",
-	"description": "",
-	"keywords": [],
-	"license": "ISC",
-	"author": "",
-	"main": "index.js",
+	"private": true,
 	"scripts": {
 		"gen": "tsx ./src/gen.ts",
 		"dev": "tsx watch ./src/gen.ts"
-	},
-	"dependencies": {
-		"@typespec/compiler": "^1.8.0"
 	},
 	"devDependencies": {
 		"@evnt/schema": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "^25.0.10",
-		"tsx": "^4.21.0",
-		"zod": "^4.3.5",
-		"zod2md": "^0.2.4"
+		"tsx": "^4.21.0"
 	},
 	"packageManager": "pnpm@10.28.0"
 }
