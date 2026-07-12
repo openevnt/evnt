@@ -2,8 +2,8 @@ import type { LinkComponent } from "./LinkComponent";
 import type { SourceComponent } from "./SourceComponent";
 import type { SplashMediaComponent } from "./SplashMediaComponent";
 import type { LanguagesComponent } from "./LanguagesComponent";
-import type { RichTextMarkdownComponent } from "./RichTextMarkdownComponent";
-import type { RichTextBlueskyComponent } from "./RichTextBlueskyComponent";
+import type { RichTextMarkdownComponent } from "./richtext/RichTextMarkdownComponent";
+import type { RichTextBlueskyComponent } from "./richtext/RichTextBlueskyComponent";
 
 export interface ComponentTypes {
 	"directory.evnt.component.source": SourceComponent;

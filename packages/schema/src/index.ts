@@ -20,12 +20,3 @@ export * from "./schemas/components/MarkdownComponent";
 
 // All canonical types come from @evnt/types
 export * from "@evnt/types";
-
-import type { $NSID } from "./schemas/OpenEvnt";
-import type { OpenEvnt } from "@evnt/types";
-import type { } from "@atcute/lexicons/ambient";
-declare module "@atcute/lexicons/ambient" {
-	interface Records {
-		[$NSID]: OpenEvnt & { $type: typeof $NSID };
-	}
-}

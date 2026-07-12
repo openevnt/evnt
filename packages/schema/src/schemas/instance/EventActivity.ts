@@ -12,7 +12,6 @@ export const TimeSchema = z.string().regex(/^\d{2}:\d{2}$/, "Time must be in HH:
 export const DurationSchema = z.string().regex(/^\d{1,}:\d{2}$/, "Duration must be in H:mm format").meta({ description: "Duration in HH:mm format, where hours can be more than 24" }) as z.ZodType<ActivityDuration>;
 
 export const ActivitySlotSchema = z.object({
-	day: z.number().int().nonnegative().optional().meta({ description: "The day of the activity, starting from 1" }),
 	time: TimeSchema.optional().meta({ description: "The time of the activity" }),
 	duration: DurationSchema.optional().meta({ description: "The duration of the activity" }),
 }) as z.ZodType<ActivitySlot>;

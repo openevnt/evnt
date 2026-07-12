@@ -9,8 +9,6 @@ export namespace Activity {
 	export type Duration = `${string}:${string}`;
 
 	export interface Slot {
-		/** The day of the activity, starting from 1 */
-		day?: number;
 		time?: Time;
 		duration?: Duration;
 	}

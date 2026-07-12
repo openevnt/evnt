@@ -608,9 +608,12 @@ directory.evnt.richtext.markdown
   $type:    "directory.evnt.richtext.markdown"
   content:  string              REQUIRED
   language: string?             OPTIONAL
+  flavor:   string?             OPTIONAL
 ```
 
 `language`: A BCP47 language tag for the markdown content. Producers SHOULD populate this field when the language is known.
+
+`flavor`: A string indicating the markdown flavor. Producers SHOULD populate this field when the flavor is known.
 
 ---
 
