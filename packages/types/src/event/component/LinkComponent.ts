@@ -1,5 +1,5 @@
-import type { PartialDate } from "../../types/PartialDate";
-import type { Translations } from "../../types/Translations";
+import type { PartialDate } from "../../types/PartialDate.js";
+import type { Translations } from "../../types/Translations.js";
 
 export interface LinkComponent {
 	$type: "directory.evnt.component.link";

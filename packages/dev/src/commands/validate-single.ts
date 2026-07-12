@@ -1,7 +1,7 @@
 import pc from "picocolors";
 import { OpenEvntSchema } from "@evnt/schema";
 import { ZodError } from "zod";
-import { SchemaValidationError } from "../errors";
+import { SchemaValidationError } from "../errors.js";
 
 export default function (json: unknown, raw: string, label: string) {
 	const result = OpenEvntSchema.safeParse(json);

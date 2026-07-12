@@ -1,18 +1,18 @@
-export * from "./analyze-config";
-export type * from "./types";
-export * from "./date";
-export * from "./duration";
-export * from "./analyze";
-export * from "./formatters/base";
-export * from "./formatters/emoji";
-export * from "./formatters/markdown";
-export * from "./formatters/discord";
+export * from "./analyze-config.js";
+export type * from "./types.js";
+export * from "./date.js";
+export * from "./duration.js";
+export * from "./analyze.js";
+export * from "./formatters/base.js";
+export * from "./formatters/emoji.js";
+export * from "./formatters/markdown.js";
+export * from "./formatters/discord.js";
 
 import type { OpenEvnt } from "@evnt/types";
-import type { AnalyzeConfig } from "./analyze-config";
-import type { EmojiFormatConfig, EmojiFormatOptions } from "./formatters/emoji";
-import { defaultAnalyzeConfig } from "./analyze-config";
-import { MarkdownFormatter } from "./formatters/markdown";
+import type { AnalyzeConfig } from "./analyze-config.js";
+import type { EmojiFormatConfig, EmojiFormatOptions } from "./formatters/emoji.js";
+import { defaultAnalyzeConfig } from "./analyze-config.js";
+import { MarkdownFormatter } from "./formatters/markdown.js";
 
 export interface PrettyOptions extends AnalyzeConfig, EmojiFormatConfig {}
 

@@ -1,7 +1,7 @@
-import type { Translations } from "../types/Translations";
-import type { AnyComponent } from "./component";
-import type { EventInstance } from "./instance";
-import type { Venue } from "./venue";
+import type { Translations } from "../types/Translations.js";
+import type { AnyComponent } from "./component/index.js";
+import type { EventInstance } from "./instance/index.js";
+import type { Venue } from "./venue/index.js";
 
 export interface OpenEvnt {
 	v: "0.1";

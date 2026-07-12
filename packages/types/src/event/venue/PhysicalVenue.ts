@@ -1,4 +1,4 @@
-import type { BaseVenue } from "./base";
+import type { BaseVenue } from "./base.js";
 
 /** Well-known map service NSIDs for autocomplete.
  * Keys follow the pattern `{reverseDomain}.{entityType}`.

@@ -1,8 +1,8 @@
 import { TranslationsUtil } from "@evnt/translations";
 import type { EventStatus, OpenEvnt, PartialDate, Venue } from "@evnt/types";
-import type { DateGroup } from "../types";
-import { groupDates } from "../analyze";
-import { formatDate, formatDateRange, formatTime, formatTimeRange } from "../date";
+import type { DateGroup } from "../types.js";
+import { groupDates } from "../analyze.js";
+import { formatDate, formatDateRange, formatTime, formatTimeRange } from "../date.js";
 
 // == Config ==============================================
 

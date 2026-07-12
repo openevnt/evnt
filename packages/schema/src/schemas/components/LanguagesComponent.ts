@@ -1,6 +1,6 @@
 import z from "zod";
 import type { LanguagesComponent, LanguageInfo } from "@evnt/types";
-import { LanguageCodeSchema } from "../../types/Translations";
+import { LanguageCodeSchema } from "../../types/Translations.js";
 
 export const LanguageInfoSchema = z.object({
 	code: LanguageCodeSchema,

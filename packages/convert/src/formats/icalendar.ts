@@ -1,8 +1,8 @@
 import ICAL from "ical.js";
 import type { OpenEvnt, PartialDate } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
-import { translate, createTranslations } from "../utils/translations";
-import type { FormatConverter, ConvertOptions } from "../types";
+import { translate, createTranslations } from "../utils/translations.js";
+import type { FormatConverter, ConvertOptions } from "../types.js";
 
 export const icalendar: FormatConverter = {
 	name: "iCalendar",

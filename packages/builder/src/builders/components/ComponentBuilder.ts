@@ -1,4 +1,4 @@
-import type { EventBuilder } from "../EventBuilder";
+import type { EventBuilder } from "../EventBuilder.js";
 import type { KnownComponent, UnknownComponent } from "@evnt/types";
 
 export class ComponentBuilder<T extends KnownComponent | UnknownComponent = KnownComponent> {

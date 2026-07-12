@@ -1,6 +1,6 @@
 import type { Venue } from "@evnt/types";
-import type { EventBuilder } from "../EventBuilder";
-import { createTranslationAdder } from "../../utils/helpers";
+import type { EventBuilder } from "../EventBuilder.js";
+import { createTranslationAdder } from "../../utils/helpers.js";
 
 type VenueType =
 	| "directory.evnt.venue.physical"

@@ -1,6 +1,6 @@
 import type { LinkComponent, PartialDate } from "@evnt/types";
-import type { EventBuilder } from "../EventBuilder";
-import { ComponentBuilder } from "./ComponentBuilder";
+import type { EventBuilder } from "../EventBuilder.js";
+import { ComponentBuilder } from "./ComponentBuilder.js";
 
 export class LinkBuilder extends ComponentBuilder<LinkComponent> {
 	constructor(component?: LinkComponent, parent?: EventBuilder) {

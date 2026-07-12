@@ -1,7 +1,7 @@
 import z from "zod";
 import type { Media, MediaPresentation } from "@evnt/types";
-import { TranslationsSchema } from "./Translations";
-import { MediaSourceSchema } from "./MediaSource";
+import { TranslationsSchema } from "./Translations.js";
+import { MediaSourceSchema } from "./MediaSource.js";
 
 export const MediaPresentationSchema = z
 	.object({

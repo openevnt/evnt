@@ -20,13 +20,23 @@ const istanbulEvent: OpenEvnt = {
 const litExpoEvent: OpenEvnt = {
 	v: "0.1",
 	name: { en: "LitExpo" },
-	venues: [
-		{ id: "litexpo", $type: "directory.evnt.venue.physical", name: { en: "LITEXPO" } },
-	],
+	venues: [{ id: "litexpo", $type: "directory.evnt.venue.physical", name: { en: "LITEXPO" } }],
 	instances: [
-		{ venueIds: ["litexpo"], start: "2026-05-22T13:00[Europe/Vilnius]", end: "2026-05-22T21:00[Europe/Vilnius]" },
-		{ venueIds: ["litexpo"], start: "2026-05-23T13:00[Europe/Vilnius]", end: "2026-05-23T21:00[Europe/Vilnius]" },
-		{ venueIds: ["litexpo"], start: "2026-05-24T13:00[Europe/Vilnius]", end: "2026-05-24T21:00[Europe/Vilnius]" },
+		{
+			venueIds: ["litexpo"],
+			start: "2026-05-22T13:00[Europe/Vilnius]",
+			end: "2026-05-22T21:00[Europe/Vilnius]",
+		},
+		{
+			venueIds: ["litexpo"],
+			start: "2026-05-23T13:00[Europe/Vilnius]",
+			end: "2026-05-23T21:00[Europe/Vilnius]",
+		},
+		{
+			venueIds: ["litexpo"],
+			start: "2026-05-24T13:00[Europe/Vilnius]",
+			end: "2026-05-24T21:00[Europe/Vilnius]",
+		},
 	],
 };
 

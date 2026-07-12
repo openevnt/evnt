@@ -1,8 +1,8 @@
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { EventStatus, PartialDate, Venue } from "@evnt/types";
-import type { DateGroup } from "../types";
-import type { FormatConfig } from "./base";
-import { PlainTextFormatter } from "./base";
+import type { DateGroup } from "../types.js";
+import type { FormatConfig } from "./base.js";
+import { PlainTextFormatter } from "./base.js";
 
 export interface EmojiFormatConfig extends FormatConfig {
 	emoji: Record<string, string> | false;

@@ -80,15 +80,15 @@ Set any emoji or status icon to `""` to suppress it.
 
 ### FormatConfig (base)
 
-| Option         | Default | Does                                 |
-| -------------- | ------- | ------------------------------------ |
-| language       | "en"    | locale for dates/times               |
-| timezone       | "UTC"   | IANA timezone for local time display |
-| groupConsecutiveDates | true | group consecutive days into ranges |
-| showStatus     | false   | show cancelled/uncertain etc         |
-| showLinks      | false   | show link components                 |
-| compactDates   | true    | "Jun 15" vs "June 15, 2026"          |
-| maxDates       | 5       | max date groups to show              |
+| Option                | Default | Does                                 |
+| --------------------- | ------- | ------------------------------------ |
+| language              | "en"    | locale for dates/times               |
+| timezone              | "UTC"   | IANA timezone for local time display |
+| groupConsecutiveDates | true    | group consecutive days into ranges   |
+| showStatus            | false   | show cancelled/uncertain etc         |
+| showLinks             | false   | show link components                 |
+| compactDates          | true    | "Jun 15" vs "June 15, 2026"          |
+| maxDates              | 5       | max date groups to show              |
 
 ### EmojiFormatConfig
 

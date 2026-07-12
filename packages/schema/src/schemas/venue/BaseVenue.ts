@@ -1,5 +1,5 @@
 import z from "zod";
-import { TranslationsSchema } from "../../types/Translations";
+import { TranslationsSchema } from "../../types/Translations.js";
 
 // This module is not public
 

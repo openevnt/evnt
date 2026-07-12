@@ -1,9 +1,9 @@
 import z from "zod";
 import type { EventInstance } from "@evnt/types";
-import { PartialDateSchema } from "../../types/PartialDate";
-import { EventStatusSchema } from "../enums/EventStatus";
-import { EventActivitySchema } from "./EventActivity";
-import { EventComponentSchema } from "../components/EventComponent";
+import { PartialDateSchema } from "../../types/PartialDate.js";
+import { EventStatusSchema } from "../enums/EventStatus.js";
+import { EventActivitySchema } from "./EventActivity.js";
+import { EventComponentSchema } from "../components/EventComponent.js";
 
 export const EventInstanceSchema = z
 	.object({

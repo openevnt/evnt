@@ -10,7 +10,7 @@ import {
 import { join, relative } from "node:path";
 import { OpenEvntSchema } from "@evnt/schema";
 import { PlainTextFormatter } from "@evnt/pretty";
-import { SchemaValidationError } from "../errors";
+import { SchemaValidationError } from "../errors.js";
 import { ZodError } from "zod";
 
 const findEvntFiles = (dir: string): string[] => {

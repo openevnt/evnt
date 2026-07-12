@@ -1,8 +1,8 @@
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { PartialDate, Venue } from "@evnt/types";
-import type { DateGroup } from "../types";
-import { MarkdownFormatter } from "./markdown";
-import type { EmojiFormatConfig } from "./emoji";
+import type { DateGroup } from "../types.js";
+import { MarkdownFormatter } from "./markdown.js";
+import type { EmojiFormatConfig } from "./emoji.js";
 
 // == Config ==============================================
 

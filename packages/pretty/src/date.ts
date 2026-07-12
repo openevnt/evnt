@@ -1,6 +1,6 @@
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { PartialDate } from "@evnt/types";
-import type { FormatConfig } from "./formatters/base";
+import type { FormatConfig } from "./formatters/base.js";
 
 // == Helpers ==============================================
 

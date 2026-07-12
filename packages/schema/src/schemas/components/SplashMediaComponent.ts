@@ -1,6 +1,6 @@
 import z from "zod";
 import type { SplashMediaComponent } from "@evnt/types";
-import { MediaSchema } from "../../types/Media";
+import { MediaSchema } from "../../types/Media.js";
 
 export type SplashMediaRole = "background" | (string & {});
 export const SplashMediaRoleSchema = z.string() as z.ZodType<SplashMediaRole>;

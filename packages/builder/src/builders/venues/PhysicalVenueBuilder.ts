@@ -1,6 +1,6 @@
 import type { PhysicalVenue } from "@evnt/types";
-import { VenueBuilder } from "./VenueBuilder";
-import type { EventBuilder } from "../EventBuilder";
+import { VenueBuilder } from "./VenueBuilder.js";
+import type { EventBuilder } from "../EventBuilder.js";
 
 export class PhysicalVenueBuilder extends VenueBuilder<"directory.evnt.venue.physical"> {
 	constructor(venue?: PhysicalVenue, parent?: EventBuilder) {

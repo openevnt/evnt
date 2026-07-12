@@ -1,5 +1,5 @@
-import type { Translations } from "../../types/Translations";
-import type { AnyComponent } from "../component";
+import type { Translations } from "../../types/Translations.js";
+import type { AnyComponent } from "../component/index.js";
 
 export namespace Activity {
 	/** A time in the format HH:MM */

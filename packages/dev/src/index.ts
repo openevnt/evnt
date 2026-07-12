@@ -1,1 +1,1 @@
-export { SchemaValidationError, JSONParseError } from "./errors";
+export { SchemaValidationError, JSONParseError } from "./errors.js";

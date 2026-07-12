@@ -1,8 +1,7 @@
 {
 	"private": true,
 	"scripts": {
-		"gen": "tsx ./src/gen.ts",
-		"dev": "tsx watch ./src/gen.ts"
+		"schema:generate": "tsx ./src/gen.ts"
 	},
 	"devDependencies": {
 		"@evnt/schema": "workspace:*",

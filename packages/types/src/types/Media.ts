@@ -1,4 +1,4 @@
-import type { Translations } from "./Translations";
+import type { Translations } from "./Translations.js";
 
 export interface Media {
 	sources: MediaSource[];

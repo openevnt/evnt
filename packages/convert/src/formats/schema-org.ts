@@ -1,8 +1,8 @@
 import type { OpenEvnt, PartialDate, Translations } from "@evnt/types";
-import { translate, createTranslations } from "../utils/translations";
-import { isRecord, asNonEmptyString } from "../utils/text";
-import { dateToPartialDate, normalizeDateString } from "../utils/date";
-import type { FormatConverter, ConvertOptions } from "../types";
+import { translate, createTranslations } from "../utils/translations.js";
+import { isRecord, asNonEmptyString } from "../utils/text.js";
+import { dateToPartialDate, normalizeDateString } from "../utils/date.js";
+import type { FormatConverter, ConvertOptions } from "../types.js";
 
 export const schemaOrg: FormatConverter = {
 	name: "Schema.org",

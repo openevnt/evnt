@@ -1,5 +1,5 @@
 import type { Venue } from "@evnt/types";
-import { EmojiFormatter, type EmojiFormatConfig } from "./emoji";
+import { EmojiFormatter, type EmojiFormatConfig } from "./emoji.js";
 
 export class MarkdownFormatter extends EmojiFormatter {
 	static markdownDefaults: EmojiFormatConfig = {
@@ -47,7 +47,7 @@ export class MarkdownFormatter extends EmojiFormatter {
 
 	protected override formatLink(url: string, name?: string): string {
 		const emoji = (this.config as EmojiFormatConfig).emoji;
-		const icon = emoji === false ? "" : emoji.link ?? "";
+		const icon = emoji === false ? "" : (emoji.link ?? "");
 		const text = name ? this.mdLink(name, url) : url;
 		return [icon, text].filter(Boolean).join(" ");
 	}

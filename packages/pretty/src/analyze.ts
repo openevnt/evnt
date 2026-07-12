@@ -1,6 +1,6 @@
 import type { EventInstance, PartialDate } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
-import type { DateGroup, DateList, DateRange, SingleDate, TimeSlot } from "./types";
+import type { DateGroup, DateList, DateRange, SingleDate, TimeSlot } from "./types.js";
 
 // == Helpers ==============================================
 

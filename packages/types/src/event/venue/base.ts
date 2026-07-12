@@ -1,4 +1,4 @@
-import type { Translations } from "../../types/Translations";
+import type { Translations } from "../../types/Translations.js";
 
 export interface BaseVenue {
 	/** Event scoped unique identifier of the venue for relating to instances */

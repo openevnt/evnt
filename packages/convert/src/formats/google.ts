@@ -1,9 +1,9 @@
 import type { OpenEvnt, PartialDate } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
-import { createTranslations } from "../utils/translations";
-import { asNonEmptyString } from "../utils/text";
-import { dateToPartialDate } from "../utils/date";
-import type { FormatConverter, ConvertOptions } from "../types";
+import { createTranslations } from "../utils/translations.js";
+import { asNonEmptyString } from "../utils/text.js";
+import { dateToPartialDate } from "../utils/date.js";
+import type { FormatConverter, ConvertOptions } from "../types.js";
 
 interface GoogleCalendarEvent {
 	summary?: string | null;

@@ -1,8 +1,8 @@
 import type { OpenEvnt, Media, PartialDate, PhysicalVenue } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
 import { EventBuilder, PhysicalVenueBuilder } from "@evnt/builder";
-import type { CommunityLexiconCalendarEvent } from "../lexicons";
-import type { FormatConverter, ConvertOptions } from "../types";
+import type { CommunityLexiconCalendarEvent } from "../lexicons/index.js";
+import type { FormatConverter, ConvertOptions } from "../types.js";
 
 interface LexiconEvent extends CommunityLexiconCalendarEvent.Main {
 	facets?: Array<{

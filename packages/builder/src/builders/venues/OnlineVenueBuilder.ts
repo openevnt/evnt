@@ -1,6 +1,6 @@
 import type { OnlineVenue } from "@evnt/types";
-import { VenueBuilder } from "./VenueBuilder";
-import type { EventBuilder } from "../EventBuilder";
+import { VenueBuilder } from "./VenueBuilder.js";
+import type { EventBuilder } from "../EventBuilder.js";
 
 export class OnlineVenueBuilder extends VenueBuilder<"directory.evnt.venue.online"> {
 	constructor(venue?: OnlineVenue, parent?: EventBuilder) {

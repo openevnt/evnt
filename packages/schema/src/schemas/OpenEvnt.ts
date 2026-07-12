@@ -1,10 +1,10 @@
 import z from "zod";
 import type { OpenEvnt } from "@evnt/types";
-import { TranslationsSchema } from "../types/Translations";
-import { VenueSchema } from "./venue/Venue";
-import { EventInstanceSchema } from "./instance/EventInstance";
-import { EventComponentSchema } from "./components/EventComponent";
-import { EventStatusSchema } from "./enums/EventStatus";
+import { TranslationsSchema } from "../types/Translations.js";
+import { VenueSchema } from "./venue/Venue.js";
+import { EventInstanceSchema } from "./instance/EventInstance.js";
+import { EventComponentSchema } from "./components/EventComponent.js";
+import { EventStatusSchema } from "./enums/EventStatus.js";
 
 const preprocessEvent = (input: any) => {
 	if (typeof input !== "object" || input === null) return input;

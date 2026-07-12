@@ -1,7 +1,7 @@
 import z from "zod";
 import type { LinkComponent } from "@evnt/types";
-import { PartialDateSchema } from "../../types/PartialDate";
-import { TranslationsSchema } from "../../types/Translations";
+import { PartialDateSchema } from "../../types/PartialDate.js";
+import { TranslationsSchema } from "../../types/Translations.js";
 
 export const LinkComponentSchema = z
 	.object({

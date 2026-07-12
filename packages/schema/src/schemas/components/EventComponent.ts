@@ -1,11 +1,11 @@
 import z from "zod";
 import type { AnyComponent } from "@evnt/types";
-import { LinkComponentSchema } from "./LinkComponent";
-import { SourceComponentSchema } from "./SourceComponent";
-import { SplashMediaComponentSchema } from "./SplashMediaComponent";
-import { LanguagesComponentSchema } from "./LanguagesComponent";
-import { RTMarkdownSchema } from "./MarkdownComponent";
-import { RichTextBlueskyComponentSchema } from "./RichTextBlueskyComponent";
+import { LinkComponentSchema } from "./LinkComponent.js";
+import { SourceComponentSchema } from "./SourceComponent.js";
+import { SplashMediaComponentSchema } from "./SplashMediaComponent.js";
+import { LanguagesComponentSchema } from "./LanguagesComponent.js";
+import { RTMarkdownSchema } from "./MarkdownComponent.js";
+import { RichTextBlueskyComponentSchema } from "./RichTextBlueskyComponent.js";
 
 export const KnownEventComponents = new Map<string, z.ZodType<AnyComponent>>([
 	["directory.evnt.component.link", LinkComponentSchema],

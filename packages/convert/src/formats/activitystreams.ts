@@ -1,10 +1,10 @@
 import type { OpenEvnt, PartialDate } from "@evnt/types";
 import { OpenEvntSchema } from "@evnt/schema";
 import { PartialDateUtil } from "@evnt/partial-date";
-import { translate, createTranslations } from "../utils/translations";
-import { isRecord, asArray, asNonEmptyString, asNumber, readUrlLike } from "../utils/text";
-import { parseDateString, partialDateToIso } from "../utils/date";
-import type { FormatConverter, ConvertOptions } from "../types";
+import { translate, createTranslations } from "../utils/translations.js";
+import { isRecord, asArray, asNonEmptyString, asNumber, readUrlLike } from "../utils/text.js";
+import { parseDateString, partialDateToIso } from "../utils/date.js";
+import type { FormatConverter, ConvertOptions } from "../types.js";
 
 export const activitystreams: FormatConverter = {
 	name: "ActivityStreams",

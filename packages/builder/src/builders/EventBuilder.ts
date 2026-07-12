@@ -1,12 +1,12 @@
 import type { OpenEvnt, EventStatus, LinkComponent } from "@evnt/types";
 import type { KnownComponent, UnknownComponent } from "@evnt/types";
-import { createBuilderAdder, createTranslationAdder } from "../utils/helpers";
-import { InstanceBuilder } from "./InstanceBuilder";
-import { UnknownVenueBuilder } from "./venues/UnknownVenueBuilder";
-import { PhysicalVenueBuilder } from "./venues/PhysicalVenueBuilder";
-import { OnlineVenueBuilder } from "./venues/OnlineVenueBuilder";
-import { VenueBuilder } from "./venues/VenueBuilder";
-import { LinkBuilder } from "./components/LinkBuilder";
+import { createBuilderAdder, createTranslationAdder } from "../utils/helpers.js";
+import { InstanceBuilder } from "./InstanceBuilder.js";
+import { UnknownVenueBuilder } from "./venues/UnknownVenueBuilder.js";
+import { PhysicalVenueBuilder } from "./venues/PhysicalVenueBuilder.js";
+import { OnlineVenueBuilder } from "./venues/OnlineVenueBuilder.js";
+import { VenueBuilder } from "./venues/VenueBuilder.js";
+import { LinkBuilder } from "./components/LinkBuilder.js";
 
 export class EventBuilder {
 	data: OpenEvnt;

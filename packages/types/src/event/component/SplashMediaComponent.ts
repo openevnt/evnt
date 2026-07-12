@@ -1,4 +1,4 @@
-import type { Media } from "../../types/Media";
+import type { Media } from "../../types/Media.js";
 
 export namespace SplashMediaComponent {
 	export interface Roles {

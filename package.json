@@ -1,7 +1,11 @@
 {
 	"private": true,
 	"scripts": {
+		"build": "pnpm -r build",
 		"test": "vitest",
+		"fmt": "oxfmt",
+		"lint": "oxlint",
+		"schema": "pnpm -F scripts schema:generate",
 		"docs:dev": "vitepress dev",
 		"docs:build": "vitepress build",
 		"docs:preview": "vitepress preview"

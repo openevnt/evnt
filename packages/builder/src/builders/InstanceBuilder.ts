@@ -1,7 +1,7 @@
 import type { EventInstance, EventStatus, PartialDate } from "@evnt/types";
-import type { EventBuilder } from "./EventBuilder";
-import { createBuilderAdder } from "../utils/helpers";
-import { VenueBuilder } from "./venues/VenueBuilder";
+import type { EventBuilder } from "./EventBuilder.js";
+import { createBuilderAdder } from "../utils/helpers.js";
+import { VenueBuilder } from "./venues/VenueBuilder.js";
 
 export class InstanceBuilder {
 	instance: EventInstance;

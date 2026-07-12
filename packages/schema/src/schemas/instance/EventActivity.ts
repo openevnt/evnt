@@ -1,7 +1,7 @@
 import z from "zod";
 import type { Activity } from "@evnt/types";
-import { TranslationsSchema } from "../../types/Translations";
-import { EventComponentSchema } from "../components/EventComponent";
+import { TranslationsSchema } from "../../types/Translations.js";
+import { EventComponentSchema } from "../components/EventComponent.js";
 
 type ActivitySlot = Activity.Slot;
 type ActivityTime = Activity.Time;

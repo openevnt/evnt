@@ -1,9 +1,9 @@
-import type { FormatConverter } from "../types";
-import { icalendar } from "./icalendar";
-import { activitystreams } from "./activitystreams";
-import { schemaOrg } from "./schema-org";
-import { google } from "./google";
-import { communityLexicon } from "./community-lexicon";
+import type { FormatConverter } from "../types.js";
+import { icalendar } from "./icalendar.js";
+import { activitystreams } from "./activitystreams.js";
+import { schemaOrg } from "./schema-org.js";
+import { google } from "./google.js";
+import { communityLexicon } from "./community-lexicon.js";
 
 export const formats = {
 	icalendar,

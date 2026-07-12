@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { OpenEvntSchema } from "@evnt/schema";
 import { ZodError } from "zod";
-import { SchemaValidationError } from "../errors";
+import { SchemaValidationError } from "../errors.js";
 
 const findJsonFiles = (dir: string): string[] => {
 	const results: string[] = [];

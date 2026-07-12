@@ -1,6 +1,6 @@
 import z from "zod";
 import type { PhysicalVenue } from "@evnt/types";
-import { BaseVenueSchema } from "./BaseVenue";
+import { BaseVenueSchema } from "./BaseVenue.js";
 
 /** @deprecated Use PhysicalVenue.Address instead */
 export type Address = PhysicalVenue["address"];

@@ -1,7 +1,7 @@
-import type { PartialDate } from "../../types/PartialDate";
-import type { AnyComponent } from "../component";
-import type { EventStatus } from "../event";
-import type { Activity } from "./activity";
+import type { PartialDate } from "../../types/PartialDate.js";
+import type { AnyComponent } from "../component/index.js";
+import type { EventStatus } from "../event.js";
+import type { Activity } from "./activity.js";
 
 export interface EventInstance {
 	id?: string;
