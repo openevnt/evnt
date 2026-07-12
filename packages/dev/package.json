@@ -18,7 +18,8 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsc",
-		"dev": "tsx ./src/cli.ts"
+		"dev": "tsx ./src/cli.ts",
+		"prepublishOnly": "pnpm build"
 	},
 	"dependencies": {
 		"@babel/code-frame": "^7.27.1",

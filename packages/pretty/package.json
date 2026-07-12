@@ -24,7 +24,8 @@
 		}
 	},
 	"scripts": {
-		"build": "tsc"
+		"build": "tsc",
+		"prepublishOnly": "pnpm build"
 	},
 	"dependencies": {
 		"@evnt/partial-date": "workspace:^",
