@@ -1,4 +1,4 @@
-# <img src="https://github.com/deniz-blue/md-emojis/raw/main/emojis/denizblue/evnt.svg" width="32px" style="vertical-align: middle;" /> Open Evnt
+# Open Evnt
 
 [![](https://shields.io/badge/visit_the-website-blue)](https://evnt.directory)
 [![](https://shields.io/badge/read_the-specification-blue)](./docs/full-spec.md)
@@ -6,40 +6,35 @@
 [![](https://shields.io/badge/join_the-matrix-blue)](https://matrix.to/#/#evnt:catgirl.cloud)
 [![](https://shields.io/badge/follow_on-bluesky-blue)](https://bsky.app/profile/evnt.directory)
 
-A modern data format for events.
+[Open Evnt](https://evnt.directory) is a data format for representing events.
 
-This monorepo contains a lot of things:
+This monorepo contains a *lot* of things:
 
-**Specification**: The data format specification document, [**can be found here**](./docs/full-spec.md). There's also:
+**Website**
 
-- [JSON Schema](./event-data.schema.json) of the data format
-- [AT Protocol Lexicons](./lexicons/)
+The [Open Evnt website](https://evnt.directory) is in [./docs](./docs/).
 
-**Packages**: We publish a few NPM packages to make it easier to work with the data format:
+**Packages**
 
-- [@evnt/schema](./packages/schema/): Types and Zod validation
-- [@evnt/partial-date](./packages/partial-date/): Helpers for working with partial dates using Temporal API
-- [@evnt/translations](./packages/translations/): Helper for working with Translations type
-- [@evnt/convert](./packages/convert/): Converters between Open Evnt and other formats (such as iCalendar, Community Lexicon, schema.org, etc.)
-- [@evnt/pretty](./packages/pretty/): Opinionated helpers for pretty-printing of event data
+- [@evnt/types](./packages/types/): TypeScript types
+- [@evnt/schema](./packages/schema/): Zod schemas
+- [@evnt/partial-date](./packages/partial-date/): Partial Date utilities
+- [@evnt/translations](./packages/translations/): Translations utilities
+- [@evnt/convert](./packages/convert/): Converters to and from other formats
+- [@evnt/pretty](./packages/pretty/): Pretty-printing utilities
+- [@evnt/dev](./packages/dev/): CLI for `.evnt.json` files
 
-**Applications**
-
-- [landing](https://evnt.directory): A landing page for the project hosted at https://evnt.directory
-
-**Other Links**
+**Join the Community**
 
 - [Discord](https://deniz.blue/discord-invite?id=1493641727980994710)
 - [Matrix](https://matrix.to/#/#evnt:catgirl.cloud)
 - [BlueSky](https://bsky.app/profile/evnt.directory)
-- [Leaflet](https://evnt.leaflet.pub/); Design decisions:
-  - [Scheduling is complex: Why we need Partial Dates](https://evnt.leaflet.pub/3mjeydgshtk2z)
-  - [Instances & Venues](https://evnt.leaflet.pub/3mjjufibxx22a)
 
 **Related Projects**
 
-- [eventsl.ink](https://github.com/openevnt/eventslink): Share event links independently of the website or platform it's on
-- [Vantage](https://github.com/deniz-blue/vantage): Proof-of-concept calendar application built on top of Open Evnt
+- [eventsl.ink](https://github.com/openevnt/eventslink): Application picker for events
+- [events-data](https://github.com/deniz-blue/events-data): Sample events in Open Evnt format
+- [Vantage](https://github.com/deniz-blue/vantage): Calendar application that supports Open Evnt
 
 ## Contributing
 
@@ -49,12 +44,17 @@ If you want to build an application, a library, or anything else using Open Evnt
 
 ### Contributing to the specification
 
-The specification is open for contributions! If you have suggestions for improvements or have ideas or just want provide constructive criticism, feel free to open an issue or a pull request.
-
-When making a pull request, only update `docs/full-spec.md`, `packages/schema` and `lexicons-src`. The JSON Schema and the Markdown documentation will be generated from these files.
+The specification is open for contributions! If you have suggestions for improvements or have ideas or just want provide constructive criticism, feel free to open an issue, a pull request or join our Discord/Matrix and discuss it with us.
 
 ### Contributing to the code
 
-This monorepo uses pnpm as the package manager. Run `pnpm install` to install dependencies.
+This monorepo uses [pnpm](https://pnpm.io/) as the package manager.
 
-You can run tests using `pnpm test`. We use Vitest for testing.
+- `pnpm install` - install dependencies
+- `pnpm build` - build all packages
+- `pnpm schema` - generate the json schema
+- `pnpm test` - run vitest tests
+- `pnpm fmt` - run oxfmt
+- `pnpm lint` - run oxlint
+- `pnpm docs:dev` - run docs in development mode
+- `pnpm docs:build` - build docs for production

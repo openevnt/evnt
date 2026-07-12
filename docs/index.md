@@ -67,3 +67,7 @@ Link: example.com/summer-workshops
 - **Write your first event** with the [Quickstart](./guide/getting-started)
 - Read the [Specification](./spec/index.md)
 - **Understand the design** in the [Why guides](./guide/root.md)
+
+## Contributing
+
+Feedback, contributions, and questions are welcome! Join our [Discord](https://deniz.blue/discord-invite?id=1493641727980994710) or [Matrix](https://matrix.to/#/#evnt:catgirl.cloud) to discuss Open Evnt with the community.
