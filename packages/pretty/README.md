@@ -52,7 +52,7 @@ addDuration("14:00", "01:30");
 src/
 ├── index.ts              re-exports everything
 ├── types.ts              DateGroup, SingleDate, DateRange, DateList, TimeSlot
-├── analyze-config.ts     AnalyzeConfig { mergeInstances }
+├── analyze-config.ts     AnalyzeConfig { groupConsecutiveDates }
 ├── analyze.ts            groupDates() -- groups instances by venue + time pattern
 ├── date.ts               formatDate, formatTime, formatTimeRange, formatDateRange
 ├── duration.ts           addDuration
@@ -84,7 +84,7 @@ Set any emoji or status icon to `""` to suppress it.
 | -------------- | ------- | ------------------------------------ |
 | language       | "en"    | locale for dates/times               |
 | timezone       | "UTC"   | IANA timezone for local time display |
-| mergeInstances | true    | merge consecutive days into ranges   |
+| groupConsecutiveDates | true | group consecutive days into ranges |
 | showStatus     | false   | show cancelled/uncertain etc         |
 | showLinks      | false   | show link components                 |
 | compactDates   | true    | "Jun 15" vs "June 15, 2026"          |

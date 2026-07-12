@@ -65,25 +65,26 @@ export class EmojiFormatter extends PlainTextFormatter {
 	// == Date groups =====================================
 
 	protected override formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
+		const lines: string[] = [];
+
 		const dateStr = this.formatDateShape(group.dates);
+		if (dateStr) lines.push([this.emojiMap.calendar, dateStr].filter(Boolean).join(" "));
+
 		const timeStr = group.times
 			.map((t) => this.formatTimeRange(t.start, t.end))
 			.filter(Boolean)
 			.join(", ");
-
-		const parts = [this.emojiMap.calendar, dateStr].filter(Boolean);
-
 		if (timeStr) {
 			const firstTime = group.times[0]?.start ?? group.times[0]?.end;
 			const clockIcon =
 				firstTime && hasTime(firstTime) ? this.clockEmoji(firstTime) : this.emojiMap.clock;
-			parts.push("·", clockIcon ?? this.emojiMap.clock ?? "🕐", timeStr);
+			lines.push([clockIcon ?? this.emojiMap.clock ?? "🕐", timeStr].filter(Boolean).join(" "));
 		}
 
 		const venueStr = this.formatGroupVenues(group.venueIds, venueMap);
-		if (venueStr) parts.push("·", venueStr);
+		if (venueStr) lines.push(venueStr);
 
-		return parts.filter(Boolean).join(" ");
+		return lines.join("\n");
 	}
 
 	protected override formatGroupVenues(venueIds: string[], venueMap: Map<string, Venue>): string {

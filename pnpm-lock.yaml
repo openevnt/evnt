@@ -306,6 +306,9 @@ importers:
       jsonc-parser:
         specifier: ^3.3.1
         version: 3.3.1
+      temporal-polyfill-lite:
+        specifier: ^0.2.3
+        version: 0.2.3
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -363,6 +366,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:^
         version: link:../typescript-config
+      temporal-polyfill-lite:
+        specifier: ^0.2.0
+        version: 0.2.3
       typescript:
         specifier: ^6.0.3
         version: 6.0.3

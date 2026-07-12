@@ -1,9 +1,10 @@
 export interface AnalyzeConfig {
-	/** Group consecutive days with the same times into ranges ("Oct 12–14").
-	 *  Non-consecutive days with the same time are grouped as a list ("Jul 1, 8, 15"). */
-	mergeInstances: boolean;
+	/** Group consecutive days that share the same times into a single range
+	 *  (e.g. "Oct 12–14"). Days with a different time pattern stay separate.
+	 *  Set to false to render every instance by itself. */
+	groupConsecutiveDates: boolean;
 }
 
 export const defaultAnalyzeConfig: AnalyzeConfig = {
-	mergeInstances: true,
+	groupConsecutiveDates: true,
 };

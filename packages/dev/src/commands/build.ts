@@ -9,29 +9,28 @@ import {
 } from "node:fs";
 import { join, relative } from "node:path";
 import { OpenEvntSchema } from "@evnt/schema";
-import { SchemaValidationError, JSONParseError } from "../errors";
+import { PlainTextFormatter } from "@evnt/pretty";
+import { SchemaValidationError } from "../errors";
 import { ZodError } from "zod";
 
-const help = `Build a static site from OpenEvnt event files.
-
-Usage: evnt build <dir> [--out <dir>]
-
-Scans <dir> for .json files, validates each, and copies them to the output directory.
-Also generates an index.json listing all events.`;
-
-const findJsonFiles = (dir: string): string[] => {
+const findEvntFiles = (dir: string): string[] => {
 	const results: string[] = [];
 	for (const entry of readdirSync(dir, { withFileTypes: true })) {
 		const full = join(dir, entry.name);
 		if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
-		if (entry.isDirectory()) results.push(...findJsonFiles(full));
-		else if (entry.name.endsWith(".json")) results.push(full);
+		if (entry.isDirectory()) results.push(...findEvntFiles(full));
+		else if (entry.name.endsWith(".evnt.json")) results.push(full);
 	}
 	return results;
 };
 
-export default async function (opts: { dir: string; out: string }) {
-	const { dir, out: rawOut } = opts;
+const titleOf = (event: { name?: Record<string, string> }): string => {
+	if (!event.name) return "unnamed";
+	return event.name.en ?? Object.values(event.name)[0] ?? "unnamed";
+};
+
+export default async function (opts: { dir: string; out: string; feed?: string }) {
+	const { dir, out: rawOut, feed = "feed.json" } = opts;
 	const out = join(process.cwd(), rawOut);
 
 	if (!existsSync(dir)) {
@@ -42,8 +41,14 @@ export default async function (opts: { dir: string; out: string }) {
 	if (existsSync(out)) rmSync(out, { recursive: true });
 	mkdirSync(out, { recursive: true });
 
-	const files = findJsonFiles(dir);
-	const entries: { path: string; lastModified?: number }[] = [];
+	const files = findEvntFiles(dir);
+	const items: {
+		id: string;
+		url: string;
+		title: string;
+		content_text: string;
+		date_modified: string;
+	}[] = [];
 	let valid = 0;
 	let invalid = 0;
 
@@ -74,25 +79,42 @@ export default async function (opts: { dir: string; out: string }) {
 			continue;
 		}
 
-		// Copy to output, preserving directory structure
+		const event = result.data;
 		const relPath = relative(dir, file);
 		const outPath = join(out, relPath);
 		mkdirSync(outPath.replace(/\/[^/]+$/, ""), { recursive: true });
-		writeFileSync(outPath, JSON.stringify(result.data, null, "\t"), "utf-8");
+		writeFileSync(outPath, JSON.stringify(event, null, "\t"), "utf-8");
 
-		entries.push({
-			path: relPath,
-			lastModified: statSync(file).mtimeMs,
+		const contentText = new PlainTextFormatter({
+			...PlainTextFormatter.defaults,
+			language: "en",
+			timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+		}).formatEvent(event as any);
+
+		items.push({
+			id: relPath,
+			url: relPath,
+			title: titleOf(event),
+			content_text: contentText,
+			date_modified: new Date(statSync(file).mtimeMs).toISOString(),
 		});
 
-		const name = result.data.name?.en ?? Object.values(result.data.name ?? {})[0] ?? "unnamed";
-		console.log(`Valid: ${relPath} (${name})`);
+		console.log(`Valid: ${relPath} (${titleOf(event)})`);
 		valid++;
 	}
 
-	// Generate index
-	writeFileSync(join(out, "index.json"), JSON.stringify({ events: entries }, null, "\t"), "utf-8");
+	items.sort((a, b) => b.date_modified.localeCompare(a.date_modified));
 
-	console.log(`\nBuilt ${valid} events to ${out}${invalid ? `, ${invalid} skipped` : ""}`);
+	const feedDoc = {
+		version: "https://jsonfeed.org/version/1.1",
+		title: "OpenEvnt Events",
+		feed_url: feed,
+		items,
+	};
+	writeFileSync(join(out, feed), JSON.stringify(feedDoc, null, "\t"), "utf-8");
+
+	console.log(
+		`\nBuilt ${valid} events to ${out}${invalid ? `, ${invalid} skipped` : ""}; wrote ${feed}`,
+	);
 	if (invalid > 0) process.exit(1);
 }

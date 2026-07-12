@@ -9,7 +9,7 @@ import { formatDate, formatDateRange, formatTime, formatTimeRange } from "../dat
 export interface FormatConfig {
 	language: string;
 	timezone: string;
-	mergeInstances: boolean;
+	groupConsecutiveDates: boolean;
 	showStatus: boolean;
 	showLinks: boolean;
 	compactDates: boolean;
@@ -30,7 +30,7 @@ export class PlainTextFormatter {
 	static defaults: FormatConfig = {
 		language: "en",
 		timezone: "UTC",
-		mergeInstances: true,
+		groupConsecutiveDates: true,
 		showStatus: false,
 		showLinks: false,
 		compactDates: true,
@@ -59,12 +59,14 @@ export class PlainTextFormatter {
 		const byId = new Map<string, Venue>();
 		for (const v of event.venues ?? []) byId.set(v.id, v);
 
-		const groups = groupDates(event.instances ?? [], this.config.mergeInstances);
+		const groups = groupDates(event.instances ?? [], this.config.groupConsecutiveDates);
 		const shownCount =
 			this.config.maxDates > 0 ? Math.min(groups.length, this.config.maxDates) : groups.length;
-		for (let i = 0; i < shownCount; i++) {
-			lines.push(this.formatDateGroup(groups[i]!, byId));
-		}
+		const dateBlocks = groups
+			.slice(0, shownCount)
+			.map((g) => this.formatDateGroup(g, byId))
+			.filter(Boolean);
+		if (dateBlocks.length > 0) lines.push(dateBlocks.join("\n\n"));
 		if (groups.length > shownCount) {
 			lines.push(`+ ${groups.length - shownCount} more dates`);
 		}
@@ -101,18 +103,21 @@ export class PlainTextFormatter {
 	// == Date groups =====================================
 
 	protected formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
+		const lines: string[] = [];
+
 		const dateStr = this.formatDateShape(group.dates);
+		if (dateStr) lines.push(dateStr);
+
 		const timeStr = group.times
 			.map((t) => this.formatTimeRange(t.start, t.end))
 			.filter(Boolean)
 			.join(", ");
-
-		const parts = [dateStr, timeStr].filter(Boolean);
+		if (timeStr) lines.push(timeStr);
 
 		const venueNames = this.formatGroupVenues(group.venueIds, venueMap);
-		if (venueNames) parts.push("·", venueNames);
+		if (venueNames) lines.push(venueNames);
 
-		return parts.filter(Boolean).join(" ");
+		return lines.join("\n");
 	}
 
 	protected formatGroupVenues(venueIds: string[], venueMap: Map<string, Venue>): string {

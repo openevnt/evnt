@@ -11,7 +11,7 @@ const findJsonFiles = (dir: string): string[] => {
 		const full = join(dir, entry.name);
 		if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
 		if (entry.isDirectory()) results.push(...findJsonFiles(full));
-		else if (entry.name.endsWith(".json")) results.push(full);
+		else if (entry.name.endsWith(".evnt.json")) results.push(full);
 	}
 	return results;
 };

@@ -55,13 +55,44 @@ export function formatDate(
 	}).format(temporal);
 }
 
-/** Format a date range as "Jun 14–16". */
 export function formatDateRange(
 	start: PartialDate,
 	end: PartialDate,
 	config: Pick<FormatConfig, "language" | "compactDates" | "timezone">,
 ): string {
-	return `${formatDate(start, config)}–${formatDate(end, config)}`;
+	const startParsed = PartialDateUtil.parse(start);
+	const endParsed = PartialDateUtil.parse(end);
+
+	if (startParsed.precision !== "day" && startParsed.precision !== "time") {
+		return `${formatDate(start, config)}–${formatDate(end, config)}`;
+	}
+
+	if (startParsed.precision !== endParsed.precision) {
+		return `${formatDate(start, config)}–${formatDate(end, config)}`;
+	}
+
+	if (config.compactDates) {
+		const from = PartialDateUtil.asPlainDate(startParsed);
+		const to = PartialDateUtil.asPlainDate(endParsed);
+		return new Intl.DateTimeFormat(config.language, {
+			month: "short",
+			day: "numeric",
+			timeZone: "UTC",
+		}).formatRange(from, to);
+	}
+
+	const temporalStart = PartialDateUtil.asFormattableTemporal(startParsed);
+	const temporalEnd = PartialDateUtil.asFormattableTemporal(endParsed);
+	return new Intl.DateTimeFormat(config.language, {
+		year: "numeric",
+		month: "long",
+		day: hasDay(start) ? "numeric" : undefined,
+		hour: hasTime(start) ? "numeric" : undefined,
+		minute: hasTime(start) ? "numeric" : undefined,
+		calendar: "iso8601",
+		hour12: false,
+		timeZone: startParsed.timezone,
+	}).formatRange(temporalStart, temporalEnd);
 }
 
 /** Format a time-only PartialDate as "14:00". Shows local time offset when timezone differs. */
@@ -102,7 +133,7 @@ export function formatTimeRange(
 ): string {
 	if (!start && !end) return "";
 	if (start && end && hasTime(start) && hasTime(end)) {
-		return `${formatTime(start, config)}–${formatTime(end, config)}`;
+		return `${formatTime(start, config)} – ${formatTime(end, config)}`;
 	}
 	if (start && hasTime(start)) return formatTime(start, config);
 	return "";

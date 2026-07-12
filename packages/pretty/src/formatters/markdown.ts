@@ -46,7 +46,8 @@ export class MarkdownFormatter extends EmojiFormatter {
 	// == Links ===========================================
 
 	protected override formatLink(url: string, name?: string): string {
-		const icon = (this.config as EmojiFormatConfig).emoji.link ?? "";
+		const emoji = (this.config as EmojiFormatConfig).emoji;
+		const icon = emoji === false ? "" : emoji.link ?? "";
 		const text = name ? this.mdLink(name, url) : url;
 		return [icon, text].filter(Boolean).join(" ");
 	}

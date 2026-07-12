@@ -28,6 +28,7 @@
 		"@evnt/schema": "workspace:*",
 		"@evnt/types": "workspace:*",
 		"jsonc-parser": "^3.3.1",
+		"temporal-polyfill-lite": "^0.2.3",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {

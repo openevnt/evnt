@@ -12,8 +12,6 @@ Commands:
   show [file]        Pretty-print an event (plain, markdown, discord)
   convert [file]     Convert to another format (ical, as2, schema-org)
   build [dir]        Build a static site from event files
-  check [file]       Lint event file(s) for common issues
-  new                Interactively create a new event file
 ```
 
 ## Examples
@@ -27,5 +25,5 @@ openevnt show test.evnt.json --format discord
 
 openevnt convert test.evnt.json --format schema-org | jq .
 
-openevnt new --out my-event.evnt.json
+openevnt build ./events --out ./dist --feed feed.json
 ```

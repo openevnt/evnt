@@ -41,21 +41,13 @@ interface DateEntry {
 	end?: PartialDate;
 }
 
-const getTimeKey = (entry: DateEntry): string => {
-	const startTime =
-		entry.start && hasTime(entry.start)
-			? PartialDateUtil.parse(entry.start).precision === "time"
-				? entry.start
-				: ""
-			: "";
-	const endTime =
-		entry.end && hasTime(entry.end)
-			? PartialDateUtil.parse(entry.end).precision === "time"
-				? entry.end
-				: ""
-			: "";
-	return `${startTime}|${endTime}`;
+const timePart = (pd?: PartialDate): string => {
+	if (!pd || !hasTime(pd)) return "";
+	const parsed = PartialDateUtil.parse(pd);
+	return parsed.precision === "time" ? `${parsed.hour}:${parsed.minute}` : "";
 };
+
+const getTimeKey = (entry: DateEntry): string => `${timePart(entry.start)}|${timePart(entry.end)}`;
 
 const roundToDay = (pd: PartialDate): PartialDate => {
 	if (!hasDay(pd)) return pd;
@@ -161,7 +153,7 @@ const dedupTimeRanges = (entries: DateEntry[]): TimeSlot[] => {
 
 // == Grouping =============================================
 
-export const groupDates = (instances: EventInstance[], merge: boolean): DateGroup[] => {
+export const groupDates = (instances: EventInstance[], group: boolean): DateGroup[] => {
 	const byVenue = new Map<string, EventInstance[]>();
 	for (const inst of instances) {
 		const key = JSON.stringify([...inst.venueIds].sort());
@@ -188,7 +180,7 @@ export const groupDates = (instances: EventInstance[], merge: boolean): DateGrou
 
 		if (entries.length === 0) continue;
 
-		if (merge) {
+		if (group) {
 			const consolidated = mergeEntries(entries);
 			for (const g of consolidated) {
 				groups.push({
@@ -198,11 +190,14 @@ export const groupDates = (instances: EventInstance[], merge: boolean): DateGrou
 				});
 			}
 		} else {
-			groups.push({
-				dates: toDateShape(entries),
-				times: dedupTimeRanges(entries),
-				venueIds,
-			});
+			// No grouping: render every instance as its own date line.
+			for (const e of entries) {
+				groups.push({
+					dates: toDateShape([e]),
+					times: dedupTimeRanges([e]),
+					venueIds,
+				});
+			}
 		}
 	}
 
