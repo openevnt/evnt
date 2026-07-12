@@ -27,7 +27,9 @@
 		"@evnt/pretty": "workspace:*",
 		"@evnt/schema": "workspace:*",
 		"@evnt/types": "workspace:*",
+		"cac": "^7.0.0",
 		"jsonc-parser": "^3.3.1",
+		"picocolors": "^1.1.1",
 		"temporal-polyfill-lite": "^0.2.3",
 		"zod": "^4.3.6"
 	},
@@ -35,8 +37,6 @@
 		"@repo/typescript-config": "workspace:*",
 		"@types/babel__code-frame": "^7.27.0",
 		"@types/node": "^25.6.0",
-		"cac": "^7.0.0",
-		"picocolors": "^1.1.1",
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.3"
 	}
