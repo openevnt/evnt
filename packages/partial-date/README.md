@@ -2,9 +2,6 @@
 
 Partial date parsing and formatting for [Open Evnt](https://evnt.directory).
 
-Partial dates are strings with a **required** timezone bracket, supporting
-any precision from year-only down to minute:
-
 ```
 2026[UTC]
 2026-06[Europe/London]
@@ -12,6 +9,8 @@ any precision from year-only down to minute:
 2026-06-15T18:00[Europe/London]
 2026-06-15T18:00[Etc/GMT+5]
 ```
+
+`PartialDate` type is imported from `@evnt/types`
 
 ## Usage
 

@@ -21,16 +21,3 @@ const event = new EventBuilder()
 	.addLink((l) => l.setUrl("https://example.com"))
 	.build();
 ```
-
-## Builders
-
-| Builder                | Methods                                                                                                               |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `EventBuilder`         | `setName`, `addPhysicalVenue`, `addOnlineVenue`, `addUnknownVenue`, `addInstance`, `addLink`, `addComponent`, `build` |
-| `PhysicalVenueBuilder` | `setId`, `setName`, `setAddressLine`, `setCountryCode`, `build`                                                       |
-| `OnlineVenueBuilder`   | `setId`, `setName`, `setUrl`, `build`                                                                                 |
-| `UnknownVenueBuilder`  | `setId`, `setName`, `build`                                                                                           |
-| `InstanceBuilder`      | `setStart`, `setEnd`, `addVenue`, `addAllVenues`, `build`                                                             |
-| `ComponentBuilder`     | `setUrl`, `build`                                                                                                     |
-| `LinkBuilder`          | `setUrl`, `setName`, `build`                                                                                          |
-| `VenueBuilder`         | `setId`, `setName`, `build`                                                                                           |

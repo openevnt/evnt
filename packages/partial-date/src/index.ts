@@ -429,15 +429,13 @@ export const PartialDateUtil = new (class {
 					day: "numeric",
 				});
 			case "time":
-				return this.asZonedDateTime(parsed)
-					.toInstant()
-					.toLocaleString(locales, {
-						year: "numeric",
-						month: "long",
-						day: "numeric",
-						hour: "2-digit",
-						minute: "2-digit",
-					});
+				return this.asZonedDateTime(parsed).toInstant().toLocaleString(locales, {
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+					hour: "2-digit",
+					minute: "2-digit",
+				});
 		}
 	}
 })();

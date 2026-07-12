@@ -1,7 +1,6 @@
 # @evnt/dev
 
-General-purpose CLI for [Open Evnt](https://evnt.directory) — validate,
-convert, pretty-print, check, and scaffold events.
+CLI tools for [Open Evnt](https://evnt.directory) event files.
 
 ## Usage
 
@@ -20,25 +19,13 @@ Commands:
 ## Examples
 
 ```bash
-# Validate a file
-openevnt validate event.json
+openevnt validate test.evnt.json
 
-# Validate from stdin
-curl -s https://example.com/event.json | openevnt validate -
+curl -s https://example.com/test.evnt.json | openevnt validate -
 
-# Pretty-print in Discord format
-openevnt show event.json --format discord
+openevnt show test.evnt.json --format discord
 
-# Convert and pipe to jq
-openevnt convert event.json --format schema-org | jq .
+openevnt convert test.evnt.json --format schema-org | jq .
 
-# Interactive creation
-openevnt new --out my-event.json
+openevnt new --out my-event.evnt.json
 ```
-
-## Features
-
-- **stdin support**: Pass `-` or omit the file arg to read from stdin
-- **stdout output**: Convert commands write to stdout by default for piping
-- **Color output**: Uses `picocolors` for green/red/yellow indicators
-- **Registry-based convert**: Uses `@evnt/convert` format registry internally

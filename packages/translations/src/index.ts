@@ -40,7 +40,7 @@ export const TranslationsUtil = new (class {
 	merge(...list: MaybeTranslations[]): Translations {
 		const result: Translations = {};
 		for (const entry of list.filter(Boolean) as Translations[])
-			for (const [key, value] of Object.entries(entry)) if (Boolean(value)) result[key] = value;
+			for (const [key, value] of Object.entries(entry)) if (value) result[key] = value;
 
 		return result;
 	}

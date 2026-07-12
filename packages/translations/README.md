@@ -36,7 +36,7 @@ TranslationsUtil.omit(name, "fr");
 ## API
 
 | Method                        | Description                                                            |
-| ----------------------------- | ---------------------------------------------------------------------- |
+|-------------------------------|------------------------------------------------------------------------|
 | `values(t)`                   | Get all non-empty translation values                                   |
 | `languages(t)`                | List available language codes with non-empty values                    |
 | `translate(t, preferred)`     | Get best-matching translation from preferred language list             |
@@ -47,6 +47,3 @@ TranslationsUtil.omit(name, "fr");
 | `add(t, code, text)`          | Immutably add a translation                                            |
 | `isEmpty(t)`                  | Check if all values are empty                                          |
 | `createTranslator(preferred)` | Create a bound translate function                                      |
-
-> Renamed from the legacy naming: `texts` → `values`, `codes` → `languages`,
-> `search` → `find`, `without` → `omit`.

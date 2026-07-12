@@ -2,7 +2,7 @@
 	"name": "@evnt/builder",
 	"version": "0.1.0",
 	"keywords": [],
-	"author": "deniz.blue <deniz@deniz.blue>",
+	"author": "Open Evnt Contributors",
 	"files": [
 		"/dist"
 	],

@@ -1,6 +1,8 @@
+import type { OpenEvnt } from "./event/event";
 import type {} from "@atcute/lexicons/ambient";
+
 declare module "@atcute/lexicons/ambient" {
 	interface Records {
-		[$NSID]: OpenEvnt & { $type: typeof $NSID };
+		"directory.evnt.event": OpenEvnt & { $type: "directory.evnt.event" };
 	}
 }

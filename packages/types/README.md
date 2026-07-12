@@ -27,3 +27,9 @@ declare module "@evnt/types" {
 	}
 }
 ```
+
+## Atcute support
+
+```ts
+import type {} from "@evnt/types/atcute";
+```
