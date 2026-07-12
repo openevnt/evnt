@@ -22,12 +22,12 @@ Each format has an optional `to` (OpenEvnt → format) and/or `from` (format →
 ## Supported formats
 
 | Key                | Name                          | `.to` | `.from` | Extensions      |
-|--------------------|-------------------------------|:-----:|:-------:|-----------------|
-| `icalendar`        | iCalendar (RFC 5545)          |   ✅   |    ✅    | `.ics`, `.ical` |
-| `activitystreams`  | W3C Activity Streams 2.0      |   ✅   |    ✅    | `.json`         |
-| `schemaOrg`        | Schema.org JSON-LD Event      |   ✅   |    ✅    | `.json`         |
-| `google`           | Google Calendar API           |   ❌   |    ✅    | `.json`         |
-| `communityLexicon` | AT Protocol Community Lexicon |   ❌   |    ✅    | `.json`         |
+| ------------------ | ----------------------------- | :---: | :-----: | --------------- |
+| `icalendar`        | iCalendar (RFC 5545)          |  ✅   |   ✅    | `.ics`, `.ical` |
+| `activitystreams`  | W3C Activity Streams 2.0      |  ✅   |   ✅    | `.json`         |
+| `schemaOrg`        | Schema.org JSON-LD Event      |  ✅   |   ✅    | `.json`         |
+| `google`           | Google Calendar API           |  ❌   |   ✅    | `.json`         |
+| `communityLexicon` | AT Protocol Community Lexicon |  ❌   |   ✅    | `.json`         |
 
 ## Convenience imports
 

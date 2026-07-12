@@ -29,7 +29,7 @@ Access-Control-Allow-Origin: *
 When returning HTML web pages, you can add a `<link>` tag to the `<head>` of your page to point to your Open Evnt data:
 
 ```html
-<link rel="alternate" type="application/evnt+json" href="https://example.com/my-event.evnt.json">
+<link rel="alternate" type="application/evnt+json" href="https://example.com/my-event.evnt.json" />
 ```
 
 ## Lists

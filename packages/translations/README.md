@@ -36,7 +36,7 @@ TranslationsUtil.omit(name, "fr");
 ## API
 
 | Method                        | Description                                                            |
-|-------------------------------|------------------------------------------------------------------------|
+| ----------------------------- | ---------------------------------------------------------------------- |
 | `values(t)`                   | Get all non-empty translation values                                   |
 | `languages(t)`                | List available language codes with non-empty values                    |
 | `translate(t, preferred)`     | Get best-matching translation from preferred language list             |
