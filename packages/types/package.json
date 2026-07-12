@@ -16,23 +16,19 @@
 	"type": "module",
 	"main": "./src/index.ts",
 	"exports": {
-		".": {
-			"import": "./src/index.js",
-			"types": "./src/index.d.ts"
-		},
-		"./atcute": {
-			"import": "./src/atcute.js",
-			"types": "./src/atcute.d.ts"
-		}
+		".": "./src/index",
+		"./atcute": "./src/atcute"
 	},
 	"publishConfig": {
-		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./atcute": {
-			"import": "./dist/atcute.js",
-			"types": "./dist/atcute.d.ts"
+		"exports": {
+			".": {
+				"import": "./dist/index.js",
+				"types": "./dist/index.d.ts"
+			},
+			"./atcute": {
+				"import": "./dist/atcute.js",
+				"types": "./dist/atcute.d.ts"
+			}
 		}
 	},
 	"scripts": {

@@ -6,10 +6,6 @@ import { EventInstanceSchema } from "./instance/EventInstance";
 import { EventComponentSchema } from "./components/EventComponent";
 import { EventStatusSchema } from "./enums/EventStatus";
 
-export const $ID =
-	"https://raw.githubusercontent.com/deniz-blue/events-format/refs/heads/main/event-data.schema.json" as const;
-export const $NSID = "directory.evnt.event" as const;
-
 const preprocessEvent = (input: any) => {
 	if (typeof input !== "object" || input === null) return input;
 	if (input.v !== 0) return input;
@@ -32,7 +28,10 @@ export const OpenEvntSchema = z
 	.preprocess(
 		preprocessEvent,
 		z.object({
-			$type: z.literal($NSID).optional().meta({ description: "The type of the event data" }),
+			$type: z
+				.literal("directory.evnt.event")
+				.optional()
+				.meta({ description: "The type of the event data" }),
 			v: z.literal("0.1").meta({ description: "The version of the Event Data schema" }),
 
 			name: TranslationsSchema.meta({ description: "The name of the event" }),
@@ -65,7 +64,7 @@ export const OpenEvntSchema = z
 	)
 	.meta({
 		id: "OpenEvnt",
-		title: "Event Data",
-		description: "An event",
-		$id: $ID,
+		title: "Open Evnt Event",
+		description: "A single event defined in the Open Evnt format",
+		$id: "https://evnt.directory/openevnt.schema.json",
 	}) satisfies z.ZodType<OpenEvnt>;
