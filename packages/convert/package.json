@@ -14,38 +14,50 @@
 	"license": "MIT",
 	"author": "Open Evnt Contributors",
 	"type": "module",
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
 	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"default": "./dist/index.js"
-		},
-		"./icalendar": {
-			"types": "./dist/formats/icalendar.d.ts",
-			"import": "./dist/formats/icalendar.js",
-			"default": "./dist/formats/icalendar.js"
-		},
-		"./activitystreams": {
-			"types": "./dist/formats/activitystreams.d.ts",
-			"import": "./dist/formats/activitystreams.js",
-			"default": "./dist/formats/activitystreams.js"
-		},
-		"./schema-org": {
-			"types": "./dist/formats/schema-org.d.ts",
-			"import": "./dist/formats/schema-org.js",
-			"default": "./dist/formats/schema-org.js"
-		},
-		"./google": {
-			"types": "./dist/formats/google.d.ts",
-			"import": "./dist/formats/google.js",
-			"default": "./dist/formats/google.js"
-		},
-		"./community-lexicon": {
-			"types": "./dist/formats/community-lexicon.d.ts",
-			"import": "./dist/formats/community-lexicon.js",
-			"default": "./dist/formats/community-lexicon.js"
+		".": "./src/index.ts",
+		"./icalendar": "./src/formats/icalendar.ts",
+		"./activitystreams": "./src/formats/activitystreams.ts",
+		"./schema-org": "./src/formats/schema-org.ts",
+		"./google": "./src/formats/google.ts",
+		"./community-lexicon": "./src/formats/community-lexicon.ts"
+	},
+	"publishConfig": {
+		"main": "./dist/index.js",
+		"types": "./dist/index.d.ts",
+		"exports": {
+			".": {
+				"types": "./dist/index.d.ts",
+				"import": "./dist/index.js",
+				"default": "./dist/index.js"
+			},
+			"./icalendar": {
+				"types": "./dist/formats/icalendar.d.ts",
+				"import": "./dist/formats/icalendar.js",
+				"default": "./dist/formats/icalendar.js"
+			},
+			"./activitystreams": {
+				"types": "./dist/formats/activitystreams.d.ts",
+				"import": "./dist/formats/activitystreams.js",
+				"default": "./dist/formats/activitystreams.js"
+			},
+			"./schema-org": {
+				"types": "./dist/formats/schema-org.d.ts",
+				"import": "./dist/formats/schema-org.js",
+				"default": "./dist/formats/schema-org.js"
+			},
+			"./google": {
+				"types": "./dist/formats/google.d.ts",
+				"import": "./dist/formats/google.js",
+				"default": "./dist/formats/google.js"
+			},
+			"./community-lexicon": {
+				"types": "./dist/formats/community-lexicon.d.ts",
+				"import": "./dist/formats/community-lexicon.js",
+				"default": "./dist/formats/community-lexicon.js"
+			}
 		}
 	},
 	"scripts": {

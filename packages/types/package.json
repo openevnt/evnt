@@ -17,21 +17,25 @@
 		"directory": "packages/types"
 	},
 	"files": [
-		"/dist"
+		"./dist"
 	],
 	"type": "module",
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
 	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"default": "./dist/index.js"
-		},
-		"./atcute": {
-			"types": "./dist/atcute.d.ts",
-			"import": "./dist/atcute.js",
-			"default": "./dist/atcute.js"
+		".": "./src/index.ts",
+		"./atcute": "./src/atcute.ts"
+	},
+	"publishConfig": {
+		"exports": {
+			".": {
+				"types": "./dist/index.d.ts",
+				"import": "./dist/index.js",
+				"default": "./dist/index.js"
+			},
+			"./atcute": {
+				"types": "./dist/atcute.d.ts",
+				"import": "./dist/atcute.js",
+				"default": "./dist/atcute.js"
+			}
 		}
 	},
 	"scripts": {
