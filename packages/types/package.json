@@ -1,10 +1,16 @@
 {
 	"name": "@evnt/types",
-	"version": "0.1.0",
-	"description": "Types for OpenEvnt",
-	"keywords": [],
+	"version": "0.1.1",
+	"description": "Open Evnt Types for TypeScript",
+	"keywords": [
+		"event",
+		"open evnt",
+		"types",
+		"typescript"
+	],
 	"homepage": "https://evnt.directory",
-	"author": "OpenEvnt",
+	"license": "MIT",
+	"author": "Open Evnt Contributors",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/openevnt/evnt.git",

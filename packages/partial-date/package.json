@@ -1,11 +1,16 @@
 {
 	"name": "@evnt/partial-date",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "OpenEvnt PartialDate utilities",
-	"keywords": [],
+	"keywords": [
+		"event",
+		"open evnt",
+		"partial date",
+		"typescript"
+	],
 	"homepage": "https://evnt.directory",
 	"license": "MIT",
-	"author": "deniz.blue <deniz@deniz.blue>",
+	"author": "Open Evnt Contributors",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/openevnt/evnt.git",

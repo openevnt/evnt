@@ -1,11 +1,18 @@
 {
 	"name": "@evnt/convert",
-	"version": "0.1.0",
-	"keywords": [],
-	"author": "deniz.blue <deniz@deniz.blue>",
-	"files": [
-		"/dist"
+	"version": "0.1.1",
+	"description": "Open Evnt utilities for converting between different event formats",
+	"keywords": [
+		"activitystreams",
+		"convert",
+		"event",
+		"google",
+		"icalendar",
+		"open evnt",
+		"schema-org"
 	],
+	"license": "MIT",
+	"author": "Open Evnt Contributors",
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts",

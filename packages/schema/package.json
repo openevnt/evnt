@@ -1,10 +1,16 @@
 {
 	"name": "@evnt/schema",
-	"version": "0.1.0",
-	"description": "Zod Schema for OpenEvnt",
-	"keywords": [],
+	"version": "0.1.1",
+	"description": "Zod Schemas for OpenEvnt",
+	"keywords": [
+		"event",
+		"open evnt",
+		"schema",
+		"zod"
+	],
 	"homepage": "https://evnt.directory",
-	"author": "OpenEvnt",
+	"license": "MIT",
+	"author": "Open Evnt Contributors",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/openevnt/evnt.git",

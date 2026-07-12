@@ -1,9 +1,14 @@
 {
 	"name": "@evnt/dev",
-	"version": "0.1.0",
-	"description": "CLI for working with OpenEvnt events",
-	"keywords": [],
-	"author": "deniz.blue",
+	"version": "0.1.1",
+	"description": "OpenEvnt CLI for working with Open Evnt files",
+	"keywords": [
+		"cli",
+		"event",
+		"open evnt"
+	],
+	"license": "MIT",
+	"author": "Open Evnt Contributors",
 	"bin": {
 		"openevnt": "./dist/cli.js"
 	},

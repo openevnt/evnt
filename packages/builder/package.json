@@ -1,7 +1,13 @@
 {
 	"name": "@evnt/builder",
-	"version": "0.1.0",
-	"keywords": [],
+	"version": "0.1.1",
+	"description": "Open Evnt builder patterns",
+	"keywords": [
+		"builder",
+		"event",
+		"open evnt"
+	],
+	"license": "MIT",
 	"author": "Open Evnt Contributors",
 	"files": [
 		"/dist"

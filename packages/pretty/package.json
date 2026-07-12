@@ -1,8 +1,15 @@
 {
 	"name": "@evnt/pretty",
 	"version": "0.1.1",
-	"keywords": [],
-	"author": "deniz.blue <deniz@deniz.blue>",
+	"description": "Open Evnt utilities for pretty printing",
+	"keywords": [
+		"event",
+		"open evnt",
+		"pretty",
+		"printing"
+	],
+	"license": "MIT",
+	"author": "Open Evnt Contributors",
 	"files": [
 		"/dist"
 	],
