@@ -318,7 +318,7 @@
 			"type": "string",
 			"id": "PartialDate",
 			"description": "A date string that can have varying levels of precision (year, month, day, time) with a timezone",
-			"regex": "/^(?<year>\\d{4})(?:-(?<month>\\d{2})(?:-(?<day>\\d{2})(?:T(?<time>(?<hour>\\d{2}):(?<minute>\\d{2}))?)?)?)?\\[(?<timezone>[\\-\\w\\/+]+)\\]$/",
+			"regex": "/^(?<year>\\d{4})(?:-(?<month>\\d{2})(?:-(?<day>\\d{2})(?:T(?<time>(?<hour>\\d{2}):(?<minute>\\d{2}))?)?)?)?\\[(?<timezone>[-\\w/+]+)\\]$/",
 			"examples": [
 				"2023[Europe/Vilnius]",
 				"2023-05[Europe/Vilnius]",

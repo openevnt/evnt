@@ -5,7 +5,7 @@
 		"test": "vitest",
 		"fmt": "oxfmt",
 		"lint": "oxlint",
-		"schema": "pnpm -F @repo/scripts schema:generate && oxfmt ./public/openevnt.schema.json",
+		"schema": "pnpm -F @repo/scripts schema:generate && oxfmt ./docs/public/openevnt.schema.json",
 		"docs:dev": "vitepress dev",
 		"docs:build": "vitepress build",
 		"docs:preview": "vitepress preview"

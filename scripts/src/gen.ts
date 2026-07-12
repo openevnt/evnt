@@ -1,7 +1,7 @@
 import { writeFileSync } from "node:fs";
 import { OpenEvntSchema } from "@evnt/schema";
 
-const OUTPUT = new URL("../../public/openevnt.schema.json", import.meta.url);
+const OUTPUT = new URL("../../docs/public/openevnt.schema.json", import.meta.url);
 
 const jsonSchema = OpenEvntSchema.toJSONSchema({
 	override(ctx) {
