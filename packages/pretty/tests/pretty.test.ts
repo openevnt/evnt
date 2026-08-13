@@ -1,6 +1,10 @@
+import "temporal-polyfill-lite/global";
 import { describe, expect, test } from "vitest";
-import { renderMarkdown } from "../src/index";
+import { MarkdownFormatter, type EmojiFormatInput } from "../src/index";
 import type { OpenEvnt, PartialDate } from "@evnt/types";
+
+const renderMarkdown = (event: OpenEvnt, options?: EmojiFormatInput) =>
+	new MarkdownFormatter(options).formatEvent(event);
 
 const date = "2025-01-01[UTC]" as PartialDate;
 
@@ -126,5 +130,65 @@ describe("renderMarkdown", () => {
 	test("emoji: false disables emoji icons", () => {
 		const result = renderMarkdown(baseEvent, { emoji: false });
 		expect(result).toContain("Test Event");
+	});
+});
+
+describe("UniCon 2026 (real-world event)", () => {
+	const uniCon: OpenEvnt = {
+		$type: "directory.evnt.event",
+		v: "0.1",
+		name: { en: "UniCon 2026" },
+		status: "planned",
+		venues: [
+			{
+				$type: "directory.evnt.venue.physical",
+				id: "v1",
+				name: { en: "Kipsala International Exhibition Centre" },
+				address: { countryCode: "LV", addr: "Kipsalas iela 1, LV-1043 Riga, Latvia" },
+			},
+		],
+		instances: [
+			{
+				venueIds: ["v1"],
+				start: "2026-08-14T14:00[Europe/Riga]",
+				end: "2026-08-14T20:00[Europe/Riga]",
+			},
+			{
+				venueIds: ["v1"],
+				start: "2026-08-15T12:00[Europe/Riga]",
+				end: "2026-08-15T20:00[Europe/Riga]",
+			},
+			{
+				venueIds: ["v1"],
+				start: "2026-08-16T12:00[Europe/Riga]",
+				end: "2026-08-16T20:00[Europe/Riga]",
+			},
+		],
+	};
+
+	test("groups by venue-set with venue header once", () => {
+		const result = renderMarkdown(uniCon);
+		// venue appears exactly once as header
+		expect(result.match(/Kipsala/g)).toHaveLength(1);
+		// venue header comes before date lines
+		const venueIdx = result.indexOf("Kipsala");
+		const dateIdx = result.indexOf("📅");
+		expect(venueIdx).toBeLessThan(dateIdx);
+	});
+
+	test("Aug 15–16 merge into a range (same times), Aug 14 stays separate", () => {
+		const result = renderMarkdown(uniCon);
+		// Aug 14 has unique time (14:00) → separate group
+		expect(result).toContain("Aug 14");
+		// Aug 15–16 share time (12:00) → merged range
+		expect(result).toContain("Aug 15");
+		// "Aug 16" never stands alone
+		expect(result).not.toMatch(/Aug 16(?!\d)/);
+	});
+
+	test("renders without parenthetical time offsets", () => {
+		const result = renderMarkdown(uniCon);
+		expect(result).not.toContain("(");
+		expect(result).not.toContain(")");
 	});
 });

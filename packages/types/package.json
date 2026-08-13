@@ -1,60 +1,60 @@
 {
-  "name": "@evnt/types",
-  "version": "0.1.2",
-  "description": "Open Evnt Types for TypeScript",
-  "keywords": [
-    "event",
-    "open evnt",
-    "types",
-    "typescript"
-  ],
-  "homepage": "https://evnt.directory",
-  "license": "MIT",
-  "author": "Open Evnt Contributors",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/openevnt/evnt.git",
-    "directory": "packages/types"
-  },
-  "files": [
-    "./dist"
-  ],
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    },
-    "./atcute": {
-      "types": "./dist/atcute.d.ts",
-      "import": "./dist/atcute.js",
-      "default": "./dist/atcute.js"
-    }
-  },
-  "publishConfig": {
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "default": "./dist/index.js"
-      },
-      "./atcute": {
-        "types": "./dist/atcute.d.ts",
-        "import": "./dist/atcute.js",
-        "default": "./dist/atcute.js"
-      }
-    }
-  },
-  "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "pnpm build"
-  },
-  "devDependencies": {
-    "@repo/typescript-config": "workspace:^",
-    "typescript": "^6.0.3"
-  },
-  "optionalDependencies": {
-    "@atcute/lexicons": "^2.0.2"
-  }
+	"name": "@evnt/types",
+	"version": "0.1.2",
+	"description": "Open Evnt Types for TypeScript",
+	"keywords": [
+		"event",
+		"open evnt",
+		"types",
+		"typescript"
+	],
+	"homepage": "https://evnt.directory",
+	"license": "MIT",
+	"author": "Open Evnt Contributors",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/openevnt/evnt.git",
+		"directory": "packages/types"
+	},
+	"files": [
+		"./dist"
+	],
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./atcute": {
+			"types": "./dist/atcute.d.ts",
+			"import": "./dist/atcute.js",
+			"default": "./dist/atcute.js"
+		}
+	},
+	"publishConfig": {
+		"exports": {
+			".": {
+				"types": "./dist/index.d.ts",
+				"import": "./dist/index.js",
+				"default": "./dist/index.js"
+			},
+			"./atcute": {
+				"types": "./dist/atcute.d.ts",
+				"import": "./dist/atcute.js",
+				"default": "./dist/atcute.js"
+			}
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"prepublishOnly": "pnpm build"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:^",
+		"typescript": "^6.0.3"
+	},
+	"optionalDependencies": {
+		"@atcute/lexicons": "^2.0.2"
+	}
 }

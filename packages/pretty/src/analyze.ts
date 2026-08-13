@@ -1,8 +1,17 @@
 import type { EventInstance, PartialDate } from "@evnt/types";
 import { PartialDateUtil } from "@evnt/partial-date";
-import type { DateGroup, DateList, DateRange, SingleDate, TimeSlot } from "./types.js";
+import type { DateGroup, DateList, DateRange, SingleDate, TimeSlot, VenueGroup } from "./types.js";
 
-// == Helpers ==============================================
+export interface AnalyzeOptions {
+	/** Group consecutive days that share the same times into a single range
+	 *  (e.g. "Oct 12–14"). Days with a different time pattern stay separate.
+	 *  Set to false to render every instance by itself. */
+	groupConsecutiveDates: boolean;
+}
+
+export const defaultAnalyzeOptions: AnalyzeOptions = {
+	groupConsecutiveDates: true,
+};
 
 const hasDay = (pd: PartialDate) => PartialDateUtil.has(pd, "day");
 const hasTime = (pd: PartialDate) => PartialDateUtil.has(pd, "time");
@@ -151,21 +160,18 @@ const dedupTimeRanges = (entries: DateEntry[]): TimeSlot[] => {
 	return ranges;
 };
 
-// == Grouping =============================================
-
-export const groupDates = (instances: EventInstance[], group: boolean): DateGroup[] => {
+export const groupDates = (instances: EventInstance[], group: boolean): VenueGroup[] => {
 	const byVenue = new Map<string, EventInstance[]>();
 	for (const inst of instances) {
 		const key = JSON.stringify([...inst.venueIds].sort());
-		const group = byVenue.get(key) ?? [];
-		group.push(inst);
-		byVenue.set(key, group);
+		const g = byVenue.get(key) ?? [];
+		g.push(inst);
+		byVenue.set(key, g);
 	}
 
-	const groups: DateGroup[] = [];
+	const venueGroups: VenueGroup[] = [];
 
 	for (const [, insts] of byVenue) {
-		// All instances in this group share the same venueIds.
 		const venueIds = [...(insts[0]?.venueIds ?? [])].sort();
 
 		const entries: DateEntry[] = insts
@@ -180,26 +186,29 @@ export const groupDates = (instances: EventInstance[], group: boolean): DateGrou
 
 		if (entries.length === 0) continue;
 
+		const dateGroups: DateGroup[] = [];
+
 		if (group) {
 			const consolidated = mergeEntries(entries);
 			for (const g of consolidated) {
-				groups.push({
+				dateGroups.push({
 					dates: toDateShape(g.entries),
 					times: dedupTimeRanges(g.entries),
 					venueIds,
 				});
 			}
 		} else {
-			// No grouping: render every instance as its own date line.
 			for (const e of entries) {
-				groups.push({
+				dateGroups.push({
 					dates: toDateShape([e]),
 					times: dedupTimeRanges([e]),
 					venueIds,
 				});
 			}
 		}
+
+		venueGroups.push({ venueIds, groups: dateGroups });
 	}
 
-	return groups;
+	return venueGroups;
 };

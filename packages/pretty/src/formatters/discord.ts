@@ -1,28 +1,28 @@
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { PartialDate, Venue } from "@evnt/types";
-import type { DateGroup } from "../types.js";
+import type { VenueGroup } from "../types.js";
 import { MarkdownFormatter } from "./markdown.js";
-import type { EmojiFormatConfig } from "./emoji.js";
-
-// == Config ==============================================
+import type { EmojiFormatOptions } from "./emoji.js";
 
 export type TimestampStyle = "off" | "both" | "only";
 
-export interface DiscordFormatConfig extends EmojiFormatConfig {
+export interface DiscordFormatOptions extends EmojiFormatOptions {
 	timestampStyle: TimestampStyle;
 }
 
+export type DiscordFormatInput = Partial<DiscordFormatOptions> & {
+	emoji?: Record<string, string> | false;
+};
+
 export class DiscordFormatter extends MarkdownFormatter {
-	static discordDefaults: DiscordFormatConfig = {
+	static readonly discordDefaults: DiscordFormatOptions = {
 		...MarkdownFormatter.markdownDefaults,
 		timestampStyle: "off",
 	};
 
-	constructor(config: DiscordFormatConfig) {
-		super(config);
+	constructor(options: DiscordFormatInput = DiscordFormatter.discordDefaults) {
+		super(options);
 	}
-
-	// == Links ===========================================
 
 	protected override mdLink(text: string, url: string): string {
 		return `[${text}](${url})`;
@@ -35,10 +35,8 @@ export class DiscordFormatter extends MarkdownFormatter {
 			.join("\n");
 	}
 
-	// == Timestamps ======================================
-
 	private get tsStyle(): TimestampStyle {
-		return (this.config as DiscordFormatConfig).timestampStyle ?? "off";
+		return (this.options as DiscordFormatOptions).timestampStyle ?? "off";
 	}
 
 	private unixTs(pd: PartialDate): number {
@@ -95,22 +93,28 @@ export class DiscordFormatter extends MarkdownFormatter {
 		return super.clockEmoji(_pd);
 	}
 
-	protected override formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
+	protected override formatVenueGroup(
+		venueGroup: VenueGroup,
+		venueMap: Map<string, Venue>,
+	): string {
 		if (this.tsStyle === "only") {
-			const dateStr = this.formatDateShape(group.dates);
-			const timeStr = group.times
-				.map((t) => this.formatTimeRange(t.start, t.end))
-				.filter(Boolean)
-				.join(", ");
-
-			const venueNames = group.venueIds
+			const venueNames = venueGroup.venueIds
 				.map((id) => venueMap.get(id))
 				.filter(Boolean)
 				.map((v) => this.resolveText(v!.name));
 			const venueStr = venueNames.length > 0 ? venueNames.join(", ") : "";
 
-			return [dateStr, timeStr, venueStr].filter(Boolean).join(" · ");
+			return venueGroup.groups
+				.map((g) => {
+					const dateStr = this.formatDateShape(g.dates);
+					const timeStr = g.times
+						.map((t) => this.formatTimeRange(t.start, t.end))
+						.filter(Boolean)
+						.join(", ");
+					return [dateStr, timeStr, venueStr].filter(Boolean).join(" · ");
+				})
+				.join("\n");
 		}
-		return super.formatDateGroup(group, venueMap);
+		return super.formatVenueGroup(venueGroup, venueMap);
 	}
 }

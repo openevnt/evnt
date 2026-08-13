@@ -6,6 +6,11 @@ export interface DateGroup {
 	venueIds: string[];
 }
 
+export interface VenueGroup {
+	venueIds: string[];
+	groups: DateGroup[];
+}
+
 export interface SingleDate {
 	type: "single";
 	date: PartialDate;

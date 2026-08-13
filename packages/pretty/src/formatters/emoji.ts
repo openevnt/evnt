@@ -1,23 +1,23 @@
 import { PartialDateUtil } from "@evnt/partial-date";
 import type { EventStatus, PartialDate, Venue } from "@evnt/types";
-import type { DateGroup } from "../types.js";
-import type { FormatConfig } from "./base.js";
+import type { DateGroup, VenueGroup } from "../types.js";
+import type { FormatOptions } from "./base.js";
 import { PlainTextFormatter } from "./base.js";
 
-export interface EmojiFormatConfig extends FormatConfig {
+export interface EmojiFormatOptions extends FormatOptions {
 	emoji: Record<string, string> | false;
 	statusIcons: Record<EventStatus, string>;
 }
 
-export type EmojiFormatOptions = Partial<EmojiFormatConfig> & {
+export type EmojiFormatInput = Partial<EmojiFormatOptions> & {
 	emoji?: Record<string, string> | false;
 };
 
 const hasTime = (pd: PartialDate) => PartialDateUtil.has(pd, "time");
 
 export class EmojiFormatter extends PlainTextFormatter {
-	static emojiDefaults: EmojiFormatConfig = {
-		...PlainTextFormatter.defaults,
+	static readonly emojiDefaults: EmojiFormatOptions = {
+		...PlainTextFormatter.defaultOptions,
 		emoji: {
 			calendar: "📅",
 			clock: "🕐",
@@ -35,36 +35,46 @@ export class EmojiFormatter extends PlainTextFormatter {
 		},
 	};
 
-	constructor(config: EmojiFormatConfig) {
-		if (config.emoji === false) {
-			config = {
-				...config,
-				emoji: {},
-				statusIcons: { planned: "", uncertain: "", postponed: "", cancelled: "", suspended: "" },
+	constructor(options: EmojiFormatInput = EmojiFormatter.emojiDefaults) {
+		const merged = { ...EmojiFormatter.emojiDefaults, ...options };
+		if (merged.emoji === false) {
+			merged.emoji = {};
+			merged.statusIcons = {
+				planned: "",
+				uncertain: "",
+				postponed: "",
+				cancelled: "",
+				suspended: "",
 			};
 		}
-		super(config);
+		super(merged);
 	}
 
 	private get emojiMap(): Record<string, string> {
-		const cfg = this.config as EmojiFormatConfig;
+		const cfg = this.options as EmojiFormatOptions;
 		return cfg.emoji === false ? {} : cfg.emoji;
 	}
 
 	private get statusIconMap(): Record<EventStatus, string> {
-		return (this.config as EmojiFormatConfig).statusIcons;
+		return (this.options as EmojiFormatOptions).statusIcons;
 	}
-
-	// == Status ==========================================
 
 	override formatStatus(status: EventStatus, text: string): string {
 		const icon = this.statusIconMap[status] ?? "";
 		return [icon, text].filter(Boolean).join(" ");
 	}
 
-	// == Date groups =====================================
+	protected override formatVenueGroup(
+		venueGroup: VenueGroup,
+		venueMap: Map<string, Venue>,
+	): string {
+		const venueStr = this.formatGroupVenues(venueGroup.venueIds, venueMap);
+		const dateLines = venueGroup.groups.map((g) => this.formatDateGroup(g));
+		if (venueStr) return [venueStr, dateLines.join("\n\n")].join("\n");
+		return dateLines.join("\n\n");
+	}
 
-	protected override formatDateGroup(group: DateGroup, venueMap: Map<string, Venue>): string {
+	protected override formatDateGroup(group: DateGroup): string {
 		const lines: string[] = [];
 
 		const dateStr = this.formatDateShape(group.dates);
@@ -80,9 +90,6 @@ export class EmojiFormatter extends PlainTextFormatter {
 				firstTime && hasTime(firstTime) ? this.clockEmoji(firstTime) : this.emojiMap.clock;
 			lines.push([clockIcon ?? this.emojiMap.clock ?? "🕐", timeStr].filter(Boolean).join(" "));
 		}
-
-		const venueStr = this.formatGroupVenues(group.venueIds, venueMap);
-		if (venueStr) lines.push(venueStr);
 
 		return lines.join("\n");
 	}
@@ -118,8 +125,6 @@ export class EmojiFormatter extends PlainTextFormatter {
 		const base = parsed.minute >= 30 ? 0x1f55c : 0x1f550;
 		return String.fromCodePoint(base + hour12 - 1);
 	}
-
-	// == Links ===========================================
 
 	protected override formatLink(url: string, name?: string): string {
 		const icon = this.emojiMap.link ?? "";

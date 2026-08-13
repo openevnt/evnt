@@ -9,6 +9,6 @@ jobs:
           fetch-depth: 0
       - uses: yesolutions/mirror-action@master
         with:
-          REMOTE: 'https://codeberg.org/OpenEvnt/evnt.git'
+          REMOTE: "https://codeberg.org/OpenEvnt/evnt.git"
           GIT_USERNAME: deniz-blue
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}

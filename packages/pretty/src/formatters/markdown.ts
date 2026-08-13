@@ -1,16 +1,14 @@
 import type { Venue } from "@evnt/types";
-import { EmojiFormatter, type EmojiFormatConfig } from "./emoji.js";
+import { EmojiFormatter, type EmojiFormatInput, type EmojiFormatOptions } from "./emoji.js";
 
 export class MarkdownFormatter extends EmojiFormatter {
-	static markdownDefaults: EmojiFormatConfig = {
+	static readonly markdownDefaults: EmojiFormatOptions = {
 		...EmojiFormatter.emojiDefaults,
 	};
 
-	constructor(config: EmojiFormatConfig) {
-		super(config);
+	constructor(options: EmojiFormatInput = MarkdownFormatter.markdownDefaults) {
+		super(options);
 	}
-
-	// == Sections ========================================
 
 	protected override formatHeader(text: string): string {
 		return `**${text}**`;
@@ -19,8 +17,6 @@ export class MarkdownFormatter extends EmojiFormatter {
 	protected override formatSubHeader(text: string): string {
 		return `*${text}*`;
 	}
-
-	// == Venues ==========================================
 
 	protected override formatGroupVenues(venueIds: string[], venueMap: Map<string, Venue>): string {
 		const names: string[] = [];
@@ -43,16 +39,12 @@ export class MarkdownFormatter extends EmojiFormatter {
 		return names.join(", ");
 	}
 
-	// == Links ===========================================
-
 	protected override formatLink(url: string, name?: string): string {
-		const emoji = (this.config as EmojiFormatConfig).emoji;
+		const emoji = (this.options as EmojiFormatOptions).emoji;
 		const icon = emoji === false ? "" : (emoji.link ?? "");
 		const text = name ? this.mdLink(name, url) : url;
 		return [icon, text].filter(Boolean).join(" ");
 	}
-
-	// == Markdown helpers ================================
 
 	protected mdLink(text: string, url: string): string {
 		return `[${text}](${url})`;

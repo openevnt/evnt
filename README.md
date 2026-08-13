@@ -8,7 +8,7 @@
 
 [Open Evnt](https://evnt.directory) is a data format for representing events.
 
-This monorepo contains a *lot* of things:
+This monorepo contains a _lot_ of things:
 
 **Website**
 

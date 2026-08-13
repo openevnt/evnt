@@ -1,37 +1,37 @@
 {
-  "name": "@evnt/pretty",
-  "version": "0.1.2",
-  "description": "Open Evnt utilities for pretty printing",
-  "keywords": [
-    "event",
-    "open evnt",
-    "pretty",
-    "printing"
-  ],
-  "license": "MIT",
-  "author": "Open Evnt Contributors",
-  "files": [
-    "./dist"
-  ],
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "publishConfig": {
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "pnpm build"
-  },
-  "dependencies": {
-    "@evnt/partial-date": "workspace:^",
-    "@evnt/translations": "workspace:^",
-    "@evnt/types": "workspace:^"
-  },
-  "devDependencies": {
-    "@repo/typescript-config": "workspace:^",
-    "temporal-polyfill-lite": "^0.2.0",
-    "typescript": "^6.0.3"
-  }
+	"name": "@evnt/pretty",
+	"version": "0.2.0",
+	"description": "Open Evnt utilities for pretty printing",
+	"keywords": [
+		"event",
+		"open evnt",
+		"pretty",
+		"printing"
+	],
+	"license": "MIT",
+	"author": "Open Evnt Contributors",
+	"files": [
+		"./dist"
+	],
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"publishConfig": {
+		"main": "./dist/index.js",
+		"types": "./dist/index.d.ts"
+	},
+	"scripts": {
+		"build": "tsc",
+		"prepublishOnly": "pnpm build"
+	},
+	"dependencies": {
+		"@evnt/partial-date": "workspace:^",
+		"@evnt/translations": "workspace:^",
+		"@evnt/types": "workspace:^"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:^",
+		"temporal-polyfill-lite": "^0.2.0",
+		"typescript": "^6.0.3"
+	}
 }
