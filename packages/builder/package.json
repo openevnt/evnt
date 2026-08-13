@@ -1,33 +1,33 @@
 {
-	"name": "@evnt/builder",
-	"version": "0.1.2",
-	"description": "Open Evnt builder patterns",
-	"keywords": [
-		"builder",
-		"event",
-		"open evnt"
-	],
-	"license": "MIT",
-	"author": "Open Evnt Contributors",
-	"files": [
-		"/dist"
-	],
-	"type": "module",
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
-	"publishConfig": {
-		"main": "./dist/index.js",
-		"types": "./dist/index.d.ts"
-	},
-	"scripts": {
-		"build": "tsc",
-		"prepublishOnly": "pnpm build"
-	},
-	"dependencies": {
-		"@evnt/types": "workspace:^"
-	},
-	"devDependencies": {
-		"@repo/typescript-config": "workspace:^",
-		"typescript": "^6.0.3"
-	}
+  "name": "@evnt/builder",
+  "version": "0.1.2",
+  "description": "Open Evnt builder patterns",
+  "keywords": [
+    "builder",
+    "event",
+    "open evnt"
+  ],
+  "license": "MIT",
+  "author": "Open Evnt Contributors",
+  "files": [
+    "/dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@evnt/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:^",
+    "typescript": "^6.0.3"
+  }
 }

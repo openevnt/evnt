@@ -1,41 +1,41 @@
 {
-	"name": "@evnt/translations",
-	"version": "0.1.2",
-	"description": "Open Evnt Translations utilities",
-	"keywords": [
-		"event",
-		"open evnt",
-		"translations",
-		"typescript"
-	],
-	"homepage": "https://evnt.directory",
-	"license": "MIT",
-	"author": "Open Evnt Contributors",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/openevnt/evnt.git",
-		"directory": "packages/translations"
-	},
-	"files": [
-		"./dist"
-	],
-	"type": "module",
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
-	"publishConfig": {
-		"main": "./dist/index.js",
-		"types": "./dist/index.d.ts"
-	},
-	"scripts": {
-		"build": "tsc",
-		"prepublishOnly": "pnpm build"
-	},
-	"dependencies": {
-		"@evnt/types": "workspace:^"
-	},
-	"devDependencies": {
-		"@repo/typescript-config": "workspace:^",
-		"typescript": "^6.0.2"
-	},
-	"packageManager": "pnpm@11.0.0-beta.6"
+  "name": "@evnt/translations",
+  "version": "0.1.2",
+  "description": "Open Evnt Translations utilities",
+  "keywords": [
+    "event",
+    "open evnt",
+    "translations",
+    "typescript"
+  ],
+  "homepage": "https://evnt.directory",
+  "license": "MIT",
+  "author": "Open Evnt Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openevnt/evnt.git",
+    "directory": "packages/translations"
+  },
+  "files": [
+    "./dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@evnt/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:^",
+    "typescript": "^6.0.2"
+  },
+  "packageManager": "pnpm@11.0.0-beta.6"
 }
