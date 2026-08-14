@@ -1,37 +1,21 @@
-# HTTP
+# HTTP(s) Protocol
 
 Open Evnt is designed to be served over HTTP. You can host your event data on any static file server, a CDN, or an S3 bucket.
 
-## File extension (optional)
+## File Extension & Content Type
 
-Use `.evnt.json` as the file extension. Tools use the `.evnt` segment to recognise the file as Open Evnt data, while the `.json` tail means systems that don't know about Open Evnt still handle it as regular JSON.
+You should use `.evnt.json` as the file extension. Tools that understand Open Evnt will recognize it while the ones that won't can fall back to treating it as a regular JSON file.
 
-## Content type (optional)
+The content type of Open Evnt events should be `application/evnt+json`. This is not required, but it helps clients that want to distinguish event data from other JSON.
 
-Serve with:
+## Headers
 
-```
-Content-Type: application/evnt+json
-```
-
-The `+json` suffix means any parser that handles `application/*+json` can decode it. Clients that know Open Evnt can match on `application/evnt+json` specifically. Not required - `application/json` works too. But `application/evnt+json` helps clients that want to distinguish event data from other JSON.
-
-## CORS
-
-If you want other websites to be able to fetch your events, add this header to your HTTP response:
+You should allow CORS requests from any origin to allow clients to fetch your event data from any domain. You can do this by adding the following header to your responses:
 
 ```
 Access-Control-Allow-Origin: *
 ```
 
-## Discovery
+## Discovery & Indexing
 
-When returning HTML web pages, you can add a `<link>` tag to the `<head>` of your page to point to your Open Evnt data:
-
-```html
-<link rel="alternate" type="application/evnt+json" href="https://example.com/my-event.evnt.json" />
-```
-
-## Lists
-
-You can use [JSON Feed](https://jsonfeed.org/) to publish a list of events. JSON Feed is a simple format for syndicating content, and it can be used to list multiple Open Evnt files.
+Check out the [Link Discovery](link-discovery.md) and [Index Discovery](index-discovery.md) protocols for more information on how to make your event data discoverable and indexable by other tools and applications.

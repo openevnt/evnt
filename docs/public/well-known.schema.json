@@ -1,0 +1,41 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://evnt.directory/well-known.schema.json",
+	"title": "Well-Known Manifest",
+	"type": "object",
+	"required": ["version"],
+	"properties": {
+		"version": { "const": 1 },
+		"collections": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/Collection" }
+		},
+		"auth": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/AuthInfo" }
+		}
+	},
+	"$defs": {
+		"Collection": {
+			"type": "object",
+			"required": ["name", "href", "type"],
+			"properties": {
+				"name": {
+					"type": "object",
+					"additionalProperties": { "type": "string", "minLength": 1 },
+					"minProperties": 1
+				},
+				"href": { "type": "string", "format": "uri" },
+				"type": { "type": "string" },
+				"auth": { "type": "boolean" }
+			}
+		},
+		"AuthInfo": {
+			"type": "object",
+			"required": ["type"],
+			"properties": {
+				"type": { "type": "string" }
+			}
+		}
+	}
+}

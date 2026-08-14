@@ -1,0 +1,36 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://evnt.directory/openevnt-index.schema.json",
+	"title": "Open Evnt Index",
+	"type": "object",
+	"required": ["version", "items"],
+	"properties": {
+		"version": { "const": 1 },
+		"supports": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"updated": { "type": "string", "format": "date-time" },
+		"items": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/IndexItem" }
+		},
+		"next": { "type": "string" },
+		"total": { "type": "integer", "minimum": 0 }
+	},
+	"$defs": {
+		"IndexItem": {
+			"type": "object",
+			"required": ["href"],
+			"properties": {
+				"href": { "type": "string" },
+				"name": {
+					"type": "object",
+					"additionalProperties": { "type": "string", "minLength": 1 },
+					"minProperties": 1
+				},
+				"summary": { "type": "string" }
+			}
+		}
+	}
+}

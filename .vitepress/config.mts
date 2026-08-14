@@ -58,13 +58,13 @@ export default defineConfig({
 			{
 				text: "Design & Motivation",
 				items: [
-					{ text: "Ethos", link: "/guide/ethos" },
 					{ text: "Open Evnt Object", link: "/guide/root" },
 					{ text: "Translations", link: "/guide/translations" },
 					{ text: "Partial Dates", link: "/guide/partial-date" },
 					{ text: "Venues", link: "/guide/venues" },
 					{ text: "Instances", link: "/guide/instances" },
 					{ text: "Components", link: "/guide/components" },
+					{ text: "Ethos", link: "/guide/ethos" },
 				],
 			},
 			{
@@ -73,6 +73,14 @@ export default defineConfig({
 					{ text: "HTTP", link: "/protocol/http" },
 					{ text: "AT Protocol", link: "/protocol/atproto" },
 				],
+			},
+			{
+				text: "Discovery",
+				items: [
+					{ text: "Link Discovery", link: "/protocol/link-discovery" },
+					{ text: "Index Discovery", link: "/protocol/index-discovery" },
+					{ text: "Open Evnt Index", link: "/protocol/open-evnt-index" },
+				]
 			},
 		],
 

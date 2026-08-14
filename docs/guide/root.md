@@ -17,14 +17,14 @@ See [the Translations explainer](./translations.md) for why it's an object and n
 The label is a secondary name for the event. Generally, the label does not need to be defined, but it can be useful for a couple scenarios:
 
 1. **Events with long names**
-   
-	Some events have long, descriptive names that are not suitable for display in a list. In this case, the `name` field can be used for the short form of the name, and the `label` field can be used for the long form. For example, the `name` might be "FOSDEM" while the `label` might be "Free and Open Source Developers' European Meeting"
 
-	Relevant information: A similar issue exists in [foss.events](https://codeberg.org/foss.events/foss-events-website/wiki#user-content-name)
+   Some events have long, descriptive names that are not suitable for display in a list. In this case, the `name` field can be used for the short form of the name, and the `label` field can be used for the long form. For example, the `name` might be "FOSDEM" while the `label` might be "Free and Open Source Developers' European Meeting"
+
+   Relevant information: A similar issue exists in [foss.events](https://codeberg.org/foss.events/foss-events-website/wiki#user-content-name)
 
 2. **Events with ambiguous names**
-   
-	Some events have names that are ambiguous or could be confused with other events. In this case, the `label` field can be used to provide additional context or clarification. For example, the `name` might be "Tech Conference" while the `label` might be "Birmingham Tech Conference 2026"
+
+   Some events have names that are ambiguous or could be confused with other events. In this case, the `label` field can be used to provide additional context or clarification. For example, the `name` might be "Tech Conference" while the `label` might be "Birmingham Tech Conference 2026"
 
 Apps should generally display the `label` field under/near the `name` field in smaller text.
 
