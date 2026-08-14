@@ -49,14 +49,14 @@ The `auth` field is an optional boolean indicating whether authentication is req
 
 ## 4. Collection Types
 
-The `type` field in a Collection object indicates the type of the collection. 
+The `type` field in a Collection object indicates the type of the collection.
 
 The following collection types are defined:
 
-| Type                   | Description                          |
-|------------------------|--------------------------------------|
+| Type                   | Description                           |
+| ---------------------- | ------------------------------------- |
 | `directory.evnt.index` | [Open Evnt Index](open-evnt-index.md) |
-| `org.jsonfeed`         | [JSON Feed](https://jsonfeed.org)    |
+| `org.jsonfeed`         | [JSON Feed](https://jsonfeed.org)     |
 
 ## 5. Authentication
 
@@ -86,7 +86,7 @@ The `scopes` field is an optional array of strings indicating the scopes require
 Servers MUST return appropriate HTTP status codes for error conditions. The following status codes are defined:
 
 | Code  | Meaning                          |
-|-------|----------------------------------|
+| ----- | -------------------------------- |
 | `200` | Public access, content returned  |
 | `401` | Authentication required          |
 | `403` | Authenticated but not authorized |
@@ -99,31 +99,31 @@ Servers SHOULD include a `WWW-Authenticate` header when returning `401` to indic
 
 ```json
 {
-  "version": 1,
-  "collections": [
-	{
-	  "name": {
-		"en": "All Events"
-	  },
-	  "href": "/events/all",
-	  "type": "directory.evnt.index"
-	},
-	{
-	  "name": {
-		"en": "My Events"
-	  },
-	  "href": "/events/my",
-	  "type": "directory.evnt.index",
-	  "auth": true
-	}
-  ],
-  "auth": [
-	{
-	  "type": "openid-connect",
-	  "issuer": "https://auth.example.com",
-	  "scopes": ["events"]
-	}
-  ]
+	"version": 1,
+	"collections": [
+		{
+			"name": {
+				"en": "All Events"
+			},
+			"href": "/events/all",
+			"type": "directory.evnt.index"
+		},
+		{
+			"name": {
+				"en": "My Events"
+			},
+			"href": "/events/my",
+			"type": "directory.evnt.index",
+			"auth": true
+		}
+	],
+	"auth": [
+		{
+			"type": "openid-connect",
+			"issuer": "https://auth.example.com",
+			"scopes": ["events"]
+		}
+	]
 }
 ```
 

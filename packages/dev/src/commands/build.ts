@@ -86,7 +86,7 @@ export default async function (opts: { dir: string; out: string; feed?: string }
 		writeFileSync(outPath, JSON.stringify(event, null, "\t"), "utf-8");
 
 		const contentText = new PlainTextFormatter({
-			...PlainTextFormatter.defaults,
+			...PlainTextFormatter.defaultOptions,
 			language: "en",
 			timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 		}).formatEvent(event as any);

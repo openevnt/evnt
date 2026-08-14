@@ -7,7 +7,7 @@
 		"lint": "oxlint",
 		"schema": "pnpm -F @repo/scripts schema:generate && oxfmt ./docs/public/openevnt.schema.json",
 		"docs:dev": "vitepress dev",
-		"docs:build": "vitepress build",
+		"docs:build": "pnpm -r build && vitepress build",
 		"docs:preview": "vitepress preview"
 	},
 	"devDependencies": {

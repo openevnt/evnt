@@ -13,7 +13,7 @@ export default async function (
 	switch (format) {
 		case "plain":
 			output = new PlainTextFormatter({
-				...PlainTextFormatter.defaults,
+				...PlainTextFormatter.defaultOptions,
 				language: lang,
 				timezone,
 			}).formatEvent(event as any);

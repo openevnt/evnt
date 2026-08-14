@@ -80,7 +80,7 @@ export default defineConfig({
 					{ text: "Link Discovery", link: "/protocol/link-discovery" },
 					{ text: "Index Discovery", link: "/protocol/index-discovery" },
 					{ text: "Open Evnt Index", link: "/protocol/open-evnt-index" },
-				]
+				],
 			},
 		],
 

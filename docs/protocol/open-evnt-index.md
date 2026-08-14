@@ -40,7 +40,6 @@ The `total` field indicates the total number of matching events. Consumers MAY u
 
 `updated` is an ISO 8601 datetime of when the index was last updated. Servers MAY omit this field.
 
-
 ## 3. IndexItem
 
 The index contains an array of items. Each item has the following shape:
