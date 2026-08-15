@@ -16,7 +16,7 @@ The following link relations and media types are defined for link discovery:
 
 | Where         | `type` attribute                   | `href` points to                        |
 |---------------|------------------------------------|-----------------------------------------|
-| Event Page    | `application/evnt+json`            | [Open Evnt](../spec/index.md)           |
+| Event Page    | `application/evnt+json`            | [Open Evnt](../spec/open-evnt-event.md)           |
 | Event Listing | `application/open-evnt-index+json` | [Open Evnt Index](../spec/open-evnt-index.md) |
 
 The `rel` attribute of the `<link>` tag or `Link` header MUST be set to `alternate`.

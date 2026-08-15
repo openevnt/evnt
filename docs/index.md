@@ -1,16 +1,24 @@
 # Open Evnt
 
-Open Evnt is a data format for events.
+Open Evnt is a specification for representing, publishing, discovering social events on the web.
 
-Open Evnt can represent events of any type, in any language, with any level of detail. It can describe a single-day conference with live streaming, a multi-day festival, or anything in between. Designed to be machine-readable and as accurate as possible, it can be used to power apps, websites, and other tools that need to understand events.
+It provides a modern JSON data format for rich event details alongside a lightweight discovery and indexing protocols that allow events to be shared across apps and websites.
 
-Open Evnt is a JSON-based format, with a simple structure that can be extended to meet your needs. It's meant to fix two big issues:
+Open Evnt addresses three major problems in event management and sharing:
 
-- **Data-stuffing**: Many event formats are designed to fit a single type of event, and when your event doesn't fit that type, you end up cramming data into fields that don't make sense. A description field becomes a dumping ground for details that don't fit anywhere else, and apps can't do anything useful with it. Open Evnt is designed to handle events as they actually are, without forcing them into a box.
+- **Data-stuffing**: Existing event formats force multi-day, hybrid, or complex event schedules into rigid fields. Unstructured details get dumped into description fields where applications can't process them. Open Evnt models events as they actually exist - with support for partial dates, multiple venues or dates, multi-language content, and extensible component blocks that allow for rich, structured event information.
+- **Fragmentation**: Without an open standard for rich event data, every website, ticket platform, conference app, and social network uses its own format gated behind proprietary APIs. Event data is siloed and cannot be shared or reused across platforms. Open Evnt creates a single, shared format that can be used for seamless interoperability between applications and services.
+- **Discoverability**: Finding and subscribing to structured event feeds today requires custom API integrations or static, unqueryable `.ics` files. Open Evnt provides protocols for publishing and discovering event collections allowing applications to query and filter events across the web in a standardized way.
 
-- **Fragmentation**: Since there really was never a standard for detailed event data, every app and website has its own format. There is barely any interoperability between them, and event data is often locked into a single platform. Open Evnt is designed to be a standard that everyone can use, so that event data can be shared and reused across apps and websites.
+## The Open Evnt Stack
 
-## An example
+Open Evnt consists of three complementary specifications:
+
+- [Open Evnt Event](./spec/open-evnt-event.md) - The primary JSON schema for modelling events in high detail.
+- [Open Evnt Manifest](./spec/open-evnt-manifest.md) - A well-known domain endpoint for exposing available event collections.
+- [Open Evnt Index](./protocol/open-evnt-index.md) - A filterable, paginated index format for querying events.
+
+## An Example Event
 
 ```json
 {
@@ -65,8 +73,9 @@ Link: example.com/summer-workshops
 
 - **Try it** in the [Playground](./playground)
 - **Write your first event** with the [Quickstart](./guide/getting-started)
-- Read the [Specification](./spec/index.md)
-- **Understand the design** in the [Why guides](./guide/root.md)
+- Read the [Event Specification](./spec/open-evnt-event.md)
+- Read the [Manifest Specification](./spec/open-evnt-manifest.md)
+- Read the [Index Specification](./protocol/open-evnt-index.md)
 
 ## Contributing
 

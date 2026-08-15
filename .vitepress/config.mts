@@ -34,7 +34,7 @@ export default defineConfig({
 		nav: [
 			{ text: "Home", link: "/" },
 			{ text: "Quickstart", link: "/guide/getting-started" },
-			{ text: "Specification", link: "/spec/" },
+			{ text: "Specification", link: "/spec/open-evnt-event" },
 			{
 				text: "Community",
 				items: [
@@ -53,7 +53,17 @@ export default defineConfig({
 			{ text: "Convert", link: "/convert" },
 			{
 				text: "Reference",
-				items: [{ text: "Specification", link: "/spec/" }],
+				items: [
+					{ text: "Open Evnt Event", link: "/spec/open-evnt-event" },
+					{
+						text: "Open Evnt Manifest",
+						link: "/spec/open-evnt-manifest",
+					},
+					{
+						text: "Open Evnt Index",
+						link: "/spec/open-evnt-index",
+					},
+				],
 			},
 			{
 				text: "Design & Motivation",
@@ -76,11 +86,7 @@ export default defineConfig({
 			},
 			{
 				text: "Discovery",
-				items: [
-					{ text: "Link Discovery", link: "/protocol/link-discovery" },
-					{ text: "Index Discovery", link: "/protocol/index-discovery" },
-					{ text: "Open Evnt Index", link: "/protocol/open-evnt-index" },
-				],
+				items: [{ text: "Link Discovery", link: "/protocol/link-discovery" }],
 			},
 		],
 

@@ -12,4 +12,4 @@ The rkey can be a slug or a TID (timestamp identifier).
 
 ## Lexicons
 
-We publish lexicons for Open Evnt. Keep in mind that the [specification](../spec/index.md) is authoritive.
+We publish lexicons for Open Evnt. Keep in mind that the [specification](../spec/open-evnt-event.md) is authoritive.
