@@ -18,4 +18,6 @@ Access-Control-Allow-Origin: *
 
 ## Discovery & Indexing
 
-Check out the [Link Discovery](link-discovery.md) and [Index Discovery](index-discovery.md) protocols for more information on how to make your event data discoverable and indexable by other tools and applications.
+Check out [Link Discovery](link-discovery.md) to learn how to make the content you serve point to a valid Open Evnt document, so that clients can discover it from the page.
+
+If you want to provide an index of your event data so that any client can discover all the events you serve, you can use the [Open Evnt Manifest](../spec/open-evnt-manifest.md) specification.

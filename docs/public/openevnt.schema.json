@@ -1,9 +1,9 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"id": "OpenEvnt",
+	"id": "directory.evnt.event",
+	"$id": "https://evnt.directory/openevnt.schema.json",
 	"title": "Open Evnt Event",
 	"description": "A single event defined in the Open Evnt format",
-	"$id": "https://evnt.directory/openevnt.schema.json",
 	"type": "object",
 	"properties": {
 		"$type": {

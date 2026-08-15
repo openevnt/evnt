@@ -10,7 +10,7 @@
 			"type": "array",
 			"items": { "type": "string" }
 		},
-		"updated": { "type": "string", "format": "date-time" },
+		"updatedAt": { "type": "string", "format": "date-time" },
 		"items": {
 			"type": "array",
 			"items": { "$ref": "#/$defs/IndexItem" }
@@ -29,7 +29,8 @@
 					"additionalProperties": { "type": "string", "minLength": 1 },
 					"minProperties": 1
 				},
-				"summary": { "type": "string" }
+				"updatedAt": { "type": "string", "format": "date-time" },
+				"etag": { "type": "string" }
 			}
 		}
 	}

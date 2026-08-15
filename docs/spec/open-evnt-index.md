@@ -2,6 +2,8 @@
 
 **Version:** 1: DRAFT
 
+**Last Updated:** 2026-08-15
+
 The Open Evnt Index is a HTTP and JSON-based protocol for querying a collection of events.
 
 ## 1. Introduction
@@ -9,6 +11,8 @@ The Open Evnt Index is a HTTP and JSON-based protocol for querying a collection 
 An Open Evnt Index is an HTTP endpoint that responds with a JSON document. The JSON document contains an array of items. Each item includes the URL to the event.
 
 The index MAY support filtering and pagination.
+
+The Open Evnt Index is identified by the NSID `directory.evnt.index`.
 
 ## 2. Request & Response
 
@@ -18,12 +22,12 @@ The response is a JSON document with the following shape:
 
 ```
 Index
-  version:  1               REQUIRED
-  items:    IndexItem[]     REQUIRED
-  supports: string[]?       OPTIONAL
-  updated:  string?         OPTIONAL
-  next:     string?         OPTIONAL
-  total:    number?         OPTIONAL
+  version:   1               REQUIRED
+  items:     IndexItem[]     REQUIRED
+  supports:  string[]?       OPTIONAL
+  updatedAt: string?         OPTIONAL
+  next:      string?         OPTIONAL
+  total:     number?         OPTIONAL
 ```
 
 `version` is the format version. MUST be `1`. Consumers MUST reject responses with an unknown `version`.
@@ -38,7 +42,7 @@ The `total` field indicates the total number of matching events. Consumers MAY u
 
 `supports` is an array of strings indicating the features supported by the index. See [section 4 (Filtering)](#4-filtering). Absent or empty means the index supports no filtering.
 
-`updated` is an ISO 8601 datetime of when the index was last updated. Servers MAY omit this field.
+`updatedAt` is an ISO 8601 datetime of when the index was last updated. Servers MAY omit this field.
 
 ## 3. IndexItem
 
@@ -46,22 +50,17 @@ The index contains an array of items. Each item has the following shape:
 
 ```
 IndexItem
-  href:     string          REQUIRED
-  name:     Translations?   OPTIONAL
-  summary:  string?         OPTIONAL
+  href:      string          REQUIRED
+  name:      Translations?   OPTIONAL
+  updatedAt: string?         OPTIONAL
+  etag:      string?         OPTIONAL
 ```
 
-Each item MUST include the `href` field, which is the URL of the event, relative to the index's origin. The `href` field MUST point to a valid Open Evnt event JSON document.
+Each item MUST include the `href` field. The `href` field MUST point to a valid Open Evnt event JSON document. If the URL is relative, it MUST be resolved against the domain of the index endpoint. Consumers MUST fetch the event document from the `href` URL to access the full event data.
 
-An item MAY include the `name` field, which is the same as the `name` field in the event. Consumers MAY use this for list display without fetching the full event.
+An item MAY include the `name` field, which is the same as the `name` field in the event. Consumers MAY use this for list display without fetching the full event. Servers MAY omit this field.
 
-An item MAY also include the `summary` field, which is a short human-readable description of the event. Consumers MAY use this for list display without fetching the full event. Servers MAY generate the summary from the event's instances and venues.
-
-Consumers SHOULD NOT assume that the `name` and `summary` fields are always present. When absent, consumers MAY fetch the event to get the name and summary.
-
-Consumers MUST treat the Open Evnt event as the source of truth.
-
-Servers MAY omit the `name` and `summary` fields for performance or privacy reasons.
+Servers MAY include the `updatedAt` field as an ISO 8601 datetime indicating when the event was last updated. Servers MAY also include the `etag` field as the ETag of the event for caching purposes. Servers that include these fields MUST ensure they are updated when the event is modified. Consumers MAY use these fields to determine if they need to refetch the event.
 
 ## 4. Filtering
 
@@ -73,8 +72,6 @@ Array entries MUST be one of the following: `search`, `after`, `before`, `limit`
 
 `before` and `after` indicate that the index supports filtering events by their start or end times. The values of these parameters MUST be ISO 8601 datetimes.
 
-Servers that support `before` and `after` query parameters MUST handle the special `"now"` value, which MUST be interpreted as the current time.
-
 `limit` indicates the client's preferred maximum number of items to return in the response. Servers MAY ignore this parameter or enforce a maximum limit.
 
 Servers that support more than one filtering parameter MUST apply filtering using a logical AND.
@@ -83,7 +80,9 @@ Servers that support more than one filtering parameter MUST apply filtering usin
 
 The index MAY support pagination. If it does, the response includes a `next` field with a URL for the next page of results.
 
-The `next` field when present MUST point to a valid index document.
+The `next` field when present MUST point to a valid index document. If the URL is relative, it MUST be resolved against the domain of the index endpoint. The URL MAY or MAY NOT be the same path as the original request.
+
+The `next` URL MUST preserve the filtering parameters from the original request. Servers MAY include additional parameters for pagination, such as a cursor or page number.
 
 ---
 
@@ -101,17 +100,19 @@ Example response:
 {
 	"version": 1,
 	"supports": ["after", "before", "search", "limit"],
-	"updated": "2026-07-15T10:30:00Z",
+	"updatedAt": "2026-07-15T10:30:00Z",
 	"items": [
 		{
 			"href": "/events/summer-fest.evnt.json",
 			"name": { "en": "Summer Festival" },
-			"summary": "July 2026, City Park"
+			"updatedAt": "2026-07-01T12:00:00Z",
+			"etag": "W/\"abc123\""
 		},
 		{
 			"href": "/events/winter-gala.evnt.json",
 			"name": { "en": "Winter Gala" },
-			"summary": "December 2026, Grand Hall"
+			"updatedAt": "2026-07-01T12:00:00Z",
+			"etag": "W/\"def456\""
 		}
 	],
 	"next": "/events.json?cursor=eyJpZCI6Mn0",
@@ -121,4 +122,4 @@ Example response:
 
 ## Appendix B: JSON Schema
 
-The JSON schema can be found at https://evnt.directory/openevnt-index.schema.json
+The JSON schema can be found at https://evnt.directory/open-evnt-index.schema.json

@@ -2,26 +2,45 @@
 
 **Version:** 1: DRAFT
 
-This document outlines how consumers can discover Open Evnt events from HTML documents and HTTP responses.
+**Last Updated:** 2026-08-15
+
+This document outlines how consumers can discover Open Evnt events and index documents from HTML documents and HTTP responses.
 
 ## 1. Introduction
 
-Servers that host Open Evnt events can provide discovery information using the methods described in this document. Consumers can use this information to locate and retrieve event documents.
+Servers that host Open Evnt events can provide discovery information using the methods described in this document. Consumers can use this information to locate and retrieve event documents and index endpoints.
 
-## 2. HTML Link Tag
+## 2. Relations and Types
 
-HTML pages that describe or contain events SHOULD include a `<link>` tag with the `rel` attribute set to `alternate` and the `type` attribute set to `application/evnt+json`. The `href` attribute should point to the URL of the event JSON document.
+The following link relations and media types are defined for link discovery:
+
+| Where         | `type` attribute                   | `href` points to                        |
+|---------------|------------------------------------|-----------------------------------------|
+| Event Page    | `application/evnt+json`            | [Open Evnt](../spec/index.md)           |
+| Event Listing | `application/open-evnt-index+json` | [Open Evnt Index](../spec/open-evnt-index.md) |
+
+The `rel` attribute of the `<link>` tag or `Link` header MUST be set to `alternate`.
+
+## 3. Linking
+
+HTML pages that describe or contain events that have an Open Evnt representation SHOULD include a `<link>` tag in the `<head>` section of the page to reference the event document or index endpoint.
+
+HTML pages that act as an event listing or index that have an Open Evnt Index representation SHOULD include a `<link>` tag in the `<head>` section of the page to reference the Open Evnt Index document.
+
+The `rel`, `type` and `href` attributes/parameters of the `<link>` tag or `Link` header MUST be set to the appropriate values as defined in [section 2 (Relations and Types)](#2-relations-and-types).
+
+In other documents, such as Markdown or plain text, servers MAY include a `Link` header in the HTTP response to reference the event document or index endpoint. The `rel`, `type` and `href` parameters of the `Link` header MUST be set to the appropriate values as defined in [section 2 (Relations and Types)](#2-relations-and-types).
+
+Servers MAY include multiple `<link>` tags or `Link` headers to reference multiple event documents or index endpoints. Consumers SHOULD follow all links to discover all available events and indexes.
+
+## Appendix: Examples
 
 ```html
-<link rel="alternate" type="application/evnt+json" href="/example.evnt.json" />
+<link rel="alternate" type="application/evnt+json" href="/events/summer-fest.evnt.json">
+<link rel="alternate" type="application/open-evnt-index+json" href="/events.json">
 ```
 
-An HTML page MAY include multiple `<link>` tags to reference multiple events.
-
-## 3. HTTP Link Header
-
-Servers MAY include an HTTP `Link` header in responses to indicate the presence of event documents. The `rel` attribute should be set to `alternate`, and the `type` attribute should be set to `application/evnt+json`. The `href` attribute should point to the URL of the event JSON document.
-
-```
-Link: </example.evnt.json>; rel="alternate"; type="application/evnt+json"
+```http
+Link: <https://example.com/events/summer-fest.evnt.json>; rel="alternate"; type="application/evnt+json"
+Link: <https://example.com/events.json>; rel="alternate"; type="application/open-evnt-index+json"
 ```

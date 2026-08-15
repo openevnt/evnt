@@ -1,0 +1,51 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://evnt.directory/manifest.schema.json",
+	"title": "Open Evnt Manifest",
+	"type": "object",
+	"required": ["version", "name", "items"],
+	"properties": {
+		"version": { "const": 1 },
+		"name": {
+			"type": "object",
+			"additionalProperties": { "type": "string", "minLength": 1 },
+			"minProperties": 1
+		},
+		"items": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/Item" }
+		}
+	},
+	"$defs": {
+		"Item": {
+			"type": "object",
+			"required": ["name", "href", "type"],
+			"properties": {
+				"name": {
+					"type": "object",
+					"additionalProperties": { "type": "string", "minLength": 1 },
+					"minProperties": 1
+				},
+				"href": { "type": "string", "format": "uri" },
+				"type": {
+					"oneOf": [
+						{ "const": "directory.evnt.manifest" },
+						{ "const": "directory.evnt.index" },
+						{ "const": "org.jsonfeed" },
+						{ "const": "text/calendar" },
+						{ "type": "string" }
+					]
+				},
+				"primary": { "type": "boolean" },
+				"auth": { "enum": ["none", "optional", "required"] }
+			}
+		},
+		"AuthInfo": {
+			"type": "object",
+			"required": ["type"],
+			"properties": {
+				"type": { "type": "string" }
+			}
+		}
+	}
+}
