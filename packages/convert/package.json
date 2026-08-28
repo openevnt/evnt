@@ -1,13 +1,17 @@
 {
 	"name": "@evnt/convert",
-	"version": "0.1.2",
-	"description": "Open Evnt utilities for converting between different event formats",
+	"version": "0.1.3",
+	"description": "Convert events between different formats",
 	"keywords": [
 		"activitystreams",
 		"convert",
 		"event",
 		"google",
+		"h-event",
 		"icalendar",
+		"jcal",
+		"jscalendar",
+		"microformats",
 		"open evnt",
 		"schema-org"
 	],
@@ -22,7 +26,10 @@
 		"./activitystreams": "./src/formats/activitystreams.ts",
 		"./schema-org": "./src/formats/schema-org.ts",
 		"./google": "./src/formats/google.ts",
-		"./community-lexicon": "./src/formats/community-lexicon.ts"
+		"./community-lexicon": "./src/formats/community-lexicon.ts",
+		"./h-event": "./src/formats/h-event.ts",
+		"./jscalendar": "./src/formats/jscalendar.ts",
+		"./jcal": "./src/formats/jcal.ts"
 	},
 	"publishConfig": {
 		"main": "./dist/index.js",
@@ -57,6 +64,21 @@
 				"types": "./dist/formats/community-lexicon.d.ts",
 				"import": "./dist/formats/community-lexicon.js",
 				"default": "./dist/formats/community-lexicon.js"
+			},
+			"./h-event": {
+				"types": "./dist/formats/h-event.d.ts",
+				"import": "./dist/formats/h-event.js",
+				"default": "./dist/formats/h-event.js"
+			},
+			"./jscalendar": {
+				"types": "./dist/formats/jscalendar.d.ts",
+				"import": "./dist/formats/jscalendar.js",
+				"default": "./dist/formats/jscalendar.js"
+			},
+			"./jcal": {
+				"types": "./dist/formats/jcal.d.ts",
+				"import": "./dist/formats/jcal.js",
+				"default": "./dist/formats/jcal.js"
 			}
 		}
 	},
@@ -69,19 +91,31 @@
 		"@evnt/partial-date": "workspace:^",
 		"@evnt/schema": "workspace:^",
 		"@evnt/translations": "workspace:^",
-		"@evnt/types": "workspace:^",
-		"ical.js": "^2.2.1",
-		"schema-dts": "^1.1.5",
-		"zod": "^4.3.6"
+		"@evnt/types": "workspace:^"
 	},
 	"devDependencies": {
 		"@atcute/lex-cli": "^2.8.1",
 		"@atcute/lexicons": "^1.3.0",
 		"@repo/typescript-config": "workspace:^",
 		"@types/node": "^25.6.0",
+		"domhandler": "^6.0.1",
+		"temporal-polyfill-lite": "^0.2.0",
 		"typescript": "^6.0.3"
 	},
-	"optionalDependencies": {
-		"googleapis": "^171.4.0"
+	"peerDependencies": {
+		"domhandler": "^6.0.0",
+		"htmlparser2": "^12.0.0",
+		"ical.js": "^2.2.1"
+	},
+	"peerDependenciesMeta": {
+		"ical.js": {
+			"optional": true
+		},
+		"htmlparser2": {
+			"optional": true
+		},
+		"domhandler": {
+			"optional": true
+		}
 	}
 }

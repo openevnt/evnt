@@ -6,6 +6,8 @@ export interface ConvertOptions {
 	timezone?: string;
 	/** AT Protocol DID (needed by some formats like community-lexicon for blob URLs). */
 	did?: string;
+	/** Stable identifier for the event, used where a format demands one (iCalendar UID). */
+	uid?: string;
 }
 
 /** A named format that can convert to/from OpenEvnt. */
