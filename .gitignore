@@ -15,3 +15,4 @@ dist
 manifest-checksum.txt
 .npmrc
 *.tgz
+.personal

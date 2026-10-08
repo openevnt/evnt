@@ -14,9 +14,9 @@ Servers that host Open Evnt events can provide discovery information using the m
 
 The following link relations and media types are defined for link discovery:
 
-| Where         | `type` attribute                   | `href` points to                        |
-|---------------|------------------------------------|-----------------------------------------|
-| Event Page    | `application/evnt+json`            | [Open Evnt](../spec/open-evnt-event.md)           |
+| Where         | `type` attribute                   | `href` points to                              |
+| ------------- | ---------------------------------- | --------------------------------------------- |
+| Event Page    | `application/evnt+json`            | [Open Evnt](../spec/open-evnt-event.md)       |
 | Event Listing | `application/open-evnt-index+json` | [Open Evnt Index](../spec/open-evnt-index.md) |
 
 The `rel` attribute of the `<link>` tag or `Link` header MUST be set to `alternate`.
@@ -36,8 +36,8 @@ Servers MAY include multiple `<link>` tags or `Link` headers to reference multip
 ## Appendix: Examples
 
 ```html
-<link rel="alternate" type="application/evnt+json" href="/events/summer-fest.evnt.json">
-<link rel="alternate" type="application/open-evnt-index+json" href="/events.json">
+<link rel="alternate" type="application/evnt+json" href="/events/summer-fest.evnt.json" />
+<link rel="alternate" type="application/open-evnt-index+json" href="/events.json" />
 ```
 
 ```http

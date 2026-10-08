@@ -36,6 +36,13 @@ export default defineConfig({
 			{ text: "Quickstart", link: "/guide/getting-started" },
 			{ text: "Specification", link: "/spec/open-evnt-event" },
 			{
+				text: "Ecosystem",
+				items: [
+					{ text: "Libraries", link: "/libraries" },
+					{ text: "Applications", link: "/applications" },
+				],
+			},
+			{
 				text: "Community",
 				items: [
 					{ text: "GitHub", link: "https://github.com/openevnt/evnt" },
@@ -51,6 +58,13 @@ export default defineConfig({
 			{ text: "Quickstart", link: "/guide/getting-started" },
 			{ text: "Playground", link: "/playground" },
 			{ text: "Convert", link: "/convert" },
+			{
+				text: "Ecosystem",
+				items: [
+					{ text: "Libraries", link: "/libraries" },
+					{ text: "Applications", link: "/applications" },
+				],
+			},
 			{
 				text: "Reference",
 				items: [
@@ -81,7 +95,6 @@ export default defineConfig({
 				text: "Protocols",
 				items: [
 					{ text: "HTTP", link: "/protocol/http" },
-					{ text: "AT Protocol", link: "/protocol/atproto" },
 				],
 			},
 			{

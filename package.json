@@ -10,6 +10,9 @@
 		"docs:build": "pnpm -r build && vitepress build",
 		"docs:preview": "vitepress preview"
 	},
+	"dependencies": {
+		"htmlparser2": "^12.0.0"
+	},
 	"devDependencies": {
 		"@evnt/convert": "workspace:*",
 		"@evnt/schema": "workspace:*",

@@ -28,10 +28,6 @@ export const OpenEvntSchema = z
 	.preprocess(
 		preprocessEvent,
 		z.object({
-			$type: z
-				.literal("directory.evnt.event")
-				.optional()
-				.meta({ description: "The type of the event data" }),
 			v: z.literal("0.1").meta({ description: "The version of the Event Data schema" }),
 
 			name: TranslationsSchema.meta({ description: "The name of the event" }),

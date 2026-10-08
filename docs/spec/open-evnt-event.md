@@ -48,7 +48,6 @@ The root object representing a single event.
 
 ```
 OpenEvnt
-  $type:      "directory.evnt.event"?   OPTIONAL
   v:          "0.1"                     REQUIRED
   name:       Translations              REQUIRED
   label:      Translations?             OPTIONAL
@@ -59,8 +58,6 @@ OpenEvnt
 
   Additional properties: NOT ALLOWED
 ```
-
-**`$type`**: An optional type identifier for AT Protocol record wrapping. When present, MUST be `"directory.evnt.event"`.
 
 **`v`**: A string literal `"0.1"` identifying the format version. See [Versioning](#9-versioning) for version semantics.
 
@@ -154,23 +151,16 @@ PresentationInfo
 
 ```
 MediaSource
-  url:          string?                 OPTIONAL
-  blob:         object?                 OPTIONAL
+  url:          string                  REQUIRED
   mimeType:     string?                 OPTIONAL
   dimensions:   { width: number, height: number }?   OPTIONAL
-
-  Either url OR blob MUST be present
 ```
 
 **`url`**: A publicly accessible URL for the media source.
 
-**`blob`**: An inline blob reference, as defined by the enclosing transport layer (e.g. AT Protocol `BlobRef`).
-
-**`mimeType`**: The MIME type of the media (e.g. `image/jpeg`, `video/mp4`). When `blob` is used, MAY be inferred from the blob's metadata.
+**`mimeType`**: The MIME type of the media (e.g. `image/jpeg`, `video/mp4`).
 
 **`dimensions`**: The native width and height of the media in pixels.
-
-Either `url` or `blob` MUST be present.
 
 ---
 
@@ -296,12 +286,12 @@ A record of identifiers for the venue in external map services.
 
 ```
 MapReferences
-  [nsid: string]: string | string[]
+  [key: string]: string | string[]
 ```
 
-Keys are reverse-domain NSIDs. Values are the identifier(s) assigned by that service.
+Keys are reverse-domain names. Values are the identifier(s) assigned by that service.
 
-| NSID                         | Service       | Entity          |
+| Key                          | Service       | Entity          |
 | ---------------------------- | ------------- | --------------- |
 | `org.openstreetmap.node`     | OpenStreetMap | Node (POI)      |
 | `org.openstreetmap.way`      | OpenStreetMap | Way (building)  |
@@ -593,19 +583,6 @@ LanguageInfo
 ```
 
 **`code`**: A BCP47 language tag (e.g. `"en"`, `"lt"`, `"zh-Hans"`).
-
-### `directory.evnt.richtext.bluesky`
-
-Rich text content in the Bluesky Rich Text format.
-
-```
-directory.evnt.richtext.bluesky
-  $type:     "directory.evnt.richtext.bluesky"
-  text:      string              REQUIRED
-  facets:    Facet[]?            OPTIONAL
-```
-
-The `facets` field uses the same format as [Bluesky Rich Text Facets](https://docs.bsky.app/docs/advanced-guides/post-richtext). `Facet` is defined by the Bluesky AT Protocol and is not part of this specification.
 
 ### `directory.evnt.richtext.markdown`
 

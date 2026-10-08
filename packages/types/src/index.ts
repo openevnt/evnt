@@ -10,7 +10,6 @@ export * from "./event/component/LinkComponent.js";
 export * from "./event/component/SourceComponent.js";
 export * from "./event/component/SplashMediaComponent.js";
 export * from "./event/component/richtext/RichTextMarkdownComponent.js";
-export * from "./event/component/richtext/RichTextBlueskyComponent.js";
 export * from "./event/venue/index.js";
 export * from "./event/venue/OnlineVenue.js";
 export * from "./event/venue/PhysicalVenue.js";

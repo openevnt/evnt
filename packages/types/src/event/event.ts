@@ -5,7 +5,6 @@ import type { Venue } from "./venue/index.js";
 
 export interface OpenEvnt {
 	v: "0.1";
-	$type?: "directory.evnt.event";
 	name: Translations;
 	label?: Translations;
 	status?: EventStatus;

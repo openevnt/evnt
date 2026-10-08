@@ -12,15 +12,9 @@ export interface MediaDimensions {
 }
 
 export interface MediaSource {
-	url?: string;
-	blob?: {
-		$type: "blob";
-		ref: {
-			$link: string; // CID
-		};
-		size: number;
-		mimeType: string;
-	};
+	url: string;
+	mimeType?: string;
+	dimensions?: MediaDimensions;
 }
 
 export interface MediaPresentation {

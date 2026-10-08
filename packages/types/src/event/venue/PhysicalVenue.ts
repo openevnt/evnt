@@ -1,6 +1,6 @@
 import type { BaseVenue } from "./base.js";
 
-/** Well-known map service NSIDs for autocomplete.
+/** Well-known map service keys for autocomplete.
  * Keys follow the pattern `{reverseDomain}.{entityType}`.
  * Values are identifiers assigned by the respective service for this location. */
 export interface PhysicalVenueMapService {
@@ -32,9 +32,9 @@ export interface PhysicalVenue extends BaseVenue {
 	address?: PhysicalVenue.Address;
 
 	/**
-	 * A record mapping service NSIDs to location identifiers.
+	 * A record mapping map services to location identifiers.
 	 *
-	 * Keys are NSIDs following the pattern `{reverseDomain}.{entityType}`,
+	 * Keys are reverse-domain names following the pattern `{reverseDomain}.{entityType}`,
 	 * uniquely identifying a map service and the type of entity it represents
 	 * (e.g. `org.openstreetmap.node`, `org.openstreetmap.way`).
 	 *

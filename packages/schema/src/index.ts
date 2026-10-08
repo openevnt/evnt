@@ -14,7 +14,6 @@ export * from "./schemas/components/EventComponent.js";
 export * from "./schemas/components/LinkComponent.js";
 export * from "./schemas/components/SourceComponent.js";
 export * from "./schemas/components/SplashMediaComponent.js";
-export * from "./schemas/components/RichTextBlueskyComponent.js";
 export * from "./schemas/components/LanguagesComponent.js";
 export * from "./schemas/components/MarkdownComponent.js";
 

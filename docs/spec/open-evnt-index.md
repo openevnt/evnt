@@ -12,7 +12,7 @@ An Open Evnt Index is an HTTP endpoint that responds with a JSON document. The J
 
 The index MAY support filtering and pagination.
 
-The Open Evnt Index is identified by the NSID `directory.evnt.index`.
+The Open Evnt Index is identified by the name `directory.evnt.index`.
 
 ## 2. Request & Response
 

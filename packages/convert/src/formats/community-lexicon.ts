@@ -5,10 +5,6 @@ import type { CommunityLexiconCalendarEvent } from "../lexicons/index.js";
 import type { FormatConverter, ConvertOptions } from "../types.js";
 
 interface LexiconEvent extends CommunityLexiconCalendarEvent.Main {
-	facets?: Array<{
-		index: { byteStart: number; byteEnd: number };
-		features: Record<string, unknown>[];
-	}>;
 	media?: Array<{
 		$type?: "community.lexicon.calendar.event#media";
 		alt?: string;
@@ -130,10 +126,7 @@ export const communityLexicon: FormatConverter = {
 					alt: media.alt ? { [language]: media.alt } : undefined,
 					sources: [
 						{
-							blob: {
-								...media.content,
-								$type: "blob",
-							},
+							mimeType: media.content.mimeType,
 							url: opts?.did
 								? `https://blobs.blue/${opts.did}/blob/${media.content.ref.$link}`
 								: `at://${media.content.ref.$link}`,
@@ -147,9 +140,8 @@ export const communityLexicon: FormatConverter = {
 		if (event.description) {
 			builder.data.components ??= [];
 			builder.data.components.push({
-				$type: "directory.evnt.richtext.bluesky",
-				text: event.description,
-				facets: event.facets,
+				$type: "directory.evnt.richtext.markdown",
+				content: event.description,
 			});
 		}
 

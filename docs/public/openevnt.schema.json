@@ -1,16 +1,11 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"id": "directory.evnt.event",
-	"$id": "https://evnt.directory/openevnt.schema.json",
+	"id": "OpenEvnt",
 	"title": "Open Evnt Event",
 	"description": "A single event defined in the Open Evnt format",
+	"$id": "https://evnt.directory/openevnt.schema.json",
 	"type": "object",
 	"properties": {
-		"$type": {
-			"description": "The type of the event data",
-			"type": "string",
-			"const": "directory.evnt.event"
-		},
 		"v": {
 			"type": "string",
 			"const": "0.1",
@@ -167,7 +162,7 @@
 					"additionalProperties": false
 				},
 				"maps": {
-					"description": "Map service identifiers keyed by NSID (e.g. `org.openstreetmap.node`, `com.google.places`). Values are the identifier(s) assigned by that service for this location.",
+					"description": "Map service identifiers keyed by reverse-domain name (e.g. `org.openstreetmap.node`, `com.google.places`). Values are the identifier(s) assigned by that service for this location.",
 					"type": "object",
 					"propertyNames": {
 						"type": "string"
@@ -453,56 +448,6 @@
 					"properties": {
 						"$type": {
 							"type": "string",
-							"const": "directory.evnt.richtext.bluesky"
-						},
-						"text": {
-							"type": "string"
-						},
-						"facets": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"index": {
-										"type": "object",
-										"properties": {
-											"byteStart": {
-												"type": "number"
-											},
-											"byteEnd": {
-												"type": "number"
-											}
-										},
-										"required": ["byteStart", "byteEnd"],
-										"additionalProperties": false
-									},
-									"features": {
-										"type": "array",
-										"items": {
-											"type": "object",
-											"properties": {
-												"$type": {
-													"type": "string"
-												}
-											},
-											"required": ["$type"],
-											"additionalProperties": {}
-										}
-									}
-								},
-								"required": ["index", "features"],
-								"additionalProperties": false
-							}
-						}
-					},
-					"required": ["$type", "text", "facets"],
-					"additionalProperties": false
-				},
-				{
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
 							"not": {
 								"anyOf": [
 									{
@@ -519,9 +464,6 @@
 									},
 									{
 										"const": "directory.evnt.richtext.markdown"
-									},
-									{
-										"const": "directory.evnt.richtext.bluesky"
 									}
 								]
 							}
@@ -563,42 +505,9 @@
 			"type": "object",
 			"properties": {
 				"url": {
-					"description": "The URL of the media source",
 					"type": "string",
-					"format": "uri"
-				},
-				"blob": {
-					"description": "AT Protocol Blob",
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
-							"const": "blob"
-						},
-						"ref": {
-							"type": "object",
-							"properties": {
-								"$link": {
-									"type": "string",
-									"description": "CID"
-								}
-							},
-							"required": ["$link"],
-							"additionalProperties": false
-						},
-						"size": {
-							"type": "integer",
-							"minimum": 0,
-							"maximum": 9007199254740991,
-							"description": "The size of the blob in bytes"
-						},
-						"mimeType": {
-							"type": "string",
-							"description": "The MIME type of the blob"
-						}
-					},
-					"required": ["$type", "ref", "size", "mimeType"],
-					"additionalProperties": false
+					"format": "uri",
+					"description": "The URL of the media source"
 				},
 				"dimensions": {
 					"description": "The dimensions of the media in pixels",
@@ -609,6 +518,7 @@
 					"type": "string"
 				}
 			},
+			"required": ["url"],
 			"additionalProperties": false,
 			"id": "MediaSource",
 			"title": "Media Source",

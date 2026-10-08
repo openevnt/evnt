@@ -135,7 +135,6 @@ describe("renderMarkdown", () => {
 
 describe("UniCon 2026 (real-world event)", () => {
 	const uniCon: OpenEvnt = {
-		$type: "directory.evnt.event",
 		v: "0.1",
 		name: { en: "UniCon 2026" },
 		status: "planned",

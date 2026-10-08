@@ -284,8 +284,6 @@ export const jscalendar: FormatConverter = {
 				}
 			} else if (type === "directory.evnt.richtext.markdown" && !description) {
 				if (typeof c.content === "string") description = c.content;
-			} else if (type === "directory.evnt.richtext.bluesky" && !description) {
-				if (typeof c.text === "string") description = c.text;
 			}
 		}
 

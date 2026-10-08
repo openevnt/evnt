@@ -5,7 +5,6 @@ import { SourceComponentSchema } from "./SourceComponent.js";
 import { SplashMediaComponentSchema } from "./SplashMediaComponent.js";
 import { LanguagesComponentSchema } from "./LanguagesComponent.js";
 import { RTMarkdownSchema } from "./MarkdownComponent.js";
-import { RichTextBlueskyComponentSchema } from "./RichTextBlueskyComponent.js";
 
 export const KnownEventComponents = new Map<string, z.ZodType<AnyComponent>>([
 	["directory.evnt.component.link", LinkComponentSchema],
@@ -13,7 +12,6 @@ export const KnownEventComponents = new Map<string, z.ZodType<AnyComponent>>([
 	["directory.evnt.component.splashMedia", SplashMediaComponentSchema],
 	["directory.evnt.component.languages", LanguagesComponentSchema],
 	["directory.evnt.richtext.markdown", RTMarkdownSchema],
-	["directory.evnt.richtext.bluesky", RichTextBlueskyComponentSchema],
 ]);
 
 export const EventComponentSchema = z

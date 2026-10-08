@@ -222,7 +222,7 @@ Every field here was added for a real reason during the planning process. None o
 
 Save it as `bfest-2026.evnt.json`. The `.evnt.json` extension tells tools what it is.
 
-Then put it on any static file server, CDN, or AT Protocol repo. Open Evnt is just JSON - anything that serves JSON can serve events.
+Then put it on any static file server or CDN. Open Evnt is just JSON - anything that serves JSON can serve events.
 
 ## 10. Next steps
 

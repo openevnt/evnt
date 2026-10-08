@@ -34,7 +34,7 @@ The `$type` namespace prevents collisions. Your `com.example.component.sponsor` 
 
 ### What about the defined types?
 
-The spec defines a handful of standard component types - link, source, splashMedia, languages, richtext (Markdown and Bluesky). These cover the most common cases so most events can use standard types instead of inventing custom ones. But they're not a ceiling - if your use case isn't covered, define your own.
+The spec defines a handful of standard component types - link, source, splashMedia, languages, richtext (Markdown). These cover the most common cases so most events can use standard types instead of inventing custom ones. But they're not a ceiling - if your use case isn't covered, define your own.
 
 ## Why preserve unknown components?
 

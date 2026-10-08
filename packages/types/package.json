@@ -25,11 +25,6 @@
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js",
 			"default": "./dist/index.js"
-		},
-		"./atcute": {
-			"types": "./dist/atcute.d.ts",
-			"import": "./dist/atcute.js",
-			"default": "./dist/atcute.js"
 		}
 	},
 	"publishConfig": {
@@ -38,11 +33,6 @@
 				"types": "./dist/index.d.ts",
 				"import": "./dist/index.js",
 				"default": "./dist/index.js"
-			},
-			"./atcute": {
-				"types": "./dist/atcute.d.ts",
-				"import": "./dist/atcute.js",
-				"default": "./dist/atcute.js"
 			}
 		}
 	},
@@ -53,8 +43,5 @@
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:^",
 		"typescript": "^6.0.3"
-	},
-	"optionalDependencies": {
-		"@atcute/lexicons": "^2.0.2"
 	}
 }

@@ -3,7 +3,6 @@ import type { SourceComponent } from "./SourceComponent.js";
 import type { SplashMediaComponent } from "./SplashMediaComponent.js";
 import type { LanguagesComponent } from "./LanguagesComponent.js";
 import type { RichTextMarkdownComponent } from "./richtext/RichTextMarkdownComponent.js";
-import type { RichTextBlueskyComponent } from "./richtext/RichTextBlueskyComponent.js";
 
 export interface ComponentTypes {
 	"directory.evnt.component.source": SourceComponent;
@@ -11,7 +10,6 @@ export interface ComponentTypes {
 	"directory.evnt.component.splashMedia": SplashMediaComponent;
 	"directory.evnt.component.languages": LanguagesComponent;
 	"directory.evnt.richtext.markdown": RichTextMarkdownComponent;
-	"directory.evnt.richtext.bluesky": RichTextBlueskyComponent;
 }
 
 export type KnownComponent = ComponentTypes[keyof ComponentTypes];

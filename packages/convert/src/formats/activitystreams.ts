@@ -209,16 +209,15 @@ export const activitystreams: FormatConverter = {
 				const splash = c as unknown as {
 					$type: string;
 					media: {
-						sources: Array<{ url?: string; blob?: { mimeType?: string } }>;
+						sources: Array<{ url: string; mimeType?: string }>;
 						alt?: Record<string, string>;
 					};
 				};
 				for (const source of splash.media.sources) {
-					if (!source.url) continue;
 					attachments.push({
-						type: source.blob?.mimeType?.startsWith("video/") ? "Video" : "Image",
+						type: source.mimeType?.startsWith("video/") ? "Video" : "Image",
 						url: source.url,
-						mediaType: source.blob?.mimeType,
+						mediaType: source.mimeType,
 						name: splash.media.alt ? translate(splash.media.alt, [language]) : undefined,
 					});
 				}
@@ -227,11 +226,6 @@ export const activitystreams: FormatConverter = {
 
 			if (type === "directory.evnt.richtext.markdown") {
 				if (!object.content && typeof c.content === "string") object.content = c.content;
-				continue;
-			}
-
-			if (type === "directory.evnt.richtext.bluesky") {
-				if (!object.content && typeof c.text === "string") object.content = c.text;
 			}
 		}
 

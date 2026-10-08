@@ -64,7 +64,7 @@ This document defines the following item types:
 Servers MUST return appropriate HTTP status codes for item requests. The following status codes are defined:
 
 | Code  | Meaning                          |
-|-------|----------------------------------|
+| ----- | -------------------------------- |
 | `200` | Public access, content returned  |
 | `401` | Authentication required          |
 | `403` | Authenticated but not authorized |

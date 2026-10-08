@@ -38,7 +38,7 @@ export const PhysicalVenueSchema = z
 			.optional()
 			.meta({
 				description:
-					"Map service identifiers keyed by NSID (e.g. `org.openstreetmap.node`, `com.google.places`). Values are the identifier(s) assigned by that service for this location.",
+					"Map service identifiers keyed by reverse-domain name (e.g. `org.openstreetmap.node`, `com.google.places`). Values are the identifier(s) assigned by that service for this location.",
 			}),
 	})
 	.meta({
