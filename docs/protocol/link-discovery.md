@@ -16,7 +16,7 @@ The following link relations and media types are defined for link discovery:
 
 | Where         | `type` attribute                   | `href` points to                              |
 | ------------- | ---------------------------------- | --------------------------------------------- |
-| Event Page    | `application/evnt+json`            | [Open Evnt](../spec/open-evnt-event.md)       |
+| Event Page    | `application/vnd.evnt+json`            | [Open Evnt](../spec/open-evnt-event.md)       |
 | Event Listing | `application/open-evnt-index+json` | [Open Evnt Index](../spec/open-evnt-index.md) |
 
 The `rel` attribute of the `<link>` tag or `Link` header MUST be set to `alternate`.
@@ -36,11 +36,11 @@ Servers MAY include multiple `<link>` tags or `Link` headers to reference multip
 ## Appendix: Examples
 
 ```html
-<link rel="alternate" type="application/evnt+json" href="/events/summer-fest.evnt.json" />
+<link rel="alternate" type="application/vnd.evnt+json" href="/events/summer-fest.evnt.json" />
 <link rel="alternate" type="application/open-evnt-index+json" href="/events.json" />
 ```
 
 ```http
-Link: <https://example.com/events/summer-fest.evnt.json>; rel="alternate"; type="application/evnt+json"
+Link: <https://example.com/events/summer-fest.evnt.json>; rel="alternate"; type="application/vnd.evnt+json"
 Link: <https://example.com/events.json>; rel="alternate"; type="application/open-evnt-index+json"
 ```

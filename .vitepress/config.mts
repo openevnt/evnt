@@ -34,7 +34,6 @@ export default defineConfig({
 		nav: [
 			{ text: "Home", link: "/" },
 			{ text: "Quickstart", link: "/guide/getting-started" },
-			{ text: "Specification", link: "/spec/open-evnt-event" },
 			{
 				text: "Ecosystem",
 				items: [
@@ -68,13 +67,16 @@ export default defineConfig({
 			{
 				text: "Reference",
 				items: [
-					{ text: "Open Evnt Event", link: "/spec/open-evnt-event" },
+					{ text: "Event", link: "/spec/open-evnt-event" },
+					{ text: "Components", link: "/spec/open-evnt-event-components" },
+					{ text: "Partial Date", link: "/spec/open-evnt-partialdate" },
+					{ text: "Translations", link: "/spec/open-evnt-translations" },
 					{
-						text: "Open Evnt Manifest",
+						text: "Manifest",
 						link: "/spec/open-evnt-manifest",
 					},
 					{
-						text: "Open Evnt Index",
+						text: "Index",
 						link: "/spec/open-evnt-index",
 					},
 				],
@@ -93,9 +95,7 @@ export default defineConfig({
 			},
 			{
 				text: "Protocols",
-				items: [
-					{ text: "HTTP", link: "/protocol/http" },
-				],
+				items: [{ text: "HTTP", link: "/protocol/http" }],
 			},
 			{
 				text: "Discovery",

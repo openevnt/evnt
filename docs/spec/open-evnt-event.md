@@ -1,729 +1,312 @@
 # Open Evnt Specification
 
-**Version:** 0.1: DRAFT
-**Last updated:** 2026-06-12
+**Version:** 0.2 DRAFT
+
+**Last Updated:** 2026-10-09
 
 ## 1. Introduction
 
-This document defines the Open Evnt data format for describing events.
+Open Evnt is a JSON format for describing one event: what it is, where and when it takes place, and where to find out more. It is meant for passing events between the sites and apps that list them.
 
 ### 1.1 Scope
 
-This specification defines:
+This document defines how one event is represented as an Open Evnt document.
 
-- The data model for representing events, venues, instances, and components
-- The partial date string format
-- The extension mechanism for custom component and venue types
-- Conformance requirements for producers and consumers
+It does not define how events are created, updated, deleted, stored or transmitted. Querying a collection of events is defined by the [Open Evnt Index](open-evnt-index.md), and finding collections by the [Open Evnt Manifest](open-evnt-manifest.md).
 
-This specification does not define:
+Parts of the format are defined in companion documents:
 
-- Transport protocols, APIs, storage, or recurrence rules
-- How events should be displayed or rendered
+- [Open Evnt Event Components](open-evnt-event-components.md), the components defined by Open Evnt
+- [Translations](open-evnt-translations.md), for text in several languages
+- [PartialDate](open-evnt-partialdate.md), for dates that may be incomplete
 
 ### 1.2 Conformance
 
-The keywords **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL** in this document are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
+The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **NOT RECOMMENDED**, **MAY**, and **OPTIONAL** in this document are to be interpreted as described in BCP 14 ([RFC 2119](https://www.rfc-editor.org/rfc/rfc2119), [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174)) when, and only when, they appear in all capitals, as shown here.
 
-For readability, these keywords appear in lowercase in this document.
+This specification sets requirements for documents, producers and consumers:
+
+- A document conforms when it follows every MUST and MUST NOT that applies to documents, in this document and in the documents it references.
+- A producer conforms when every document it writes conforms and it follows every MUST and MUST NOT that applies to producers.
+- A consumer conforms when it follows every MUST and MUST NOT that applies to consumers.
 
 ### 1.3 Terminology
 
-| Term         | Definition                                                                               |
-| ------------ | ---------------------------------------------------------------------------------------- |
-| Event        | A planned happening, represented as an `OpenEvnt` object                                 |
-| Producer     | Software that creates or emits Open Evnt documents                                       |
-| Consumer     | Software that reads or processes Open Evnt documents                                     |
-| Instance     | A single continuous occurrence of an event with its own time and venue references        |
-| Component    | A typed piece of additional event metadata, extensible by `$type`                        |
-| Partial Date | A string representing a date and/or time with varying precision and an explicit timezone |
+| Term      | Definition                                                                               |
+|-----------|------------------------------------------------------------------------------------------|
+| Event     | A gathering of people for a shared purpose or interest                                   |
+| Document  | A JSON object that describes one event, as defined in [section 2](#2-open-evnt-document) |
+| Organizer | The person or group that runs the event                                                  |
+| Publisher | The person or group that publishes a document, who may not be the organizer              |
+| Producer  | Software that writes Open Evnt documents                                                 |
+| Consumer  | Software that reads Open Evnt documents                                                  |
 
----
+### 1.4 Notation
 
-## 2. Data Model
+Objects are described in blocks like this one:
 
-### 2.1 OpenEvnt
+```
+Example
+  name:  string     REQUIRED
+  tags:  string[]?  OPTIONAL
+  kind:  "a"?       OPTIONAL
+```
 
-The root object representing a single event.
+The first line names the type. Each line under it is a field of the JSON object, with its type and whether it is REQUIRED or OPTIONAL. A REQUIRED field MUST be present. An OPTIONAL field MAY be left out, and its type ends in `?`.
+
+`string`, `number` and `boolean` are the JSON types of [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259). `T[]` is a JSON array of `T`. A quoted value such as `"0.2"` is a string that MUST have exactly that value. Other type names are defined in this document or in the documents it references.
+
+No field takes `null`. A field without a value is left out. Consumers MUST reject a document in which a field defined by this specification is `null`.
+
+## 2. Open Evnt Document
+
+A single event is represented as an Open Evnt Document.
+
+The document has the following structure:
 
 ```
 OpenEvnt
-  v:          "0.1"                     REQUIRED
-  name:       Translations              REQUIRED
-  label:      Translations?             OPTIONAL
-  status:     EventStatus?              OPTIONAL
-  venues:     Venue[]?                  OPTIONAL
-  instances:  EventInstance[]?          OPTIONAL
-  components: EventComponent[]?         OPTIONAL
-
-  Additional properties: NOT ALLOWED
+  v:           "0.2"                     REQUIRED
+  id:          string                    REQUIRED
+  name:        Translations              REQUIRED
+  status:      Status?                   OPTIONAL
+  venue:       Venue?                    OPTIONAL
+  occurrences: Occurrence[]?             OPTIONAL
+  components:  Component[]?              OPTIONAL
 ```
 
-**`v`**: A string literal `"0.1"` identifying the format version. See [Versioning](#9-versioning) for version semantics.
+The `v` field indicates the version of the Open Evnt specification that the event conforms to. See [section 7 (Versioning)](#7-versioning).
 
-**`name`**: The event name as a [Translations](#22-translations) object. MUST have at least one entry.
+The `id` field identifies the event. See [section 2.2 (Identity)](#22-identity).
 
-**`label`**: A [Translations](#22-translations) object for representing an additional name for the event, for distinguishing it from similarly named events. Producers SHOULD use this field when the event has a name that might be ambiguous (e.g. "SomeCon") to provide a more specific label (e.g. "SomeCon 2025"). Consumers MAY display this label alongside the main name.
+The `name` field is the event's name as its organizer uses it, including any year or edition number, such as "GameOn 2026". See [section 3.1 (Translations)](#31-translations).
 
-**`status`**: An [EventStatus](#23-eventstatus) value describing the current planning state. When absent, consumers MUST treat the event as `"planned"`.
+The `status` field says that the event may not take place as listed. See [section 2.1 (Status)](#21-status).
 
-**`venues`**: An array of [Venue](#4-venues) objects. Each venue MUST have a unique `id` within this array.
+The `venue` field is the place where the event takes place. See [section 4 (Venue)](#4-venue).
 
-**`instances`**: An array of [EventInstance](#5-instances) objects representing occurrences of the event.
+The `occurrences` field lists the times the event takes place. See [section 5 (Occurrences)](#5-occurrences).
 
-**`components`**: An array of [EventComponent](#6-components) objects representing additional metadata.
+The `components` field holds components that describe the event. See [section 6 (Component Extension Model)](#6-component-extension-model).
 
-### 2.2 Translations
+### 2.1 Status
 
-An object mapping BCP47 language tags to strings.
+The `status` field is only present when the event may not take place as listed. An event without a `status` has nothing known to be wrong with it. The following values are defined:
 
-```
-Translations
-  [language: string]: string
+| Value       | Description                                                                    |
+|-------------|--------------------------------------------------------------------------------|
+| `uncertain` | The organizer has said the event may not take place as listed                  |
+| `cancelled` | The event will not take place                                                  |
+| `postponed` | The event will not take place on the listed dates, and new dates are not known |
 
-  Constraints:
-    Keys MUST be valid BCP47 language tags
-    Values MUST be non-empty strings
-    At least one entry REQUIRED
-```
+Consumers SHOULD show that an `uncertain` event may not take place as listed wherever they show its dates.
 
-#### Resolution algorithm
+When a postponed event gets new dates, producers SHOULD update its `occurrences` and remove `status`. The event keeps its `id`.
 
-When a consumer needs a single string for a user's preferred language, the following algorithm is RECOMMENDED:
+Producers SHOULD keep a cancelled or postponed event published at its `id`, with its last dates and venue, and SHOULD NOT delete it. Consumers SHOULD NOT present the dates of a cancelled or postponed event as upcoming.
 
-1. Exact match against the user's preferred BCP47 tag
-2. Match without region subtag (e.g. `zh-Hans-CN` → `zh-Hans`)
-3. Match on primary language subtag only (e.g. `zh-Hans-CN` → `zh`)
-4. Fallback to `en`
-5. Any available entry
-6. Empty string or placeholder
+When only some dates or parts of an event are called off, the `status` of the [occurrence](#5-occurrences) or [activity](#51-activities) says so, and the event has no `status`.
 
-### 2.3 EventStatus
+### 2.2 Identity
 
-An enum representing the planning state of an event or instance.
+The `id` field is an absolute URI, as defined by [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986), that identifies the event.
 
-```
-EventStatus: "planned" | "uncertain" | "postponed" | "cancelled" | "suspended"
-```
+Producers SHOULD use the `https` URL the document itself is fetched from, not the URL of a web page about the event. When there is none, such as for a draft or a document shared as a file, producers MAY use a `urn:uuid:` URI ([RFC 9562](https://www.rfc-editor.org/rfc/rfc9562)). Producers SHOULD generate the `id` without asking a person for it.
 
-| Variant     | Description                               | Dates valid? |
-| ----------- | ----------------------------------------- | ------------ |
-| `planned`   | Event is scheduled as described (default) | Yes          |
-| `uncertain` | Event may be rescheduled or cancelled     | Unknown      |
-| `postponed` | Event moved to a later, unknown date      | No           |
-| `cancelled` | Event will not take place                 | No           |
-| `suspended` | Event paused; future unknown              | No           |
+The `id` of an event MUST NOT change, including when the document is moved, mirrored or copied to another publisher. An `id` MUST NOT be reused for a different event. A producer that creates an event by copying an existing document, such as the next edition of the event, MUST give the copy a new `id`.
 
-- `planned` is the initial state and the default when `status` is absent.
-- `cancelled` is a terminal state - it MUST NOT transition to any other status.
-- Any non-terminal status MAY return to `planned`.
+When a document with an `https` id moves, its old URL SHOULD redirect to the new one.
 
-When `status` is not `"planned"`, consumers SHOULD treat associated dates as potentially invalid.
+An `https` id is verified when fetching it, following redirects, returns a document with the same `id`. Consumers MAY treat an unverified `id` as a claim.
 
-### 2.4 Media
+Consumers that find the same `id` on documents describing clearly different events SHOULD treat this as a collision and SHOULD NOT merge the documents.
 
-A media asset (image, video) with one or more sources.
+A document that describes the same event as another document with a different `id`, such as a listing on another site, can link it with a [Relation Component](open-evnt-event-components.md#28-relation-component) of type `alternate`.
+
+## 3. Common Data Types
+
+### 3.1. Translations
+
+Text that can be given in several languages, defined by the [Open Evnt Translations specification](open-evnt-translations.md).
+
+### 3.2. PartialDate
+
+A date and optional time known to a year, month, day or minute, defined by the [Open Evnt PartialDate specification](open-evnt-partialdate.md).
+
+## 4. Venue
+
+A `Venue` is the physical place where an event takes place. It is a JSON object with the following structure:
 
 ```
-Media
-  sources:      MediaSource[]           REQUIRED
-  alt:          Translations?           OPTIONAL
-  presentation: PresentationInfo?       OPTIONAL
+Venue
+  name:        Translations?  OPTIONAL
+  address:     string?        OPTIONAL
+  countryCode: string?        OPTIONAL
+  components:  Component[]?   OPTIONAL
 ```
 
-**`sources`**: One or more sources for the same media in different formats or resolutions. MUST NOT contain semantically different content in the same `Media` object.
+A venue MUST have at least one field.
 
-**`alt`**: Alternative text for accessibility.
+The `name` field is the name of the venue, such as "LITEXPO". It is left out when the place has no name, or when only its address or city is known.
 
-**`presentation`**: Visual hints for rendering.
+The `address` field is the address of the venue as people would write it, such as "Laisvės pr. 5, Vilnius". It does not have to be a postal address, so a park or a field has one too. When only the city or area is known, the address is just that.
 
-```
-PresentationInfo
-  blurhash:       string?    OPTIONAL
-  dominantColor:  string?    OPTIONAL
-```
+The `countryCode` field is the country the venue is in, as an uppercase [ISO 3166-1](https://www.iso.org/iso-3166-country-codes.html) alpha-2 code, such as "LT".
 
-**`blurhash`**: A [BlurHash](https://blurha.sh/) string representing a placeholder image.
+The `components` field is an optional array of components that describe the venue. See [section 6 (Component Extension Model)](#6-component-extension-model).
 
-**`dominantColor`**: A hex color code (e.g. `#1a1a2e`) representing the dominant color in the media.
+Where the venue is on a map goes in a [Coordinates Component](open-evnt-event-components.md#29-coordinates-component).
 
-#### MediaSource
+An event has at most one venue, and every occurrence of the event takes place there. An event that changes place between occurrences MUST be split into one event per place.
 
-```
-MediaSource
-  url:          string                  REQUIRED
-  mimeType:     string?                 OPTIONAL
-  dimensions:   { width: number, height: number }?   OPTIONAL
-```
-
-**`url`**: A publicly accessible URL for the media source.
-
-**`mimeType`**: The MIME type of the media (e.g. `image/jpeg`, `video/mp4`).
-
-**`dimensions`**: The native width and height of the media in pixels.
-
----
-
-## 3. Partial Date
-
-A `PartialDate` is a string that represents a date and/or time with varying precision and an explicit timezone.
-
-### 3.1 Grammar
-
-```
-partialdate = year [ "-" month [ "-" day [ "T" time ] ] ] "[" timezone "]"
-
-time     = hour ":" minute
-year     = 4DIGIT
-month    = 2DIGIT  ; 01–12
-day      = 2DIGIT  ; 01–31
-hour     = 2DIGIT  ; 00–23
-minute   = 2DIGIT  ; 00–59
-timezone = 1*( ALPHA / DIGIT / "-" / "_" / "/" / "+" )
-```
-
-The grammar is adapted from [RFC 9557](https://www.rfc-editor.org/rfc/rfc9557) (which extends RFC 3339) but is **not compatible** with RFC 3339 or ISO 8601.
-
-### 3.2 Precision levels
-
-| Level | Pattern                           | Example                               |
-| ----- | --------------------------------- | ------------------------------------- |
-| Year  | `2025[Europe/London]`             | Only the year is known                |
-| Month | `2025-11[Europe/London]`          | Year and month known                  |
-| Day   | `2025-11-12[Europe/London]`       | Full date known                       |
-| Time  | `2025-11-12T11:00[Europe/London]` | Date and time (without seconds) known |
-
-### 3.3 Constraints
-
-- Precision levels MUST be provided in order. Skipping a level (e.g. year to day without month) is NOT ALLOWED.
-- A time component MUST NOT appear without a day.
-- A day MUST NOT appear without a month.
-- A month MUST NOT appear without a year.
-- Seconds MUST NOT be included.
-
-### 3.4 Timezone
-
-Every `PartialDate` MUST include an IANA timezone identifier in square brackets at the end of the string.
-
-- UTC offsets (`Z`, `+02:00`) are NOT ALLOWED.
-- Only IANA timezone identifiers (e.g. `Europe/London`, `America/New_York`, `UTC`) are valid.
-
-When precision is year-only or month-only, the timezone carries no semantic meaning but MUST still be provided. `[UTC]` is a conventional choice.
-
-### 3.5 Semantics
-
-- A `PartialDate` represents a range of possible instants, not a single instant.
-- At year precision, the value covers the entire calendar year in the specified timezone.
-- At month precision, the value covers the entire calendar month.
-- At day precision, the value covers the entire calendar day.
-- At time precision, the value is a specific instant (subject to timezone rules such as DST).
-
-### 3.6 Comparison
-
-Two `PartialDate` values MAY be compared only when they share the same precision and timezone. Cross-precision comparison (e.g. year vs month) is NOT RECOMMENDED without explicit resolution rules.
-
-### 3.7 Invalid examples
-
-| Value                                | Reason                           |
-| ------------------------------------ | -------------------------------- |
-| `2025-11-12T11:00Z`                  | UTC offset, not timezone bracket |
-| `2025-11-12T11:00+02:00`             | UTC offset, not timezone bracket |
-| `2025-11-12T11:00[Europe/London`     | Missing closing bracket          |
-| `2025-11-12T11:00:00[Europe/London]` | Seconds not allowed              |
-| `2025-11-12T11[Europe/London]`       | Time must include minutes        |
-| `2025-11T11:00[Europe/London]`       | Time without day                 |
-| `2025T11:00[Europe/London]`          | Time without month and day       |
-
----
-
-## 4. Venues
-
-A venue represents a location where an event takes place. Venues are defined at the event level and referenced by instances via their `id` field.
-
-### 4.1 Venue (base)
-
-```
-Venue (base)
-  id:     string              REQUIRED
-  $type:  string              REQUIRED
-  name:   Translations        REQUIRED
-```
-
-**`id`**: A locally unique identifier within the event's `venues` array. Two different events MAY use the same venue IDs. Within a single event, venue IDs MUST be unique.
-
-**`$type`**: A reverse-domain string identifying the venue variant. Determines the structure of the venue object.
-
-**`name`**: A human-readable name as a [Translations](#22-translations) object.
-
-### 4.2 PhysicalVenue
-
-`$type`: `directory.evnt.venue.physical`
-
-A real-world location.
-
-```
-PhysicalVenue extends Venue
-  $type:    "directory.evnt.venue.physical"
-  address:  Address?            OPTIONAL
-  maps:     MapReferences?      OPTIONAL
-```
-
-#### Address
-
-```
-Address
-  addr:         string?         OPTIONAL
-  countryCode:  string?         OPTIONAL
-```
-
-**`addr`**: The full address as a single free-form string.
-
-**`countryCode`**: An ISO 3166-1 alpha-2 country code (e.g. `LT`, `US`). SHOULD be uppercase.
-
-#### MapReferences
-
-A record of identifiers for the venue in external map services.
-
-```
-MapReferences
-  [key: string]: string | string[]
-```
-
-Keys are reverse-domain names. Values are the identifier(s) assigned by that service.
-
-| Key                          | Service       | Entity          |
-| ---------------------------- | ------------- | --------------- |
-| `org.openstreetmap.node`     | OpenStreetMap | Node (POI)      |
-| `org.openstreetmap.way`      | OpenStreetMap | Way (building)  |
-| `org.openstreetmap.relation` | OpenStreetMap | Relation (area) |
-| `com.google.places`          | Google Places | Place ID        |
-| `com.foursquare`             | Foursquare    | Venue ID        |
-| `com.what3words`             | what3words    | 3-word address  |
-| `org.geonames`               | GeoNames      | Feature ID      |
-| `org.wikidata.entity`        | Wikidata      | Entity QID      |
-
-### 4.3 OnlineVenue
-
-`$type`: `directory.evnt.venue.online`
-
-A virtual or web-based location.
-
-```
-OnlineVenue extends Venue
-  $type:    "directory.evnt.venue.online"
-  url:      string?            OPTIONAL
-```
-
-**`url`**: The URL where the event can be accessed online.
-
-### 4.4 UnknownVenue
-
-`$type`: `directory.evnt.venue.unknown`
-
-This represents a location with a name but does not make any guarantees about whether it is physical or online. Recommended for automated data collection when the venue type cannot be determined.
-
-```
-UnknownVenue extends Venue
-  $type:    "directory.evnt.venue.unknown"
-```
-
-If an instance has no known venue at all, use an empty `venueIds` array rather than creating an `UnknownVenue`.
-
-### 4.5 Custom venue types
-
-Producers MUST NOT define custom venue types. Consumers MUST ignore venues with unknown `$type` values and MUST preserve them when re-saving.
-
-If a venue is ignored due to unknown `$type`, its `id` is no longer available for instance references. Consumers SHOULD treat references to ignored venues as unresolvable.
-
----
-
-## 5. Instances
-
-An instance represents a single continuous occurrence of an event. If an event happens multiple times (e.g. a conference with multiple days), each occurrence is a separate instance.
-
-### 5.1 EventInstance
-
-```
-EventInstance
-  id:        string?                  OPTIONAL
-  venueIds:  string[]                 REQUIRED
-  start:     PartialDate?             OPTIONAL
-  end:       PartialDate?             OPTIONAL
-  status:    EventStatus?             OPTIONAL
-  components:EventComponent[]?        OPTIONAL
-
-  Additional properties: NOT ALLOWED
-```
-
-**`id`**: An optional local identifier for the instance.
-
-**`activities`**: An array of [Activity](#55-activity) objects representing scheduled sub-items within this instance (e.g. conference talks, workshops, performances). See [Activity](#55-activity) for the full definition.
-
-**`components`**: An array of [EventComponent](#6-components) objects representing additional metadata specific to this instance.
-
-**`venueIds`**: References to [Venues](#4-venues) defined in the parent `OpenEvnt.venues`. MUST be an array (possibly empty). Duplicate values MUST NOT appear. Each value MUST match the `id` field of a venue in `venues`. If a value does not match any venue, consumers SHOULD treat it as an error.
-
-When displaying venue information, consumers SHOULD use the `venueIds` of each instance rather than listing all event-level venues directly. This prevents displaying venues that are not relevant to a specific instance.
-
-Producers SHOULD warn if a venue in `venues` is not referenced by any instance.
-
-**`start`**: The start date and/or time as a [PartialDate](#3-partial-date).
-
-**`end`**: The end date and/or time as a [PartialDate](#3-partial-date). When both `start` and `end` are present, `end` MUST have the same or lower precision than `start` (e.g. if `start` specifies a day, `end` cannot specify a time).
-
-**`status`**: The planning state of this instance. Overrides the event-level [EventStatus](#23-eventstatus) for this instance. When absent, inherits from the event-level `status`.
-
-An event with no instances has no scheduled occurrences. This is valid for placeholder or template events.
-
-### 5.2 Multiple instances
-
-When an event has multiple occurrences with different times or venues, each occurrence SHOULD be represented as a separate instance.
+An event in Kaunas whose venue has not been announced yet has this venue:
 
 ```json
-{
-	"instances": [
-		{
-			"venueIds": ["hall"],
-			"start": "2026-06-15T09:00[Europe/Vilnius]",
-			"end": "2026-06-15T18:00[Europe/Vilnius]"
-		},
-		{
-			"venueIds": ["hall"],
-			"start": "2026-06-16T10:00[Europe/Vilnius]",
-			"end": "2026-06-16T17:00[Europe/Vilnius]"
-		}
-	]
-}
+{ "address": "Kaunas", "countryCode": "LT" }
 ```
 
-### 5.3 Multi-day events
+An event without a `venue` has no known physical place: either nothing about the place has been announced, or the event is held online only. An event held online, alone or next to a venue, carries an [Online Component](open-evnt-event-components.md#26-online-component).
 
-A single event spanning multiple consecutive days (e.g. a festival, a game jam) SHOULD be represented as a single instance with `start` and `end` dates. The criterion is whether attendance is continuous (one instance) vs. discrete separate sessions (multiple instances).
+## 5. Occurrences
 
-### 5.4 Instance status
+An `Occurrence` is one time the event takes place: a stretch of time in which attendees can take part in it. It is a JSON object with the following structure:
 
-Each instance MAY have its own `status`, independent of the event-level status.
-
-```json
-{
-	"status": "planned",
-	"instances": [
-		{ "venueIds": ["hall"], "status": "planned", "start": "2026-06-15[Europe/Vilnius]" },
-		{ "venueIds": ["hall"], "status": "uncertain", "start": "2026-06-16[Europe/Vilnius]" }
-	]
-}
+```
+Occurrence
+  start:      PartialDate?  OPTIONAL
+  end:        PartialDate?  OPTIONAL
+  status:     "cancelled"?  OPTIONAL
+  activities: Activity[]?   OPTIONAL
+  components: Component[]?  OPTIONAL
 ```
 
-Instance-level status overrides the event-level status for that instance only.
+All occurrences of an event take place at the event's venue. See [section 4 (Venue)](#4-venue).
 
-### 5.5 Activity
+The `start` and `end` fields are optional `PartialDate` fields that represent the start and end times of the occurrence. If both are present, `start` MUST NOT be after `end`, as defined in [section 3.2 (Order)](open-evnt-partialdate.md#32-order) of the PartialDate specification.
 
-An activity is a scheduled sub-item within an instance: a conference talk, workshop, performance, or social hour.
+When attendees are admitted at different times, such as by ticket type, `start` and `end` span the widest window: `start` is the earliest time anyone is admitted and `end` is the latest time anyone may stay. The times for each group belong in components.
+
+The `status` field is `cancelled` when this occurrence will not take place but other occurrences of the event still do. No other values are defined for occurrences.
+
+The `activities` field is an optional array of `Activity` objects that represent the activities that take place during the occurrence. See [section 5.1 (Activities)](#51-activities).
+
+The `components` field is an optional array of `Component` objects that represent additional information about the occurrence. See [section 6 (Component Extension Model)](#6-component-extension-model).
+
+### 5.1. Activities
+
+An `Activity` is a specific activity that takes place during an occurrence of an event. Activities are represented as JSON objects.
+
+The `Activity` object has the following structure:
 
 ```
 Activity
-  name:        Translations              REQUIRED
-  slot:        ActivitySlot?             OPTIONAL
-  location:    ActivityLocation?         OPTIONAL
-  components:  EventComponent[]?         OPTIONAL
+  name:     Translations  REQUIRED
+  status:   "cancelled"?  OPTIONAL
 ```
 
-**`name`**: The activity name as a [Translations](#22-translations) object. MUST have at least one entry.
+The `name` is a required `Translations` field that describes the name of the activity.
 
-**`slot`**: When the activity takes place within the instance's time window.
+The `status` field is `cancelled` when the activity will not take place but the rest of the event still does. No other values are defined for activities.
 
-**`location`**: A label for the room, stage, or area within the venue where this activity takes place. Not a [Venue](#4-venues) reference - use `ActivityLocation` for sub-venue naming.
+## 6. Component Extension Model
 
-**`components`**: Activity-specific metadata. See [Components](#6-components).
+The event itself, its venue, and its occurrences can be extended with additional information using the component extension model.
 
-#### ActivitySlot
+The `components` field in the Open Evnt document, the `Venue` object, and `Occurrence` objects is an optional array of `Component` objects.
 
-```
-ActivitySlot
-  time?:     "hh:mm"          OPTIONAL
-  duration?: "hh:mm"          OPTIONAL
-```
+A `Component` object MUST have a `$type` field that indicates the type of the component.
 
-**`time`**: Clock time in 24h format. Hours 00–23, minutes 00–59. Represents unanchored clock time - inherits timezone context from the parent instance's `PartialDate`.
+The `$type` field is a string that follows the reverse domain name notation. Producers SHOULD use a domain name that they control to avoid naming collisions with other producers.
 
-**`duration`**: Duration in hours:minutes. Minutes limited to 00–59; hours are unbounded.
+### 6.1. Component Versions
 
-| Slot shape                                | Meaning      |
-| ----------------------------------------- | ------------ |
-| `{}`                                      | Untimed      |
-| `{ "time": "15:00" }`                     | Starts 15:00 |
-| `{ "time": "15:00", "duration": "1:00" }` | 15:00–16:00  |
+A component type has an integer version. The version follows the name after a `#`, such as `directory.evnt.component.link#1`. A `$type` without a `#` is version 0. Producers MUST NOT write `#0`.
 
-#### ActivityLocation
+A new version is only made for a breaking change: a field is removed, or its meaning or type changes. Adding an optional field does not make a new version.
 
-```
-ActivityLocation
-  name:     Translations              REQUIRED
-```
+Consumers MUST treat each version as a separate type. A consumer that supports `directory.evnt.component.link` but not `directory.evnt.component.link#1` treats the latter as an unknown type.
 
-**`name`**: A label for the room or area, e.g. `{ "en": "Janson" }`, `{ "en": "Main Stage" }`, `{ "en": "Workshop Tent" }`.
+Consumers MAY ignore components with unknown `$type` values.
 
-#### Example
+Consumers MUST preserve components with unknown `$type` values when modifying an Open Evnt document.
 
-```json
-{
-	"instances": [
-		{
-			"venueIds": ["campus"],
-			"start": "2026-02-07[Europe/Brussels]",
-			"end": "2026-02-07T19:00[Europe/Brussels]",
-			"activities": [
-				{
-					"name": { "en": "Opening Keynote" },
-					"slot": { "time": "09:30", "duration": "0:50" },
-					"location": { "name": { "en": "Janson" } }
-				},
-				{
-					"name": { "en": "Rust for Linux" },
-					"slot": { "time": "13:00", "duration": "0:50" },
-					"location": { "name": { "en": "Janson" } }
-				},
-				{
-					"name": { "en": "LLVM Workshop" },
-					"slot": { "time": "10:30", "duration": "8:30" },
-					"location": { "name": { "en": "K.3.201" } }
-				}
-			]
-		}
-	]
-}
-```
+The order of components in the `components` array is not significant. Consumers MAY reorder components when modifying an Open Evnt document.
 
----
+## 7. Versioning
 
-## 6. Components
+The `v` field in the Open Evnt document indicates the version of the Open Evnt specification that the event conforms to.
 
-Components carry additional metadata about an event that is not tied to a specific venue or instance. They are the primary extension mechanism of Open Evnt.
+Consumers MUST reject versions that they do not support. Producers MUST set `v` to the version of the specification that they are using.
 
-### 6.1 EventComponent (base)
+The current version of the Open Evnt specification is `"0.2"`. Producers SHOULD use this version when creating new events.
 
-```
-EventComponent
-  $type:  string    REQUIRED
-
-  Additional properties: ALLOWED
-```
-
-**`$type`**: A reverse-domain string identifying the component type. Determines the structure and semantics of the remaining fields.
-
-### 6.2 Component processing rules
-
-- Consumers MUST ignore components with unknown `$type` values.
-- Consumers MUST preserve unknown components and their properties when re-saving event data.
-- Producers MAY define custom component types using any reverse-domain string.
-- Custom `$type` values SHOULD use a namespace the producer controls (e.g. `com.example.component.metadata`).
-
-## 7. Defined component types
-
-### `directory.evnt.component.link`
-
-A link related to the event (website, ticketing, social media, etc.).
-
-```
-directory.evnt.component.link
-  $type:     "directory.evnt.component.link"
-  url:       string              REQUIRED
-  name:      Translations?       OPTIONAL
-  disabled:  boolean?            OPTIONAL
-  opensAt:   PartialDate?        OPTIONAL
-  closesAt:  PartialDate?        OPTIONAL
-```
-
-**`disabled`**: When `true`, the link is temporarily unavailable.
-
-**`opensAt`**: The link becomes active at this time.
-
-**`closesAt`**: The link becomes inactive at this time.
-
-### `directory.evnt.component.source`
-
-A source of information about the event (news article, announcement, etc.).
-
-```
-directory.evnt.component.source
-  $type:     "directory.evnt.component.source"
-  url:       string              REQUIRED
-```
-
-Producers SHOULD use this component when the event data was sourced from an external announcement or publication. It is not needed when the event itself is the primary source.
-
-### `directory.evnt.component.splashMedia`
-
-A media item for visual representation of the event (cover image, poster, etc.).
-
-```
-directory.evnt.component.splashMedia
-  $type:     "directory.evnt.component.splashMedia"
-  media:     Media               REQUIRED
-  roles:     string[]            REQUIRED
-```
-
-**`roles`**: Usage roles such as `"background"`, `"thumbnail"`, `"poster"`. Applications MAY define their own roles.
-
-### `directory.evnt.component.languages`
-
-Languages the event is available in.
-
-```
-directory.evnt.component.languages
-  $type:      "directory.evnt.component.languages"
-  languages:  LanguageInfo[]           REQUIRED
-```
-
-**`languages`**: An array of language entries.
-
-```
-LanguageInfo
-  code:  string    REQUIRED
-```
-
-**`code`**: A BCP47 language tag (e.g. `"en"`, `"lt"`, `"zh-Hans"`).
-
-### `directory.evnt.richtext.markdown`
-
-Markdown content with an optional language hint.
-
-```
-directory.evnt.richtext.markdown
-  $type:    "directory.evnt.richtext.markdown"
-  content:  string              REQUIRED
-  language: string?             OPTIONAL
-  flavor:   string?             OPTIONAL
-```
-
-`language`: A BCP47 language tag for the markdown content. Producers SHOULD populate this field when the language is known.
-
-`flavor`: A string indicating the markdown flavor. Producers SHOULD populate this field when the flavor is known.
-
----
+When a new version of the Open Evnt specification is released, producers MAY choose to update their events to conform to the new version. Consumers MAY choose to support multiple versions of the Open Evnt specification.
 
 ## 8. Serialization
 
-Open Evnt documents are serialized as JSON.
+An Open Evnt document is serialized as a single JSON object encoded as UTF-8.
 
-### 8.1 JSON representation
+### 8.1. Field Ordering
 
-An `OpenEvnt` object MUST be represented as a JSON object conforming to the [data model](#2-data-model) defined in this specification.
+The order of keys in a JSON object is not significant. Consumers MUST NOT depend on key order, and producers MUST NOT assign meaning to it.
 
-```json
-{
-	"v": "0.1",
-	"name": {
-		"en": "Example Event"
-	}
-}
-```
+### 8.2. Additional Properties
 
-### 8.2 Field ordering
+An object defined by this specification MUST NOT carry properties other than those defined for it. Consumers MUST reject documents containing such properties.
 
-Consumers MUST NOT depend on JSON object key order.
+This rule does not apply to `Component` objects. A `Component` carries whatever properties its `$type` defines, and consumers MUST preserve them as described in [section 6 (Component Extension Model)](#6-component-extension-model).
 
-### 8.3 Unknown fields
+### 8.3. Media Type and File Extension
 
-At the `OpenEvnt` level, consumers MUST reject objects with properties not defined in the data model.
+An Open Evnt document SHOULD be served with the media type `application/vnd.evnt+json` and saved with the file extension `.evnt.json`. Consumers MAY accept other media types and file extensions.
 
-At the component level, additional properties beyond `$type` are PERMITTED. Consumers MUST preserve them when re-saving.
-
-### 8.4 File extension
-
-The RECOMMENDED file extension for Open Evnt files is `.evnt.json`. This distinguishes Open Evnt files from generic JSON while keeping standard tooling (syntax highlighting, validators) working.
-
-```
-meetup.evnt.json
-fosdem-2026.evnt.json
-```
-
-### 8.5 MIME type
-
-The RECOMMENDED MIME type is `application/evnt+json`.
-
-Optional version parameter:
-
-```
-application/evnt+json; v=0.1
-```
-
----
-
-## 9. Versioning
-
-### 9.1 Version scheme
-
-Versions follow a `MAJOR.MINOR` scheme.
-
-**Exception for 0.x versions:** All `0.*` versions may introduce breaking changes. This follows the ZeroVer convention while the format is in development. Starting from `1.0`, the rules below apply.
-
-- **MINOR** changes (e.g. `1.0` → `1.1`): Additive only. New optional fields, new component types. Existing documents remain valid.
-- **MAJOR** changes (e.g. `1.0` → `2.0`): May break backward compatibility. Fields may be removed, required fields may change, serialization format may change.
-
-### 9.2 Current version
-
-The current version is `"0.1"`. All published documents MUST set `v` to `"0.1"`.
-
-The `0.` prefix indicates the format is in development. Producers and consumers SHOULD expect breaking changes between any `0.x` versions.
-
-### 9.3 Producer requirements
-
-- Producers MUST set `v` to the version of the spec they conform to.
-- Producers MUST NOT produce documents with a `v` value that does not match the spec they implement.
-
-### 9.4 Consumer requirements
-
-- Consumers MUST accept documents with a `v` value equal to or lower than the highest version they support.
-- Consumers MAY accept documents with a higher minor version (e.g. a `1.0` consumer MAY accept `1.1` documents, ignoring unrecognized fields).
-- Consumers MUST reject documents with a higher major version they do not support.
-
----
-
-## Appendix A: Complete example
+## Appendix A: Complete Example
 
 ```json
 {
-	"v": "0.1",
+	"v": "0.2",
+	"id": "https://example.com/events/tech-conference-2026",
 	"name": {
 		"en": "Tech Conference 2026",
 		"lt": "Tech Konferencija 2026"
 	},
-	"label": {
-		"en": "The premier tech event in Vilnius",
-		"lt": "Pagrindinis technologijų renginys Vilniuje"
-	},
-	"status": "planned",
-	"venues": [
-		{
-			"id": "main-hall",
-			"$type": "directory.evnt.venue.physical",
-			"name": { "en": "Vilnius Convention Centre" },
-			"address": {
-				"addr": "123 Konstitucijos pr., Vilnius",
-				"countryCode": "LT"
+	"venue": {
+		"name": { "en": "Vilnius Convention Centre" },
+		"address": "Konstitucijos pr. 123, Vilnius",
+		"countryCode": "LT",
+		"components": [
+			{
+				"$type": "directory.evnt.component.placeId",
+				"type": "org.openstreetmap.way",
+				"id": "123456789"
 			}
-		},
+		]
+	},
+	"occurrences": [
 		{
-			"id": "stream",
-			"$type": "directory.evnt.venue.online",
-			"name": { "en": "Livestream" },
-			"url": "https://live.example.com/techconf-2026"
-		}
-	],
-	"instances": [
-		{
-			"venueIds": ["main-hall", "stream"],
 			"start": "2026-06-15T09:00[Europe/Vilnius]",
-			"end": "2026-06-15T18:00[Europe/Vilnius]"
+			"end": "2026-06-15T18:00[Europe/Vilnius]",
+			"activities": [
+				{ "name": { "en": "Opening Keynote" } },
+				{ "name": { "en": "Workshop: Building Event Directories" } }
+			]
 		},
 		{
-			"venueIds": ["main-hall", "stream"],
 			"start": "2026-06-16T10:00[Europe/Vilnius]",
 			"end": "2026-06-16T17:00[Europe/Vilnius]"
 		}
 	],
 	"components": [
+		{
+			"$type": "directory.evnt.component.relation",
+			"type": "parent",
+			"target": "https://example.com/events/tech-conference"
+		},
+		{
+			"$type": "directory.evnt.component.online",
+			"url": "https://live.example.com/techconf-2026",
+			"name": { "en": "Livestream" }
+		},
 		{
 			"$type": "directory.evnt.component.link",
 			"url": "https://example.com/tickets",
@@ -735,7 +318,6 @@ The `0.` prefix indicates the format is in development. Producers and consumers 
 				"sources": [
 					{
 						"url": "https://example.com/banner.jpg",
-						"mimeType": "image/jpeg",
 						"dimensions": { "width": 1200, "height": 600 }
 					}
 				],
@@ -743,22 +325,40 @@ The `0.` prefix indicates the format is in development. Producers and consumers 
 				"presentation": {
 					"dominantColor": "#1a1a2e"
 				}
-			},
-			"roles": ["background"]
+			}
 		}
 	]
 }
 ```
 
----
+The component types used above are defined by the [Open Evnt Event Components specification](open-evnt-event-components.md), not by this document.
 
 ## Appendix B: JSON Schema
 
 The machine-validatable JSON Schema for this specification is published at `https://evnt.directory/openevnt.schema.json`.
 
----
-
 ## Appendix C: Changelog
+
+### 0.2: draft
+
+- Added the required `id` field.
+- Replaced the `venues` array with a single optional `venue`. Venue ids and venue types are removed; online attendance moved to the Online Component.
+- Renamed `instances` to `occurrences`.
+- Removed `venueIds` from occurrences.
+- Removed the `$type` field from the document.
+- Added component versions.
+- Removed the `planned` and `suspended` statuses. An event without `status` has nothing known to be wrong with it.
+- Cancelled and postponed events stay published. Consumers no longer ignore their dates; they just don't present them as upcoming.
+- Added `status` to occurrences and activities.
+- Events link to each other with the new Relation Component.
+- `null` is not a valid field value. A field without a value is left out.
+- Removed the `label` field. The year or edition goes in `name`, and the series is a `parent` relation.
+- The media type is now `application/vnd.evnt+json`, and it moved to section 8.
+- PartialDate moved to its own document, with rules for ordering and clock changes.
+- Removed `opensAt` and `closesAt` from the Link Component.
+- Removed the `Address` object. `address` is a string, `countryCode` moved onto the venue, and the venue `name` is optional.
+- Added the Coordinates Component for where the venue is on a map.
+- Translations keys must not differ only in case, values must not be empty, and consumers pick a language with RFC 4647 Lookup.
 
 ### 0.1: 2026-06-12
 

@@ -6,7 +6,7 @@ Open Evnt is designed to be served over HTTP. You can host your event data on an
 
 You should use `.evnt.json` as the file extension. Tools that understand Open Evnt will recognize it while the ones that won't can fall back to treating it as a regular JSON file.
 
-The content type of Open Evnt events should be `application/evnt+json`. This is not required, but it helps clients that want to distinguish event data from other JSON.
+The content type of Open Evnt events should be `application/vnd.evnt+json`. This is not required, but it helps clients that want to distinguish event data from other JSON.
 
 ## Headers
 
