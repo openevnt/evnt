@@ -11,19 +11,16 @@ importers:
       '@evnt/convert':
         specifier: ^0.1.3
         version: 0.1.3(domhandler@6.0.1)(htmlparser2@12.0.0)(ical.js@2.2.1)(zod@4.3.6)
-      '@evnt/schema':
-        specifier: ^0.1.2
-        version: 0.1.2(zod@4.3.6)
-      htmlparser2:
-        specifier: ^12.0.0
-        version: 12.0.0
-    devDependencies:
       ajv:
         specifier: ^8.20.0
         version: 8.20.0
       ajv-formats:
         specifier: ^3.0.1
         version: 3.0.1(ajv@8.20.0)
+      htmlparser2:
+        specifier: ^12.0.0
+        version: 12.0.0
+    devDependencies:
       oxfmt:
         specifier: ^0.58.0
         version: 0.58.0

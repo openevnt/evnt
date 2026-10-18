@@ -17,7 +17,7 @@
 				@blur="formatJson"
 			></textarea>
 			<p v-if="error" class="error-text">{{ error }}</p>
-			<p v-else class="valid-text">Valid OpenEvnt event</p>
+			<p v-else class="valid-text">Valid Open Evnt 0.2 event</p>
 		</div>
 
 		<div v-if="previewUrl" class="preview-section">
@@ -38,123 +38,50 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { OpenEvntSchema } from "@evnt/schema";
+import Ajv2020, { type ErrorObject } from "ajv/dist/2020";
+import addFormats from "ajv-formats";
+import schema from "../../../docs/public/openevnt.schema.json";
+import minimal from "../../../examples/valid/minimal.evnt.json";
+import weeklySeries from "../../../examples/valid/weekly-series.evnt.json";
+import venueNotAnnounced from "../../../examples/valid/venue-not-announced.evnt.json";
+import cancelledParts from "../../../examples/valid/cancelled-occurrence-and-activity.evnt.json";
+import everyComponent from "../../../examples/valid/every-component.evnt.json";
+
+const ajv = new Ajv2020({ allErrors: true });
+addFormats(ajv);
+const validate = ajv.compile(schema);
 
 const presets = [
-	{
-		label: "Simple talk",
-		json: JSON.stringify(
-			{
-				v: "0.1",
-				name: { en: "Keynote: The Future of Events" },
-				instances: [
-					{
-						venueIds: [],
-						start: "2027-03-08T09:00[UTC]",
-						end: "2027-03-08T10:00[UTC]",
-					},
-				],
-			},
-			null,
-			2,
-		),
-	},
-	{
-		label: "Multi-day conference",
-		json: JSON.stringify(
-			{
-				v: "0.1",
-				name: { en: "WebDevConf 2027", lt: "WebDevKonferencija 2027" },
-				venues: [
-					{
-						id: "hall-a",
-						$type: "directory.evnt.venue.physical",
-						name: { en: "Main Hall" },
-					},
-				],
-				instances: [
-					{
-						venueIds: ["hall-a"],
-						start: "2027-06-15T09:00[Europe/Vilnius]",
-						end: "2027-06-15T18:00[Europe/Vilnius]",
-					},
-					{
-						venueIds: ["hall-a"],
-						start: "2027-06-16T10:00[Europe/Vilnius]",
-						end: "2027-06-16T17:00[Europe/Vilnius]",
-					},
-					{
-						venueIds: ["hall-a"],
-						start: "2027-06-17[Europe/Vilnius]",
-					},
-				],
-			},
-			null,
-			2,
-		),
-	},
-	{
-		label: "Hybrid meetup",
-		json: JSON.stringify(
-			{
-				v: "0.1",
-				name: { en: "Vilnius Tech Meetup", lt: "Vilniaus Tech Susitikimas" },
-				venues: [
-					{
-						id: "pub",
-						$type: "directory.evnt.venue.physical",
-						name: { en: "The Old Pub" },
-						address: { addr: "Vokieciu g. 12", countryCode: "LT" },
-					},
-					{
-						id: "stream",
-						$type: "directory.evnt.venue.online",
-						name: { en: "Livestream" },
-						url: "https://stream.example.com/meetup",
-					},
-				],
-				instances: [
-					{
-						venueIds: ["pub", "stream"],
-						start: "2027-04-14T19:00[Europe/Vilnius]",
-					},
-				],
-			},
-			null,
-			2,
-		),
-	},
-	{
-		label: "Partial date",
-		json: JSON.stringify(
-			{
-				v: "0.1",
-				name: { en: "Summer Festival" },
-				instances: [
-					{
-						venueIds: [],
-						start: "2027-06[UTC]",
-					},
-				],
-			},
-			null,
-			2,
-		),
-	},
-];
+	{ label: "Minimal", event: minimal },
+	{ label: "Weekly series", event: weeklySeries },
+	{ label: "Venue not announced", event: venueNotAnnounced },
+	{ label: "Cancelled parts", event: cancelledParts },
+	{ label: "Every component", event: everyComponent },
+].map(({ label, event }) => ({ label, json: JSON.stringify(event, null, 2) }));
+
+function describeError(error: ErrorObject) {
+	const where = error.instancePath || "(root)";
+	switch (error.keyword) {
+		case "additionalProperties":
+			return `${where}: ${error.message}: ${error.params.additionalProperty}`;
+		case "const":
+			return `${where}: ${error.message} ${JSON.stringify(error.params.allowedValue)}`;
+		case "enum":
+			return `${where}: ${error.message} ${error.params.allowedValues.map((v: unknown) => JSON.stringify(v)).join(", ")}`;
+		default:
+			return `${where}: ${error.message}`;
+	}
+}
 
 const raw = ref(presets[0].json);
 
 const error = computed(() => {
 	try {
-		const obj = JSON.parse(raw.value);
-		const result = OpenEvntSchema.safeParse(obj);
-		if (!result.success) {
-			return result.error.issues
-				.map((i: any) => `${i.path?.join(".") || "(root)"}: ${i.message}`)
-				.join("\n");
-		}
-		return null;
+		if (validate(JSON.parse(raw.value))) return null;
+		return (validate.errors ?? [])
+			.filter((e) => e.keyword !== "if")
+			.map(describeError)
+			.join("\n");
 	} catch (e: any) {
 		return e.message;
 	}

@@ -33,7 +33,6 @@ export default defineConfig({
 
 		nav: [
 			{ text: "Home", link: "/" },
-			{ text: "Quickstart", link: "/guide/getting-started" },
 			{
 				text: "Ecosystem",
 				items: [
@@ -54,7 +53,6 @@ export default defineConfig({
 
 		sidebar: [
 			{ text: "Home", link: "/" },
-			{ text: "Quickstart", link: "/guide/getting-started" },
 			{ text: "Playground", link: "/playground" },
 			{ text: "Convert", link: "/convert" },
 			{
@@ -79,18 +77,6 @@ export default defineConfig({
 						text: "Index",
 						link: "/spec/open-evnt-index",
 					},
-				],
-			},
-			{
-				text: "Design & Motivation",
-				items: [
-					{ text: "Open Evnt Object", link: "/guide/root" },
-					{ text: "Translations", link: "/guide/translations" },
-					{ text: "Partial Dates", link: "/guide/partial-date" },
-					{ text: "Venues", link: "/guide/venues" },
-					{ text: "Instances", link: "/guide/instances" },
-					{ text: "Components", link: "/guide/components" },
-					{ text: "Ethos", link: "/guide/ethos" },
 				],
 			},
 			{
