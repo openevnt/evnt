@@ -60,6 +60,7 @@ Link: example.com/summer-workshops
 ## Start here
 
 - **Try it** in the [Playground](./playground)
+- **Pick your use case:** a [calendar app](./use-cases/calendar-app.md), a [convention website](./use-cases/convention-website.md), a [ticketing site](./use-cases/ticketing-site.md) or an [event directory](./use-cases/event-directory.md)
 - Read the [Event Specification](./spec/open-evnt-event.md)
 - Read the [Manifest Specification](./spec/open-evnt-manifest.md)
 - Read the [Index Specification](./spec/open-evnt-index.md)

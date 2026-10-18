@@ -34,6 +34,15 @@ export default defineConfig({
 		nav: [
 			{ text: "Home", link: "/" },
 			{
+				text: "Use cases",
+				items: [
+					{ text: "Calendar app", link: "/use-cases/calendar-app" },
+					{ text: "Convention website", link: "/use-cases/convention-website" },
+					{ text: "Ticketing site", link: "/use-cases/ticketing-site" },
+					{ text: "Event directory", link: "/use-cases/event-directory" },
+				],
+			},
+			{
 				text: "Ecosystem",
 				items: [
 					{ text: "Libraries", link: "/libraries" },
@@ -55,6 +64,15 @@ export default defineConfig({
 			{ text: "Home", link: "/" },
 			{ text: "Playground", link: "/playground" },
 			{ text: "Convert", link: "/convert" },
+			{
+				text: "Use cases",
+				items: [
+					{ text: "Calendar app", link: "/use-cases/calendar-app" },
+					{ text: "Convention website", link: "/use-cases/convention-website" },
+					{ text: "Ticketing site", link: "/use-cases/ticketing-site" },
+					{ text: "Event directory", link: "/use-cases/event-directory" },
+				],
+			},
 			{
 				text: "Ecosystem",
 				items: [
