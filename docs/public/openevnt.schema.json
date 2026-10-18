@@ -117,7 +117,7 @@
 			"required": ["$type"],
 			"properties": {
 				"$type": {
-					"description": "Reverse domain name, with #N after it from version 1 on",
+					"description": "Reverse domain name, plus #N for version 1 and later",
 					"type": "string",
 					"pattern": "^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)+(#[1-9][0-9]*)?$"
 				}
@@ -229,7 +229,7 @@
 				"$type": { "const": "directory.evnt.component.splashMedia" },
 				"media": { "$ref": "#/$defs/Media" },
 				"roles": {
-					"description": "Where the media is meant to be shown: background, poster, banner or a value of the producer's own",
+					"description": "Where the media is meant to be shown: background, poster, banner, or the producer's own value",
 					"type": "array",
 					"items": { "type": "string" }
 				}
@@ -320,7 +320,7 @@
 			"properties": {
 				"$type": { "const": "directory.evnt.component.relation" },
 				"type": {
-					"description": "parent, child, alternate or a reverse domain name of the producer's own",
+					"description": "parent, child, alternate, or the producer's own value in reverse domain name notation",
 					"type": "string"
 				},
 				"target": {

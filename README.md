@@ -8,11 +8,11 @@
 
 [Open Evnt](https://evnt.directory) is a data format for representing events.
 
-This repository has the specification and the [Open Evnt website](https://evnt.directory), which is in [./docs](./docs/).
+This repository holds the specification and the website, which is in [./docs](./docs/).
 
 **Libraries**
 
-The JavaScript and TypeScript packages (`@evnt/*` on npm) are in [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). Libraries for other languages are listed on the [libraries page](./docs/libraries.md).
+The JavaScript and TypeScript packages, `@evnt/*` on npm, are in [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). Other libraries are on the [libraries page](./docs/libraries.md).
 
 **Join the Community**
 
@@ -38,7 +38,7 @@ The specification is open for contributions! If you have suggestions for improve
 
 ### Contributing to the code
 
-Code for the libraries goes to [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). The website here uses [pnpm](https://pnpm.io/) as the package manager.
+Library code goes to [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). The website uses [pnpm](https://pnpm.io/):
 
 - `pnpm install` - install dependencies
 - `pnpm fmt` - run oxfmt
