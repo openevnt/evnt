@@ -337,6 +337,12 @@ The component types used above are defined by the [Open Evnt Event Components sp
 
 The machine-validatable JSON Schema for this specification is published at `https://evnt.directory/openevnt.schema.json`.
 
+A document that fails the schema does not conform. Passing it is not enough, because the schema does not check:
+
+- that no two Translations keys differ only in case
+- that an occurrence's `start` is not after its `end`
+- that a language tag, country code or timezone name is registered, only that it has the right shape
+
 ## Appendix C: Changelog
 
 ### 0.2: draft

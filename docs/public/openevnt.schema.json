@@ -1,567 +1,347 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"id": "OpenEvnt",
-	"title": "Open Evnt Event",
-	"description": "A single event defined in the Open Evnt format",
 	"$id": "https://evnt.directory/openevnt.schema.json",
+	"title": "Open Evnt Document",
+	"description": "One event in the Open Evnt 0.2 format",
 	"type": "object",
+	"required": ["v", "id", "name"],
 	"properties": {
-		"v": {
-			"type": "string",
-			"const": "0.1",
-			"description": "The version of the Event Data schema"
+		"v": { "const": "0.2" },
+		"id": {
+			"description": "Identifies the event. It never changes and is never reused for another event",
+			"$ref": "#/$defs/AbsoluteUri"
 		},
 		"name": {
-			"description": "The name of the event",
-			"$ref": "#/$defs/Translations"
-		},
-		"label": {
-			"description": "A secondary label for the event",
+			"description": "The event's name as its organizer uses it, including any year or edition",
 			"$ref": "#/$defs/Translations"
 		},
 		"status": {
-			"description": "The status of the event",
-			"$ref": "#/$defs/EventStatus"
+			"description": "Only present when the event may not take place as listed",
+			"enum": ["uncertain", "cancelled", "postponed"]
 		},
-		"venues": {
-			"description": "The venues associated with this event",
+		"venue": { "$ref": "#/$defs/Venue" },
+		"occurrences": {
+			"description": "The times the event takes place",
 			"type": "array",
-			"items": {
-				"$ref": "#/$defs/Venue"
-			}
+			"items": { "$ref": "#/$defs/Occurrence" }
 		},
-		"instances": {
-			"description": "The instances of the event",
-			"type": "array",
-			"items": {
-				"$ref": "#/$defs/EventInstance"
-			}
-		},
-		"components": {
-			"description": "Additional components of the event",
-			"type": "array",
-			"items": {
-				"$ref": "#/$defs/EventComponent"
-			}
-		}
+		"components": { "$ref": "#/$defs/Components" }
 	},
-	"required": ["v", "name"],
 	"additionalProperties": false,
 	"$defs": {
 		"Translations": {
+			"description": "Text in one or more languages, keyed by BCP 47 language tag",
 			"type": "object",
-			"propertyNames": {
-				"type": "string",
-				"description": "BCP47 language code"
-			},
-			"additionalProperties": {
-				"type": "string"
-			},
-			"id": "Translations",
-			"description": "A multilingual string",
-			"default": {
-				"en": ""
-			},
-			"examples": [
-				{
-					"en": "Example",
-					"tr": "Örnek",
-					"lt": "Pavyzdys"
-				}
-			],
-			"defaultSnippets": [
-				{
-					"label": "Add English",
-					"body": {
-						"en": "$1"
-					}
-				},
-				{
-					"label": "Add other language",
-					"body": {
-						"$1": "$2"
-					}
-				}
-			]
+			"minProperties": 1,
+			"propertyNames": { "$ref": "#/$defs/LanguageTag" },
+			"additionalProperties": { "type": "string", "minLength": 1 }
 		},
-		"EventStatus": {
-			"anyOf": [
-				{
-					"type": "string",
-					"const": "planned",
-					"description": "No disruptions - event is planned or has already occurred"
-				},
-				{
-					"type": "string",
-					"const": "uncertain",
-					"description": "Event is not finalized"
-				},
-				{
-					"type": "string",
-					"const": "postponed",
-					"description": "The event has been postponed to an unknown later date"
-				},
-				{
-					"type": "string",
-					"const": "cancelled",
-					"description": "The event has been cancelled"
-				},
-				{
-					"type": "string",
-					"const": "suspended",
-					"description": "The event may be postponed or cancelled"
-				}
-			],
-			"id": "EventStatus"
-		},
-		"Venue": {
-			"id": "Venue",
-			"oneOf": [
-				{
-					"$ref": "#/$defs/PhysicalVenue"
-				},
-				{
-					"$ref": "#/$defs/OnlineVenue"
-				},
-				{
-					"$ref": "#/$defs/UnknownVenue"
-				}
-			]
-		},
-		"PhysicalVenue": {
-			"type": "object",
-			"properties": {
-				"$type": {
-					"type": "string",
-					"const": "directory.evnt.venue.physical"
-				},
-				"id": {
-					"type": "string",
-					"description": "ID of the venue to be used in Event Instances"
-				},
-				"name": {
-					"description": "The name of the venue",
-					"$ref": "#/$defs/Translations"
-				},
-				"address": {
-					"type": "object",
-					"properties": {
-						"countryCode": {
-							"description": "The ISO 3166-1 alpha-2 country code",
-							"type": "string"
-						},
-						"postalCode": {
-							"description": "The postal code of the address, if any",
-							"type": "string"
-						},
-						"addr": {
-							"description": "Full address excluding country and postal code",
-							"type": "string"
-						}
-					},
-					"additionalProperties": false
-				},
-				"maps": {
-					"description": "Map service identifiers keyed by reverse-domain name (e.g. `org.openstreetmap.node`, `com.google.places`). Values are the identifier(s) assigned by that service for this location.",
-					"type": "object",
-					"propertyNames": {
-						"type": "string"
-					},
-					"additionalProperties": {
-						"anyOf": [
-							{
-								"type": "string"
-							},
-							{
-								"type": "array",
-								"items": {
-									"type": "string"
-								}
-							}
-						]
-					}
-				}
-			},
-			"required": ["$type", "id", "name"],
-			"additionalProperties": false,
-			"id": "PhysicalVenue",
-			"title": "Physical Venue",
-			"description": "A venue with a known or unknown physical location"
-		},
-		"OnlineVenue": {
-			"type": "object",
-			"properties": {
-				"$type": {
-					"type": "string",
-					"const": "directory.evnt.venue.online"
-				},
-				"id": {
-					"type": "string",
-					"description": "ID of the venue to be used in Event Instances"
-				},
-				"name": {
-					"description": "The name of the venue",
-					"$ref": "#/$defs/Translations"
-				},
-				"url": {
-					"type": "string"
-				}
-			},
-			"required": ["$type", "id", "name"],
-			"additionalProperties": false,
-			"id": "OnlineVenue"
-		},
-		"UnknownVenue": {
-			"type": "object",
-			"properties": {
-				"$type": {
-					"type": "string",
-					"const": "directory.evnt.venue.unknown"
-				},
-				"id": {
-					"type": "string",
-					"description": "ID of the venue to be used in Event Instances"
-				},
-				"name": {
-					"description": "The name of the venue",
-					"$ref": "#/$defs/Translations"
-				}
-			},
-			"required": ["$type", "id", "name"],
-			"additionalProperties": false,
-			"id": "UnknownVenue"
-		},
-		"EventInstance": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"venueIds": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					},
-					"description": "The IDs of the venues where this event instance takes place"
-				},
-				"start": {
-					"description": "The start date and/or time",
-					"$ref": "#/$defs/PartialDate"
-				},
-				"end": {
-					"description": "The end date and/or time",
-					"$ref": "#/$defs/PartialDate"
-				},
-				"status": {
-					"description": "The status of the event instance",
-					"$ref": "#/$defs/EventStatus"
-				},
-				"activities": {
-					"description": "The activities taking place during this event instance",
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"name": {
-								"description": "The name of the activity",
-								"$ref": "#/$defs/Translations"
-							},
-							"slot": {
-								"description": "The time slot of the activity",
-								"type": "object",
-								"properties": {
-									"time": {
-										"description": "The time of the activity",
-										"type": "string",
-										"pattern": "^\\d{2}:\\d{2}$"
-									},
-									"duration": {
-										"description": "The duration of the activity",
-										"type": "string",
-										"pattern": "^\\d{1,}:\\d{2}$"
-									}
-								},
-								"additionalProperties": false
-							},
-							"components": {
-								"description": "Additional components of the event instance",
-								"type": "array",
-								"items": {
-									"$ref": "#/$defs/EventComponent"
-								}
-							}
-						},
-						"required": ["name"],
-						"additionalProperties": false
-					}
-				},
-				"components": {
-					"description": "Additional components of the event instance",
-					"type": "array",
-					"items": {
-						"$ref": "#/$defs/EventComponent"
-					}
-				}
-			},
-			"required": ["venueIds"],
-			"additionalProperties": false,
-			"id": "EventInstance",
-			"title": "Event Instance",
-			"description": "A part of an event that can occur at a known or unknown date and/or time and a known or unknown place or places."
+		"LanguageTag": {
+			"type": "string",
+			"pattern": "^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$"
 		},
 		"PartialDate": {
+			"description": "A date known to a year, month, day or minute, with an IANA timezone, such as 2026-06-15T09:00[Europe/Vilnius]",
 			"type": "string",
-			"id": "PartialDate",
-			"description": "A date string that can have varying levels of precision (year, month, day, time) with a timezone",
-			"regex": "/^(?<year>\\d{4})(?:-(?<month>\\d{2})(?:-(?<day>\\d{2})(?:T(?<time>(?<hour>\\d{2}):(?<minute>\\d{2}))?)?)?)?\\[(?<timezone>[-\\w/+]+)\\]$/",
-			"examples": [
-				"2023[Europe/Vilnius]",
-				"2023-05[Europe/Vilnius]",
-				"2023-05-15[Europe/Vilnius]",
-				"2023-05-15T13:45[Europe/Vilnius]"
-			],
-			"defaultSnippets": [
+			"pattern": "^[0-9]{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01])(T([01][0-9]|2[0-3]):[0-5][0-9])?)?)?\\[[A-Za-z0-9_/+-]+\\]$",
+			"not": { "pattern": "^[0-9]{4}-(02-3[01]|(0[469]|11)-31)" },
+			"if": { "pattern": "^[0-9]{4}-02-29" },
+			"then": {
+				"pattern": "^([0-9]{2}(0[48]|[2468][048]|[13579][26])|([02468][048]|[13579][26])00)-02-29"
+			}
+		},
+		"AbsoluteUri": {
+			"type": "string",
+			"format": "uri",
+			"pattern": "^[A-Za-z][A-Za-z0-9+.-]*:"
+		},
+		"Venue": {
+			"description": "The physical place where every occurrence of the event takes place",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"name": { "$ref": "#/$defs/Translations" },
+				"address": {
+					"description": "The address as people would write it, or just the city or area when that is all that is known",
+					"type": "string"
+				},
+				"countryCode": {
+					"description": "Uppercase ISO 3166-1 alpha-2 code",
+					"type": "string",
+					"pattern": "^[A-Z]{2}$"
+				},
+				"components": {
+					"$ref": "#/$defs/Components",
+					"type": "array",
+					"contains": {
+						"type": "object",
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.coordinates" } }
+					},
+					"minContains": 0,
+					"maxContains": 1
+				}
+			},
+			"additionalProperties": false
+		},
+		"Occurrence": {
+			"description": "One time the event takes place",
+			"type": "object",
+			"properties": {
+				"start": { "$ref": "#/$defs/PartialDate" },
+				"end": { "$ref": "#/$defs/PartialDate" },
+				"status": { "const": "cancelled" },
+				"activities": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/Activity" }
+				},
+				"components": { "$ref": "#/$defs/Components" }
+			},
+			"additionalProperties": false
+		},
+		"Activity": {
+			"type": "object",
+			"required": ["name"],
+			"properties": {
+				"name": { "$ref": "#/$defs/Translations" },
+				"status": { "const": "cancelled" }
+			},
+			"additionalProperties": false
+		},
+		"Components": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/Component" }
+		},
+		"Component": {
+			"type": "object",
+			"required": ["$type"],
+			"properties": {
+				"$type": {
+					"description": "Reverse domain name, with #N after it from version 1 on",
+					"type": "string",
+					"pattern": "^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)+(#[1-9][0-9]*)?$"
+				}
+			},
+			"allOf": [
 				{
-					"label": "Current Date & Time",
-					"body": "${1:${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}}[$2:UTC]"
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.richtext.markdown" } }
+					},
+					"then": { "$ref": "#/$defs/MarkdownComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.link" } }
+					},
+					"then": { "$ref": "#/$defs/LinkComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.source" } }
+					},
+					"then": { "$ref": "#/$defs/SourceComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.splashMedia" } }
+					},
+					"then": { "$ref": "#/$defs/SplashMediaComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.languages" } }
+					},
+					"then": { "$ref": "#/$defs/LanguagesComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.online" } }
+					},
+					"then": { "$ref": "#/$defs/OnlineComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.placeId" } }
+					},
+					"then": { "$ref": "#/$defs/PlaceIdComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.relation" } }
+					},
+					"then": { "$ref": "#/$defs/RelationComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.component.coordinates" } }
+					},
+					"then": { "$ref": "#/$defs/CoordinatesComponent" }
 				}
 			]
 		},
-		"EventComponent": {
-			"oneOf": [
-				{
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
-							"const": "directory.evnt.component.link"
-						},
-						"url": {
-							"type": "string",
-							"description": "The URL of the link"
-						},
-						"name": {
-							"description": "The name of the link",
-							"$ref": "#/$defs/Translations"
-						},
-						"disabled": {
-							"description": "Whether the link is disabled",
-							"type": "boolean"
-						},
-						"opensAt": {
-							"description": "The date and/or time when the link becomes active",
-							"$ref": "#/$defs/PartialDate"
-						},
-						"closesAt": {
-							"description": "The date and/or time when the link becomes inactive",
-							"$ref": "#/$defs/PartialDate"
-						}
-					},
-					"required": ["$type", "url"],
-					"additionalProperties": false
-				},
-				{
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
-							"const": "directory.evnt.component.source"
-						},
-						"url": {
-							"type": "string",
-							"description": "The URL of the source"
-						}
-					},
-					"required": ["$type", "url"],
-					"additionalProperties": false
-				},
-				{
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
-							"const": "directory.evnt.component.splashMedia"
-						},
-						"roles": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							}
-						},
-						"media": {
-							"$ref": "#/$defs/Media"
-						}
-					},
-					"required": ["$type", "roles", "media"],
-					"additionalProperties": false
-				},
-				{
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
-							"const": "directory.evnt.component.languages"
-						},
-						"languages": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"code": {
-										"type": "string",
-										"description": "BCP47 language code"
-									}
-								},
-								"required": ["code"],
-								"additionalProperties": false
-							}
-						}
-					},
-					"required": ["$type", "languages"],
-					"additionalProperties": false
-				},
-				{
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
-							"const": "directory.evnt.richtext.markdown"
-						},
-						"content": {
-							"type": "string",
-							"description": "The markdown content"
-						},
-						"language": {
-							"description": "A BCP47 language tag for the markdown content",
-							"type": "string"
-						},
-						"flavor": {
-							"description": "A string indicating the markdown flavor",
-							"type": "string"
-						}
-					},
-					"required": ["$type", "content"],
-					"additionalProperties": false
-				},
-				{
-					"type": "object",
-					"properties": {
-						"$type": {
-							"type": "string",
-							"not": {
-								"anyOf": [
-									{
-										"const": "directory.evnt.component.link"
-									},
-									{
-										"const": "directory.evnt.component.source"
-									},
-									{
-										"const": "directory.evnt.component.splashMedia"
-									},
-									{
-										"const": "directory.evnt.component.languages"
-									},
-									{
-										"const": "directory.evnt.richtext.markdown"
-									}
-								]
-							}
-						}
-					},
-					"required": ["$type"],
-					"additionalProperties": true
+		"MarkdownComponent": {
+			"type": "object",
+			"required": ["$type", "content"],
+			"properties": {
+				"$type": { "const": "directory.evnt.richtext.markdown" },
+				"content": { "type": "string" },
+				"language": { "$ref": "#/$defs/LanguageTag" },
+				"flavor": {
+					"description": "The Markdown flavor, such as commonmark or gfm",
+					"type": "string"
 				}
-			],
-			"id": "EventComponent"
+			}
+		},
+		"LinkComponent": {
+			"type": "object",
+			"required": ["$type", "url"],
+			"properties": {
+				"$type": { "const": "directory.evnt.component.link" },
+				"url": { "$ref": "#/$defs/AbsoluteUri" },
+				"name": { "$ref": "#/$defs/Translations" },
+				"disabled": {
+					"description": "The link is unavailable for now",
+					"type": "boolean"
+				}
+			}
+		},
+		"SourceComponent": {
+			"type": "object",
+			"required": ["$type", "url"],
+			"properties": {
+				"$type": { "const": "directory.evnt.component.source" },
+				"url": { "$ref": "#/$defs/AbsoluteUri" }
+			}
+		},
+		"SplashMediaComponent": {
+			"type": "object",
+			"required": ["$type", "media"],
+			"properties": {
+				"$type": { "const": "directory.evnt.component.splashMedia" },
+				"media": { "$ref": "#/$defs/Media" },
+				"roles": {
+					"description": "Where the media is meant to be shown: background, poster, banner or a value of the producer's own",
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			}
 		},
 		"Media": {
 			"type": "object",
+			"required": ["sources"],
 			"properties": {
 				"sources": {
-					"minItems": 1,
+					"description": "The same image or video in one or more formats or resolutions",
 					"type": "array",
-					"items": {
-						"$ref": "#/$defs/MediaSource"
-					},
-					"description": "The sources for the media item"
+					"minItems": 1,
+					"items": { "$ref": "#/$defs/MediaSource" }
 				},
-				"alt": {
-					"description": "Alternative text for the media item",
-					"$ref": "#/$defs/Translations"
-				},
+				"alt": { "$ref": "#/$defs/Translations" },
 				"presentation": {
-					"description": "The presentation details of the media item",
-					"$ref": "#/$defs/MediaPresentation"
+					"type": "object",
+					"properties": {
+						"blurhash": { "type": "string" },
+						"dominantColor": {
+							"type": "string",
+							"pattern": "^#[0-9A-Fa-f]{6}$"
+						}
+					}
 				}
-			},
-			"required": ["sources"],
-			"additionalProperties": false,
-			"id": "Media",
-			"title": "Media",
-			"description": "A media item, such as an image or video"
+			}
 		},
 		"MediaSource": {
 			"type": "object",
-			"properties": {
-				"url": {
-					"type": "string",
-					"format": "uri",
-					"description": "The URL of the media source"
-				},
-				"dimensions": {
-					"description": "The dimensions of the media in pixels",
-					"$ref": "#/$defs/MediaDimensions"
-				},
-				"mimeType": {
-					"description": "The MIME type of the media",
-					"type": "string"
-				}
-			},
 			"required": ["url"],
-			"additionalProperties": false,
-			"id": "MediaSource",
-			"title": "Media Source",
-			"description": "A source for a media item."
-		},
-		"MediaDimensions": {
-			"type": "object",
 			"properties": {
-				"width": {
-					"type": "integer",
-					"minimum": 0,
-					"maximum": 9007199254740991,
-					"description": "The width of the media in pixels"
-				},
-				"height": {
-					"type": "integer",
-					"minimum": 0,
-					"maximum": 9007199254740991,
-					"description": "The height of the media in pixels"
+				"url": { "$ref": "#/$defs/AbsoluteUri" },
+				"mimeType": { "type": "string" },
+				"dimensions": {
+					"description": "Width and height in pixels",
+					"type": "object",
+					"required": ["width", "height"],
+					"properties": {
+						"width": { "type": "number" },
+						"height": { "type": "number" }
+					}
 				}
-			},
-			"required": ["width", "height"],
-			"additionalProperties": false,
-			"id": "MediaDimensions",
-			"title": "Media Dimensions",
-			"description": "The dimensions of a media item"
+			}
 		},
-		"MediaPresentation": {
+		"LanguagesComponent": {
 			"type": "object",
+			"required": ["$type", "languages"],
 			"properties": {
-				"blurhash": {
-					"description": " A BlurHash representation of the media item",
+				"$type": { "const": "directory.evnt.component.languages" },
+				"languages": {
+					"description": "The languages the event is held in, not the languages of the document",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": ["code"],
+						"properties": {
+							"code": { "$ref": "#/$defs/LanguageTag" }
+						}
+					}
+				}
+			}
+		},
+		"OnlineComponent": {
+			"type": "object",
+			"required": ["$type", "url"],
+			"properties": {
+				"$type": { "const": "directory.evnt.component.online" },
+				"url": { "$ref": "#/$defs/AbsoluteUri" },
+				"name": { "$ref": "#/$defs/Translations" }
+			}
+		},
+		"PlaceIdComponent": {
+			"type": "object",
+			"required": ["$type", "type", "id"],
+			"properties": {
+				"$type": { "const": "directory.evnt.component.placeId" },
+				"type": {
+					"description": "The service and kind of entry, such as org.openstreetmap.way",
 					"type": "string"
 				},
-				"dominantColor": {
-					"description": "The dominant color of the media item in hex rgb format (must start with a hashtag)",
+				"id": { "type": "string" }
+			}
+		},
+		"RelationComponent": {
+			"type": "object",
+			"required": ["$type", "type", "target"],
+			"properties": {
+				"$type": { "const": "directory.evnt.component.relation" },
+				"type": {
+					"description": "parent, child, alternate or a reverse domain name of the producer's own",
 					"type": "string"
+				},
+				"target": {
+					"description": "Usually the id of the other event",
+					"$ref": "#/$defs/AbsoluteUri"
 				}
-			},
-			"additionalProperties": false,
-			"id": "MediaPresentation",
-			"title": "Media Presentation",
-			"description": "The presentation details of a media item"
+			}
+		},
+		"CoordinatesComponent": {
+			"type": "object",
+			"required": ["$type", "latitude", "longitude"],
+			"properties": {
+				"$type": { "const": "directory.evnt.component.coordinates" },
+				"latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+				"longitude": { "type": "number", "minimum": -180, "maximum": 180 },
+				"uncertainty": {
+					"description": "How far the venue may be from the point, in metres",
+					"type": "number",
+					"exclusiveMinimum": 0
+				}
+			}
 		}
 	}
 }
