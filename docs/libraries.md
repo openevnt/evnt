@@ -6,7 +6,7 @@ To add an entry to this page, open an issue or a pull request.
 
 ## Official TypeScript libraries
 
-The Open Evnt project maintains these libraries. All of them are on npm in the `@evnt` scope.
+The Open Evnt project maintains these libraries. All of them are on npm in the `@evnt` scope, and their source is in [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js).
 
 - [@evnt/types](https://npmx.dev/package/@evnt/types) - TypeScript types for Open Evnt events.
 - [@evnt/schema](https://npmx.dev/package/@evnt/schema) - Zod schemas that validate Open Evnt events.

@@ -1,28 +1,18 @@
 # Open Evnt
 
 [![](https://shields.io/badge/visit_the-website-blue)](https://evnt.directory)
-[![](https://shields.io/badge/read_the-specification-blue)](./docs/full-spec.md)
+[![](https://shields.io/badge/read_the-specification-blue)](./docs/spec/open-evnt-event.md)
 [![](https://shields.io/badge/join_the-discord-blue)](https://deniz.blue/discord-invite?id=1493641727980994710)
 [![](https://shields.io/badge/join_the-matrix-blue)](https://matrix.to/#/#evnt:catgirl.cloud)
 [![](https://shields.io/badge/follow_on-bluesky-blue)](https://bsky.app/profile/evnt.directory)
 
 [Open Evnt](https://evnt.directory) is a data format for representing events.
 
-This monorepo contains a _lot_ of things:
+This repository has the specification and the [Open Evnt website](https://evnt.directory), which is in [./docs](./docs/).
 
-**Website**
+**Libraries**
 
-The [Open Evnt website](https://evnt.directory) is in [./docs](./docs/).
-
-**Packages**
-
-- [@evnt/types](./packages/types/): TypeScript types
-- [@evnt/schema](./packages/schema/): Zod schemas
-- [@evnt/partial-date](./packages/partial-date/): Partial Date utilities
-- [@evnt/translations](./packages/translations/): Translations utilities
-- [@evnt/convert](./packages/convert/): Converters to and from other formats
-- [@evnt/pretty](./packages/pretty/): Pretty-printing utilities
-- [@evnt/dev](./packages/dev/): CLI for `.evnt.json` files
+The JavaScript and TypeScript packages (`@evnt/*` on npm) are in [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). Libraries for other languages are listed on the [libraries page](./docs/libraries.md).
 
 **Join the Community**
 
@@ -48,12 +38,9 @@ The specification is open for contributions! If you have suggestions for improve
 
 ### Contributing to the code
 
-This monorepo uses [pnpm](https://pnpm.io/) as the package manager.
+Code for the libraries goes to [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). The website here uses [pnpm](https://pnpm.io/) as the package manager.
 
 - `pnpm install` - install dependencies
-- `pnpm build` - build all packages
-- `pnpm schema` - generate the json schema
-- `pnpm test` - run vitest tests
 - `pnpm fmt` - run oxfmt
 - `pnpm lint` - run oxlint
 - `pnpm docs:dev` - run docs in development mode
