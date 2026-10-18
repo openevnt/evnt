@@ -1,0 +1,40 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/unknown-components",
+	"name": {
+		"de": "Komponenten anderer Anbieter",
+		"en": "Components from other producers"
+	},
+	"venue": {
+		"address": "Berlin",
+		"countryCode": "DE",
+		"components": [
+			{
+				"$type": "com.example.accessibility#0",
+				"stepFree": true
+			}
+		]
+	},
+	"occurrences": [
+		{
+			"start": "2026-11-12[Europe/Berlin]",
+			"components": [
+				{
+					"$type": "com.example.ticketTiers#2",
+					"tiers": [
+						{
+							"name": "Early bird",
+							"price": 15
+						}
+					]
+				}
+			]
+		}
+	],
+	"components": [
+		{
+			"$type": "com.example.ageRating#3",
+			"minimum": 18
+		}
+	]
+}

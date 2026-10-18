@@ -1,6 +1,6 @@
 # Open Evnt PartialDate
 
-**Last Updated:** 2026-10-09
+**Last Updated:** 2026-10-17
 
 This document defines `PartialDate`, the date type used in Open Evnt specifications.
 
@@ -83,6 +83,6 @@ This is how iCalendar reads local times ([RFC 5545](https://www.rfc-editor.org/r
 
 ### 3.2 Order
 
-A `PartialDate` *a* is not after *b* when the period of *a* starts before the period of *b* ends, or both periods start at the same instant. So a start of `2025-11-12[Europe/London]` is not after an end of `2025-11-12T18:00[Europe/London]`, and a start of `2025-11-12T10:00[Europe/London]` is not after an end of `2025-11-12[Europe/London]`.
+A `PartialDate` _a_ is not after _b_ when the period of _a_ starts before the period of _b_ ends, or both periods start at the same instant. So a start of `2025-11-12[Europe/London]` is not after an end of `2025-11-12T18:00[Europe/London]`, and a start of `2025-11-12T10:00[Europe/London]` is not after an end of `2025-11-12[Europe/London]`.
 
 To sort values, consumers SHOULD compare the instants their periods start at. When two periods start at the same instant, the value with the finer precision comes first.

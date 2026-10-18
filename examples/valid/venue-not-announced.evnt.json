@@ -1,0 +1,25 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/nairobi-tech-week-2027",
+	"name": {
+		"en": "Nairobi Tech Week 2027",
+		"sw": "Wiki ya Teknolojia Nairobi 2027"
+	},
+	"venue": {
+		"address": "Nairobi",
+		"countryCode": "KE",
+		"components": [
+			{
+				"$type": "directory.evnt.component.coordinates#0",
+				"latitude": -1.2864,
+				"longitude": 36.8172,
+				"uncertainty": 10000
+			}
+		]
+	},
+	"occurrences": [
+		{
+			"start": "2027-06[Africa/Nairobi]"
+		}
+	]
+}

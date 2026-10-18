@@ -1,0 +1,78 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/tech-conference-2026",
+	"name": {
+		"en": "Tech Conference 2026",
+		"lt": "Tech Konferencija 2026"
+	},
+	"venue": {
+		"name": {
+			"en": "Vilnius Convention Centre"
+		},
+		"address": "Konstitucijos pr. 123, Vilnius",
+		"countryCode": "LT",
+		"components": [
+			{
+				"$type": "directory.evnt.component.placeId#0",
+				"type": "org.openstreetmap.way",
+				"id": "123456789"
+			}
+		]
+	},
+	"occurrences": [
+		{
+			"start": "2026-06-15T09:00[Europe/Vilnius]",
+			"end": "2026-06-15T18:00[Europe/Vilnius]",
+			"activities": [
+				{
+					"name": {
+						"en": "Opening Keynote"
+					}
+				},
+				{
+					"name": {
+						"en": "Workshop: Building Event Directories"
+					}
+				}
+			]
+		},
+		{
+			"start": "2026-06-16T10:00[Europe/Vilnius]",
+			"end": "2026-06-16T17:00[Europe/Vilnius]"
+		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.component.relation#0",
+			"type": "parent",
+			"target": "https://example.com/events/tech-conference"
+		},
+		{
+			"$type": "directory.evnt.component.link#0",
+			"url": "https://example.com/tickets",
+			"name": {
+				"en": "Get Tickets"
+			}
+		},
+		{
+			"$type": "directory.evnt.component.splashMedia#0",
+			"media": {
+				"sources": [
+					{
+						"url": "https://example.com/banner.jpg",
+						"dimensions": {
+							"width": 1200,
+							"height": 600
+						}
+					}
+				],
+				"alt": {
+					"en": "Tech Conference 2026 banner"
+				},
+				"presentation": {
+					"dominantColor": "#1a1a2e"
+				}
+			}
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/component-with-newer-field",
+	"name": {
+		"en": "A link with a field added after 0.2"
+	},
+	"components": [
+		{
+			"$type": "directory.evnt.component.link#0",
+			"url": "https://example.com/tickets",
+			"kind": "tickets"
+		}
+	]
+}

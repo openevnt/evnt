@@ -1,0 +1,19 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/language-tags",
+	"name": {
+		"en": "Hello",
+		"ar": "مرحبا",
+		"kn": "ನಮಸ್ಕಾರ",
+		"he": "שלום",
+		"hi": "नमस्ते",
+		"ja": "こんにちは",
+		"ko": "안녕하세요",
+		"uk": "Привіт",
+		"zh-Hant": "你好",
+		"es-419": "Hola",
+		"sr-Latn-RS": "Zdravo",
+		"de-CH-1996": "Grüezi",
+		"und": "👋"
+	}
+}

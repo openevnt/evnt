@@ -76,7 +76,7 @@
 					"contains": {
 						"type": "object",
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.coordinates" } }
+						"properties": { "$type": { "const": "directory.evnt.component.coordinates#0" } }
 					},
 					"minContains": 0,
 					"maxContains": 1
@@ -117,72 +117,65 @@
 			"required": ["$type"],
 			"properties": {
 				"$type": {
-					"description": "Reverse domain name, plus #N for version 1 and later",
+					"description": "Reverse domain name followed by #N, the version",
 					"type": "string",
-					"pattern": "^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)+(#[1-9][0-9]*)?$"
+					"pattern": "^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)+#(0|[1-9][0-9]*)$"
 				}
 			},
 			"allOf": [
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.richtext.markdown" } }
+						"properties": { "$type": { "const": "directory.evnt.richtext.markdown#0" } }
 					},
 					"then": { "$ref": "#/$defs/MarkdownComponent" }
 				},
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.link" } }
+						"properties": { "$type": { "const": "directory.evnt.component.link#0" } }
 					},
 					"then": { "$ref": "#/$defs/LinkComponent" }
 				},
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.source" } }
+						"properties": { "$type": { "const": "directory.evnt.component.source#0" } }
 					},
 					"then": { "$ref": "#/$defs/SourceComponent" }
 				},
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.splashMedia" } }
+						"properties": { "$type": { "const": "directory.evnt.component.splashMedia#0" } }
 					},
 					"then": { "$ref": "#/$defs/SplashMediaComponent" }
 				},
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.languages" } }
+						"properties": { "$type": { "const": "directory.evnt.component.languages#0" } }
 					},
 					"then": { "$ref": "#/$defs/LanguagesComponent" }
 				},
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.online" } }
-					},
-					"then": { "$ref": "#/$defs/OnlineComponent" }
-				},
-				{
-					"if": {
-						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.placeId" } }
+						"properties": { "$type": { "const": "directory.evnt.component.placeId#0" } }
 					},
 					"then": { "$ref": "#/$defs/PlaceIdComponent" }
 				},
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.relation" } }
+						"properties": { "$type": { "const": "directory.evnt.component.relation#0" } }
 					},
 					"then": { "$ref": "#/$defs/RelationComponent" }
 				},
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.component.coordinates" } }
+						"properties": { "$type": { "const": "directory.evnt.component.coordinates#0" } }
 					},
 					"then": { "$ref": "#/$defs/CoordinatesComponent" }
 				}
@@ -192,7 +185,7 @@
 			"type": "object",
 			"required": ["$type", "content"],
 			"properties": {
-				"$type": { "const": "directory.evnt.richtext.markdown" },
+				"$type": { "const": "directory.evnt.richtext.markdown#0" },
 				"content": { "type": "string" },
 				"language": { "$ref": "#/$defs/LanguageTag" },
 				"flavor": {
@@ -205,7 +198,7 @@
 			"type": "object",
 			"required": ["$type", "url"],
 			"properties": {
-				"$type": { "const": "directory.evnt.component.link" },
+				"$type": { "const": "directory.evnt.component.link#0" },
 				"url": { "$ref": "#/$defs/AbsoluteUri" },
 				"name": { "$ref": "#/$defs/Translations" },
 				"disabled": {
@@ -218,7 +211,7 @@
 			"type": "object",
 			"required": ["$type", "url"],
 			"properties": {
-				"$type": { "const": "directory.evnt.component.source" },
+				"$type": { "const": "directory.evnt.component.source#0" },
 				"url": { "$ref": "#/$defs/AbsoluteUri" }
 			}
 		},
@@ -226,7 +219,7 @@
 			"type": "object",
 			"required": ["$type", "media"],
 			"properties": {
-				"$type": { "const": "directory.evnt.component.splashMedia" },
+				"$type": { "const": "directory.evnt.component.splashMedia#0" },
 				"media": { "$ref": "#/$defs/Media" },
 				"roles": {
 					"description": "Where the media is meant to be shown: background, poster, banner, or the producer's own value",
@@ -279,7 +272,7 @@
 			"type": "object",
 			"required": ["$type", "languages"],
 			"properties": {
-				"$type": { "const": "directory.evnt.component.languages" },
+				"$type": { "const": "directory.evnt.component.languages#0" },
 				"languages": {
 					"description": "The languages the event is held in, not the languages of the document",
 					"type": "array",
@@ -293,20 +286,11 @@
 				}
 			}
 		},
-		"OnlineComponent": {
-			"type": "object",
-			"required": ["$type", "url"],
-			"properties": {
-				"$type": { "const": "directory.evnt.component.online" },
-				"url": { "$ref": "#/$defs/AbsoluteUri" },
-				"name": { "$ref": "#/$defs/Translations" }
-			}
-		},
 		"PlaceIdComponent": {
 			"type": "object",
 			"required": ["$type", "type", "id"],
 			"properties": {
-				"$type": { "const": "directory.evnt.component.placeId" },
+				"$type": { "const": "directory.evnt.component.placeId#0" },
 				"type": {
 					"description": "The service and kind of entry, such as org.openstreetmap.way",
 					"type": "string"
@@ -318,7 +302,7 @@
 			"type": "object",
 			"required": ["$type", "type", "target"],
 			"properties": {
-				"$type": { "const": "directory.evnt.component.relation" },
+				"$type": { "const": "directory.evnt.component.relation#0" },
 				"type": {
 					"description": "parent, child, alternate, or the producer's own value in reverse domain name notation",
 					"type": "string"
@@ -333,7 +317,7 @@
 			"type": "object",
 			"required": ["$type", "latitude", "longitude"],
 			"properties": {
-				"$type": { "const": "directory.evnt.component.coordinates" },
+				"$type": { "const": "directory.evnt.component.coordinates#0" },
 				"latitude": { "type": "number", "minimum": -90, "maximum": 90 },
 				"longitude": { "type": "number", "minimum": -180, "maximum": 180 },
 				"uncertainty": {

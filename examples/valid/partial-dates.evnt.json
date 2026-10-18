@@ -1,0 +1,44 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/partial-dates",
+	"name": {
+		"en": "Partial date precisions"
+	},
+	"occurrences": [
+		{
+			"start": "2027[Europe/London]"
+		},
+		{
+			"start": "2027-05[America/Argentina/Buenos_Aires]"
+		},
+		{
+			"start": "2027-05-14[Asia/Kathmandu]",
+			"end": "2027-05-16[Asia/Kathmandu]"
+		},
+		{
+			"start": "2027-05-14T18:00[America/St_Johns]",
+			"end": "2027-05-14T23:30[America/St_Johns]"
+		},
+		{
+			"start": "2025-11-12[Europe/London]",
+			"end": "2025-11-12T18:00[Europe/London]"
+		},
+		{
+			"start": "2025-11-12T10:00[Europe/London]",
+			"end": "2025-11-12[Europe/London]"
+		},
+		{
+			"start": "2028-02-29[UTC]"
+		},
+		{
+			"start": "2000-02-29[Pacific/Chatham]"
+		},
+		{
+			"start": "2027-03-14T02:30[America/New_York]"
+		},
+		{
+			"end": "2026-12-31T23:59[Etc/GMT-14]"
+		},
+		{}
+	]
+}

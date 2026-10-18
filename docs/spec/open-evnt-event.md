@@ -2,7 +2,7 @@
 
 **Version:** 0.2 DRAFT
 
-**Last Updated:** 2026-10-09
+**Last Updated:** 2026-10-18
 
 ## 1. Introduction
 
@@ -33,7 +33,7 @@ This specification sets requirements for documents, producers and consumers:
 ### 1.3 Terminology
 
 | Term      | Definition                                                                               |
-|-----------|------------------------------------------------------------------------------------------|
+| --------- | ---------------------------------------------------------------------------------------- |
 | Event     | A gathering of people for a shared purpose or interest                                   |
 | Document  | A JSON object that describes one event, as defined in [section 2](#2-open-evnt-document) |
 | Organizer | The person or group that runs the event                                                  |
@@ -94,7 +94,7 @@ The `components` field holds components that describe the event. See [section 6 
 The `status` field is only present when the event may not take place as listed. An event without a `status` has nothing known to be wrong with it. The following values are defined:
 
 | Value       | Description                                                                    |
-|-------------|--------------------------------------------------------------------------------|
+| ----------- | ------------------------------------------------------------------------------ |
 | `uncertain` | The organizer has said the event may not take place as listed                  |
 | `cancelled` | The event will not take place                                                  |
 | `postponed` | The event will not take place on the listed dates, and new dates are not known |
@@ -121,7 +121,7 @@ An `https` id is verified when fetching it, following redirects, returns a docum
 
 Consumers that find the same `id` on documents describing clearly different events SHOULD treat this as a collision and SHOULD NOT merge the documents.
 
-A document that describes the same event as another document with a different `id`, such as a listing on another site, can link it with a [Relation Component](open-evnt-event-components.md#28-relation-component) of type `alternate`.
+A document that describes the same event as another document with a different `id`, such as a listing on another site, can link it with a [Relation Component](open-evnt-event-components.md#27-relation-component) of type `alternate`.
 
 ## 3. Common Data Types
 
@@ -155,7 +155,7 @@ The `countryCode` field is the country the venue is in, as an uppercase [ISO 316
 
 The `components` field is an optional array of components that describe the venue. See [section 6 (Component Extension Model)](#6-component-extension-model).
 
-Where the venue is on a map goes in a [Coordinates Component](open-evnt-event-components.md#29-coordinates-component).
+Where the venue is on a map goes in a [Coordinates Component](open-evnt-event-components.md#28-coordinates-component).
 
 An event has at most one venue, and every occurrence of the event takes place there. An event that changes place between occurrences MUST be split into one event per place.
 
@@ -165,7 +165,7 @@ An event in Kaunas whose venue has not been announced yet has this venue:
 { "address": "Kaunas", "countryCode": "LT" }
 ```
 
-An event without a `venue` has no known physical place: either nothing about the place has been announced, or the event is held online only. An event held online, alone or next to a venue, carries an [Online Component](open-evnt-event-components.md#26-online-component).
+An event without a `venue` has no known physical place: either nothing about the place has been announced, or the event is held online only.
 
 ## 5. Occurrences
 
@@ -216,15 +216,15 @@ The `components` field in the Open Evnt document, the `Venue` object, and `Occur
 
 A `Component` object MUST have a `$type` field that indicates the type of the component.
 
-The `$type` field is a string that follows the reverse domain name notation. Producers SHOULD use a domain name that they control to avoid naming collisions with other producers.
+The `$type` field is a name in reverse domain name notation followed by a version, such as `directory.evnt.component.link#0`. See [section 6.1 (Component Versions)](#61-component-versions). Producers SHOULD use a domain name that they control to avoid naming collisions with other producers.
 
 ### 6.1. Component Versions
 
-A component type has an integer version. The version follows the name after a `#`, such as `directory.evnt.component.link#1`. A `$type` without a `#` is version 0. Producers MUST NOT write `#0`.
+Every `$type` MUST end in a version: a `#` followed by a non-negative integer without leading zeros, such as the `#0` in `directory.evnt.component.link#0`. The first version of a component type is 0.
 
 A new version is only made for a breaking change: a field is removed, or its meaning or type changes. Adding an optional field does not make a new version.
 
-Consumers MUST treat each version as a separate type. A consumer that supports `directory.evnt.component.link` but not `directory.evnt.component.link#1` treats the latter as an unknown type.
+Consumers MUST treat each version as a separate type. A consumer that supports `directory.evnt.component.link#0` but not `directory.evnt.component.link#1` treats the latter as an unknown type.
 
 Consumers MAY ignore components with unknown `$type` values.
 
@@ -276,7 +276,7 @@ An Open Evnt document SHOULD be served with the media type `application/vnd.evnt
 		"countryCode": "LT",
 		"components": [
 			{
-				"$type": "directory.evnt.component.placeId",
+				"$type": "directory.evnt.component.placeId#0",
 				"type": "org.openstreetmap.way",
 				"id": "123456789"
 			}
@@ -298,22 +298,17 @@ An Open Evnt document SHOULD be served with the media type `application/vnd.evnt
 	],
 	"components": [
 		{
-			"$type": "directory.evnt.component.relation",
+			"$type": "directory.evnt.component.relation#0",
 			"type": "parent",
 			"target": "https://example.com/events/tech-conference"
 		},
 		{
-			"$type": "directory.evnt.component.online",
-			"url": "https://live.example.com/techconf-2026",
-			"name": { "en": "Livestream" }
-		},
-		{
-			"$type": "directory.evnt.component.link",
+			"$type": "directory.evnt.component.link#0",
 			"url": "https://example.com/tickets",
 			"name": { "en": "Get Tickets" }
 		},
 		{
-			"$type": "directory.evnt.component.splashMedia",
+			"$type": "directory.evnt.component.splashMedia#0",
 			"media": {
 				"sources": [
 					{
@@ -348,11 +343,11 @@ A document that fails the schema does not conform. Passing it is not enough, bec
 ### 0.2: draft
 
 - Added the required `id` field.
-- Replaced the `venues` array with a single optional `venue`. Venue ids and venue types are removed; online attendance moved to the Online Component.
+- Replaced the `venues` array with a single optional `venue`. Venue ids and venue types, including online venues, are removed.
 - Renamed `instances` to `occurrences`.
 - Removed `venueIds` from occurrences.
 - Removed the `$type` field from the document.
-- Added component versions.
+- Added component versions. Every component `$type` ends in its version, such as `#0`.
 - Removed the `planned` and `suspended` statuses. An event without `status` has nothing known to be wrong with it.
 - Cancelled and postponed events stay published. Consumers no longer ignore their dates; they just don't present them as upcoming.
 - Added `status` to occurrences and activities.
@@ -362,6 +357,7 @@ A document that fails the schema does not conform. Passing it is not enough, bec
 - The media type is now `application/vnd.evnt+json`, and it moved to section 8.
 - PartialDate moved to its own document, with rules for ordering and clock changes.
 - Removed `opensAt` and `closesAt` from the Link Component.
+- The Splash Media Component's `roles` are optional, and every media source needs a `url`.
 - Removed the `Address` object. `address` is a string, `countryCode` moved onto the venue, and the venue `name` is optional.
 - Added the Coordinates Component for where the venue is on a map.
 - Translations keys must not differ only in case, values must not be empty, and consumers pick a language with RFC 4647 Lookup.

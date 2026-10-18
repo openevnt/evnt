@@ -1,0 +1,22 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/cairo-jazz-night-2027",
+	"name": {
+		"ar": "ليلة الجاز في القاهرة",
+		"en": "Cairo Jazz Night"
+	},
+	"venue": {
+		"name": {
+			"ar": "دار الأوبرا المصرية",
+			"en": "Cairo Opera House"
+		},
+		"address": "Zamalek, Cairo",
+		"countryCode": "EG"
+	},
+	"occurrences": [
+		{
+			"start": "2027-02-18T20:00[Africa/Cairo]",
+			"end": "2027-02-18T23:00[Africa/Cairo]"
+		}
+	]
+}

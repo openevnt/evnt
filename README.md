@@ -12,7 +12,7 @@ This repository holds the specification and the website, which is in [./docs](./
 
 **Libraries**
 
-The JavaScript and TypeScript packages, `@evnt/*` on npm, are in [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). Other libraries are on the [libraries page](./docs/libraries.md).
+The JavaScript and TypeScript packages, `@evnt/*` on npm, are in [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). Other libraries are on the [libraries page](./docs/libraries.md). Documents to test a library against are in [./examples](./examples/).
 
 **Join the Community**
 
@@ -41,6 +41,7 @@ The specification is open for contributions! If you have suggestions for improve
 Library code goes to [openevnt/openevnt-js](https://github.com/openevnt/openevnt-js). The website uses [pnpm](https://pnpm.io/):
 
 - `pnpm install` - install dependencies
+- `pnpm test` - check the examples against the JSON schema
 - `pnpm fmt` - run oxfmt
 - `pnpm lint` - run oxlint
 - `pnpm docs:dev` - run docs in development mode

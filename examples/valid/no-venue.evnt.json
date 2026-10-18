@@ -1,0 +1,22 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/grupo-de-estudos-rust-42",
+	"name": {
+		"pt-BR": "Grupo de estudos de Rust #42"
+	},
+	"occurrences": [
+		{
+			"start": "2026-11-05T19:00[America/Sao_Paulo]",
+			"end": "2026-11-05T21:00[America/Sao_Paulo]"
+		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.component.link#0",
+			"url": "https://meet.example.com/rust-estudos",
+			"name": {
+				"pt-BR": "Entrar na chamada"
+			}
+		}
+	]
+}

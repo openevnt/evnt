@@ -1,8 +1,8 @@
 # Open Evnt Event Components
 
-**Version:** 0.1 DRAFT
+**Version:** 0.2 DRAFT
 
-**Last Updated:** 2026-10-08
+**Last Updated:** 2026-10-18
 
 [[toc]]
 
@@ -10,7 +10,7 @@ This document outlines the Open Evnt defined components that can be used to desc
 
 ## 1. Introduction
 
-The keywords **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL** in this document should be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
+The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **NOT RECOMMENDED**, **MAY**, and **OPTIONAL** in this document are to be interpreted as described in BCP 14 ([RFC 2119](https://www.rfc-editor.org/rfc/rfc2119), [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174)) when, and only when, they appear in all capitals, as shown here.
 
 How components are carried, how `$type` is chosen, and how consumers treat unknown components is defined in [section 6 (Component Extension Model)](open-evnt-event.md#6-component-extension-model) of the Open Evnt specification. The `Translations` and `PartialDate` types used below are defined in its [section 3 (Common Data Types)](open-evnt-event.md#3-common-data-types).
 
@@ -18,17 +18,16 @@ A component describes the object whose `components` array holds it: the event, i
 
 ## 2. Components
 
-| `$type`                                | Section                                    |
-| -------------------------------------- | ------------------------------------------ |
-| `directory.evnt.richtext.markdown`     | [2.1.1](#211-markdown-rich-text-component) |
-| `directory.evnt.component.link`        | [2.2](#22-link-component)                  |
-| `directory.evnt.component.source`      | [2.3](#23-source-component)                |
-| `directory.evnt.component.splashMedia` | [2.4](#24-splash-media-component)          |
-| `directory.evnt.component.languages`   | [2.5](#25-languages-component)             |
-| `directory.evnt.component.online`      | [2.6](#26-online-component)                |
-| `directory.evnt.component.placeId`     | [2.7](#27-place-id-component)              |
-| `directory.evnt.component.relation`    | [2.8](#28-relation-component)              |
-| `directory.evnt.component.coordinates` | [2.9](#29-coordinates-component)           |
+| `$type`                                  | Section                                    |
+| ---------------------------------------- | ------------------------------------------ |
+| `directory.evnt.richtext.markdown#0`     | [2.1.1](#211-markdown-rich-text-component) |
+| `directory.evnt.component.link#0`        | [2.2](#22-link-component)                  |
+| `directory.evnt.component.source#0`      | [2.3](#23-source-component)                |
+| `directory.evnt.component.splashMedia#0` | [2.4](#24-splash-media-component)          |
+| `directory.evnt.component.languages#0`   | [2.5](#25-languages-component)             |
+| `directory.evnt.component.placeId#0`     | [2.6](#26-place-id-component)              |
+| `directory.evnt.component.relation#0`    | [2.7](#27-relation-component)              |
+| `directory.evnt.component.coordinates#0` | [2.8](#28-coordinates-component)           |
 
 ## 2.1. Rich Text Components
 
@@ -39,11 +38,11 @@ An object MAY hold more than one rich text component. Consumers SHOULD display o
 ## 2.1.1. Markdown Rich Text Component
 
 ```
-directory.evnt.richtext.markdown
-  $type:    "directory.evnt.richtext.markdown"  REQUIRED
-  content:  string                              REQUIRED
-  language: string?                             OPTIONAL
-  flavor:   string?                             OPTIONAL
+directory.evnt.richtext.markdown#0
+  $type:     "directory.evnt.richtext.markdown#0"  REQUIRED
+  content:   string                                REQUIRED
+  language:  string?                               OPTIONAL
+  flavor:    string?                               OPTIONAL
 ```
 
 The `content` field is the Markdown text.
@@ -54,7 +53,7 @@ The `flavor` field names the Markdown flavor of `content`, such as `"commonmark"
 
 ```json
 {
-	"$type": "directory.evnt.richtext.markdown",
+	"$type": "directory.evnt.richtext.markdown#0",
 	"content": "Two days of talks and **workshops**.",
 	"language": "en",
 	"flavor": "commonmark"
@@ -66,11 +65,11 @@ The `flavor` field names the Markdown flavor of `content`, such as `"commonmark"
 A link related to the event, such as its website, ticket sales or a social media page.
 
 ```
-directory.evnt.component.link
-  $type:     "directory.evnt.component.link"  REQUIRED
-  url:       string                           REQUIRED
-  name:      Translations?                    OPTIONAL
-  disabled:  boolean?                         OPTIONAL
+directory.evnt.component.link#0
+  $type:     "directory.evnt.component.link#0"  REQUIRED
+  url:       string                             REQUIRED
+  name:      Translations?                      OPTIONAL
+  disabled:  boolean?                           OPTIONAL
 ```
 
 The `url` field is the URL of the link.
@@ -81,7 +80,7 @@ The `disabled` field, when `true`, means the link is unavailable for now. Consum
 
 ```json
 {
-	"$type": "directory.evnt.component.link",
+	"$type": "directory.evnt.component.link#0",
 	"url": "https://example.com/tickets",
 	"name": { "en": "Get Tickets" }
 }
@@ -92,9 +91,9 @@ The `disabled` field, when `true`, means the link is unavailable for now. Consum
 Where the event data came from, such as an announcement or a news article.
 
 ```
-directory.evnt.component.source
-  $type:  "directory.evnt.component.source"  REQUIRED
-  url:    string                             REQUIRED
+directory.evnt.component.source#0
+  $type:  "directory.evnt.component.source#0"  REQUIRED
+  url:    string                               REQUIRED
 ```
 
 The `url` field is the URL of the source.
@@ -103,7 +102,7 @@ Producers SHOULD add this component when the event data was taken from an extern
 
 ```json
 {
-	"$type": "directory.evnt.component.source",
+	"$type": "directory.evnt.component.source#0",
 	"url": "https://news.example.com/tech-conference-announced"
 }
 ```
@@ -113,10 +112,10 @@ Producers SHOULD add this component when the event data was taken from an extern
 An image or video that represents the event visually.
 
 ```
-directory.evnt.component.splashMedia
-  $type:  "directory.evnt.component.splashMedia"  REQUIRED
-  media:  Media                                   REQUIRED
-  roles:  string[]?                               OPTIONAL
+directory.evnt.component.splashMedia#0
+  $type:  "directory.evnt.component.splashMedia#0"  REQUIRED
+  media:  Media                                     REQUIRED
+  roles:  string[]?                                 OPTIONAL
 ```
 
 The `media` field is the media itself. See [section 2.4.1 (Media)](#241-media).
@@ -133,7 +132,7 @@ Producers MAY use other values. Consumers MUST ignore values they do not recogni
 
 ```json
 {
-	"$type": "directory.evnt.component.splashMedia",
+	"$type": "directory.evnt.component.splashMedia#0",
 	"media": {
 		"sources": [{ "url": "https://example.com/poster.jpg" }],
 		"alt": { "en": "Tech Conference 2026 poster" }
@@ -185,9 +184,9 @@ The `presentation.dominantColor` field is the dominant color of the media as six
 The languages the event is held in. This describes the event, not the document: an event held in Lithuanian can be described in English.
 
 ```
-directory.evnt.component.languages
-  $type:      "directory.evnt.component.languages"  REQUIRED
-  languages:  LanguageInfo[]                        REQUIRED
+directory.evnt.component.languages#0
+  $type:      "directory.evnt.component.languages#0"  REQUIRED
+  languages:  LanguageInfo[]                          REQUIRED
 
 LanguageInfo
   code:  string  REQUIRED
@@ -197,43 +196,20 @@ The `code` field is a [BCP 47 language tag](https://www.rfc-editor.org/rfc/bcp/b
 
 ```json
 {
-	"$type": "directory.evnt.component.languages",
+	"$type": "directory.evnt.component.languages#0",
 	"languages": [{ "code": "lt" }, { "code": "en" }]
 }
 ```
 
-## 2.6. Online Component
-
-A way to attend the event online, such as a livestream or a video call. An event held only online has this component and no `venue`. A hybrid event has both.
-
-```
-directory.evnt.component.online
-  $type:  "directory.evnt.component.online"  REQUIRED
-  url:    string                             REQUIRED
-  name:   Translations?                      OPTIONAL
-```
-
-The `url` field is where attendees join.
-
-The `name` field is a label, such as the name of the platform.
-
-```json
-{
-	"$type": "directory.evnt.component.online",
-	"url": "https://live.example.com/techconf-2026",
-	"name": { "en": "Livestream" }
-}
-```
-
-## 2.7. Place ID Component
+## 2.6. Place ID Component
 
 The venue's entry in a map or place service. Place ID components belong in the venue's `components`.
 
 ```
-directory.evnt.component.placeId
-  $type:  "directory.evnt.component.placeId"  REQUIRED
-  type:   string                              REQUIRED
-  id:     string                              REQUIRED
+directory.evnt.component.placeId#0
+  $type:  "directory.evnt.component.placeId#0"  REQUIRED
+  type:   string                                REQUIRED
+  id:     string                                REQUIRED
 ```
 
 The `type` field names the service and the kind of entry. The following values are defined:
@@ -254,21 +230,21 @@ A venue MAY have any number of place ID components, including several of the sam
 
 ```json
 {
-	"$type": "directory.evnt.component.placeId",
+	"$type": "directory.evnt.component.placeId#0",
 	"type": "org.openstreetmap.way",
 	"id": "123456789"
 }
 ```
 
-## 2.8. Relation Component
+## 2.7. Relation Component
 
 A link from the event to another event. Relation components belong in the event's `components`.
 
 ```
-directory.evnt.component.relation
-  $type:   "directory.evnt.component.relation"  REQUIRED
-  type:    string                               REQUIRED
-  target:  string                               REQUIRED
+directory.evnt.component.relation#0
+  $type:   "directory.evnt.component.relation#0"  REQUIRED
+  type:    string                                 REQUIRED
+  target:  string                                 REQUIRED
 ```
 
 The `target` field is an absolute URI, usually the `id` of the other event.
@@ -295,22 +271,22 @@ A consumer that wants more certainty can check whether the target links back: `c
 
 ```json
 {
-	"$type": "directory.evnt.component.relation",
+	"$type": "directory.evnt.component.relation#0",
 	"type": "parent",
 	"target": "https://example.com/events/tech-conference"
 }
 ```
 
-## 2.9. Coordinates Component
+## 2.8. Coordinates Component
 
 Where the venue is on a map. Coordinates components belong in the venue's `components`.
 
 ```
-directory.evnt.component.coordinates
-  $type:        "directory.evnt.component.coordinates"  REQUIRED
-  latitude:     number                                  REQUIRED
-  longitude:    number                                  REQUIRED
-  uncertainty:  number?                                 OPTIONAL
+directory.evnt.component.coordinates#0
+  $type:        "directory.evnt.component.coordinates#0"  REQUIRED
+  latitude:     number                                    REQUIRED
+  longitude:    number                                    REQUIRED
+  uncertainty:  number?                                   OPTIONAL
 ```
 
 The `latitude` and `longitude` fields are WGS 84 coordinates in decimal degrees, the system GPS uses. `latitude` is from -90 to 90 and `longitude` from -180 to 180.
@@ -323,7 +299,7 @@ A venue MUST NOT have more than one coordinates component.
 
 ```json
 {
-	"$type": "directory.evnt.component.coordinates",
+	"$type": "directory.evnt.component.coordinates#0",
 	"latitude": 54.8985,
 	"longitude": 23.9036,
 	"uncertainty": 5000

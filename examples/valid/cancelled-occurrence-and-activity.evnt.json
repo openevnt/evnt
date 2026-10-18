@@ -1,0 +1,39 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/companys-garden-summer-concerts-2027",
+	"name": {
+		"en": "Summer concerts in the Company's Garden",
+		"af": "Somerkonserte in die Kompanjiestuin"
+	},
+	"venue": {
+		"name": {
+			"en": "The Company's Garden"
+		},
+		"address": "Queen Victoria Street, Cape Town",
+		"countryCode": "ZA"
+	},
+	"occurrences": [
+		{
+			"start": "2027-01-16T17:00[Africa/Johannesburg]",
+			"end": "2027-01-16T20:00[Africa/Johannesburg]",
+			"activities": [
+				{
+					"name": {
+						"en": "Marimba band"
+					}
+				},
+				{
+					"name": {
+						"en": "Picnic workshop"
+					},
+					"status": "cancelled"
+				}
+			]
+		},
+		{
+			"start": "2027-01-23T17:00[Africa/Johannesburg]",
+			"end": "2027-01-23T20:00[Africa/Johannesburg]",
+			"status": "cancelled"
+		}
+	]
+}

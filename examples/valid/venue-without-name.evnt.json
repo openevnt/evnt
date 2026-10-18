@@ -1,0 +1,19 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/ocean-beach-cleanup-2026-11",
+	"name": {
+		"en": "Ocean Beach cleanup",
+		"es": "Limpieza de Ocean Beach"
+	},
+	"status": "uncertain",
+	"venue": {
+		"address": "Ocean Beach at Noriega Street, San Francisco",
+		"countryCode": "US"
+	},
+	"occurrences": [
+		{
+			"start": "2026-11-14T09:00[America/Los_Angeles]",
+			"end": "2026-11-14T12:00[America/Los_Angeles]"
+		}
+	]
+}

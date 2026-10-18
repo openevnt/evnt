@@ -1,0 +1,20 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/sydney-film-marathon-2027",
+	"name": {
+		"en": "Overnight film marathon"
+	},
+	"venue": {
+		"name": {
+			"en": "Sydney Opera House"
+		},
+		"address": "Bennelong Point, Sydney NSW 2000",
+		"countryCode": "AU"
+	},
+	"occurrences": [
+		{
+			"start": "2027-04-03T20:00[Australia/Sydney]",
+			"end": "2027-04-04T06:00[Australia/Sydney]"
+		}
+	]
+}

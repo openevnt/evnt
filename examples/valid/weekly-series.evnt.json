@@ -1,0 +1,45 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/toronto-board-games-2026-11",
+	"name": {
+		"en": "Toronto board game night, November 2026",
+		"fr": "Soirée jeux de société de Toronto, novembre 2026"
+	},
+	"venue": {
+		"name": {
+			"en": "Toronto Reference Library"
+		},
+		"address": "789 Yonge Street, Toronto",
+		"countryCode": "CA"
+	},
+	"occurrences": [
+		{
+			"start": "2026-11-05T18:30[America/Toronto]",
+			"end": "2026-11-05T21:30[America/Toronto]"
+		},
+		{
+			"start": "2026-11-12T18:30[America/Toronto]",
+			"end": "2026-11-12T21:30[America/Toronto]"
+		},
+		{
+			"start": "2026-11-19T18:30[America/Toronto]",
+			"end": "2026-11-19T21:30[America/Toronto]"
+		},
+		{
+			"start": "2026-11-26T18:30[America/Toronto]",
+			"end": "2026-11-26T21:30[America/Toronto]"
+		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.component.relation#0",
+			"type": "parent",
+			"target": "https://example.com/events/toronto-board-games"
+		},
+		{
+			"$type": "directory.evnt.component.relation#0",
+			"type": "alternate",
+			"target": "https://listings.example.org/e/88213"
+		}
+	]
+}

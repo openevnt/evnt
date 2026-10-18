@@ -1,0 +1,48 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/lagos-rust-meetup-2026-11",
+	"name": {
+		"en": "Lagos Rust Meetup"
+	},
+	"venue": {},
+	"occurrences": [
+		{
+			"start": "2026-11-12T18:00[Africa/Lagos]",
+			"end": "2026-11-12T21:00[Africa/Lagos]",
+			"activities": [
+				{
+					"name": {
+						"en": "Lightning talks"
+					}
+				}
+			]
+		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.component.link#0",
+			"url": "https://example.com/meetup",
+			"name": {
+				"en": "Sign up"
+			}
+		},
+		{
+			"$type": "directory.evnt.component.splashMedia#0",
+			"media": {
+				"sources": [
+					{
+						"url": "https://example.com/meetup.jpg"
+					}
+				],
+				"presentation": {
+					"dominantColor": "#1a1a2e"
+				}
+			}
+		},
+		{
+			"$type": "directory.evnt.component.relation#0",
+			"type": "parent",
+			"target": "https://example.com/events/lagos-rust-meetup"
+		}
+	]
+}
