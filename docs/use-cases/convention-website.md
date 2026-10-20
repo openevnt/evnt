@@ -95,7 +95,7 @@ Panels and shows go in `activities`. A panel that's called off gets `"status": "
 
 ### description and poster
 
-Add a [Markdown component](../spec/open-evnt-event-components.md#211-markdown-rich-text-component) for the description and a [splash media component](../spec/open-evnt-event-components.md#24-splash-media-component) with `"roles": ["poster"]` and alt text.
+Add a [Markdown component](../spec/open-evnt-event-components.md#211-markdown-text-component) for the description and a [splash media component](../spec/open-evnt-event-components.md#24-splash-media-component) with `"roles": ["poster"]` and alt text.
 
 ### cancelled or postponed
 

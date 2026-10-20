@@ -2,7 +2,7 @@
 
 **Version:** 0.2 DRAFT
 
-**Last Updated:** 2026-10-18
+**Last Updated:** 2026-10-20
 
 [[toc]]
 
@@ -18,45 +18,73 @@ A component describes the object whose `components` array holds it: the event, i
 
 ## 2. Components
 
-| `$type`                                  | Section                                    |
-| ---------------------------------------- | ------------------------------------------ |
-| `directory.evnt.richtext.markdown#0`     | [2.1.1](#211-markdown-rich-text-component) |
-| `directory.evnt.component.link#0`        | [2.2](#22-link-component)                  |
-| `directory.evnt.component.source#0`      | [2.3](#23-source-component)                |
-| `directory.evnt.component.splashMedia#0` | [2.4](#24-splash-media-component)          |
-| `directory.evnt.component.languages#0`   | [2.5](#25-languages-component)             |
-| `directory.evnt.component.placeId#0`     | [2.6](#26-place-id-component)              |
-| `directory.evnt.component.relation#0`    | [2.7](#27-relation-component)              |
-| `directory.evnt.component.coordinates#0` | [2.8](#28-coordinates-component)           |
+| `$type`                                  | Section                               |
+| ---------------------------------------- | ------------------------------------- |
+| `directory.evnt.text.markdown#0`         | [2.1.1](#211-markdown-text-component) |
+| `directory.evnt.text.plain#0`            | [2.1.2](#212-plain-text-component)    |
+| `directory.evnt.component.link#0`        | [2.2](#22-link-component)             |
+| `directory.evnt.component.source#0`      | [2.3](#23-source-component)           |
+| `directory.evnt.component.splashMedia#0` | [2.4](#24-splash-media-component)     |
+| `directory.evnt.component.languages#0`   | [2.5](#25-languages-component)        |
+| `directory.evnt.component.placeId#0`     | [2.6](#26-place-id-component)         |
+| `directory.evnt.component.relation#0`    | [2.7](#27-relation-component)         |
+| `directory.evnt.component.coordinates#0` | [2.8](#28-coordinates-component)      |
 
-## 2.1. Rich Text Components
+## 2.1. Text Components
 
-Rich text components carry a description in a text format.
+Text components carry a description of the object in one text format. Their `content` is a [`Translations`](open-evnt-event.md#31-translations) value, so one component holds the description in every language it is given in.
 
-An object MAY hold more than one rich text component. Consumers SHOULD display only one of them, picking the format and language that suit them best.
+An object MAY hold more than one text component. Consumers SHOULD display one language of one of them, chosen in two steps:
 
-## 2.1.1. Markdown Rich Text Component
+1. **Language.** The consumer takes every language that appears in the `content` of a text component whose `$type` it supports, and picks one as for `Translations` ([Translations, section 3](open-evnt-translations.md#3-choosing-a-language)).
+2. **Format.** Among the supported components that have that language, it picks the format it can display best. Plain text is the last choice when a supported richer format is present.
+
+Producers SHOULD use the plain text component for text they did not write themselves, such as an organizer's description copied from a website or a social media post, so that its line breaks and characters are kept as they are. Text written in several languages at once, such as a post in both Lithuanian and English, goes under `mul`.
+
+Further formats are added as new text `$type`s. A consumer that does not support one ignores it ([section 6](open-evnt-event.md#6-component-extension-model)) and chooses among the rest.
+
+## 2.1.1. Markdown Text Component
 
 ```
-directory.evnt.richtext.markdown#0
-  $type:     "directory.evnt.richtext.markdown#0"  REQUIRED
-  content:   string                                REQUIRED
-  language:  string?                               OPTIONAL
-  flavor:    string?                               OPTIONAL
+directory.evnt.text.markdown#0
+  $type:    "directory.evnt.text.markdown#0"  REQUIRED
+  content:  Translations                      REQUIRED
+  flavor:   string?                           OPTIONAL
 ```
 
-The `content` field is the Markdown text.
+The `content` field is the Markdown text, in one or more languages.
 
-The `language` field is a [BCP 47 language tag](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) for the language of `content`. Producers SHOULD set it when the language is known.
+The `flavor` field names the Markdown flavor of every value in `content`, such as `"commonmark"` or `"gfm"`. When it is absent, `content` is [CommonMark](https://spec.commonmark.org/). Consumers that do not support the named flavor MAY render `content` as CommonMark.
 
-The `flavor` field names the Markdown flavor of `content`, such as `"commonmark"` or `"gfm"`. Producers SHOULD set it when the flavor is known.
+Consumers MUST NOT render raw HTML in `content` as HTML. They SHOULD display it as text.
 
 ```json
 {
-	"$type": "directory.evnt.richtext.markdown#0",
-	"content": "Two days of talks and **workshops**.",
-	"language": "en",
+	"$type": "directory.evnt.text.markdown#0",
+	"content": {
+		"en": "Two days of talks and **workshops**.",
+		"lt": "Dvi dienos pranešimų ir **dirbtuvių**."
+	},
 	"flavor": "commonmark"
+}
+```
+
+## 2.1.2. Plain Text Component
+
+```
+directory.evnt.text.plain#0
+  $type:    "directory.evnt.text.plain#0"  REQUIRED
+  content:  Translations                   REQUIRED
+```
+
+The `content` field is the text, in one or more languages, with no markup. Consumers MUST display it as text and MUST keep its line breaks. Consumers MAY turn URLs in it into links.
+
+```json
+{
+	"$type": "directory.evnt.text.plain#0",
+	"content": {
+		"mul": "Įėjimas nemokamas, registruotis nereikia.\nEntry is free and no registration is needed."
+	}
 }
 ```
 

@@ -1,0 +1,27 @@
+{
+	"v": "0.2",
+	"id": "https://example.com/events/montevideo-candombe-workshop-2026-12",
+	"name": {
+		"es": "Taller de candombe"
+	},
+	"venue": {
+		"name": {
+			"es": "Centro Cultural Barrio Sur"
+		},
+		"address": "Gonzalo Ramírez 1270, Montevideo",
+		"countryCode": "UY"
+	},
+	"occurrences": [
+		{
+			"start": "2026-12-05T17:00[America/Montevideo]",
+			"end": "2026-12-05T19:00[America/Montevideo]"
+		}
+	],
+	"components": [
+		{
+			"$type": "directory.evnt.text.markdown#0",
+			"content": "Dos horas de **tambores** para principiantes.",
+			"flavor": "commonmark"
+		}
+	]
+}

@@ -37,8 +37,8 @@ Open Evnt consists of three complementary specifications:
 	"occurrences": [{ "start": "2026-07[Europe/Berlin]" }],
 	"components": [
 		{
-			"$type": "directory.evnt.richtext.markdown#0",
-			"content": "An example description!",
+			"$type": "directory.evnt.text.markdown#0",
+			"content": { "en": "An example description!" },
 			"flavor": "gfm"
 		},
 		{

@@ -126,9 +126,16 @@
 				{
 					"if": {
 						"required": ["$type"],
-						"properties": { "$type": { "const": "directory.evnt.richtext.markdown#0" } }
+						"properties": { "$type": { "const": "directory.evnt.text.markdown#0" } }
 					},
-					"then": { "$ref": "#/$defs/MarkdownComponent" }
+					"then": { "$ref": "#/$defs/MarkdownTextComponent" }
+				},
+				{
+					"if": {
+						"required": ["$type"],
+						"properties": { "$type": { "const": "directory.evnt.text.plain#0" } }
+					},
+					"then": { "$ref": "#/$defs/PlainTextComponent" }
 				},
 				{
 					"if": {
@@ -181,17 +188,24 @@
 				}
 			]
 		},
-		"MarkdownComponent": {
+		"MarkdownTextComponent": {
 			"type": "object",
 			"required": ["$type", "content"],
 			"properties": {
-				"$type": { "const": "directory.evnt.richtext.markdown#0" },
-				"content": { "type": "string" },
-				"language": { "$ref": "#/$defs/LanguageTag" },
+				"$type": { "const": "directory.evnt.text.markdown#0" },
+				"content": { "$ref": "#/$defs/Translations" },
 				"flavor": {
-					"description": "The Markdown flavor, such as commonmark or gfm",
+					"description": "The Markdown flavor of every value in content, such as commonmark or gfm; CommonMark when absent",
 					"type": "string"
 				}
+			}
+		},
+		"PlainTextComponent": {
+			"type": "object",
+			"required": ["$type", "content"],
+			"properties": {
+				"$type": { "const": "directory.evnt.text.plain#0" },
+				"content": { "$ref": "#/$defs/Translations" }
 			}
 		},
 		"LinkComponent": {

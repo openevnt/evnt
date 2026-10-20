@@ -34,10 +34,13 @@
 	],
 	"components": [
 		{
-			"$type": "directory.evnt.richtext.markdown#0",
-			"content": "Two days of **playable demos** and talks from independent studios.",
-			"language": "en",
+			"$type": "directory.evnt.text.markdown#0",
+			"content": { "en": "Two days of **playable demos** and talks from independent studios." },
 			"flavor": "commonmark"
+		},
+		{
+			"$type": "directory.evnt.text.plain#0",
+			"content": { "en": "Two days of playable demos and talks from independent studios." }
 		},
 		{
 			"$type": "directory.evnt.component.link#0",

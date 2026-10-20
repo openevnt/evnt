@@ -14,11 +14,11 @@ Each key MUST be a valid [BCP 47 language tag](https://www.rfc-editor.org/info/b
 
 Each value is the text in that language, as a string. A value MUST NOT be empty.
 
-The tag `und` is for text whose language is not known.
+The tag `und` is for text whose language is not known. The tag `mul` is for text written in several languages at once, such as one announcement in both Lithuanian and English.
 
 ## 3. Choosing a Language
 
-Consumers SHOULD pick the value to show with the Lookup scheme of [RFC 4647](https://www.rfc-editor.org/rfc/rfc4647) section 3.4, matched against the reader's preferred languages, so a reader asking for `lt-LT` gets the `lt` value. When nothing matches, consumers SHOULD show the `und` value if there is one, and otherwise MAY show any value.
+Consumers SHOULD pick the value to show with the Lookup scheme of [RFC 4647](https://www.rfc-editor.org/rfc/rfc4647) section 3.4, matched against the reader's preferred languages, so a reader asking for `lt-LT` gets the `lt` value. When nothing matches, consumers SHOULD show the `mul` value if there is one, then the `und` value, and otherwise MAY show any value.
 
 ## Appendix A. Examples
 

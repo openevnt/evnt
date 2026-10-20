@@ -71,4 +71,4 @@ No `venue` means the place isn't known, or the event is online only. Show `addre
 
 ### Components
 
-Skip types you don't know, and keep them if you save the document back ([§6.1](../spec/open-evnt-event.md#61-component-versions)). The `#N` is part of the type, so `link#0` and `link#1` are different things. A calendar usually wants the [Markdown description](../spec/open-evnt-event-components.md#211-markdown-rich-text-component), [links](../spec/open-evnt-event-components.md#22-link-component), and a [poster](../spec/open-evnt-event-components.md#24-splash-media-component).
+Skip types you don't know, and keep them if you save the document back ([§6.1](../spec/open-evnt-event.md#61-component-versions)). The `#N` is part of the type, so `link#0` and `link#1` are different things. A calendar usually wants the [Markdown description](../spec/open-evnt-event-components.md#211-markdown-text-component), [links](../spec/open-evnt-event-components.md#22-link-component), and a [poster](../spec/open-evnt-event-components.md#24-splash-media-component).
